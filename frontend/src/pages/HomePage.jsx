@@ -66,8 +66,7 @@ useEffect(() => {
 
         <div className="flex items-center gap-4">
           <button
-          className="transition-all duration-700 ease-in-out"
-  className={`rounded-lg border px-4 py-2 text-xs font-medium transition ${
+  className={`rounded-lg border px-4 py-2 text-xs font-medium transition-all duration-700 ease-in-out ${
     isHero
       ? "border-white/40 text-white hover:bg-white hover:text-black"
       : "border-black text-black hover:bg-black hover:text-white"
@@ -76,8 +75,7 @@ useEffect(() => {
   Sign in
 </button>
           <button
-          className="transition-all duration-700 ease-in-out"
-  className={`rounded-lg px-5 py-2 text-xs font-semibold transition ${
+  className={`rounded-lg px-5 py-2 text-xs font-medium transition-all duration-700 ease-in-out ${
     isHero
       ? "bg-white text-black hover:bg-white/85"
       : "bg-black text-white hover:bg-black/85"
