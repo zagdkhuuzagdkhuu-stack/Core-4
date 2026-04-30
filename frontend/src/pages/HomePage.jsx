@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ArrowRight, ChevronDown, Image, Plus, X } from "lucide-react";
 
 const logos = ["LOGO", "LOGO", "LOGO", "LOGO", "LOGO", "LOGO", "LOGO"];
@@ -11,6 +11,19 @@ const features = [
 ];
 
 export default function HomePage() {
+
+  const [isHero, setIsHero] = useState(true);
+
+useEffect(() => {
+  const handleScroll = () => {
+    setIsHero(window.scrollY < 120);
+  };
+
+  handleScroll();
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
+}, []);
+
   return (
     <main className="min-h-screen bg-white/5 border border-black/10 text-[#000000]">
       {/* Announcement */}
@@ -24,29 +37,54 @@ export default function HomePage() {
       </div>
 
       {/* Navbar */}
-        <header className="sticky top-0 z-50 bg-[#FAFAF9]/60 backdrop-blur-md flex h-16 items-center justify-between px-16 border-b border-black/5">
+        <header
+  className={`sticky top-0 z-50 flex h-20 items-center justify-between px-12 
+  transition-all duration-500 ease-in-out backdrop-blur-xl border-b ${
+    isHero
+      ? "bg-black text-white border-white/10"
+      : "bg-[#FAFAF9] text-black border-black/10"
+  }`}
+>
         <div className="flex items-center gap-4">
           <div className="grid h-12 w-12 place-items-center rounded-full bg-black text-white">
             <ArrowRight size={20} className="-rotate-45" />
           </div>
-          <span className="text-lg font-medium">Lorem Ipsum</span>
+          <span className="text-lg font-medium transition-colors duration-500 ease-in-out">
+  Lorem Ipsum
+</span>
         </div>
 
         <nav className="hidden items-center gap-12 text-[15px] font-medium lg:flex">
-          <a className="flex items-center gap-1" href="#">Platform <ChevronDown size={15} /></a>
-          <a className="flex items-center gap-1" href="#">Solutions <ChevronDown size={15} /></a>
-          <a href="#">Customers</a>
-          <a className="flex items-center gap-1" href="#">Resources <ChevronDown size={15} /></a>
-          <a className="flex items-center gap-1" href="#">Company <ChevronDown size={15} /></a>
+          <a className="transition-colors duration-500 ease-in-out" href="#">
+  Platform
+</a>
+          <a className="flex items-center gap-1 transition-colors duration-500 ease-in-out" href="#">Solutions <ChevronDown size={15} /></a>
+          <a className="transition-colors duration-500 ease-in-out" href="#">Customers</a>
+          <a className="flex items-center gap-1 transition-colors duration-500 ease-in-out" href="#">Resources <ChevronDown size={15} /></a>
+          <a className="flex items-center gap-1 transition-colors duration-500 ease-in-out" href="#">Company <ChevronDown size={15} /></a>
         </nav>
 
         <div className="flex items-center gap-4">
-          <button className="rounded-lg border border-black px-4 py-2 text-xs font-medium hover:bg-black hover:text-white">
-            Sign in
-          </button>
-          <button className="rounded-lg bg-white px-4 py-2 text-xs font-semibold text-black hover:bg-black/85 hover:text-white">
-            Request a Demo
-          </button>
+          <button
+          className="transition-all duration-700 ease-in-out"
+  className={`rounded-lg border px-4 py-2 text-xs font-medium transition ${
+    isHero
+      ? "border-white/40 text-white hover:bg-white hover:text-black"
+      : "border-black text-black hover:bg-black hover:text-white"
+  }`}
+>
+  Sign in
+</button>
+          <button
+          className="transition-all duration-700 ease-in-out"
+  className={`rounded-lg px-5 py-2 text-xs font-semibold transition ${
+    isHero
+      ? "bg-white text-black hover:bg-white/85"
+      : "bg-black text-white hover:bg-black/85"
+  }`}
+>
+  Request a Demo
+</button>
         </div>
       </header>
 
@@ -66,7 +104,7 @@ export default function HomePage() {
             <button className="rounded-lg bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-black/85 text-white">
               Request a Demo
             </button>
-            <button className="inline-flex items-center gap-2 text-sm font-semibold hover:opacity-60">
+            <button className="inline-flex items-center gap-2 text-sm font-semibold transition-opacity duration-500 ease-in-out hover:opacity-60">
               Learn more <ArrowRight size={16} />
             </button>
           </div>
