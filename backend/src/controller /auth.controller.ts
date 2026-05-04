@@ -1,11 +1,8 @@
-// src/routes/auth.ts
-import { Router } from "express";
-import  database from "../database.js";
+import { Request, Response } from "express";
+import database from "../database";
 import { verifyGoogleToken } from "../utils/google";
 import { signToken } from "../utils/jwt";
-import { hashPassword, verifyPassword } from "../utils/password.js";
-
-const router = Router();
+import { hashPassword, verifyPassword } from "../utils/password";
 
 function toSafeUser(user: {
   passwordHash?: string | null;
@@ -15,7 +12,7 @@ function toSafeUser(user: {
   return safeUser;
 }
 
-router.post("/register", async (req, res) => {
+export async function register(req: Request, res: Response) {
   try {
     const { fullName, email, password } = req.body;
     const normalizedEmail = String(email || "").toLowerCase().trim();
@@ -42,6 +39,7 @@ router.post("/register", async (req, res) => {
     }
 
     const [firstName, ...lastNameParts] = normalizedName.split(/\s+/);
+
     const user = await database.user.create({
       data: {
         email: normalizedEmail,
@@ -53,13 +51,13 @@ router.post("/register", async (req, res) => {
 
     const token = signToken(user.id);
 
-    res.status(201).json({ token, user: toSafeUser(user) });
+    return res.status(201).json({ token, user: toSafeUser(user) });
   } catch (err) {
-    res.status(500).json({ message: "Registration failed" });
+    return res.status(500).json({ message: "Registration failed" });
   }
-});
+}
 
-router.post("/login", async (req, res) => {
+export async function login(req: Request, res: Response) {
   try {
     const { email, password } = req.body;
 
@@ -69,30 +67,49 @@ router.post("/login", async (req, res) => {
 
     const user = await database.user.findUnique({
       where: { email: String(email).toLowerCase().trim() },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        avatarUrl: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+        passwordHash: true,
+      },
     });
 
-    if (!user || !verifyPassword(password, user.passwordHash)) {
+    if (!user || !verifyPassword(String(password), user.passwordHash)) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
     const token = signToken(user.id);
 
-    res.json({ token, user: toSafeUser(user) });
+    return res.json({ token, user: toSafeUser(user) });
   } catch (err) {
-    res.status(500).json({ message: "Login failed" });
+    return res.status(500).json({ message: "Login failed" });
   }
-});
+}
 
-router.post("/google", async (req, res) => {
+export async function googleLogin(req: Request, res: Response) {
   try {
     const { idToken } = req.body;
 
+    if (!idToken) {
+      return res.status(400).json({ message: "Google token is required" });
+    }
+
     const payload = await verifyGoogleToken(idToken);
 
-    const email = payload.email!;
+    const email = payload.email?.toLowerCase().trim();
     const name = payload.name;
     const picture = payload.picture;
     const googleId = payload.sub;
+
+    if (!email) {
+      return res.status(401).json({ message: "Google email not found" });
+    }
 
     let user = await database.user.findUnique({
       where: { email },
@@ -111,10 +128,12 @@ router.post("/google", async (req, res) => {
 
     const token = signToken(user.id);
 
-    res.json({ token, user });
+    return res.json({ token, user: toSafeUser(user) });
   } catch (err) {
-    res.status(401).json({ message: "Google auth failed" });
-  }
-});
-
-export default router;
+  console.error("Google auth error:", err);
+  return res.status(401).json({
+    message: "Google auth failed",
+    error: err instanceof Error ? err.message : String(err),
+  });
+}
+}
