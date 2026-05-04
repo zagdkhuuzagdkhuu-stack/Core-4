@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { ArrowRight, ChevronDown, Play, X } from "lucide-react";
 
 const logos = [
@@ -83,7 +84,8 @@ export default function HomePage() {
         </nav>
 
         <div className="flex items-center gap-4">
-          <button
+          <Link
+            to="/login"
             className={`rounded-lg border px-4 py-2 text-xs font-medium transition-all duration-500 ${
               isHero
                 ? "border-white/40 text-white hover:bg-white hover:text-black"
@@ -91,8 +93,9 @@ export default function HomePage() {
             }`}
           >
             Sign in
-          </button>
-          <button
+          </Link>
+          <Link
+            to="/register"
             className={`rounded-lg px-5 py-2 text-xs font-medium transition-all duration-500 ${
               isHero
                 ? "bg-white text-black hover:bg-white/85"
@@ -100,7 +103,7 @@ export default function HomePage() {
             }`}
           >
             Request a Demo
-          </button>
+          </Link>
         </div>
       </header>
 
@@ -117,12 +120,12 @@ export default function HomePage() {
             Create, review, analyze, and manage contracts from one secure workspace built for modern legal teams.
           </p>
           <div className="mt-9 flex items-center gap-8">
-            <button className="rounded-lg bg-white px-8 py-4 text-sm font-semibold text-black hover:bg-white/85">
-              Request a Demo
-            </button>
-            <button className="inline-flex items-center gap-2 text-sm font-semibold transition-opacity duration-500 hover:opacity-60">
+            <Link to="/register" className="rounded-lg bg-white px-8 py-4 text-sm font-semibold text-black hover:bg-white/85">
+              Start free reviews
+            </Link>
+            <Link to="/dashboard" className="inline-flex items-center gap-2 text-sm font-semibold transition-opacity duration-500 hover:opacity-60">
               Learn more <ArrowRight size={16} />
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -198,9 +201,9 @@ export default function HomePage() {
             <h3 className="text-lg font-semibold">Turn contract work into a calm, searchable workflow.</h3>
             <p className="mt-1 text-sm text-black/60">Draft, review, and analyze documents without leaving your workspace.</p>
           </div>
-          <button className="rounded-md bg-black px-7 py-4 text-sm font-semibold text-white hover:bg-black/85">
-            Request a Demo
-          </button>
+          <Link to="/register" className="rounded-md bg-black px-7 py-4 text-sm font-semibold text-white hover:bg-black/85">
+            Start free reviews
+          </Link>
         </div>
       </section>
     </main>

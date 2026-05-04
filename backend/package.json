@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon",
     "build": "tsc",
-    "start": "node dist/app.js"
+    "start": "tsx src/server.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",

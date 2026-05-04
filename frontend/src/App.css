@@ -1,5 +1,399 @@
 @import "tailwindcss";
 
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f6f5f1;
+}
+
+button,
+a,
+input,
+textarea {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.surface-panel {
+  border: 1px solid rgba(0, 0, 0, 0.11);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 18px 46px rgba(16, 16, 14, 0.05);
+}
+
+.dark-panel {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(255, 255, 255, 0.09);
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(140deg, #2f2e2b 0%, #151514 54%, #26231e 100%);
+  background-size: 34px 34px, 34px 34px, auto;
+}
+
+.app-nav-link,
+.primary-button,
+.secondary-button,
+.danger-button,
+.light-button,
+.ghost-light-button,
+.auth-provider-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  border-radius: 6px;
+  padding: 0 14px;
+  font-size: 14px;
+  font-weight: 650;
+  text-decoration: none;
+  transition: background 180ms ease, color 180ms ease, border-color 180ms ease, opacity 180ms ease;
+}
+
+.app-nav-link {
+  color: rgba(0, 0, 0, 0.58);
+}
+
+.app-nav-link:hover,
+.app-nav-link-active {
+  background: #111;
+  color: #fff;
+}
+
+.primary-button {
+  border: 1px solid #111;
+  background: #111;
+  color: #fff;
+}
+
+.primary-button:hover {
+  background: #30302d;
+}
+
+.primary-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.secondary-button {
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  background: #fff;
+  color: #111;
+}
+
+.secondary-button:hover {
+  border-color: #111;
+}
+
+.danger-button {
+  border: 1px solid rgba(157, 75, 40, 0.28);
+  background: rgba(157, 75, 40, 0.08);
+  color: #7d3316;
+}
+
+.light-button {
+  border: 1px solid #fff;
+  background: #fff;
+  color: #111;
+}
+
+.ghost-light-button {
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #fff;
+}
+
+.auth-provider-button {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.13);
+  background: #fff;
+  color: #111;
+}
+
+.field-label {
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.58);
+}
+
+.field-label input,
+.field-label textarea,
+.input-with-icon {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.13);
+  border-radius: 6px;
+  background: #fff;
+  color: #111;
+}
+
+.field-label input,
+.field-label textarea {
+  min-height: 46px;
+  padding: 0 13px;
+  outline: none;
+}
+
+.field-label textarea {
+  padding-top: 12px;
+  resize: vertical;
+}
+
+.field-label input:focus,
+.field-label textarea:focus,
+.input-with-icon:focus-within {
+  border-color: #111;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.055);
+}
+
+.input-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 13px;
+}
+
+.input-with-icon input {
+  border: 0;
+  padding: 0;
+  box-shadow: none;
+}
+
+.search-field {
+  display: flex;
+  min-width: min(100%, 390px);
+  flex: 1;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.13);
+  border-radius: 6px;
+  background: #fff;
+  padding: 0 13px;
+}
+
+.search-field input {
+  min-height: 43px;
+  width: 100%;
+  border: 0;
+  outline: none;
+}
+
+.segmented-control {
+  display: flex;
+  gap: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
+  background: #efede7;
+  padding: 4px;
+}
+
+.segmented-control button {
+  min-height: 34px;
+  border-radius: 4px;
+  padding: 0 10px;
+  color: rgba(0, 0, 0, 0.58);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.segmented-control button.active {
+  background: #111;
+  color: #fff;
+}
+
+.metric-card,
+.compact-card,
+.contract-list-item,
+.risk-row,
+.workflow-row {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.metric-card {
+  padding: 18px;
+}
+
+.metric-card span {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.42);
+}
+
+.metric-card strong {
+  display: block;
+  margin-top: 12px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 44px;
+  line-height: 1;
+}
+
+.metric-card p,
+.compact-card p,
+.contract-list-item p {
+  margin: 6px 0 0;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.contract-list-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 17px;
+  color: #111;
+  text-decoration: none;
+}
+
+.contract-list-item:hover {
+  border-color: rgba(0, 0, 0, 0.24);
+  background: #fff;
+}
+
+.contract-list-item h3,
+.compact-card h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.status-chip,
+.risk-pill {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0 10px;
+  background: #111;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.risk-pill-medium {
+  background: rgba(157, 75, 40, 0.12);
+  color: #7d3316;
+}
+
+.type-option {
+  display: flex;
+  min-height: 46px;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.11);
+  border-radius: 6px;
+  background: #fff;
+  padding: 0 13px;
+  text-align: left;
+  font-weight: 700;
+}
+
+.type-option-active {
+  border-color: #111;
+  background: #111;
+  color: #fff;
+}
+
+.clause-chip {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 999px;
+  background: #fff;
+  padding: 0 11px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.contract-paper {
+  min-height: 340px;
+  border-radius: 6px;
+  background: #fff;
+  padding: 32px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.contract-paper.compact {
+  min-height: 230px;
+}
+
+.contract-paper h3 {
+  margin: 0 0 22px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 30px;
+}
+
+.contract-paper p {
+  max-width: 760px;
+  color: rgba(0, 0, 0, 0.68);
+  line-height: 1.85;
+}
+
+.risk-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.compact-card {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+}
+
+.upload-drop {
+  display: grid;
+  min-height: 290px;
+  cursor: pointer;
+  place-items: center;
+  align-content: center;
+  gap: 10px;
+  border: 1.5px dashed rgba(0, 0, 0, 0.22);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+    linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    #fff;
+  background-size: 30px 30px;
+  text-align: center;
+}
+
+.workflow-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px;
+  font-weight: 700;
+}
+
+.workflow-index {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-size: 12px;
+}
+
 .hero-product-shell {
   position: relative;
   display: grid;
