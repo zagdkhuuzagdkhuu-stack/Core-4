@@ -3,7 +3,7 @@ import {
   register,
   login,
   googleLogin,
-} from "../controller /auth.controller";
+} from "../controller/auth.controller";
 
 const router = Router();
 
