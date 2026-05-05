@@ -1,6 +1,0 @@
-{
-"watch" : ["src", ".env"],
-"ext" : "js,ts,json",
-"ignore" : ["src/log/*", "src/**/*.{spec,test}.ts"],
-"exec": "node --import tsx src/server.ts"
-}

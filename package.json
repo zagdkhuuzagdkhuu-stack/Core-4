@@ -1,0 +1,49 @@
+{
+  "name": "ai-contract-automation",
+  "version": "1.0.0",
+  "description": "AI contract automation app",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently -n backend,frontend -c blue,green \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "tsx watch app/src/server.ts",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build": "npm run build:backend && npm --prefix frontend run build",
+    "build:backend": "tsc",
+    "build:frontend": "npm --prefix frontend run build",
+    "start": "tsx app/src/server.ts",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "body-parser": "^2.2.2",
+    "cors": "^2.8.6",
+    "debug": "4.3.7",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "google-auth-library": "^10.6.2",
+    "helmet": "^8.1.0",
+    "init": "^0.1.2",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.20.0",
+    "tsx": "^4.21.0"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.19.6",
+    "@types/cors": "^2.8.19",
+    "@types/dotenv": "^6.1.1",
+    "@types/express": "^5.0.6",
+    "@types/helmet": "^0.0.48",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^25.6.0",
+    "@types/pg": "^8.20.0",
+    "concurrently": "^9.2.1",
+    "prisma": "^7.8.0",
+    "typescript": "^6.0.3"
+  },
+  "keywords": []
+}
