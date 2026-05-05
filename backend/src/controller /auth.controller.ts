@@ -103,12 +103,12 @@ export async function googleLogin(req: Request, res: Response) {
     const payload = await verifyGoogleToken(idToken);
 
     const email = payload.email?.toLowerCase().trim();
-    const name = payload.name;
+    const name = payload.name || "";
     const picture = payload.picture;
     const googleId = payload.sub;
 
-    if (!email) {
-      return res.status(401).json({ message: "Google email not found" });
+    if (!email || !googleId) {
+      return res.status(401).json({ message: "Google account info not found" });
     }
 
     let user = await database.user.findUnique({
@@ -116,12 +116,23 @@ export async function googleLogin(req: Request, res: Response) {
     });
 
     if (!user) {
+      const [firstName, ...lastNameParts] = name.split(/\s+/);
+
       user = await database.user.create({
         data: {
           email,
-          firstName: name,
+          firstName: firstName || null,
+          lastName: lastNameParts.join(" ") || null,
           avatarUrl: picture,
           googleId,
+        },
+      });
+    } else if (!user.googleId) {
+      user = await database.user.update({
+        where: { id: user.id },
+        data: {
+          googleId,
+          avatarUrl: user.avatarUrl || picture,
         },
       });
     }
@@ -130,10 +141,10 @@ export async function googleLogin(req: Request, res: Response) {
 
     return res.json({ token, user: toSafeUser(user) });
   } catch (err) {
-  console.error("Google auth error:", err);
-  return res.status(401).json({
-    message: "Google auth failed",
-    error: err instanceof Error ? err.message : String(err),
-  });
-}
+    console.error("Google auth error:", err);
+    return res.status(401).json({
+      message: "Google auth failed",
+      error: err instanceof Error ? err.message : String(err),
+    });
+  }
 }
