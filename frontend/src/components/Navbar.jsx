@@ -8,7 +8,7 @@ function Navbar() {
         AI Contract Automation
       </Link>
       <nav className="nav-links">
-        <Link to="/dashboard">Dashboard</Link>
+        <Link to="/">Home</Link>
         <Link to="/contracts/create">Create</Link>
         <Link to="/login">Login</Link>
       </nav>

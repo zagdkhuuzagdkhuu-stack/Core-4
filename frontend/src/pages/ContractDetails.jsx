@@ -27,7 +27,7 @@ export default function ContractDetails() {
           <div className="contract-paper">
             <h3>{contract.title}</h3>
             <p>
-              This agreement is made between LexPilot Workspace and {contract.party}. The parties agree to the scope,
+              This agreement is made between DraftLy Workspace and {contract.party}. The parties agree to the scope,
               payment terms, confidentiality duties, and operational obligations described in the attached schedule.
             </p>
             <p>

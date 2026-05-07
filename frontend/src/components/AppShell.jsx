@@ -1,9 +1,10 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import { ArrowRight, FilePlus2, LayoutDashboard, Search, Upload } from "lucide-react";
+import BackButton from "./BackButton.jsx";
 
 const navItems = [
-  { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
+  { label: "Home", to: "/", icon: LayoutDashboard },
   { label: "Create", to: "/contracts/create", icon: FilePlus2 },
   { label: "Upload", to: "/contracts/upload", icon: Upload },
 ];
@@ -12,12 +13,15 @@ export default function AppShell({ children, eyebrow, title, description, action
   return (
     <main className="min-h-screen bg-[#f6f5f1] text-black">
       <header className="sticky top-0 z-40 flex h-20 items-center justify-between border-b border-black/10 bg-[#f6f5f1]/88 px-8 backdrop-blur-md max-md:px-4">
-        <Link to="/" className="flex items-center gap-4">
-          <span className="grid h-11 w-11 place-items-center rounded-full bg-black text-white">
-            <ArrowRight size={18} className="-rotate-45" />
-          </span>
-          <span className="text-lg font-medium">LexPilot</span>
-        </Link>
+        <div className="flex items-center gap-4">
+          <BackButton />
+          <Link to="/" className="flex items-center gap-4">
+            <span className="grid h-11 w-11 place-items-center rounded-full bg-black text-white">
+              <ArrowRight size={18} className="-rotate-45" />
+            </span>
+            <span className="brand-wordmark text-2xl">DraftLy</span>
+          </Link>
+        </div>
         <nav className="hidden items-center gap-2 md:flex">
           {navItems.map(({ label, to, icon: Icon }) => (
             <NavLink key={to} to={to} className={({ isActive }) => `app-nav-link ${isActive ? "app-nav-link-active" : ""}`}>

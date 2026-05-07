@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, Lock, Mail, User } from "lucide-react";
 import api from "../lib/api.js";
+import BackButton from "../components/BackButton.jsx";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export default function Register() {
       const { data } = await api.post("/auth/register", form);
       localStorage.setItem("lexpilot_token", data.token);
       localStorage.setItem("lexpilot_user", JSON.stringify(data.user));
-      navigate("/dashboard");
+      navigate("/");
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed. Please try again.");
     } finally {
@@ -28,12 +29,15 @@ export default function Register() {
 
   return (
     <main className="min-h-screen bg-[#f6f5f1] px-6 py-10 text-black">
-      <Link to="/" className="flex items-center gap-4">
-        <span className="grid h-11 w-11 place-items-center rounded-full bg-black text-white">
-          <ArrowRight size={18} className="-rotate-45" />
-        </span>
-        <span className="text-lg font-medium">LexPilot</span>
-      </Link>
+      <div className="flex items-center gap-4">
+        <BackButton />
+        <Link to="/" className="flex items-center gap-4">
+          <span className="grid h-11 w-11 place-items-center rounded-full bg-black text-white">
+            <ArrowRight size={18} className="-rotate-45" />
+          </span>
+          <span className="brand-wordmark text-2xl">DraftLy</span>
+        </Link>
+      </div>
 
       <section className="mx-auto mt-16 grid max-w-5xl gap-10 lg:grid-cols-[0.9fr_1fr]">
         <div>
