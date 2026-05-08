@@ -3,10 +3,10 @@ import { AlertTriangle, Check, FileText, Upload } from "lucide-react";
 import AppShell from "../components/AppShell.jsx";
 
 const extractedItems = [
-  ["Parties", "Altai Growth Partners, North Square Properties"],
-  ["Key dates", "Effective May 15, 2026. Expires May 14, 2027."],
-  ["Obligations", "Monthly payment, maintenance reporting, notice requirements."],
-  ["Risks", "Repair duty and late payment language need review."],
+  ["Талууд", "Altai Growth Partners, North Square Properties"],
+  ["Гол огноо", "2026-05-15-нд эхэлж, 2027-05-14-нд дуусна."],
+  ["Үүрэг", "Сарын төлбөр, засвар үйлчилгээний тайлан, мэдэгдлийн шаардлага."],
+  ["Эрсдэл", "Засварын үүрэг болон хугацаа хэтрэлтийн нөхцөлийг хянах шаардлагатай."],
 ];
 
 export default function UploadContract() {
@@ -14,16 +14,16 @@ export default function UploadContract() {
 
   return (
     <AppShell
-      eyebrow="Upload Existing Contract"
-      title="Turn a signed or draft file into structured contract intelligence."
-      description="Upload a PDF, DOCX, or Word document. The backend will extract parties, dates, clauses, obligations, and risk signals for review."
+      eyebrow="Одоо байгаа гэрээ оруулах"
+      title="Гарын үсэг зурсан эсвэл ноорог файлыг бүтэцтэй гэрээний мэдээлэл болго."
+      description="PDF, DOCX эсвэл Word файл оруулна уу. Систем талууд, огноо, заалт, үүрэг болон эрсдэлийн дохиог гаргана."
     >
       <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
         <section className="surface-panel p-6">
           <label className="upload-drop">
             <Upload size={26} />
-            <span className="text-lg font-semibold">{fileName || "Drop contract file here"}</span>
-            <span className="text-sm text-black/50">PDF, DOCX, or Word document</span>
+            <span className="text-lg font-semibold">{fileName || "Гэрээний файлаа энд оруулна уу"}</span>
+            <span className="text-sm text-black/50">PDF, DOCX эсвэл Word файл</span>
             <input
               className="sr-only"
               type="file"
@@ -33,7 +33,7 @@ export default function UploadContract() {
           </label>
 
           <div className="mt-6 grid gap-3">
-            {["AI extracting data", "AI analyzing clauses", "Human review before saving"].map((item, index) => (
+            {["AI өгөгдөл гаргаж байна", "AI заалтуудыг шинжилж байна", "Хадгалахаас өмнө хүн хянана"].map((item, index) => (
               <div key={item} className="workflow-row">
                 <span className="workflow-index">{index + 1}</span>
                 <span>{item}</span>
@@ -45,10 +45,10 @@ export default function UploadContract() {
         <section className="surface-panel p-6">
           <div className="mb-5 flex items-center justify-between">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-black/42">Extraction Preview</p>
-              <h2 className="mt-2 text-2xl font-semibold">Ready for review</h2>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-black/42">Мэдээлэл танилт</p>
+              <h2 className="mt-2 text-2xl font-semibold">Хянахад бэлэн</h2>
             </div>
-            <span className="risk-pill risk-pill-medium">58 risk</span>
+            <span className="risk-pill risk-pill-medium">58 эрсдэл</span>
           </div>
 
           <div className="grid gap-3">
@@ -66,12 +66,12 @@ export default function UploadContract() {
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
             <button className="primary-button">
               <Check size={16} />
-              Accept
+              Зөвшөөрөх
             </button>
-            <button className="secondary-button">Correct Data</button>
+            <button className="secondary-button">Засах</button>
             <button className="secondary-button">
               <AlertTriangle size={16} />
-              Compare
+              Харьцуулах
             </button>
           </div>
         </section>

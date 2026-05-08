@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, ImageIcon, Play } from "lucide-react";
-
+import BrandLogo from "../components/BrandLogo.jsx";
 
 const logos = [
   "ANYA",
@@ -15,29 +15,64 @@ const logos = [
 ];
 
 const featureWords = [
-  "Contract Analysis",
-  "Complex Workflows",
-  "Document Storage",
-  "Legal Research",
-  "Deal Management",
-  "Due Diligence",
-  "Fund Formation",
+  "Гэрээ шинжлэх",
+  "Ажлын урсгал",
+  "Баримт хадгалах",
+  "Хуулийн судалгаа",
+  "Хэлцэл удирдах",
+  "Нарийвчилсан шалгалт",
+  "Гэрээ боловсруулах",
 ];
 
 const homepagePictures = {
   hero: {
     src: null,
-    alt: "DraftLy contract review workspace",
-    label: "Draft workspace image",
+    alt: "DraftLy гэрээ хянах ажлын орчин",
+    label: "Ажлын орчны зураг",
   },
 };
 
 const walkthroughVideo = {
   src: null,
   poster: null,
-  label: "How-to walkthrough video",
-  title: "How to use DraftLy",
+  label: "Ашиглах зааврын бичлэг",
+  title: "DraftLy ашиглах заавар",
 };
+
+const footerSections = [
+  {
+    title: "Платформ",
+    links: [
+      { label: "Гэрээ боловсруулах", href: "#" },
+      { label: "Гэрээ шинжлэх", href: "#" },
+      { label: "Эрсдэл илрүүлэх", href: "#" },
+      { label: "Баримт бичиг удирдах", href: "#" },
+    ],
+  },
+  {
+    title: "Шийдэл",
+    links: [
+      { label: "Байгууллагад", href: "#" },
+      { label: "Хуулийн багт", href: "#" },
+      { label: "Стартапуудад", href: "#" },
+    ],
+  },
+  {
+    title: "Компани",
+    links: [
+      { label: "Бидний тухай", href: "#" },
+      { label: "Аюулгүй байдал", href: "#" },
+    ],
+  },
+  {
+    title: "Холбоо барих",
+    links: [
+      { label: "Facebook", href: "https://www.facebook.com/profile.php?id=61589540814058" },
+      { label: "Instagram", href: "https://instagram.com" },
+      { label: "YouTube", href: "https://youtube.com" },
+    ],
+  },
+];
 
 export default function HomePage() {
   const [isHero, setIsHero] = useState(true);
@@ -46,7 +81,7 @@ export default function HomePage() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsHero(window.scrollY < 120);
+      setIsHero(window.scrollY < 800);
     };
 
     handleScroll();
@@ -76,52 +111,86 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-white text-black">
       <header
-        className={`sticky top-0 z-50 grid h-[78px] grid-cols-[auto_1fr_auto] items-center gap-8 px-11 transition-all duration-500 ease-in-out ${
-          isHero
-            ? "bg-[#090806] text-white border-none"
-            : "bg-[#FAFAF9]/78 text-black backdrop-blur-md border-b border-black/5"
-        }`}
-      >
-        <Link to="/" className="brand-wordmark text-[34px]">
-          DraftLy
-        </Link>
+  className={`sticky top-0 z-50 grid h-[78px] grid-cols-[auto_1fr_auto] items-center gap-8 px-11 transition-all duration-500 ease-in-out ${
+    isHero
+      ? "bg-black text-white " : "bg-black/20 text-black backdrop-blur-md"
+  }`}
+>
+  {/* Logo */}
+  <Link
+    to="/"
+    className={`brand-wordmark text-[34px] transition-colors duration-500 ${
+      isHero ? "text-white" : "text-black"
+    }`}
+  >
+    DraftLy.
+  </Link>
 
-        <nav
-          className={`flex min-w-0 justify-center gap-5 whitespace-nowrap text-[13px] font-semibold transition-colors duration-500 sm:gap-9 sm:text-[15px] ${
-            isHero ? "text-white" : "text-black"
-          }`}
-        >
-          <Link className="homepage-nav-link" to="/contracts/create">
-            Create new Contract
-          </Link>
-          <Link className="homepage-nav-link" to="/contracts/upload">
-            Upload existing Contract
-          </Link>
-        </nav>
+  {/* Navbar Links */}
+  <nav
+    className={`flex min-w-0 justify-center gap-5 whitespace-nowrap text-[13px] font-semibold transition-colors duration-500 sm:gap-9 sm:text-[15px] ${
+      isHero ? "text-white" : "text-black"
+    }`}
+  >
+    <Link className="homepage-nav-link" to="/solution">
+      Solution
+    </Link>
 
-        <div className="flex items-center justify-end gap-5">
-          <Link
-            to="/login"
-            className={`inline-flex h-[42px] items-center gap-2 rounded-md border px-4 text-[15px] font-semibold transition-all duration-500 ${
-              isHero
-                ? "border-white text-white hover:bg-white hover:text-black"
-                : "border-black text-black hover:bg-black hover:text-white"
-            }`}
-          >
-            Login
-          </Link>
-          <Link
-            to="/register"
-            className={`hidden h-[42px] items-center rounded-md px-4 text-[15px] font-semibold transition-all duration-500 sm:inline-flex ${
-              isHero
-                ? "bg-white text-black hover:bg-white/86"
-                : "bg-black text-white hover:bg-black/82"
-            }`}
-          >
-            Request a Demo
-          </Link>
-        </div>
-      </header>
+    <Link className="homepage-nav-link" to="/contracts/create">
+      Create New Contract
+    </Link>
+
+    <Link className="homepage-nav-link" to="/contracts/upload">
+      Upload Existing Contract
+    </Link>
+
+    <div className="group">
+  <Link
+    type = "button"
+    className="homepage-nav-link"
+  >
+    About
+  </Link>
+
+  <div className="cursor-pointer invisible fixed left-0 top-[78px] z-40 w-screen translate-y-2 bg-black/70 backdrop-blur-xl text-white opacity-0 transition-all duration-300 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+    <div className="grid min-h-[520px] grid-cols-2 gap-20 border-t border-white/10 px-16 py-20">
+      <div>
+        <h3 className="mb-4 text-[14px] font-semibold text-white">
+          Company
+        </h3>
+        <p className="max-w-[360px] text-[14px] leading-7 text-white/75">
+          DraftLy-ийн тухай, платформын зорилго болон хөгжүүлэлтийн мэдээлэл.
+        </p>
+      </div>
+
+      <div>
+        <h3 className="mb-4 text-[14px] font-semibold text-white">
+          Newsroom
+        </h3>
+        <p className="max-w-[380px] text-[14px] leading-7 text-white/75">
+          Платформын шинэчлэлт, мэдээ болон хөгжүүлэлтийн мэдээлэл.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+    
+  </nav>
+
+  {/* Right side */}
+  <div className="flex items-center justify-end gap-5">
+    <Link
+      to="/login"
+      className={`inline-flex h-[42px] items-center gap-2 rounded-md border px-4 text-[15px] font-semibold transition-all duration-500 ${
+        isHero
+          ? "border-white text-white hover:bg-white hover:text-black"
+          : "border-black text-black hover:bg-black hover:text-white"
+      }`}
+    >
+      Нэвтрэх
+    </Link>
+  </div>
+</header>
 
       <section className="grid min-h-[620px] grid-cols-[0.88fr_1.12fr] items-center gap-20 bg-gradient-to-b from-black to-[#111111] px-16 pb-14 pt-12 text-white max-lg:grid-cols-1">
         <div className="max-w-[560px]">
@@ -136,29 +205,26 @@ export default function HomePage() {
           </p>
           <div className="mt-9 flex items-center gap-8">
             <Link to={isLoggedIn ? "/contracts/upload" : "/login"} className="rounded-lg bg-white px-8 py-4 text-sm font-semibold text-black hover:bg-white/85">
-              Start free reviews
+              Үнэгүй эхлэх
             </Link>
             <a href="#overview" className="inline-flex items-center gap-2 text-sm font-semibold transition-opacity duration-500 hover:opacity-60">
-              Learn more <ArrowRight size={16} />
+              Дэлгэрэнгүй <ArrowRight size={16} />
             </a>
           </div>
         </div>
 
         <div className="flex justify-end">
-          <PictureSlot
-            picture={homepagePictures.hero}
-            className="picture-slot-hero"
-          />
+          <PictureSlot picture={homepagePictures.hero} className="picture-slot-hero" />
         </div>
       </section>
 
       <section className="logo-marquee-section">
         <p className="logo-marquee-label">
-          Trusted by leading
+          Итгэл хүлээсэн
           <br />
-          organizations
+          байгууллагууд
         </p>
-        <div className="logo-marquee-track" aria-label="Partner logos">
+        <div className="logo-marquee-track" aria-label="Хамтрагч байгууллагууд">
           <div className="logo-marquee-content">
             {[...logos, ...logos, ...logos].map((logo, index) => (
               <span key={`${logo}-${index}`}>{logo}</span>
@@ -171,7 +237,7 @@ export default function HomePage() {
         <div className="video-copy">
           <h2>
             Манай платформ нь гэрээ, баримт бичиг боловсруулах, хянах, удирдах үйл явцыг хиймэл оюуны тусламжтайгаар автоматжуулж,
-            <span> ажлын хурд болон үр ашигийг нэмэгдүүлэх зорилготой орчин үеийн шийдэл юм. </span>
+            <span> ажлын хурд болон үр ашгийг нэмэгдүүлэх зорилготой орчин үеийн шийдэл юм. </span>
           </h2>
         </div>
 
@@ -180,10 +246,10 @@ export default function HomePage() {
 
       <section className="feature-slider-section">
         <div>
-          <p className="feature-kicker">The top legal teams use DraftLy for</p>
+          <p className="feature-kicker">Хуулийн багууд DraftLy-г ашигладаг чиглэлүүд</p>
         </div>
 
-        <div className="feature-word-window" aria-label="Legal platform capabilities">
+        <div className="feature-word-window" aria-label="Платформын боломжууд">
           <div className="feature-word-stack">
             {featureWords.map((item, index) => {
               let offset = index - activeFeature;
@@ -213,9 +279,31 @@ export default function HomePage() {
           </div>
         </div>
 
-        <button className="feature-action">Explore Platform</button>
+        <button className="feature-action">Платформ үзэх</button>
       </section>
 
+      <footer className="site-footer">
+        <div className="site-footer-inner">
+          <Link to="/" className="site-footer-logo" aria-label="DraftLy нүүр хуудас">
+            <BrandLogo size="xl" />
+          </Link>
+
+          <nav className="site-footer-grid" aria-label="Доод цэс">
+            {footerSections.map((section) => (
+              <div key={section.title} className="site-footer-column">
+                <h2>{section.title}</h2>
+                <ul>
+                  {section.links.map((item) => (
+                    <li key={item.label}>
+                      <a href={item.href}>{item.label}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </nav>
+        </div>
+      </footer>
     </main>
   );
 }
@@ -254,7 +342,7 @@ function VideoSlot({ video }) {
             <ImageIcon size={34} />
             <span>{video.label}</span>
           </div>
-          <button className="video-play" aria-label="Play walkthrough video" type="button">
+          <button className="video-play" aria-label="Зааврын бичлэг тоглуулах" type="button">
             <Play size={22} fill="currentColor" />
           </button>
         </div>

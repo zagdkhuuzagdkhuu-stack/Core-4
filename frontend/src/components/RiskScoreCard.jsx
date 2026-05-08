@@ -3,7 +3,7 @@ import React from "react";
 function RiskScoreCard({ score = 0 }) {
   return (
     <section className="panel risk-card">
-      <span className="muted">Risk score</span>
+      <span className="muted">Эрсдэлийн оноо</span>
       <strong>{score}</strong>
     </section>
   );

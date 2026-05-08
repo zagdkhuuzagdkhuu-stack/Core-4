@@ -1,12 +1,13 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
-import { ArrowRight, FilePlus2, LayoutDashboard, Search, Upload } from "lucide-react";
+import { FilePlus2, LayoutDashboard, Search, Upload } from "lucide-react";
 import BackButton from "./BackButton.jsx";
+import BrandLogo from "./BrandLogo.jsx";
 
 const navItems = [
-  { label: "Home", to: "/", icon: LayoutDashboard },
-  { label: "Create", to: "/contracts/create", icon: FilePlus2 },
-  { label: "Upload", to: "/contracts/upload", icon: Upload },
+  { label: "Нүүр", to: "/", icon: LayoutDashboard },
+  { label: "Үүсгэх", to: "/contracts/create", icon: FilePlus2 },
+  { label: "Оруулах", to: "/contracts/upload", icon: Upload },
 ];
 
 export default function AppShell({ children, eyebrow, title, description, action }) {
@@ -16,9 +17,7 @@ export default function AppShell({ children, eyebrow, title, description, action
         <div className="flex items-center gap-4">
           <BackButton />
           <Link to="/" className="flex items-center gap-4">
-            <span className="grid h-11 w-11 place-items-center rounded-full bg-black text-white">
-              <ArrowRight size={18} className="-rotate-45" />
-            </span>
+            <BrandLogo />
             <span className="brand-wordmark text-2xl">DraftLy</span>
           </Link>
         </div>
@@ -33,7 +32,7 @@ export default function AppShell({ children, eyebrow, title, description, action
         <div className="flex items-center gap-3">
           <div className="hidden h-10 items-center gap-2 rounded-md border border-black/10 bg-white px-3 text-sm text-black/50 lg:flex">
             <Search size={15} />
-            Search contracts
+            Гэрээ хайх
           </div>
           {action}
         </div>

@@ -19,8 +19,8 @@ export default function BackButton({ className = "" }) {
       type="button"
       className={`back-button ${className}`}
       onClick={goBack}
-      aria-label="Go back"
-      title="Go back"
+      aria-label="Буцах"
+      title="Буцах"
     >
       <ArrowLeft size={18} />
     </button>

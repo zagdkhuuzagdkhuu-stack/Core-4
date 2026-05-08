@@ -5,8 +5,8 @@ function ContractCard({ contract }) {
   return (
     <article className="panel">
       <h3>{contract.title}</h3>
-      <p className="muted">{contract.status || "draft"}</p>
-      <Link to={`/contracts/${contract.id}/analysis`}>View analysis</Link>
+      <p className="muted">{contract.status || "Ноорог"}</p>
+      <Link to={`/contracts/${contract.id}/analysis`}>Шинжилгээ харах</Link>
     </article>
   );
 }

@@ -5,12 +5,12 @@ function Navbar() {
   return (
     <header className="navbar">
       <Link className="brand" to="/">
-        AI Contract Automation
+        AI гэрээний автоматжуулалт
       </Link>
       <nav className="nav-links">
-        <Link to="/">Home</Link>
-        <Link to="/contracts/create">Create</Link>
-        <Link to="/login">Login</Link>
+        <Link to="/">Нүүр</Link>
+        <Link to="/contracts/create">Үүсгэх</Link>
+        <Link to="/login">Нэвтрэх</Link>
       </nav>
     </header>
   );

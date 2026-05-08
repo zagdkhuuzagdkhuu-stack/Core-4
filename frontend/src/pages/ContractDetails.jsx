@@ -13,36 +13,34 @@ export default function ContractDetails() {
       eyebrow={contract.type}
       title={contract.title}
       description={contract.summary}
-      action={<button className="primary-button hidden sm:inline-flex"><Download size={16} /> Download</button>}
+      action={<button className="primary-button hidden sm:inline-flex"><Download size={16} /> Татах</button>}
     >
       <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <section className="surface-panel p-7">
           <div className="mb-6 flex items-center justify-between">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-black/42">Full Contract</p>
-              <h2 className="mt-2 text-2xl font-semibold">Draft preview</h2>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-black/42">Бүтэн гэрээ</p>
+              <h2 className="mt-2 text-2xl font-semibold">Ноорог урьдчилан харах</h2>
             </div>
             <span className="status-chip">{contract.status}</span>
           </div>
           <div className="contract-paper">
             <h3>{contract.title}</h3>
             <p>
-              This agreement is made between DraftLy Workspace and {contract.party}. The parties agree to the scope,
-              payment terms, confidentiality duties, and operational obligations described in the attached schedule.
+              Энэхүү гэрээ нь DraftLy ажлын орчин болон {contract.party} хооронд байгуулагдсан. Талууд хавсралтад дурдсан ажлын хүрээ, төлбөрийн нөхцөл, нууцлалын үүрэг болон үйл ажиллагааны үүргийг зөвшөөрнө.
             </p>
             <p>
-              The contract begins on {contract.date}. Payment, renewal, termination, liability, and dispute terms remain
-              subject to final legal review before approval.
+              Гэрээ {contract.date}-нд эхэлнэ. Төлбөр, сунгалт, цуцлалт, хариуцлага болон маргааны нөхцөлийг батлахаас өмнө хуулийн эцсийн хяналт шаардлагатай.
             </p>
             <p>
-              AI review highlights should be confirmed by the responsible user before signature or payment processing.
+              Гарын үсэг зурах эсвэл төлбөр боловсруулахын өмнө AI хяналтын онцолсон эрсдэлийг хариуцсан хэрэглэгч баталгаажуулна.
             </p>
           </div>
         </section>
 
         <aside className="grid gap-6">
           <section className="surface-panel p-6">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-black/42">Risk Analysis</p>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-black/42">Эрсдэлийн шинжилгээ</p>
             <div className="mt-4 flex items-end gap-3">
               <span className="font-serif text-7xl leading-none">{contract.riskScore}</span>
               <span className="pb-3 text-sm font-semibold text-black/50">/ 100</span>
@@ -55,12 +53,12 @@ export default function ContractDetails() {
           </section>
 
           <section className="surface-panel p-6">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-black/42">Actions</p>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-black/42">Үйлдлүүд</p>
             <div className="mt-4 grid grid-cols-2 gap-3">
-              <button className="secondary-button"><FilePenLine size={16} /> Edit</button>
-              <button className="secondary-button"><Copy size={16} /> Duplicate</button>
-              <button className="secondary-button"><RefreshCw size={16} /> Renew</button>
-              <button className="danger-button"><Trash2 size={16} /> Delete</button>
+              <button className="secondary-button"><FilePenLine size={16} /> Засах</button>
+              <button className="secondary-button"><Copy size={16} /> Хуулах</button>
+              <button className="secondary-button"><RefreshCw size={16} /> Сунгах</button>
+              <button className="danger-button"><Trash2 size={16} /> Устгах</button>
             </div>
           </section>
         </aside>
