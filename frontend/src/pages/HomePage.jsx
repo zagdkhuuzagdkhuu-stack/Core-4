@@ -6,12 +6,12 @@ import BrandLogo from "../components/BrandLogo.jsx";
 const logos = [
   "ANYA",
   "ZAGDAA",
-  "OCHROO",
+  "TUYA",
   "UNDRAMM",
   "ANYA",
   "ZAGDAA",
-  "OCHROO",
-  "UNDRAMM",
+  "TUYA",
+  "OCHIROO",
 ];
 
 const featureWords = [
