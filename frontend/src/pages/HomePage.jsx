@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, ImageIcon, Play } from "lucide-react";
 import BrandLogo from "../components/BrandLogo.jsx";
@@ -192,8 +192,10 @@ export default function HomePage() {
   </div>
 </header>
 
-      <section className="grid min-h-[620px] grid-cols-[0.88fr_1.12fr] items-center gap-20 bg-gradient-to-b from-black to-[#111111] px-16 pb-14 pt-12 text-white max-lg:grid-cols-1">
-        <div className="max-w-[560px]">
+      <section className="relative grid min-h-[620px] grid-cols-[0.88fr_1.12fr] items-center gap-20 overflow-hidden bg-gradient-to-b from-black to-[#111111] px-16 pb-14 pt-12 text-white max-lg:grid-cols-1">
+        <LayeredSineWaveBackground />
+
+        <div className="relative z-10 max-w-[560px]">
           <h1 className="font-serif text-[clamp(30px,3.1vw,44px)] leading-[1.2] text-white max-md:text-[28px]">
             <span className="block">Хиймэл оюунд суурилсан</span>
             <span className="block">гэрээ, баримт бичиг</span>
@@ -213,7 +215,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="flex justify-end">
+        <div className="relative z-10 flex justify-end">
           <PictureSlot picture={homepagePictures.hero} className="picture-slot-hero" />
         </div>
       </section>
@@ -305,6 +307,92 @@ export default function HomePage() {
         </div>
       </footer>
     </main>
+  );
+}
+
+function LayeredSineWaveBackground() {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) {
+      return undefined;
+    }
+
+    const ctx = canvas.getContext("2d");
+    let width = 0;
+    let height = 0;
+    let time = 0;
+    let frameId = 0;
+
+    const bands = [
+      { freq: 0.008, speed: 0.3, y: 0.35, color: [83, 210, 170] },
+      { freq: 0.011, speed: 0.5, y: 0.45, color: [130, 80, 220] },
+      { freq: 0.007, speed: 0.2, y: 0.55, color: [60, 160, 255] },
+    ];
+
+    const resizeCanvas = () => {
+      const scale = window.devicePixelRatio || 1;
+      const bounds = canvas.getBoundingClientRect();
+      width = bounds.width;
+      height = bounds.height;
+      canvas.width = Math.floor(width * scale);
+      canvas.height = Math.floor(height * scale);
+      ctx.setTransform(scale, 0, 0, scale, 0, 0);
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      bands.forEach((band) => {
+        const gradient = ctx.createLinearGradient(0, 0, 0, height);
+
+        gradient.addColorStop(0, "transparent");
+        gradient.addColorStop(0.4, `rgba(${band.color.join(",")},0.12)`);
+        gradient.addColorStop(1, "transparent");
+
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+
+        for (let x = 0; x <= width; x += 3) {
+          const wave =
+            Math.sin(x * band.freq + time * band.speed) * 80 +
+            Math.sin(x * band.freq * 1.7 + time * band.speed * 0.7) * 40;
+          const y = height * band.y + wave;
+
+          if (x === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+
+        ctx.lineTo(width, height);
+        ctx.lineTo(0, height);
+        ctx.closePath();
+        ctx.fill();
+      });
+
+      time += 0.02;
+      frameId = requestAnimationFrame(draw);
+    };
+
+    resizeCanvas();
+    draw();
+    window.addEventListener("resize", resizeCanvas);
+
+    return () => {
+      window.removeEventListener("resize", resizeCanvas);
+      cancelAnimationFrame(frameId);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="pointer-events-none absolute inset-0 z-0 h-full w-full opacity-100"
+      aria-hidden="true"
+    />
   );
 }
 
