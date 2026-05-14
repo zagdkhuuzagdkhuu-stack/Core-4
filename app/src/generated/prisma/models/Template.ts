@@ -31,9 +31,10 @@ export type TemplateMinAggregateOutputType = {
   category: string | null
   content: string | null
   isActive: boolean | null
+  createdById: string | null
+  categoryId: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  userId: string | null
 }
 
 export type TemplateMaxAggregateOutputType = {
@@ -43,9 +44,10 @@ export type TemplateMaxAggregateOutputType = {
   category: string | null
   content: string | null
   isActive: boolean | null
+  createdById: string | null
+  categoryId: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  userId: string | null
 }
 
 export type TemplateCountAggregateOutputType = {
@@ -56,9 +58,10 @@ export type TemplateCountAggregateOutputType = {
   content: number
   variables: number
   isActive: number
+  createdById: number
+  categoryId: number
   createdAt: number
   updatedAt: number
-  userId: number
   _all: number
 }
 
@@ -70,9 +73,10 @@ export type TemplateMinAggregateInputType = {
   category?: true
   content?: true
   isActive?: true
+  createdById?: true
+  categoryId?: true
   createdAt?: true
   updatedAt?: true
-  userId?: true
 }
 
 export type TemplateMaxAggregateInputType = {
@@ -82,9 +86,10 @@ export type TemplateMaxAggregateInputType = {
   category?: true
   content?: true
   isActive?: true
+  createdById?: true
+  categoryId?: true
   createdAt?: true
   updatedAt?: true
-  userId?: true
 }
 
 export type TemplateCountAggregateInputType = {
@@ -95,9 +100,10 @@ export type TemplateCountAggregateInputType = {
   content?: true
   variables?: true
   isActive?: true
+  createdById?: true
+  categoryId?: true
   createdAt?: true
   updatedAt?: true
-  userId?: true
   _all?: true
 }
 
@@ -179,11 +185,12 @@ export type TemplateGroupByOutputType = {
   description: string | null
   category: string
   content: string
-  variables: runtime.JsonValue
+  variables: runtime.JsonValue | null
   isActive: boolean
+  createdById: string
+  categoryId: string | null
   createdAt: Date
   updatedAt: Date
-  userId: string
   _count: TemplateCountAggregateOutputType | null
   _min: TemplateMinAggregateOutputType | null
   _max: TemplateMaxAggregateOutputType | null
@@ -208,17 +215,19 @@ export type TemplateWhereInput = {
   AND?: Prisma.TemplateWhereInput | Prisma.TemplateWhereInput[]
   OR?: Prisma.TemplateWhereInput[]
   NOT?: Prisma.TemplateWhereInput | Prisma.TemplateWhereInput[]
-  id?: Prisma.StringFilter<"Template"> | string
+  id?: Prisma.UuidFilter<"Template"> | string
   name?: Prisma.StringFilter<"Template"> | string
   description?: Prisma.StringNullableFilter<"Template"> | string | null
   category?: Prisma.StringFilter<"Template"> | string
   content?: Prisma.StringFilter<"Template"> | string
-  variables?: Prisma.JsonFilter<"Template">
+  variables?: Prisma.JsonNullableFilter<"Template">
   isActive?: Prisma.BoolFilter<"Template"> | boolean
+  createdById?: Prisma.UuidFilter<"Template"> | string
+  categoryId?: Prisma.UuidNullableFilter<"Template"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Template"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Template"> | Date | string
-  userId?: Prisma.StringFilter<"Template"> | string
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  templateCategory?: Prisma.XOR<Prisma.TemplateCategoryNullableScalarRelationFilter, Prisma.TemplateCategoryWhereInput> | null
   documents?: Prisma.DocumentListRelationFilter
   contracts?: Prisma.ContractListRelationFilter
 }
@@ -229,12 +238,14 @@ export type TemplateOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   category?: Prisma.SortOrder
   content?: Prisma.SortOrder
-  variables?: Prisma.SortOrder
+  variables?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
   createdBy?: Prisma.UserOrderByWithRelationInput
+  templateCategory?: Prisma.TemplateCategoryOrderByWithRelationInput
   documents?: Prisma.DocumentOrderByRelationAggregateInput
   contracts?: Prisma.ContractOrderByRelationAggregateInput
 }
@@ -248,12 +259,14 @@ export type TemplateWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"Template"> | string | null
   category?: Prisma.StringFilter<"Template"> | string
   content?: Prisma.StringFilter<"Template"> | string
-  variables?: Prisma.JsonFilter<"Template">
+  variables?: Prisma.JsonNullableFilter<"Template">
   isActive?: Prisma.BoolFilter<"Template"> | boolean
+  createdById?: Prisma.UuidFilter<"Template"> | string
+  categoryId?: Prisma.UuidNullableFilter<"Template"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Template"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Template"> | Date | string
-  userId?: Prisma.StringFilter<"Template"> | string
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  templateCategory?: Prisma.XOR<Prisma.TemplateCategoryNullableScalarRelationFilter, Prisma.TemplateCategoryWhereInput> | null
   documents?: Prisma.DocumentListRelationFilter
   contracts?: Prisma.ContractListRelationFilter
 }, "id">
@@ -264,11 +277,12 @@ export type TemplateOrderByWithAggregationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   category?: Prisma.SortOrder
   content?: Prisma.SortOrder
-  variables?: Prisma.SortOrder
+  variables?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
   _count?: Prisma.TemplateCountOrderByAggregateInput
   _max?: Prisma.TemplateMaxOrderByAggregateInput
   _min?: Prisma.TemplateMinOrderByAggregateInput
@@ -278,16 +292,17 @@ export type TemplateScalarWhereWithAggregatesInput = {
   AND?: Prisma.TemplateScalarWhereWithAggregatesInput | Prisma.TemplateScalarWhereWithAggregatesInput[]
   OR?: Prisma.TemplateScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TemplateScalarWhereWithAggregatesInput | Prisma.TemplateScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Template"> | string
+  id?: Prisma.UuidWithAggregatesFilter<"Template"> | string
   name?: Prisma.StringWithAggregatesFilter<"Template"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Template"> | string | null
   category?: Prisma.StringWithAggregatesFilter<"Template"> | string
   content?: Prisma.StringWithAggregatesFilter<"Template"> | string
-  variables?: Prisma.JsonWithAggregatesFilter<"Template">
+  variables?: Prisma.JsonNullableWithAggregatesFilter<"Template">
   isActive?: Prisma.BoolWithAggregatesFilter<"Template"> | boolean
+  createdById?: Prisma.UuidWithAggregatesFilter<"Template"> | string
+  categoryId?: Prisma.UuidNullableWithAggregatesFilter<"Template"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Template"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Template"> | Date | string
-  userId?: Prisma.StringWithAggregatesFilter<"Template"> | string
 }
 
 export type TemplateCreateInput = {
@@ -296,11 +311,12 @@ export type TemplateCreateInput = {
   description?: string | null
   category: string
   content: string
-  variables: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy: Prisma.UserCreateNestedOneWithoutTemplatesInput
+  templateCategory?: Prisma.TemplateCategoryCreateNestedOneWithoutTemplatesInput
   documents?: Prisma.DocumentCreateNestedManyWithoutTemplateInput
   contracts?: Prisma.ContractCreateNestedManyWithoutTemplateInput
 }
@@ -311,11 +327,12 @@ export type TemplateUncheckedCreateInput = {
   description?: string | null
   category: string
   content: string
-  variables: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
+  createdById: string
+  categoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  userId: string
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutTemplateInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutTemplateInput
 }
@@ -326,11 +343,12 @@ export type TemplateUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  variables?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneRequiredWithoutTemplatesNestedInput
+  templateCategory?: Prisma.TemplateCategoryUpdateOneWithoutTemplatesNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutTemplateNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutTemplateNestedInput
 }
@@ -341,11 +359,12 @@ export type TemplateUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  variables?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutTemplateNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutTemplateNestedInput
 }
@@ -356,11 +375,12 @@ export type TemplateCreateManyInput = {
   description?: string | null
   category: string
   content: string
-  variables: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
+  createdById: string
+  categoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  userId: string
 }
 
 export type TemplateUpdateManyMutationInput = {
@@ -369,7 +389,7 @@ export type TemplateUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  variables?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -381,11 +401,12 @@ export type TemplateUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  variables?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type TemplateListRelationFilter = {
@@ -406,9 +427,10 @@ export type TemplateCountOrderByAggregateInput = {
   content?: Prisma.SortOrder
   variables?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
 }
 
 export type TemplateMaxOrderByAggregateInput = {
@@ -418,9 +440,10 @@ export type TemplateMaxOrderByAggregateInput = {
   category?: Prisma.SortOrder
   content?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
 }
 
 export type TemplateMinOrderByAggregateInput = {
@@ -430,9 +453,10 @@ export type TemplateMinOrderByAggregateInput = {
   category?: Prisma.SortOrder
   content?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
 }
 
 export type TemplateNullableScalarRelationFilter = {
@@ -482,8 +506,46 @@ export type TemplateUncheckedUpdateManyWithoutCreatedByNestedInput = {
   deleteMany?: Prisma.TemplateScalarWhereInput | Prisma.TemplateScalarWhereInput[]
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
+export type TemplateCreateNestedManyWithoutTemplateCategoryInput = {
+  create?: Prisma.XOR<Prisma.TemplateCreateWithoutTemplateCategoryInput, Prisma.TemplateUncheckedCreateWithoutTemplateCategoryInput> | Prisma.TemplateCreateWithoutTemplateCategoryInput[] | Prisma.TemplateUncheckedCreateWithoutTemplateCategoryInput[]
+  connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutTemplateCategoryInput | Prisma.TemplateCreateOrConnectWithoutTemplateCategoryInput[]
+  createMany?: Prisma.TemplateCreateManyTemplateCategoryInputEnvelope
+  connect?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
+}
+
+export type TemplateUncheckedCreateNestedManyWithoutTemplateCategoryInput = {
+  create?: Prisma.XOR<Prisma.TemplateCreateWithoutTemplateCategoryInput, Prisma.TemplateUncheckedCreateWithoutTemplateCategoryInput> | Prisma.TemplateCreateWithoutTemplateCategoryInput[] | Prisma.TemplateUncheckedCreateWithoutTemplateCategoryInput[]
+  connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutTemplateCategoryInput | Prisma.TemplateCreateOrConnectWithoutTemplateCategoryInput[]
+  createMany?: Prisma.TemplateCreateManyTemplateCategoryInputEnvelope
+  connect?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
+}
+
+export type TemplateUpdateManyWithoutTemplateCategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.TemplateCreateWithoutTemplateCategoryInput, Prisma.TemplateUncheckedCreateWithoutTemplateCategoryInput> | Prisma.TemplateCreateWithoutTemplateCategoryInput[] | Prisma.TemplateUncheckedCreateWithoutTemplateCategoryInput[]
+  connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutTemplateCategoryInput | Prisma.TemplateCreateOrConnectWithoutTemplateCategoryInput[]
+  upsert?: Prisma.TemplateUpsertWithWhereUniqueWithoutTemplateCategoryInput | Prisma.TemplateUpsertWithWhereUniqueWithoutTemplateCategoryInput[]
+  createMany?: Prisma.TemplateCreateManyTemplateCategoryInputEnvelope
+  set?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
+  disconnect?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
+  delete?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
+  connect?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
+  update?: Prisma.TemplateUpdateWithWhereUniqueWithoutTemplateCategoryInput | Prisma.TemplateUpdateWithWhereUniqueWithoutTemplateCategoryInput[]
+  updateMany?: Prisma.TemplateUpdateManyWithWhereWithoutTemplateCategoryInput | Prisma.TemplateUpdateManyWithWhereWithoutTemplateCategoryInput[]
+  deleteMany?: Prisma.TemplateScalarWhereInput | Prisma.TemplateScalarWhereInput[]
+}
+
+export type TemplateUncheckedUpdateManyWithoutTemplateCategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.TemplateCreateWithoutTemplateCategoryInput, Prisma.TemplateUncheckedCreateWithoutTemplateCategoryInput> | Prisma.TemplateCreateWithoutTemplateCategoryInput[] | Prisma.TemplateUncheckedCreateWithoutTemplateCategoryInput[]
+  connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutTemplateCategoryInput | Prisma.TemplateCreateOrConnectWithoutTemplateCategoryInput[]
+  upsert?: Prisma.TemplateUpsertWithWhereUniqueWithoutTemplateCategoryInput | Prisma.TemplateUpsertWithWhereUniqueWithoutTemplateCategoryInput[]
+  createMany?: Prisma.TemplateCreateManyTemplateCategoryInputEnvelope
+  set?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
+  disconnect?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
+  delete?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
+  connect?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
+  update?: Prisma.TemplateUpdateWithWhereUniqueWithoutTemplateCategoryInput | Prisma.TemplateUpdateWithWhereUniqueWithoutTemplateCategoryInput[]
+  updateMany?: Prisma.TemplateUpdateManyWithWhereWithoutTemplateCategoryInput | Prisma.TemplateUpdateManyWithWhereWithoutTemplateCategoryInput[]
+  deleteMany?: Prisma.TemplateScalarWhereInput | Prisma.TemplateScalarWhereInput[]
 }
 
 export type TemplateCreateNestedOneWithoutDocumentsInput = {
@@ -524,10 +586,11 @@ export type TemplateCreateWithoutCreatedByInput = {
   description?: string | null
   category: string
   content: string
-  variables: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  templateCategory?: Prisma.TemplateCategoryCreateNestedOneWithoutTemplatesInput
   documents?: Prisma.DocumentCreateNestedManyWithoutTemplateInput
   contracts?: Prisma.ContractCreateNestedManyWithoutTemplateInput
 }
@@ -538,8 +601,9 @@ export type TemplateUncheckedCreateWithoutCreatedByInput = {
   description?: string | null
   category: string
   content: string
-  variables: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
+  categoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutTemplateInput
@@ -576,16 +640,73 @@ export type TemplateScalarWhereInput = {
   AND?: Prisma.TemplateScalarWhereInput | Prisma.TemplateScalarWhereInput[]
   OR?: Prisma.TemplateScalarWhereInput[]
   NOT?: Prisma.TemplateScalarWhereInput | Prisma.TemplateScalarWhereInput[]
-  id?: Prisma.StringFilter<"Template"> | string
+  id?: Prisma.UuidFilter<"Template"> | string
   name?: Prisma.StringFilter<"Template"> | string
   description?: Prisma.StringNullableFilter<"Template"> | string | null
   category?: Prisma.StringFilter<"Template"> | string
   content?: Prisma.StringFilter<"Template"> | string
-  variables?: Prisma.JsonFilter<"Template">
+  variables?: Prisma.JsonNullableFilter<"Template">
   isActive?: Prisma.BoolFilter<"Template"> | boolean
+  createdById?: Prisma.UuidFilter<"Template"> | string
+  categoryId?: Prisma.UuidNullableFilter<"Template"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Template"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Template"> | Date | string
-  userId?: Prisma.StringFilter<"Template"> | string
+}
+
+export type TemplateCreateWithoutTemplateCategoryInput = {
+  id?: string
+  name: string
+  description?: string | null
+  category: string
+  content: string
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy: Prisma.UserCreateNestedOneWithoutTemplatesInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutTemplateInput
+  contracts?: Prisma.ContractCreateNestedManyWithoutTemplateInput
+}
+
+export type TemplateUncheckedCreateWithoutTemplateCategoryInput = {
+  id?: string
+  name: string
+  description?: string | null
+  category: string
+  content: string
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutTemplateInput
+  contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutTemplateInput
+}
+
+export type TemplateCreateOrConnectWithoutTemplateCategoryInput = {
+  where: Prisma.TemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.TemplateCreateWithoutTemplateCategoryInput, Prisma.TemplateUncheckedCreateWithoutTemplateCategoryInput>
+}
+
+export type TemplateCreateManyTemplateCategoryInputEnvelope = {
+  data: Prisma.TemplateCreateManyTemplateCategoryInput | Prisma.TemplateCreateManyTemplateCategoryInput[]
+  skipDuplicates?: boolean
+}
+
+export type TemplateUpsertWithWhereUniqueWithoutTemplateCategoryInput = {
+  where: Prisma.TemplateWhereUniqueInput
+  update: Prisma.XOR<Prisma.TemplateUpdateWithoutTemplateCategoryInput, Prisma.TemplateUncheckedUpdateWithoutTemplateCategoryInput>
+  create: Prisma.XOR<Prisma.TemplateCreateWithoutTemplateCategoryInput, Prisma.TemplateUncheckedCreateWithoutTemplateCategoryInput>
+}
+
+export type TemplateUpdateWithWhereUniqueWithoutTemplateCategoryInput = {
+  where: Prisma.TemplateWhereUniqueInput
+  data: Prisma.XOR<Prisma.TemplateUpdateWithoutTemplateCategoryInput, Prisma.TemplateUncheckedUpdateWithoutTemplateCategoryInput>
+}
+
+export type TemplateUpdateManyWithWhereWithoutTemplateCategoryInput = {
+  where: Prisma.TemplateScalarWhereInput
+  data: Prisma.XOR<Prisma.TemplateUpdateManyMutationInput, Prisma.TemplateUncheckedUpdateManyWithoutTemplateCategoryInput>
 }
 
 export type TemplateCreateWithoutDocumentsInput = {
@@ -594,11 +715,12 @@ export type TemplateCreateWithoutDocumentsInput = {
   description?: string | null
   category: string
   content: string
-  variables: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy: Prisma.UserCreateNestedOneWithoutTemplatesInput
+  templateCategory?: Prisma.TemplateCategoryCreateNestedOneWithoutTemplatesInput
   contracts?: Prisma.ContractCreateNestedManyWithoutTemplateInput
 }
 
@@ -608,11 +730,12 @@ export type TemplateUncheckedCreateWithoutDocumentsInput = {
   description?: string | null
   category: string
   content: string
-  variables: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
+  createdById: string
+  categoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  userId: string
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutTemplateInput
 }
 
@@ -638,11 +761,12 @@ export type TemplateUpdateWithoutDocumentsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  variables?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneRequiredWithoutTemplatesNestedInput
+  templateCategory?: Prisma.TemplateCategoryUpdateOneWithoutTemplatesNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutTemplateNestedInput
 }
 
@@ -652,11 +776,12 @@ export type TemplateUncheckedUpdateWithoutDocumentsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  variables?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutTemplateNestedInput
 }
 
@@ -666,11 +791,12 @@ export type TemplateCreateWithoutContractsInput = {
   description?: string | null
   category: string
   content: string
-  variables: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy: Prisma.UserCreateNestedOneWithoutTemplatesInput
+  templateCategory?: Prisma.TemplateCategoryCreateNestedOneWithoutTemplatesInput
   documents?: Prisma.DocumentCreateNestedManyWithoutTemplateInput
 }
 
@@ -680,11 +806,12 @@ export type TemplateUncheckedCreateWithoutContractsInput = {
   description?: string | null
   category: string
   content: string
-  variables: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
+  createdById: string
+  categoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  userId: string
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutTemplateInput
 }
 
@@ -710,11 +837,12 @@ export type TemplateUpdateWithoutContractsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  variables?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneRequiredWithoutTemplatesNestedInput
+  templateCategory?: Prisma.TemplateCategoryUpdateOneWithoutTemplatesNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutTemplateNestedInput
 }
 
@@ -724,11 +852,12 @@ export type TemplateUncheckedUpdateWithoutContractsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  variables?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutTemplateNestedInput
 }
 
@@ -738,8 +867,9 @@ export type TemplateCreateManyCreatedByInput = {
   description?: string | null
   category: string
   content: string
-  variables: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
+  categoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -750,10 +880,11 @@ export type TemplateUpdateWithoutCreatedByInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  variables?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  templateCategory?: Prisma.TemplateCategoryUpdateOneWithoutTemplatesNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutTemplateNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutTemplateNestedInput
 }
@@ -764,8 +895,9 @@ export type TemplateUncheckedUpdateWithoutCreatedByInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  variables?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutTemplateNestedInput
@@ -778,8 +910,65 @@ export type TemplateUncheckedUpdateManyWithoutCreatedByInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  variables?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TemplateCreateManyTemplateCategoryInput = {
+  id?: string
+  name: string
+  description?: string | null
+  category: string
+  content: string
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type TemplateUpdateWithoutTemplateCategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutTemplatesNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutTemplateNestedInput
+  contracts?: Prisma.ContractUpdateManyWithoutTemplateNestedInput
+}
+
+export type TemplateUncheckedUpdateWithoutTemplateCategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutTemplateNestedInput
+  contracts?: Prisma.ContractUncheckedUpdateManyWithoutTemplateNestedInput
+}
+
+export type TemplateUncheckedUpdateManyWithoutTemplateCategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  variables?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -832,10 +1021,12 @@ export type TemplateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   content?: boolean
   variables?: boolean
   isActive?: boolean
+  createdById?: boolean
+  categoryId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  userId?: boolean
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  templateCategory?: boolean | Prisma.Template$templateCategoryArgs<ExtArgs>
   documents?: boolean | Prisma.Template$documentsArgs<ExtArgs>
   contracts?: boolean | Prisma.Template$contractsArgs<ExtArgs>
   _count?: boolean | Prisma.TemplateCountOutputTypeDefaultArgs<ExtArgs>
@@ -849,10 +1040,12 @@ export type TemplateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   content?: boolean
   variables?: boolean
   isActive?: boolean
+  createdById?: boolean
+  categoryId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  userId?: boolean
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  templateCategory?: boolean | Prisma.Template$templateCategoryArgs<ExtArgs>
 }, ExtArgs["result"]["template"]>
 
 export type TemplateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -863,10 +1056,12 @@ export type TemplateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   content?: boolean
   variables?: boolean
   isActive?: boolean
+  createdById?: boolean
+  categoryId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  userId?: boolean
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  templateCategory?: boolean | Prisma.Template$templateCategoryArgs<ExtArgs>
 }, ExtArgs["result"]["template"]>
 
 export type TemplateSelectScalar = {
@@ -877,29 +1072,34 @@ export type TemplateSelectScalar = {
   content?: boolean
   variables?: boolean
   isActive?: boolean
+  createdById?: boolean
+  categoryId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  userId?: boolean
 }
 
-export type TemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "category" | "content" | "variables" | "isActive" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["template"]>
+export type TemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "category" | "content" | "variables" | "isActive" | "createdById" | "categoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["template"]>
 export type TemplateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  templateCategory?: boolean | Prisma.Template$templateCategoryArgs<ExtArgs>
   documents?: boolean | Prisma.Template$documentsArgs<ExtArgs>
   contracts?: boolean | Prisma.Template$contractsArgs<ExtArgs>
   _count?: boolean | Prisma.TemplateCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TemplateIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  templateCategory?: boolean | Prisma.Template$templateCategoryArgs<ExtArgs>
 }
 export type TemplateIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  templateCategory?: boolean | Prisma.Template$templateCategoryArgs<ExtArgs>
 }
 
 export type $TemplatePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Template"
   objects: {
     createdBy: Prisma.$UserPayload<ExtArgs>
+    templateCategory: Prisma.$TemplateCategoryPayload<ExtArgs> | null
     documents: Prisma.$DocumentPayload<ExtArgs>[]
     contracts: Prisma.$ContractPayload<ExtArgs>[]
   }
@@ -909,11 +1109,12 @@ export type $TemplatePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     description: string | null
     category: string
     content: string
-    variables: runtime.JsonValue
+    variables: runtime.JsonValue | null
     isActive: boolean
+    createdById: string
+    categoryId: string | null
     createdAt: Date
     updatedAt: Date
-    userId: string
   }, ExtArgs["result"]["template"]>
   composites: {}
 }
@@ -1309,6 +1510,7 @@ readonly fields: TemplateFieldRefs;
 export interface Prisma__TemplateClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   createdBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  templateCategory<T extends Prisma.Template$templateCategoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Template$templateCategoryArgs<ExtArgs>>): Prisma.Prisma__TemplateCategoryClient<runtime.Types.Result.GetResult<Prisma.$TemplateCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   documents<T extends Prisma.Template$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Template$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   contracts<T extends Prisma.Template$contractsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Template$contractsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1347,9 +1549,10 @@ export interface TemplateFieldRefs {
   readonly content: Prisma.FieldRef<"Template", 'String'>
   readonly variables: Prisma.FieldRef<"Template", 'Json'>
   readonly isActive: Prisma.FieldRef<"Template", 'Boolean'>
+  readonly createdById: Prisma.FieldRef<"Template", 'String'>
+  readonly categoryId: Prisma.FieldRef<"Template", 'String'>
   readonly createdAt: Prisma.FieldRef<"Template", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Template", 'DateTime'>
-  readonly userId: Prisma.FieldRef<"Template", 'String'>
 }
     
 
@@ -1748,6 +1951,25 @@ export type TemplateDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Templates to delete.
    */
   limit?: number
+}
+
+/**
+ * Template.templateCategory
+ */
+export type Template$templateCategoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TemplateCategory
+   */
+  select?: Prisma.TemplateCategorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TemplateCategory
+   */
+  omit?: Prisma.TemplateCategoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TemplateCategoryInclude<ExtArgs> | null
+  where?: Prisma.TemplateCategoryWhereInput
 }
 
 /**

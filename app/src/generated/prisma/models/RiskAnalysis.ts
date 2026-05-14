@@ -27,71 +27,101 @@ export type AggregateRiskAnalysis = {
 }
 
 export type RiskAnalysisAvgAggregateOutputType = {
-  score: number | null
+  riskScore: number | null
+  estimatedCost: runtime.Decimal | null
 }
 
 export type RiskAnalysisSumAggregateOutputType = {
-  score: number | null
+  riskScore: number | null
+  estimatedCost: runtime.Decimal | null
 }
 
 export type RiskAnalysisMinAggregateOutputType = {
   id: string | null
-  score: number | null
-  summary: string | null
-  createdAt: Date | null
+  contractId: string | null
   documentId: string | null
+  summary: string | null
+  riskScore: number | null
+  estimatedCost: runtime.Decimal | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type RiskAnalysisMaxAggregateOutputType = {
   id: string | null
-  score: number | null
-  summary: string | null
-  createdAt: Date | null
+  contractId: string | null
   documentId: string | null
+  summary: string | null
+  riskScore: number | null
+  estimatedCost: runtime.Decimal | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type RiskAnalysisCountAggregateOutputType = {
   id: number
-  score: number
-  risks: number
-  summary: number
-  createdAt: number
+  contractId: number
   documentId: number
+  summary: number
+  riskScore: number
+  risks: number
+  missingClauses: number
+  riskyTerms: number
+  inconsistentWording: number
+  complianceWarnings: number
+  estimatedCost: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
 
 export type RiskAnalysisAvgAggregateInputType = {
-  score?: true
+  riskScore?: true
+  estimatedCost?: true
 }
 
 export type RiskAnalysisSumAggregateInputType = {
-  score?: true
+  riskScore?: true
+  estimatedCost?: true
 }
 
 export type RiskAnalysisMinAggregateInputType = {
   id?: true
-  score?: true
-  summary?: true
-  createdAt?: true
+  contractId?: true
   documentId?: true
+  summary?: true
+  riskScore?: true
+  estimatedCost?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type RiskAnalysisMaxAggregateInputType = {
   id?: true
-  score?: true
-  summary?: true
-  createdAt?: true
+  contractId?: true
   documentId?: true
+  summary?: true
+  riskScore?: true
+  estimatedCost?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type RiskAnalysisCountAggregateInputType = {
   id?: true
-  score?: true
-  risks?: true
-  summary?: true
-  createdAt?: true
+  contractId?: true
   documentId?: true
+  summary?: true
+  riskScore?: true
+  risks?: true
+  missingClauses?: true
+  riskyTerms?: true
+  inconsistentWording?: true
+  complianceWarnings?: true
+  estimatedCost?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -183,11 +213,18 @@ export type RiskAnalysisGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 
 export type RiskAnalysisGroupByOutputType = {
   id: string
-  score: number
-  risks: runtime.JsonValue
+  contractId: string | null
+  documentId: string | null
   summary: string | null
+  riskScore: number
+  risks: runtime.JsonValue | null
+  missingClauses: runtime.JsonValue | null
+  riskyTerms: runtime.JsonValue | null
+  inconsistentWording: runtime.JsonValue | null
+  complianceWarnings: runtime.JsonValue | null
+  estimatedCost: runtime.Decimal | null
   createdAt: Date
-  documentId: string
+  updatedAt: Date
   _count: RiskAnalysisCountAggregateOutputType | null
   _avg: RiskAnalysisAvgAggregateOutputType | null
   _sum: RiskAnalysisSumAggregateOutputType | null
@@ -214,45 +251,76 @@ export type RiskAnalysisWhereInput = {
   AND?: Prisma.RiskAnalysisWhereInput | Prisma.RiskAnalysisWhereInput[]
   OR?: Prisma.RiskAnalysisWhereInput[]
   NOT?: Prisma.RiskAnalysisWhereInput | Prisma.RiskAnalysisWhereInput[]
-  id?: Prisma.StringFilter<"RiskAnalysis"> | string
-  score?: Prisma.IntFilter<"RiskAnalysis"> | number
-  risks?: Prisma.JsonFilter<"RiskAnalysis">
+  id?: Prisma.UuidFilter<"RiskAnalysis"> | string
+  contractId?: Prisma.UuidNullableFilter<"RiskAnalysis"> | string | null
+  documentId?: Prisma.UuidNullableFilter<"RiskAnalysis"> | string | null
   summary?: Prisma.StringNullableFilter<"RiskAnalysis"> | string | null
+  riskScore?: Prisma.IntFilter<"RiskAnalysis"> | number
+  risks?: Prisma.JsonNullableFilter<"RiskAnalysis">
+  missingClauses?: Prisma.JsonNullableFilter<"RiskAnalysis">
+  riskyTerms?: Prisma.JsonNullableFilter<"RiskAnalysis">
+  inconsistentWording?: Prisma.JsonNullableFilter<"RiskAnalysis">
+  complianceWarnings?: Prisma.JsonNullableFilter<"RiskAnalysis">
+  estimatedCost?: Prisma.DecimalNullableFilter<"RiskAnalysis"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"RiskAnalysis"> | Date | string
-  documentId?: Prisma.StringFilter<"RiskAnalysis"> | string
-  document?: Prisma.XOR<Prisma.DocumentScalarRelationFilter, Prisma.DocumentWhereInput>
+  updatedAt?: Prisma.DateTimeFilter<"RiskAnalysis"> | Date | string
+  contract?: Prisma.XOR<Prisma.ContractNullableScalarRelationFilter, Prisma.ContractWhereInput> | null
+  document?: Prisma.XOR<Prisma.DocumentNullableScalarRelationFilter, Prisma.DocumentWhereInput> | null
 }
 
 export type RiskAnalysisOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  score?: Prisma.SortOrder
-  risks?: Prisma.SortOrder
+  contractId?: Prisma.SortOrderInput | Prisma.SortOrder
+  documentId?: Prisma.SortOrderInput | Prisma.SortOrder
   summary?: Prisma.SortOrderInput | Prisma.SortOrder
+  riskScore?: Prisma.SortOrder
+  risks?: Prisma.SortOrderInput | Prisma.SortOrder
+  missingClauses?: Prisma.SortOrderInput | Prisma.SortOrder
+  riskyTerms?: Prisma.SortOrderInput | Prisma.SortOrder
+  inconsistentWording?: Prisma.SortOrderInput | Prisma.SortOrder
+  complianceWarnings?: Prisma.SortOrderInput | Prisma.SortOrder
+  estimatedCost?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  documentId?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  contract?: Prisma.ContractOrderByWithRelationInput
   document?: Prisma.DocumentOrderByWithRelationInput
 }
 
 export type RiskAnalysisWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  contractId?: string
+  documentId?: string
   AND?: Prisma.RiskAnalysisWhereInput | Prisma.RiskAnalysisWhereInput[]
   OR?: Prisma.RiskAnalysisWhereInput[]
   NOT?: Prisma.RiskAnalysisWhereInput | Prisma.RiskAnalysisWhereInput[]
-  score?: Prisma.IntFilter<"RiskAnalysis"> | number
-  risks?: Prisma.JsonFilter<"RiskAnalysis">
   summary?: Prisma.StringNullableFilter<"RiskAnalysis"> | string | null
+  riskScore?: Prisma.IntFilter<"RiskAnalysis"> | number
+  risks?: Prisma.JsonNullableFilter<"RiskAnalysis">
+  missingClauses?: Prisma.JsonNullableFilter<"RiskAnalysis">
+  riskyTerms?: Prisma.JsonNullableFilter<"RiskAnalysis">
+  inconsistentWording?: Prisma.JsonNullableFilter<"RiskAnalysis">
+  complianceWarnings?: Prisma.JsonNullableFilter<"RiskAnalysis">
+  estimatedCost?: Prisma.DecimalNullableFilter<"RiskAnalysis"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"RiskAnalysis"> | Date | string
-  documentId?: Prisma.StringFilter<"RiskAnalysis"> | string
-  document?: Prisma.XOR<Prisma.DocumentScalarRelationFilter, Prisma.DocumentWhereInput>
-}, "id">
+  updatedAt?: Prisma.DateTimeFilter<"RiskAnalysis"> | Date | string
+  contract?: Prisma.XOR<Prisma.ContractNullableScalarRelationFilter, Prisma.ContractWhereInput> | null
+  document?: Prisma.XOR<Prisma.DocumentNullableScalarRelationFilter, Prisma.DocumentWhereInput> | null
+}, "id" | "contractId" | "documentId">
 
 export type RiskAnalysisOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  score?: Prisma.SortOrder
-  risks?: Prisma.SortOrder
+  contractId?: Prisma.SortOrderInput | Prisma.SortOrder
+  documentId?: Prisma.SortOrderInput | Prisma.SortOrder
   summary?: Prisma.SortOrderInput | Prisma.SortOrder
+  riskScore?: Prisma.SortOrder
+  risks?: Prisma.SortOrderInput | Prisma.SortOrder
+  missingClauses?: Prisma.SortOrderInput | Prisma.SortOrder
+  riskyTerms?: Prisma.SortOrderInput | Prisma.SortOrder
+  inconsistentWording?: Prisma.SortOrderInput | Prisma.SortOrder
+  complianceWarnings?: Prisma.SortOrderInput | Prisma.SortOrder
+  estimatedCost?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  documentId?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.RiskAnalysisCountOrderByAggregateInput
   _avg?: Prisma.RiskAnalysisAvgOrderByAggregateInput
   _max?: Prisma.RiskAnalysisMaxOrderByAggregateInput
@@ -264,183 +332,276 @@ export type RiskAnalysisScalarWhereWithAggregatesInput = {
   AND?: Prisma.RiskAnalysisScalarWhereWithAggregatesInput | Prisma.RiskAnalysisScalarWhereWithAggregatesInput[]
   OR?: Prisma.RiskAnalysisScalarWhereWithAggregatesInput[]
   NOT?: Prisma.RiskAnalysisScalarWhereWithAggregatesInput | Prisma.RiskAnalysisScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"RiskAnalysis"> | string
-  score?: Prisma.IntWithAggregatesFilter<"RiskAnalysis"> | number
-  risks?: Prisma.JsonWithAggregatesFilter<"RiskAnalysis">
+  id?: Prisma.UuidWithAggregatesFilter<"RiskAnalysis"> | string
+  contractId?: Prisma.UuidNullableWithAggregatesFilter<"RiskAnalysis"> | string | null
+  documentId?: Prisma.UuidNullableWithAggregatesFilter<"RiskAnalysis"> | string | null
   summary?: Prisma.StringNullableWithAggregatesFilter<"RiskAnalysis"> | string | null
+  riskScore?: Prisma.IntWithAggregatesFilter<"RiskAnalysis"> | number
+  risks?: Prisma.JsonNullableWithAggregatesFilter<"RiskAnalysis">
+  missingClauses?: Prisma.JsonNullableWithAggregatesFilter<"RiskAnalysis">
+  riskyTerms?: Prisma.JsonNullableWithAggregatesFilter<"RiskAnalysis">
+  inconsistentWording?: Prisma.JsonNullableWithAggregatesFilter<"RiskAnalysis">
+  complianceWarnings?: Prisma.JsonNullableWithAggregatesFilter<"RiskAnalysis">
+  estimatedCost?: Prisma.DecimalNullableWithAggregatesFilter<"RiskAnalysis"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"RiskAnalysis"> | Date | string
-  documentId?: Prisma.StringWithAggregatesFilter<"RiskAnalysis"> | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"RiskAnalysis"> | Date | string
 }
 
 export type RiskAnalysisCreateInput = {
   id?: string
-  score: number
-  risks: Prisma.JsonNullValueInput | runtime.InputJsonValue
   summary?: string | null
+  riskScore: number
+  risks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  missingClauses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  riskyTerms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  estimatedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
-  document: Prisma.DocumentCreateNestedOneWithoutRiskAnalysesInput
+  updatedAt?: Date | string
+  contract?: Prisma.ContractCreateNestedOneWithoutRiskAnalysisInput
+  document?: Prisma.DocumentCreateNestedOneWithoutRiskAnalysisInput
 }
 
 export type RiskAnalysisUncheckedCreateInput = {
   id?: string
-  score: number
-  risks: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contractId?: string | null
+  documentId?: string | null
   summary?: string | null
+  riskScore: number
+  risks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  missingClauses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  riskyTerms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  estimatedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
-  documentId: string
+  updatedAt?: Date | string
 }
 
 export type RiskAnalysisUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  score?: Prisma.IntFieldUpdateOperationsInput | number
-  risks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskScore?: Prisma.IntFieldUpdateOperationsInput | number
+  risks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  missingClauses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  riskyTerms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  estimatedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  document?: Prisma.DocumentUpdateOneRequiredWithoutRiskAnalysesNestedInput
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  contract?: Prisma.ContractUpdateOneWithoutRiskAnalysisNestedInput
+  document?: Prisma.DocumentUpdateOneWithoutRiskAnalysisNestedInput
 }
 
 export type RiskAnalysisUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  score?: Prisma.IntFieldUpdateOperationsInput | number
-  risks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskScore?: Prisma.IntFieldUpdateOperationsInput | number
+  risks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  missingClauses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  riskyTerms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  estimatedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documentId?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type RiskAnalysisCreateManyInput = {
   id?: string
-  score: number
-  risks: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contractId?: string | null
+  documentId?: string | null
   summary?: string | null
+  riskScore: number
+  risks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  missingClauses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  riskyTerms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  estimatedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
-  documentId: string
+  updatedAt?: Date | string
 }
 
 export type RiskAnalysisUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  score?: Prisma.IntFieldUpdateOperationsInput | number
-  risks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskScore?: Prisma.IntFieldUpdateOperationsInput | number
+  risks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  missingClauses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  riskyTerms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  estimatedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type RiskAnalysisUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  score?: Prisma.IntFieldUpdateOperationsInput | number
-  risks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskScore?: Prisma.IntFieldUpdateOperationsInput | number
+  risks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  missingClauses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  riskyTerms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  estimatedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documentId?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type RiskAnalysisListRelationFilter = {
-  every?: Prisma.RiskAnalysisWhereInput
-  some?: Prisma.RiskAnalysisWhereInput
-  none?: Prisma.RiskAnalysisWhereInput
-}
-
-export type RiskAnalysisOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+export type RiskAnalysisNullableScalarRelationFilter = {
+  is?: Prisma.RiskAnalysisWhereInput | null
+  isNot?: Prisma.RiskAnalysisWhereInput | null
 }
 
 export type RiskAnalysisCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  score?: Prisma.SortOrder
-  risks?: Prisma.SortOrder
-  summary?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
+  contractId?: Prisma.SortOrder
   documentId?: Prisma.SortOrder
+  summary?: Prisma.SortOrder
+  riskScore?: Prisma.SortOrder
+  risks?: Prisma.SortOrder
+  missingClauses?: Prisma.SortOrder
+  riskyTerms?: Prisma.SortOrder
+  inconsistentWording?: Prisma.SortOrder
+  complianceWarnings?: Prisma.SortOrder
+  estimatedCost?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type RiskAnalysisAvgOrderByAggregateInput = {
-  score?: Prisma.SortOrder
+  riskScore?: Prisma.SortOrder
+  estimatedCost?: Prisma.SortOrder
 }
 
 export type RiskAnalysisMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  score?: Prisma.SortOrder
-  summary?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
+  contractId?: Prisma.SortOrder
   documentId?: Prisma.SortOrder
+  summary?: Prisma.SortOrder
+  riskScore?: Prisma.SortOrder
+  estimatedCost?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type RiskAnalysisMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  score?: Prisma.SortOrder
-  summary?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
+  contractId?: Prisma.SortOrder
   documentId?: Prisma.SortOrder
+  summary?: Prisma.SortOrder
+  riskScore?: Prisma.SortOrder
+  estimatedCost?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type RiskAnalysisSumOrderByAggregateInput = {
-  score?: Prisma.SortOrder
+  riskScore?: Prisma.SortOrder
+  estimatedCost?: Prisma.SortOrder
 }
 
-export type RiskAnalysisCreateNestedManyWithoutDocumentInput = {
-  create?: Prisma.XOR<Prisma.RiskAnalysisCreateWithoutDocumentInput, Prisma.RiskAnalysisUncheckedCreateWithoutDocumentInput> | Prisma.RiskAnalysisCreateWithoutDocumentInput[] | Prisma.RiskAnalysisUncheckedCreateWithoutDocumentInput[]
-  connectOrCreate?: Prisma.RiskAnalysisCreateOrConnectWithoutDocumentInput | Prisma.RiskAnalysisCreateOrConnectWithoutDocumentInput[]
-  createMany?: Prisma.RiskAnalysisCreateManyDocumentInputEnvelope
-  connect?: Prisma.RiskAnalysisWhereUniqueInput | Prisma.RiskAnalysisWhereUniqueInput[]
+export type RiskAnalysisCreateNestedOneWithoutDocumentInput = {
+  create?: Prisma.XOR<Prisma.RiskAnalysisCreateWithoutDocumentInput, Prisma.RiskAnalysisUncheckedCreateWithoutDocumentInput>
+  connectOrCreate?: Prisma.RiskAnalysisCreateOrConnectWithoutDocumentInput
+  connect?: Prisma.RiskAnalysisWhereUniqueInput
 }
 
-export type RiskAnalysisUncheckedCreateNestedManyWithoutDocumentInput = {
-  create?: Prisma.XOR<Prisma.RiskAnalysisCreateWithoutDocumentInput, Prisma.RiskAnalysisUncheckedCreateWithoutDocumentInput> | Prisma.RiskAnalysisCreateWithoutDocumentInput[] | Prisma.RiskAnalysisUncheckedCreateWithoutDocumentInput[]
-  connectOrCreate?: Prisma.RiskAnalysisCreateOrConnectWithoutDocumentInput | Prisma.RiskAnalysisCreateOrConnectWithoutDocumentInput[]
-  createMany?: Prisma.RiskAnalysisCreateManyDocumentInputEnvelope
-  connect?: Prisma.RiskAnalysisWhereUniqueInput | Prisma.RiskAnalysisWhereUniqueInput[]
+export type RiskAnalysisUncheckedCreateNestedOneWithoutDocumentInput = {
+  create?: Prisma.XOR<Prisma.RiskAnalysisCreateWithoutDocumentInput, Prisma.RiskAnalysisUncheckedCreateWithoutDocumentInput>
+  connectOrCreate?: Prisma.RiskAnalysisCreateOrConnectWithoutDocumentInput
+  connect?: Prisma.RiskAnalysisWhereUniqueInput
 }
 
-export type RiskAnalysisUpdateManyWithoutDocumentNestedInput = {
-  create?: Prisma.XOR<Prisma.RiskAnalysisCreateWithoutDocumentInput, Prisma.RiskAnalysisUncheckedCreateWithoutDocumentInput> | Prisma.RiskAnalysisCreateWithoutDocumentInput[] | Prisma.RiskAnalysisUncheckedCreateWithoutDocumentInput[]
-  connectOrCreate?: Prisma.RiskAnalysisCreateOrConnectWithoutDocumentInput | Prisma.RiskAnalysisCreateOrConnectWithoutDocumentInput[]
-  upsert?: Prisma.RiskAnalysisUpsertWithWhereUniqueWithoutDocumentInput | Prisma.RiskAnalysisUpsertWithWhereUniqueWithoutDocumentInput[]
-  createMany?: Prisma.RiskAnalysisCreateManyDocumentInputEnvelope
-  set?: Prisma.RiskAnalysisWhereUniqueInput | Prisma.RiskAnalysisWhereUniqueInput[]
-  disconnect?: Prisma.RiskAnalysisWhereUniqueInput | Prisma.RiskAnalysisWhereUniqueInput[]
-  delete?: Prisma.RiskAnalysisWhereUniqueInput | Prisma.RiskAnalysisWhereUniqueInput[]
-  connect?: Prisma.RiskAnalysisWhereUniqueInput | Prisma.RiskAnalysisWhereUniqueInput[]
-  update?: Prisma.RiskAnalysisUpdateWithWhereUniqueWithoutDocumentInput | Prisma.RiskAnalysisUpdateWithWhereUniqueWithoutDocumentInput[]
-  updateMany?: Prisma.RiskAnalysisUpdateManyWithWhereWithoutDocumentInput | Prisma.RiskAnalysisUpdateManyWithWhereWithoutDocumentInput[]
-  deleteMany?: Prisma.RiskAnalysisScalarWhereInput | Prisma.RiskAnalysisScalarWhereInput[]
+export type RiskAnalysisUpdateOneWithoutDocumentNestedInput = {
+  create?: Prisma.XOR<Prisma.RiskAnalysisCreateWithoutDocumentInput, Prisma.RiskAnalysisUncheckedCreateWithoutDocumentInput>
+  connectOrCreate?: Prisma.RiskAnalysisCreateOrConnectWithoutDocumentInput
+  upsert?: Prisma.RiskAnalysisUpsertWithoutDocumentInput
+  disconnect?: Prisma.RiskAnalysisWhereInput | boolean
+  delete?: Prisma.RiskAnalysisWhereInput | boolean
+  connect?: Prisma.RiskAnalysisWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RiskAnalysisUpdateToOneWithWhereWithoutDocumentInput, Prisma.RiskAnalysisUpdateWithoutDocumentInput>, Prisma.RiskAnalysisUncheckedUpdateWithoutDocumentInput>
 }
 
-export type RiskAnalysisUncheckedUpdateManyWithoutDocumentNestedInput = {
-  create?: Prisma.XOR<Prisma.RiskAnalysisCreateWithoutDocumentInput, Prisma.RiskAnalysisUncheckedCreateWithoutDocumentInput> | Prisma.RiskAnalysisCreateWithoutDocumentInput[] | Prisma.RiskAnalysisUncheckedCreateWithoutDocumentInput[]
-  connectOrCreate?: Prisma.RiskAnalysisCreateOrConnectWithoutDocumentInput | Prisma.RiskAnalysisCreateOrConnectWithoutDocumentInput[]
-  upsert?: Prisma.RiskAnalysisUpsertWithWhereUniqueWithoutDocumentInput | Prisma.RiskAnalysisUpsertWithWhereUniqueWithoutDocumentInput[]
-  createMany?: Prisma.RiskAnalysisCreateManyDocumentInputEnvelope
-  set?: Prisma.RiskAnalysisWhereUniqueInput | Prisma.RiskAnalysisWhereUniqueInput[]
-  disconnect?: Prisma.RiskAnalysisWhereUniqueInput | Prisma.RiskAnalysisWhereUniqueInput[]
-  delete?: Prisma.RiskAnalysisWhereUniqueInput | Prisma.RiskAnalysisWhereUniqueInput[]
-  connect?: Prisma.RiskAnalysisWhereUniqueInput | Prisma.RiskAnalysisWhereUniqueInput[]
-  update?: Prisma.RiskAnalysisUpdateWithWhereUniqueWithoutDocumentInput | Prisma.RiskAnalysisUpdateWithWhereUniqueWithoutDocumentInput[]
-  updateMany?: Prisma.RiskAnalysisUpdateManyWithWhereWithoutDocumentInput | Prisma.RiskAnalysisUpdateManyWithWhereWithoutDocumentInput[]
-  deleteMany?: Prisma.RiskAnalysisScalarWhereInput | Prisma.RiskAnalysisScalarWhereInput[]
+export type RiskAnalysisUncheckedUpdateOneWithoutDocumentNestedInput = {
+  create?: Prisma.XOR<Prisma.RiskAnalysisCreateWithoutDocumentInput, Prisma.RiskAnalysisUncheckedCreateWithoutDocumentInput>
+  connectOrCreate?: Prisma.RiskAnalysisCreateOrConnectWithoutDocumentInput
+  upsert?: Prisma.RiskAnalysisUpsertWithoutDocumentInput
+  disconnect?: Prisma.RiskAnalysisWhereInput | boolean
+  delete?: Prisma.RiskAnalysisWhereInput | boolean
+  connect?: Prisma.RiskAnalysisWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RiskAnalysisUpdateToOneWithWhereWithoutDocumentInput, Prisma.RiskAnalysisUpdateWithoutDocumentInput>, Prisma.RiskAnalysisUncheckedUpdateWithoutDocumentInput>
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
+export type RiskAnalysisCreateNestedOneWithoutContractInput = {
+  create?: Prisma.XOR<Prisma.RiskAnalysisCreateWithoutContractInput, Prisma.RiskAnalysisUncheckedCreateWithoutContractInput>
+  connectOrCreate?: Prisma.RiskAnalysisCreateOrConnectWithoutContractInput
+  connect?: Prisma.RiskAnalysisWhereUniqueInput
+}
+
+export type RiskAnalysisUncheckedCreateNestedOneWithoutContractInput = {
+  create?: Prisma.XOR<Prisma.RiskAnalysisCreateWithoutContractInput, Prisma.RiskAnalysisUncheckedCreateWithoutContractInput>
+  connectOrCreate?: Prisma.RiskAnalysisCreateOrConnectWithoutContractInput
+  connect?: Prisma.RiskAnalysisWhereUniqueInput
+}
+
+export type RiskAnalysisUpdateOneWithoutContractNestedInput = {
+  create?: Prisma.XOR<Prisma.RiskAnalysisCreateWithoutContractInput, Prisma.RiskAnalysisUncheckedCreateWithoutContractInput>
+  connectOrCreate?: Prisma.RiskAnalysisCreateOrConnectWithoutContractInput
+  upsert?: Prisma.RiskAnalysisUpsertWithoutContractInput
+  disconnect?: Prisma.RiskAnalysisWhereInput | boolean
+  delete?: Prisma.RiskAnalysisWhereInput | boolean
+  connect?: Prisma.RiskAnalysisWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RiskAnalysisUpdateToOneWithWhereWithoutContractInput, Prisma.RiskAnalysisUpdateWithoutContractInput>, Prisma.RiskAnalysisUncheckedUpdateWithoutContractInput>
+}
+
+export type RiskAnalysisUncheckedUpdateOneWithoutContractNestedInput = {
+  create?: Prisma.XOR<Prisma.RiskAnalysisCreateWithoutContractInput, Prisma.RiskAnalysisUncheckedCreateWithoutContractInput>
+  connectOrCreate?: Prisma.RiskAnalysisCreateOrConnectWithoutContractInput
+  upsert?: Prisma.RiskAnalysisUpsertWithoutContractInput
+  disconnect?: Prisma.RiskAnalysisWhereInput | boolean
+  delete?: Prisma.RiskAnalysisWhereInput | boolean
+  connect?: Prisma.RiskAnalysisWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RiskAnalysisUpdateToOneWithWhereWithoutContractInput, Prisma.RiskAnalysisUpdateWithoutContractInput>, Prisma.RiskAnalysisUncheckedUpdateWithoutContractInput>
 }
 
 export type RiskAnalysisCreateWithoutDocumentInput = {
   id?: string
-  score: number
-  risks: Prisma.JsonNullValueInput | runtime.InputJsonValue
   summary?: string | null
+  riskScore: number
+  risks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  missingClauses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  riskyTerms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  estimatedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
+  contract?: Prisma.ContractCreateNestedOneWithoutRiskAnalysisInput
 }
 
 export type RiskAnalysisUncheckedCreateWithoutDocumentInput = {
   id?: string
-  score: number
-  risks: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contractId?: string | null
   summary?: string | null
+  riskScore: number
+  risks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  missingClauses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  riskyTerms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  estimatedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type RiskAnalysisCreateOrConnectWithoutDocumentInput = {
@@ -448,135 +609,229 @@ export type RiskAnalysisCreateOrConnectWithoutDocumentInput = {
   create: Prisma.XOR<Prisma.RiskAnalysisCreateWithoutDocumentInput, Prisma.RiskAnalysisUncheckedCreateWithoutDocumentInput>
 }
 
-export type RiskAnalysisCreateManyDocumentInputEnvelope = {
-  data: Prisma.RiskAnalysisCreateManyDocumentInput | Prisma.RiskAnalysisCreateManyDocumentInput[]
-  skipDuplicates?: boolean
-}
-
-export type RiskAnalysisUpsertWithWhereUniqueWithoutDocumentInput = {
-  where: Prisma.RiskAnalysisWhereUniqueInput
+export type RiskAnalysisUpsertWithoutDocumentInput = {
   update: Prisma.XOR<Prisma.RiskAnalysisUpdateWithoutDocumentInput, Prisma.RiskAnalysisUncheckedUpdateWithoutDocumentInput>
   create: Prisma.XOR<Prisma.RiskAnalysisCreateWithoutDocumentInput, Prisma.RiskAnalysisUncheckedCreateWithoutDocumentInput>
+  where?: Prisma.RiskAnalysisWhereInput
 }
 
-export type RiskAnalysisUpdateWithWhereUniqueWithoutDocumentInput = {
-  where: Prisma.RiskAnalysisWhereUniqueInput
+export type RiskAnalysisUpdateToOneWithWhereWithoutDocumentInput = {
+  where?: Prisma.RiskAnalysisWhereInput
   data: Prisma.XOR<Prisma.RiskAnalysisUpdateWithoutDocumentInput, Prisma.RiskAnalysisUncheckedUpdateWithoutDocumentInput>
-}
-
-export type RiskAnalysisUpdateManyWithWhereWithoutDocumentInput = {
-  where: Prisma.RiskAnalysisScalarWhereInput
-  data: Prisma.XOR<Prisma.RiskAnalysisUpdateManyMutationInput, Prisma.RiskAnalysisUncheckedUpdateManyWithoutDocumentInput>
-}
-
-export type RiskAnalysisScalarWhereInput = {
-  AND?: Prisma.RiskAnalysisScalarWhereInput | Prisma.RiskAnalysisScalarWhereInput[]
-  OR?: Prisma.RiskAnalysisScalarWhereInput[]
-  NOT?: Prisma.RiskAnalysisScalarWhereInput | Prisma.RiskAnalysisScalarWhereInput[]
-  id?: Prisma.StringFilter<"RiskAnalysis"> | string
-  score?: Prisma.IntFilter<"RiskAnalysis"> | number
-  risks?: Prisma.JsonFilter<"RiskAnalysis">
-  summary?: Prisma.StringNullableFilter<"RiskAnalysis"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"RiskAnalysis"> | Date | string
-  documentId?: Prisma.StringFilter<"RiskAnalysis"> | string
-}
-
-export type RiskAnalysisCreateManyDocumentInput = {
-  id?: string
-  score: number
-  risks: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  summary?: string | null
-  createdAt?: Date | string
 }
 
 export type RiskAnalysisUpdateWithoutDocumentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  score?: Prisma.IntFieldUpdateOperationsInput | number
-  risks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskScore?: Prisma.IntFieldUpdateOperationsInput | number
+  risks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  missingClauses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  riskyTerms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  estimatedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  contract?: Prisma.ContractUpdateOneWithoutRiskAnalysisNestedInput
 }
 
 export type RiskAnalysisUncheckedUpdateWithoutDocumentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  score?: Prisma.IntFieldUpdateOperationsInput | number
-  risks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskScore?: Prisma.IntFieldUpdateOperationsInput | number
+  risks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  missingClauses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  riskyTerms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  estimatedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type RiskAnalysisUncheckedUpdateManyWithoutDocumentInput = {
+export type RiskAnalysisCreateWithoutContractInput = {
+  id?: string
+  summary?: string | null
+  riskScore: number
+  risks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  missingClauses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  riskyTerms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  estimatedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  document?: Prisma.DocumentCreateNestedOneWithoutRiskAnalysisInput
+}
+
+export type RiskAnalysisUncheckedCreateWithoutContractInput = {
+  id?: string
+  documentId?: string | null
+  summary?: string | null
+  riskScore: number
+  risks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  missingClauses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  riskyTerms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  estimatedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type RiskAnalysisCreateOrConnectWithoutContractInput = {
+  where: Prisma.RiskAnalysisWhereUniqueInput
+  create: Prisma.XOR<Prisma.RiskAnalysisCreateWithoutContractInput, Prisma.RiskAnalysisUncheckedCreateWithoutContractInput>
+}
+
+export type RiskAnalysisUpsertWithoutContractInput = {
+  update: Prisma.XOR<Prisma.RiskAnalysisUpdateWithoutContractInput, Prisma.RiskAnalysisUncheckedUpdateWithoutContractInput>
+  create: Prisma.XOR<Prisma.RiskAnalysisCreateWithoutContractInput, Prisma.RiskAnalysisUncheckedCreateWithoutContractInput>
+  where?: Prisma.RiskAnalysisWhereInput
+}
+
+export type RiskAnalysisUpdateToOneWithWhereWithoutContractInput = {
+  where?: Prisma.RiskAnalysisWhereInput
+  data: Prisma.XOR<Prisma.RiskAnalysisUpdateWithoutContractInput, Prisma.RiskAnalysisUncheckedUpdateWithoutContractInput>
+}
+
+export type RiskAnalysisUpdateWithoutContractInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  score?: Prisma.IntFieldUpdateOperationsInput | number
-  risks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskScore?: Prisma.IntFieldUpdateOperationsInput | number
+  risks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  missingClauses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  riskyTerms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  estimatedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  document?: Prisma.DocumentUpdateOneWithoutRiskAnalysisNestedInput
+}
+
+export type RiskAnalysisUncheckedUpdateWithoutContractInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskScore?: Prisma.IntFieldUpdateOperationsInput | number
+  risks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  missingClauses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  riskyTerms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  estimatedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
 
 export type RiskAnalysisSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  score?: boolean
-  risks?: boolean
-  summary?: boolean
-  createdAt?: boolean
+  contractId?: boolean
   documentId?: boolean
-  document?: boolean | Prisma.DocumentDefaultArgs<ExtArgs>
+  summary?: boolean
+  riskScore?: boolean
+  risks?: boolean
+  missingClauses?: boolean
+  riskyTerms?: boolean
+  inconsistentWording?: boolean
+  complianceWarnings?: boolean
+  estimatedCost?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  contract?: boolean | Prisma.RiskAnalysis$contractArgs<ExtArgs>
+  document?: boolean | Prisma.RiskAnalysis$documentArgs<ExtArgs>
 }, ExtArgs["result"]["riskAnalysis"]>
 
 export type RiskAnalysisSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  score?: boolean
-  risks?: boolean
-  summary?: boolean
-  createdAt?: boolean
+  contractId?: boolean
   documentId?: boolean
-  document?: boolean | Prisma.DocumentDefaultArgs<ExtArgs>
+  summary?: boolean
+  riskScore?: boolean
+  risks?: boolean
+  missingClauses?: boolean
+  riskyTerms?: boolean
+  inconsistentWording?: boolean
+  complianceWarnings?: boolean
+  estimatedCost?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  contract?: boolean | Prisma.RiskAnalysis$contractArgs<ExtArgs>
+  document?: boolean | Prisma.RiskAnalysis$documentArgs<ExtArgs>
 }, ExtArgs["result"]["riskAnalysis"]>
 
 export type RiskAnalysisSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  score?: boolean
-  risks?: boolean
-  summary?: boolean
-  createdAt?: boolean
+  contractId?: boolean
   documentId?: boolean
-  document?: boolean | Prisma.DocumentDefaultArgs<ExtArgs>
+  summary?: boolean
+  riskScore?: boolean
+  risks?: boolean
+  missingClauses?: boolean
+  riskyTerms?: boolean
+  inconsistentWording?: boolean
+  complianceWarnings?: boolean
+  estimatedCost?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  contract?: boolean | Prisma.RiskAnalysis$contractArgs<ExtArgs>
+  document?: boolean | Prisma.RiskAnalysis$documentArgs<ExtArgs>
 }, ExtArgs["result"]["riskAnalysis"]>
 
 export type RiskAnalysisSelectScalar = {
   id?: boolean
-  score?: boolean
-  risks?: boolean
-  summary?: boolean
-  createdAt?: boolean
+  contractId?: boolean
   documentId?: boolean
+  summary?: boolean
+  riskScore?: boolean
+  risks?: boolean
+  missingClauses?: boolean
+  riskyTerms?: boolean
+  inconsistentWording?: boolean
+  complianceWarnings?: boolean
+  estimatedCost?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type RiskAnalysisOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "score" | "risks" | "summary" | "createdAt" | "documentId", ExtArgs["result"]["riskAnalysis"]>
+export type RiskAnalysisOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "contractId" | "documentId" | "summary" | "riskScore" | "risks" | "missingClauses" | "riskyTerms" | "inconsistentWording" | "complianceWarnings" | "estimatedCost" | "createdAt" | "updatedAt", ExtArgs["result"]["riskAnalysis"]>
 export type RiskAnalysisInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  document?: boolean | Prisma.DocumentDefaultArgs<ExtArgs>
+  contract?: boolean | Prisma.RiskAnalysis$contractArgs<ExtArgs>
+  document?: boolean | Prisma.RiskAnalysis$documentArgs<ExtArgs>
 }
 export type RiskAnalysisIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  document?: boolean | Prisma.DocumentDefaultArgs<ExtArgs>
+  contract?: boolean | Prisma.RiskAnalysis$contractArgs<ExtArgs>
+  document?: boolean | Prisma.RiskAnalysis$documentArgs<ExtArgs>
 }
 export type RiskAnalysisIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  document?: boolean | Prisma.DocumentDefaultArgs<ExtArgs>
+  contract?: boolean | Prisma.RiskAnalysis$contractArgs<ExtArgs>
+  document?: boolean | Prisma.RiskAnalysis$documentArgs<ExtArgs>
 }
 
 export type $RiskAnalysisPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "RiskAnalysis"
   objects: {
-    document: Prisma.$DocumentPayload<ExtArgs>
+    contract: Prisma.$ContractPayload<ExtArgs> | null
+    document: Prisma.$DocumentPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    score: number
-    risks: runtime.JsonValue
+    contractId: string | null
+    documentId: string | null
     summary: string | null
+    riskScore: number
+    risks: runtime.JsonValue | null
+    missingClauses: runtime.JsonValue | null
+    riskyTerms: runtime.JsonValue | null
+    inconsistentWording: runtime.JsonValue | null
+    complianceWarnings: runtime.JsonValue | null
+    estimatedCost: runtime.Decimal | null
     createdAt: Date
-    documentId: string
+    updatedAt: Date
   }, ExtArgs["result"]["riskAnalysis"]>
   composites: {}
 }
@@ -971,7 +1226,8 @@ readonly fields: RiskAnalysisFieldRefs;
  */
 export interface Prisma__RiskAnalysisClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  document<T extends Prisma.DocumentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentDefaultArgs<ExtArgs>>): Prisma.Prisma__DocumentClient<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  contract<T extends Prisma.RiskAnalysis$contractArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RiskAnalysis$contractArgs<ExtArgs>>): Prisma.Prisma__ContractClient<runtime.Types.Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  document<T extends Prisma.RiskAnalysis$documentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RiskAnalysis$documentArgs<ExtArgs>>): Prisma.Prisma__DocumentClient<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1002,11 +1258,18 @@ export interface Prisma__RiskAnalysisClient<T, Null = never, ExtArgs extends run
  */
 export interface RiskAnalysisFieldRefs {
   readonly id: Prisma.FieldRef<"RiskAnalysis", 'String'>
-  readonly score: Prisma.FieldRef<"RiskAnalysis", 'Int'>
-  readonly risks: Prisma.FieldRef<"RiskAnalysis", 'Json'>
-  readonly summary: Prisma.FieldRef<"RiskAnalysis", 'String'>
-  readonly createdAt: Prisma.FieldRef<"RiskAnalysis", 'DateTime'>
+  readonly contractId: Prisma.FieldRef<"RiskAnalysis", 'String'>
   readonly documentId: Prisma.FieldRef<"RiskAnalysis", 'String'>
+  readonly summary: Prisma.FieldRef<"RiskAnalysis", 'String'>
+  readonly riskScore: Prisma.FieldRef<"RiskAnalysis", 'Int'>
+  readonly risks: Prisma.FieldRef<"RiskAnalysis", 'Json'>
+  readonly missingClauses: Prisma.FieldRef<"RiskAnalysis", 'Json'>
+  readonly riskyTerms: Prisma.FieldRef<"RiskAnalysis", 'Json'>
+  readonly inconsistentWording: Prisma.FieldRef<"RiskAnalysis", 'Json'>
+  readonly complianceWarnings: Prisma.FieldRef<"RiskAnalysis", 'Json'>
+  readonly estimatedCost: Prisma.FieldRef<"RiskAnalysis", 'Decimal'>
+  readonly createdAt: Prisma.FieldRef<"RiskAnalysis", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"RiskAnalysis", 'DateTime'>
 }
     
 
@@ -1405,6 +1668,44 @@ export type RiskAnalysisDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Limit how many RiskAnalyses to delete.
    */
   limit?: number
+}
+
+/**
+ * RiskAnalysis.contract
+ */
+export type RiskAnalysis$contractArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Contract
+   */
+  select?: Prisma.ContractSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Contract
+   */
+  omit?: Prisma.ContractOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContractInclude<ExtArgs> | null
+  where?: Prisma.ContractWhereInput
+}
+
+/**
+ * RiskAnalysis.document
+ */
+export type RiskAnalysis$documentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Document
+   */
+  select?: Prisma.DocumentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Document
+   */
+  omit?: Prisma.DocumentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentInclude<ExtArgs> | null
+  where?: Prisma.DocumentWhereInput
 }
 
 /**

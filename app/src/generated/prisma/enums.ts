@@ -17,12 +17,20 @@ export const UserRole = {
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 
+export const PermissionRole = {
+  OWNER: 'OWNER',
+  ADMIN: 'ADMIN',
+  MEMBER: 'MEMBER',
+  VIEWER: 'VIEWER'
+} as const
+
+export type PermissionRole = (typeof PermissionRole)[keyof typeof PermissionRole]
+
+
 export const DocumentStatus = {
   DRAFT: 'DRAFT',
-  GENERATED: 'GENERATED',
-  REVIEWED: 'REVIEWED',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
+  FINAL: 'FINAL',
+  ARCHIVED: 'ARCHIVED'
 } as const
 
 export type DocumentStatus = (typeof DocumentStatus)[keyof typeof DocumentStatus]
@@ -32,8 +40,54 @@ export const ContractStatus = {
   DRAFT: 'DRAFT',
   REVIEW: 'REVIEW',
   APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED',
-  SIGNED: 'SIGNED'
+  SIGNED: 'SIGNED',
+  ARCHIVED: 'ARCHIVED'
 } as const
 
 export type ContractStatus = (typeof ContractStatus)[keyof typeof ContractStatus]
+
+
+export const PartyRole = {
+  PARTY: 'PARTY',
+  SIGNER: 'SIGNER',
+  OTHER: 'OTHER'
+} as const
+
+export type PartyRole = (typeof PartyRole)[keyof typeof PartyRole]
+
+
+export const RiskLevel = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH'
+} as const
+
+export type RiskLevel = (typeof RiskLevel)[keyof typeof RiskLevel]
+
+
+export const ApprovalStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type ApprovalStatus = (typeof ApprovalStatus)[keyof typeof ApprovalStatus]
+
+
+export const PaymentStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  FAILED: 'FAILED',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
+export const SubscriptionStatus = {
+  ACTIVE: 'ACTIVE',
+  CANCELLED: 'CANCELLED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type SubscriptionStatus = (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus]

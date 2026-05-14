@@ -11,17 +11,47 @@ export const UserRole = {
     USER: 'USER',
     ADMIN: 'ADMIN'
 };
+export const PermissionRole = {
+    OWNER: 'OWNER',
+    ADMIN: 'ADMIN',
+    MEMBER: 'MEMBER',
+    VIEWER: 'VIEWER'
+};
 export const DocumentStatus = {
     DRAFT: 'DRAFT',
-    GENERATED: 'GENERATED',
-    REVIEWED: 'REVIEWED',
-    APPROVED: 'APPROVED',
-    REJECTED: 'REJECTED'
+    FINAL: 'FINAL',
+    ARCHIVED: 'ARCHIVED'
 };
 export const ContractStatus = {
     DRAFT: 'DRAFT',
     REVIEW: 'REVIEW',
     APPROVED: 'APPROVED',
-    REJECTED: 'REJECTED',
-    SIGNED: 'SIGNED'
+    SIGNED: 'SIGNED',
+    ARCHIVED: 'ARCHIVED'
+};
+export const PartyRole = {
+    PARTY: 'PARTY',
+    SIGNER: 'SIGNER',
+    OTHER: 'OTHER'
+};
+export const RiskLevel = {
+    LOW: 'LOW',
+    MEDIUM: 'MEDIUM',
+    HIGH: 'HIGH'
+};
+export const ApprovalStatus = {
+    PENDING: 'PENDING',
+    APPROVED: 'APPROVED',
+    REJECTED: 'REJECTED'
+};
+export const PaymentStatus = {
+    PENDING: 'PENDING',
+    PAID: 'PAID',
+    FAILED: 'FAILED',
+    REFUNDED: 'REFUNDED'
+};
+export const SubscriptionStatus = {
+    ACTIVE: 'ACTIVE',
+    CANCELLED: 'CANCELLED',
+    EXPIRED: 'EXPIRED'
 };

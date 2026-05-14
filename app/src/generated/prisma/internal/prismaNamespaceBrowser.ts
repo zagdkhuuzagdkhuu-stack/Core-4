@@ -52,10 +52,24 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  UserSession: 'UserSession',
+  Company: 'Company',
+  UserCompany: 'UserCompany',
+  TemplateCategory: 'TemplateCategory',
   Template: 'Template',
   Document: 'Document',
+  Contract: 'Contract',
+  ContractParty: 'ContractParty',
+  Clause: 'Clause',
+  ClauseTag: 'ClauseTag',
+  ClauseTagMap: 'ClauseTagMap',
   RiskAnalysis: 'RiskAnalysis',
-  Contract: 'Contract'
+  Approval: 'Approval',
+  Payment: 'Payment',
+  Notification: 'Notification',
+  Subscription: 'Subscription',
+  AuditLog: 'AuditLog',
+  FileUpload: 'FileUpload'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -78,16 +92,66 @@ export const UserScalarFieldEnum = {
   id: 'id',
   firstName: 'firstName',
   lastName: 'lastName',
+  fullName: 'fullName',
   email: 'email',
   passwordHash: 'passwordHash',
   avatarUrl: 'avatarUrl',
   googleId: 'googleId',
   role: 'role',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const UserSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  refreshToken: 'refreshToken',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type UserSessionScalarFieldEnum = (typeof UserSessionScalarFieldEnum)[keyof typeof UserSessionScalarFieldEnum]
+
+
+export const CompanyScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  registrationNumber: 'registrationNumber',
+  industry: 'industry',
+  address: 'address',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CompanyScalarFieldEnum = (typeof CompanyScalarFieldEnum)[keyof typeof CompanyScalarFieldEnum]
+
+
+export const UserCompanyScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  companyId: 'companyId',
+  position: 'position',
+  permissionRole: 'permissionRole',
+  joinedAt: 'joinedAt'
+} as const
+
+export type UserCompanyScalarFieldEnum = (typeof UserCompanyScalarFieldEnum)[keyof typeof UserCompanyScalarFieldEnum]
+
+
+export const TemplateCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt'
+} as const
+
+export type TemplateCategoryScalarFieldEnum = (typeof TemplateCategoryScalarFieldEnum)[keyof typeof TemplateCategoryScalarFieldEnum]
 
 
 export const TemplateScalarFieldEnum = {
@@ -98,9 +162,10 @@ export const TemplateScalarFieldEnum = {
   content: 'content',
   variables: 'variables',
   isActive: 'isActive',
+  createdById: 'createdById',
+  categoryId: 'categoryId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  userId: 'userId'
+  updatedAt: 'updatedAt'
 } as const
 
 export type TemplateScalarFieldEnum = (typeof TemplateScalarFieldEnum)[keyof typeof TemplateScalarFieldEnum]
@@ -111,47 +176,190 @@ export const DocumentScalarFieldEnum = {
   title: 'title',
   content: 'content',
   rawInput: 'rawInput',
-  status: 'status',
   fileUrl: 'fileUrl',
+  fileType: 'fileType',
+  status: 'status',
+  ownerId: 'ownerId',
+  companyId: 'companyId',
+  templateId: 'templateId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  userId: 'userId',
-  templateId: 'templateId'
+  updatedAt: 'updatedAt'
 } as const
 
 export type DocumentScalarFieldEnum = (typeof DocumentScalarFieldEnum)[keyof typeof DocumentScalarFieldEnum]
 
 
-export const RiskAnalysisScalarFieldEnum = {
-  id: 'id',
-  score: 'score',
-  risks: 'risks',
-  summary: 'summary',
-  createdAt: 'createdAt',
-  documentId: 'documentId'
-} as const
-
-export type RiskAnalysisScalarFieldEnum = (typeof RiskAnalysisScalarFieldEnum)[keyof typeof RiskAnalysisScalarFieldEnum]
-
-
 export const ContractScalarFieldEnum = {
   id: 'id',
   title: 'title',
+  contractType: 'contractType',
   parties: 'parties',
   value: 'value',
   currency: 'currency',
   startDate: 'startDate',
   endDate: 'endDate',
   status: 'status',
+  documentId: 'documentId',
+  templateId: 'templateId',
+  createdById: 'createdById',
+  companyId: 'companyId',
   signedAt: 'signedAt',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  userId: 'userId',
-  documentId: 'documentId',
-  templateId: 'templateId'
+  updatedAt: 'updatedAt'
 } as const
 
 export type ContractScalarFieldEnum = (typeof ContractScalarFieldEnum)[keyof typeof ContractScalarFieldEnum]
+
+
+export const ContractPartyScalarFieldEnum = {
+  id: 'id',
+  contractId: 'contractId',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  role: 'role',
+  organizationName: 'organizationName',
+  address: 'address',
+  createdAt: 'createdAt'
+} as const
+
+export type ContractPartyScalarFieldEnum = (typeof ContractPartyScalarFieldEnum)[keyof typeof ContractPartyScalarFieldEnum]
+
+
+export const ClauseScalarFieldEnum = {
+  id: 'id',
+  contractId: 'contractId',
+  title: 'title',
+  content: 'content',
+  clauseType: 'clauseType',
+  riskLevel: 'riskLevel',
+  explanation: 'explanation',
+  orderNo: 'orderNo',
+  createdAt: 'createdAt'
+} as const
+
+export type ClauseScalarFieldEnum = (typeof ClauseScalarFieldEnum)[keyof typeof ClauseScalarFieldEnum]
+
+
+export const ClauseTagScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description'
+} as const
+
+export type ClauseTagScalarFieldEnum = (typeof ClauseTagScalarFieldEnum)[keyof typeof ClauseTagScalarFieldEnum]
+
+
+export const ClauseTagMapScalarFieldEnum = {
+  id: 'id',
+  clauseId: 'clauseId',
+  tagId: 'tagId'
+} as const
+
+export type ClauseTagMapScalarFieldEnum = (typeof ClauseTagMapScalarFieldEnum)[keyof typeof ClauseTagMapScalarFieldEnum]
+
+
+export const RiskAnalysisScalarFieldEnum = {
+  id: 'id',
+  contractId: 'contractId',
+  documentId: 'documentId',
+  summary: 'summary',
+  riskScore: 'riskScore',
+  risks: 'risks',
+  missingClauses: 'missingClauses',
+  riskyTerms: 'riskyTerms',
+  inconsistentWording: 'inconsistentWording',
+  complianceWarnings: 'complianceWarnings',
+  estimatedCost: 'estimatedCost',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RiskAnalysisScalarFieldEnum = (typeof RiskAnalysisScalarFieldEnum)[keyof typeof RiskAnalysisScalarFieldEnum]
+
+
+export const ApprovalScalarFieldEnum = {
+  id: 'id',
+  contractId: 'contractId',
+  userId: 'userId',
+  status: 'status',
+  comment: 'comment',
+  approvedAt: 'approvedAt',
+  orderNo: 'orderNo',
+  createdAt: 'createdAt'
+} as const
+
+export type ApprovalScalarFieldEnum = (typeof ApprovalScalarFieldEnum)[keyof typeof ApprovalScalarFieldEnum]
+
+
+export const PaymentScalarFieldEnum = {
+  id: 'id',
+  contractId: 'contractId',
+  userId: 'userId',
+  amount: 'amount',
+  currency: 'currency',
+  status: 'status',
+  paymentMethod: 'paymentMethod',
+  paidAt: 'paidAt',
+  invoiceUrl: 'invoiceUrl',
+  createdAt: 'createdAt'
+} as const
+
+export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  isRead: 'isRead',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const SubscriptionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  plan: 'plan',
+  status: 'status',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  createdAt: 'createdAt'
+} as const
+
+export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
+
+
+export const AuditLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  action: 'action',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  description: 'description',
+  ipAddress: 'ipAddress',
+  createdAt: 'createdAt'
+} as const
+
+export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const FileUploadScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  documentId: 'documentId',
+  fileName: 'fileName',
+  fileUrl: 'fileUrl',
+  mimeType: 'mimeType',
+  size: 'size',
+  uploadedAt: 'uploadedAt'
+} as const
+
+export type FileUploadScalarFieldEnum = (typeof FileUploadScalarFieldEnum)[keyof typeof FileUploadScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -162,11 +370,12 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-export const JsonNullValueInput = {
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
   JsonNull: JsonNull
 } as const
 
-export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {

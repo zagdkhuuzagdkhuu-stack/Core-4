@@ -23,6 +23,26 @@ export * from './enums';
  */
 export type User = Prisma.UserModel
 /**
+ * Model UserSession
+ * 
+ */
+export type UserSession = Prisma.UserSessionModel
+/**
+ * Model Company
+ * 
+ */
+export type Company = Prisma.CompanyModel
+/**
+ * Model UserCompany
+ * 
+ */
+export type UserCompany = Prisma.UserCompanyModel
+/**
+ * Model TemplateCategory
+ * 
+ */
+export type TemplateCategory = Prisma.TemplateCategoryModel
+/**
  * Model Template
  * 
  */
@@ -33,12 +53,62 @@ export type Template = Prisma.TemplateModel
  */
 export type Document = Prisma.DocumentModel
 /**
+ * Model Contract
+ * 
+ */
+export type Contract = Prisma.ContractModel
+/**
+ * Model ContractParty
+ * 
+ */
+export type ContractParty = Prisma.ContractPartyModel
+/**
+ * Model Clause
+ * 
+ */
+export type Clause = Prisma.ClauseModel
+/**
+ * Model ClauseTag
+ * 
+ */
+export type ClauseTag = Prisma.ClauseTagModel
+/**
+ * Model ClauseTagMap
+ * 
+ */
+export type ClauseTagMap = Prisma.ClauseTagMapModel
+/**
  * Model RiskAnalysis
  * 
  */
 export type RiskAnalysis = Prisma.RiskAnalysisModel
 /**
- * Model Contract
+ * Model Approval
  * 
  */
-export type Contract = Prisma.ContractModel
+export type Approval = Prisma.ApprovalModel
+/**
+ * Model Payment
+ * 
+ */
+export type Payment = Prisma.PaymentModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
+ * Model Subscription
+ * 
+ */
+export type Subscription = Prisma.SubscriptionModel
+/**
+ * Model AuditLog
+ * 
+ */
+export type AuditLog = Prisma.AuditLogModel
+/**
+ * Model FileUpload
+ * 
+ */
+export type FileUpload = Prisma.FileUploadModel
