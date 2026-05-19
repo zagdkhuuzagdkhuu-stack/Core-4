@@ -1,3 +1,4 @@
+import database from "../database";
 import { checkQPayInvoice, createQPayInvoice } from "../utils/qpay";
 function parseAmount(value) {
     const amount = Number(value);
@@ -8,17 +9,50 @@ function parseAmount(value) {
 }
 export async function createQPayPayment(req, res) {
     try {
+        const userId = req.userId;
         const amount = parseAmount(req.body.amount);
+        const contractId = String(req.body.contractId || "");
         if (!amount) {
             return res.status(400).json({ message: "A valid payment amount is required." });
         }
+        if (!contractId) {
+            return res.status(400).json({ message: "Contract id is required." });
+        }
+        const contract = await database.contract.findFirst({
+            where: {
+                id: contractId,
+                createdById: userId,
+            },
+            select: {
+                id: true,
+                title: true,
+            },
+        });
+        if (!contract) {
+            return res.status(404).json({ message: "Contract not found." });
+        }
         const invoice = await createQPayInvoice({
             amount,
-            description: String(req.body.description || "Contract payment").slice(0, 255),
+            description: String(req.body.description || `${contract.title} payment`).slice(0, 255),
             receiverCode: req.body.receiverCode ? String(req.body.receiverCode) : undefined,
-            senderInvoiceNo: req.body.contractId ? `contract-${req.body.contractId}-${Date.now()}` : undefined,
+            senderInvoiceNo: `pay-${Date.now()}-${contractId.slice(0, 8)}`,
         });
-        return res.status(201).json(invoice);
+        const payment = await database.payment.create({
+            data: {
+                contractId,
+                userId,
+                amount,
+                currency: "MNT",
+                status: "PENDING",
+                paymentMethod: "QPAY",
+                invoiceUrl: invoice.invoice_id,
+            },
+        });
+        return res.status(201).json({
+            payment,
+            invoice,
+            ...invoice,
+        });
     }
     catch (error) {
         return res.status(500).json({
@@ -34,7 +68,24 @@ export async function checkQPayPayment(req, res) {
             return res.status(400).json({ message: "QPay invoice id is required." });
         }
         const paymentStatus = await checkQPayInvoice(invoiceId);
-        return res.json(paymentStatus);
+        const payment = await database.payment.findFirst({
+            where: {
+                invoiceUrl: invoiceId,
+            },
+        });
+        const updatedPayment = payment && paymentStatus.paid
+            ? await database.payment.update({
+                where: { id: payment.id },
+                data: {
+                    status: "PAID",
+                    paidAt: new Date(),
+                },
+            })
+            : payment;
+        return res.json({
+            ...paymentStatus,
+            payment: updatedPayment,
+        });
     }
     catch (error) {
         return res.status(500).json({
@@ -43,7 +94,53 @@ export async function checkQPayPayment(req, res) {
         });
     }
 }
-export function qpayCallback(req, res) {
-    console.log("QPay callback:", req.body || req.query);
-    return res.json({ received: true });
+function findCallbackInvoiceId(payload) {
+    const candidates = [
+        payload.invoice_id,
+        payload.invoiceId,
+        payload.object_id,
+        payload.objectId,
+        payload.payment_id,
+    ];
+    const value = candidates.find((item) => typeof item === "string" && item.trim());
+    return value ? String(value) : "";
+}
+export async function qpayCallback(req, res) {
+    try {
+        const payload = {
+            ...req.query,
+            ...req.body,
+        };
+        const invoiceId = findCallbackInvoiceId(payload);
+        if (!invoiceId) {
+            return res.status(400).json({ message: "QPay callback invoice id was not found." });
+        }
+        const payment = await database.payment.findFirst({
+            where: { invoiceUrl: invoiceId },
+        });
+        if (!payment) {
+            return res.status(404).json({ message: "Payment record not found for callback invoice." });
+        }
+        const paymentStatus = await checkQPayInvoice(invoiceId);
+        const updatedPayment = paymentStatus.paid
+            ? await database.payment.update({
+                where: { id: payment.id },
+                data: {
+                    status: "PAID",
+                    paidAt: new Date(),
+                },
+            })
+            : payment;
+        return res.json({
+            received: true,
+            paid: paymentStatus.paid,
+            payment: updatedPayment,
+        });
+    }
+    catch (error) {
+        return res.status(500).json({
+            message: "Failed to process QPay callback.",
+            error: error instanceof Error ? error.message : String(error),
+        });
+    }
 }

@@ -11,7 +11,7 @@ function getQPayCredentials() {
 async function parseQPayResponse(response) {
     const data = await response.json().catch(() => ({}));
     if (!response.ok) {
-        const message = typeof data?.message === "string" ? data.message : "QPay request failed";
+        const message = typeof data?.message === "string" ? data.message : JSON.stringify(data) || "QPay request failed";
         throw new Error(message);
     }
     return data;

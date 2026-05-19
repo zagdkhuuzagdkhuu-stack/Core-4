@@ -1,15 +1,24 @@
 import express from "express";
 import cors from "cors";
+import path from "path";
+import analysisRoutes from "./router/analysis.router";
 import authRoutes from "./router/auth.router";
+import contractRoutes from "./router/contract.router";
+import documentRoutes from "./router/document.router";
 import paymentRoutes from "./router/payment.router";
+import uploadRoutes from "./router/upload.router";
 import errorHandler from "./middleware/error.middleware";
 
 const app = express();
-app.use(express.json());
 app.use(cors());
 app.use(express.json());
+app.use("/uploads", express.static(path.resolve("app/uploads")));
 app.use("/api/auth", authRoutes);
+app.use("/api/contracts", contractRoutes);
+app.use("/api/documents", documentRoutes);
+app.use("/api/analysis", analysisRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use("/api/upload", uploadRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "AI Contract Backend is running" });

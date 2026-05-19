@@ -1,0 +1,156 @@
+import { Request, Response } from "express";
+import database from "../database";
+import { AuthenticatedRequest } from "../middleware/auth.middleware";
+
+const documentStatuses = new Set(["DRAFT", "FINAL", "ARCHIVED"]);
+
+export async function listDocuments(req: Request, res: Response) {
+  try {
+    const userId = (req as AuthenticatedRequest).userId;
+    const documents = await database.document.findMany({
+      where: { ownerId: userId },
+      orderBy: { createdAt: "desc" },
+      include: {
+        contract: true,
+        riskAnalysis: true,
+        fileUploads: true,
+      },
+    });
+
+    return res.json({ documents });
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to list documents." });
+  }
+}
+
+export async function getDocument(req: Request, res: Response) {
+  try {
+    const userId = (req as AuthenticatedRequest).userId;
+    const documentId = String(req.params.id || "");
+    const document = await database.document.findFirst({
+      where: {
+        id: documentId,
+        ownerId: userId,
+      },
+      include: {
+        contract: true,
+        riskAnalysis: true,
+        fileUploads: true,
+      },
+    });
+
+    if (!document) {
+      return res.status(404).json({ message: "Document not found." });
+    }
+
+    return res.json({ document });
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to load document." });
+  }
+}
+
+export async function createDocument(req: Request, res: Response) {
+  try {
+    const userId = (req as AuthenticatedRequest).userId;
+    const title = String(req.body.title || "").trim();
+
+    if (!title) {
+      return res.status(400).json({ message: "Document title is required." });
+    }
+
+    const document = await database.document.create({
+      data: {
+        title,
+        content: req.body.content ? String(req.body.content) : null,
+        rawInput: req.body.rawInput || undefined,
+        fileUrl: req.body.fileUrl ? String(req.body.fileUrl) : undefined,
+        fileType: req.body.fileType ? String(req.body.fileType) : undefined,
+        ownerId: userId,
+      },
+    });
+
+    if (req.body.fileName && req.body.fileUrl) {
+      await database.fileUpload.create({
+        data: {
+          userId,
+          documentId: document.id,
+          fileName: String(req.body.fileName),
+          fileUrl: String(req.body.fileUrl),
+          mimeType: req.body.mimeType ? String(req.body.mimeType) : undefined,
+          size: req.body.size ? BigInt(req.body.size) : undefined,
+        },
+      });
+    }
+
+    return res.status(201).json({ document });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to create document.",
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+}
+
+export async function updateDocument(req: Request, res: Response) {
+  try {
+    const userId = (req as AuthenticatedRequest).userId;
+    const documentId = String(req.params.id || "");
+    const status = req.body.status ? String(req.body.status) : undefined;
+
+    if (status && !documentStatuses.has(status)) {
+      return res.status(400).json({ message: "Invalid document status." });
+    }
+
+    const existing = await database.document.findFirst({
+      where: {
+        id: documentId,
+        ownerId: userId,
+      },
+    });
+
+    if (!existing) {
+      return res.status(404).json({ message: "Document not found." });
+    }
+
+    const document = await database.document.update({
+      where: { id: existing.id },
+      data: {
+        title: req.body.title ? String(req.body.title).trim() : undefined,
+        content: req.body.content !== undefined ? String(req.body.content) : undefined,
+        rawInput: req.body.rawInput || undefined,
+        fileUrl: req.body.fileUrl ? String(req.body.fileUrl) : undefined,
+        fileType: req.body.fileType ? String(req.body.fileType) : undefined,
+        status: status as any,
+      },
+    });
+
+    return res.json({ document });
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to update document." });
+  }
+}
+
+export async function deleteDocument(req: Request, res: Response) {
+  try {
+    const userId = (req as AuthenticatedRequest).userId;
+    const documentId = String(req.params.id || "");
+    const document = await database.document.findFirst({
+      where: {
+        id: documentId,
+        ownerId: userId,
+      },
+    });
+
+    if (!document) {
+      return res.status(404).json({ message: "Document not found." });
+    }
+
+    await database.document.delete({
+      where: { id: document.id },
+    });
+
+    return res.json({ deleted: true });
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to delete document." });
+  }
+}
