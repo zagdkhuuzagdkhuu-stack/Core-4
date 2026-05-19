@@ -1,23 +1,42 @@
+import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import CreateContract from "./pages/CreateContract";
-import UploadContract from "./pages/UploadContract";
-import ContractDetails from "./pages/ContractDetails";
+import AppShell from "./components/AppShell";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { useI18n } from "./i18n/useI18n";
+import { getSession } from "./lib/session";
+import AuthPage from "./pages/AuthPage";
+import DashboardPage from "./pages/DashboardPage";
+import LandingPage from "./pages/LandingPage";
+import PaymentsPage from "./pages/PaymentsPage";
 
 export default function App() {
+  const [session, setSession] = useState(getSession);
+  const { language, setLanguage, t } = useI18n();
+
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={<Navigate to="/" replace />} />
-      <Route path="/contracts/create" element={<CreateContract />} />
-      <Route path="/contracts/upload" element={<UploadContract />} />
-      <Route path="/contracts/:id" element={<ContractDetails />} />
-      <Route path="/contracts/:id/analysis" element={<ContractDetails />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <AppShell language={language} session={session} setLanguage={setLanguage} t={t}>
+      <Routes>
+        <Route path="/" element={<LandingPage t={t} />} />
+        <Route path="/login" element={<AuthPage mode="login" setSession={setSession} t={t} />} />
+        <Route path="/register" element={<AuthPage mode="register" setSession={setSession} t={t} />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute session={session}>
+              <DashboardPage session={session} t={t} />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/payments"
+          element={
+            <ProtectedRoute session={session}>
+              <PaymentsPage t={t} />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </AppShell>
   );
 }

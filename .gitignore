@@ -1,7 +1,36 @@
-node_modules
-# Keep environment variables out of version control
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Build output
+dist/
+frontend/dist/
+app/dist/
+
+# Vite cache
+frontend/node_modules/.vite/
+
+# Environment variables and secrets
 .env
-dist
-frontend/node_modules
-frontend/dist
-app/uploads
+.env.*
+!.env.example
+
+# Local uploads and generated runtime files
+app/uploads/
+uploads/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# TypeScript cache
+*.tsbuildinfo
