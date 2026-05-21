@@ -1,8 +1,18 @@
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || "",
-});
+let openaiClient: OpenAI | null = null;
+
+function getOpenAIClient() {
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error("OPENAI_API_KEY is not set in environment variables.");
+  }
+
+  openaiClient ??= new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+
+  return openaiClient;
+}
 
 export interface ClauseResult {
   title: string;
@@ -67,6 +77,7 @@ const RISK_SYSTEM_PROMPT = `You are a contract risk analyst. Analyze the contrac
 
 export async function analyzeWithCrewAI(text: string): Promise<AnalysisResult> {
   const trimmed = text.slice(0, 50000);
+  const openai = getOpenAIClient();
 
   const [analysisRes, clausesRes] = await Promise.all([
     openai.chat.completions.create({
@@ -128,6 +139,7 @@ export async function analyzeWithCrewAI(text: string): Promise<AnalysisResult> {
 
 export async function analyzeWithSingleCall(text: string): Promise<AnalysisResult> {
   const trimmed = text.slice(0, 50000);
+  const openai = getOpenAIClient();
 
   const res = await openai.chat.completions.create({
     model: "gpt-4o-mini",

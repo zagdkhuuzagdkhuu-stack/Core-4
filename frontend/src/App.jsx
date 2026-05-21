@@ -8,6 +8,7 @@ import AuthPage from "./pages/AuthPage";
 import DashboardPage from "./pages/DashboardPage";
 import LandingPage from "./pages/LandingPage";
 import PaymentsPage from "./pages/PaymentsPage";
+import TemplatesPage from "./pages/TemplatesPage";
 
 export default function App() {
   const [session, setSession] = useState(getSession);
@@ -17,13 +18,15 @@ export default function App() {
     <AppShell language={language} session={session} setLanguage={setLanguage} t={t}>
       <Routes>
         <Route path="/" element={<LandingPage t={t} />} />
+        <Route path="/templates" element={<TemplatesPage t={t} />} />
         <Route path="/login" element={<AuthPage mode="login" setSession={setSession} t={t} />} />
         <Route path="/register" element={<AuthPage mode="register" setSession={setSession} t={t} />} />
+        <Route path="/sso" element={<AuthPage mode="sso" setSession={setSession} t={t} />} />
         <Route
           path="/dashboard"
           element={
             <ProtectedRoute session={session}>
-              <DashboardPage session={session} t={t} />
+              <DashboardPage language={language} session={session} setLanguage={setLanguage} t={t} />
             </ProtectedRoute>
           }
         />

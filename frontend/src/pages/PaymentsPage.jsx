@@ -1,11 +1,12 @@
 import { QrCode, RefreshCcw } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import api from "../lib/api";
 
 export default function PaymentsPage({ t }) {
+  const defaultDescriptionRef = useRef(t("payments.defaultDescription"));
   const [form, setForm] = useState({
     amount: "1000",
-    description: "Contract payment",
+    description: t("payments.defaultDescription"),
     contractId: "",
     receiverCode: "",
   });
@@ -13,6 +14,21 @@ export default function PaymentsPage({ t }) {
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const previousDefault = defaultDescriptionRef.current;
+    const nextDefault = t("payments.defaultDescription");
+
+    setForm((current) => {
+      if (current.description && current.description !== previousDefault) {
+        return current;
+      }
+
+      return { ...current, description: nextDefault };
+    });
+
+    defaultDescriptionRef.current = nextDefault;
+  }, [t]);
 
   function updateField(event) {
     setForm((current) => ({ ...current, [event.target.name]: event.target.value }));
