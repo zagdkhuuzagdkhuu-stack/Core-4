@@ -1,10 +1,10 @@
-﻿import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { ReactNode, RefObject } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
-  FileText, BarChart3, ArrowRight, ArrowLeft, Twitter, Linkedin,
+  FileText, ArrowRight, ArrowLeft, Twitter, Linkedin,
   Instagram, Facebook, Phone, Mail, MapPin, Sun, Moon, UploadCloud,
-  LoaderCircle, Check, Archive, Download, Trash2, House, Search, QrCode,
+  LoaderCircle, Check, Archive, Download, Trash2, Search, QrCode,
 } from "lucide-react";
 import enContent from "./content/en.json";
 import mnContent from "./content/mn.json";
@@ -91,9 +91,9 @@ const SECTION_REVEAL = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.8,
+      duration: 0.55,
       ease: "easeOut",
-      staggerChildren: 0.12,
+      staggerChildren: 0.08,
       when: "beforeChildren",
     },
   },
@@ -104,16 +104,64 @@ const REVEAL_ITEM = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.8, ease: "easeOut" },
+    transition: { duration: 0.55, ease: "easeOut" },
   },
 };
 
-const HEADER_TABS = [
-  { label: "Home", Icon: House, tone: "#F7F1EC" },
-  { label: "Template", Icon: FileText, tone: "#F7F1EC" },
-  { label: "Analysis", Icon: BarChart3, tone: "#D8C6BA" },
-  { label: "Contact us", Icon: Mail, tone: "#CF9D7B" },
-] satisfies { label: HeaderTab; Icon: typeof FileText; tone: string }[];
+const STACK_EASE = [0.22, 1, 0.36, 1] as const;
+const STACK_TRANSITION = { duration: 0.82, ease: STACK_EASE };
+
+const stackedPageVariants = {
+  enter: (direction: number) => ({
+    y: direction >= 0 ? "100%" : 0,
+    scale: direction >= 0 ? 1 : 0.98,
+    opacity: direction >= 0 ? 1 : 0.9,
+    filter: direction >= 0 ? "blur(0px)" : "blur(2px)",
+    zIndex: direction >= 0 ? 30 : 10,
+  }),
+  center: {
+    y: ["0%", "-1.2%", "0%"],
+    scale: 1,
+    opacity: 1,
+    filter: "blur(0px)",
+    zIndex: 20,
+    transition: STACK_TRANSITION,
+  },
+  exit: (direction: number) => ({
+    y: direction < 0 ? "100%" : 0,
+    scale: direction < 0 ? 1 : 0.98,
+    opacity: direction < 0 ? 1 : 0.9,
+    filter: direction < 0 ? "blur(0px)" : "blur(2px)",
+    zIndex: direction < 0 ? 30 : 10,
+    transition: STACK_TRANSITION,
+  }),
+};
+
+const stackedStepVariants = {
+  enter: (direction: number) => ({
+    y: direction >= 0 ? "100%" : 0,
+    scale: direction >= 0 ? 1.015 : 0.98,
+    opacity: direction >= 0 ? 1 : 0.9,
+    filter: direction >= 0 ? "blur(0px)" : "blur(2px)",
+    zIndex: direction >= 0 ? 30 : 10,
+  }),
+  center: {
+    y: ["0%", "-1.2%", "0%"],
+    scale: [1.015, 0.995, 1],
+    opacity: 1,
+    filter: "blur(0px)",
+    zIndex: 20,
+    transition: STACK_TRANSITION,
+  },
+  exit: (direction: number) => ({
+    y: direction < 0 ? "100%" : 0,
+    scale: direction < 0 ? 1 : 0.98,
+    opacity: direction < 0 ? 1 : 0.9,
+    filter: direction < 0 ? "blur(0px)" : "blur(2px)",
+    zIndex: direction < 0 ? 30 : 10,
+    transition: STACK_TRANSITION,
+  }),
+};
 
 const STEP_LABELS: { key: AnalysisStep; label: string }[] = [
   { key: "upload", label: "Upload" },
@@ -148,7 +196,7 @@ const TEMPLATE_CARDS = [
   { name: "Sales Agreement", desc: "Document sale terms, delivery, warranties, and payment." },
 ];
 
-// â”€â”€â”€ Hooks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Hooks ───────────────────────────────────────────────────────────────────
 
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLElement>(null);
@@ -174,14 +222,14 @@ function OpeningSplash({ onComplete }: { onComplete: () => void }) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0C1519]"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-background"
       initial={{ opacity: 1 }}
       animate={{ opacity: [1, 1, 0] }}
       transition={{ duration: 2.85, times: [0, 0.86, 1], ease: "easeInOut" }}
       aria-hidden="true"
     >
       <motion.div
-        className="font-display text-6xl font-black tracking-normal text-[#F7F1EC] md:text-7xl"
+        className="font-display text-6xl font-black tracking-normal text-foreground md:text-7xl"
         initial={{ x: 0, y: 0, scale: 1 }}
         animate={{
           x: ["0vw", "0vw", "calc(-50vw + 120px)"],
@@ -252,20 +300,21 @@ function FolderTabs({
         homeGlobal ? "fixed left-0 right-0" : "sticky"
       } ${
         isSimpleHomeNav
-          ? "bg-[#F7F1EC]/96 px-5 py-3 shadow-[0_14px_34px_rgba(12,21,25,0.10)] backdrop-blur-md sm:px-8"
+          ? "bg-navbar/96 px-5 py-3 shadow-[0_14px_34px_rgba(12,21,25,0.10)] backdrop-blur-md sm:px-8"
           : `bg-transparent ${
               homeGlobal ? "px-3 pt-3 sm:pr-7" : "-mb-[2px] pl-0 pr-4 pt-0 sm:pr-7"
             }`
       }`}
       animate={{ y: isHidden ? -120 : 0, opacity: isHidden ? 0 : 1 }}
       transition={{ duration: 0.36, ease: "easeOut" }}
+      style={{ zoom: 1.25 }}
     >
-      <div className={`relative w-full text-[#0C1519] ${isSimpleHomeNav ? "max-w-none" : "max-w-[920px]"}`}>
+      <div className={`relative w-full text-foreground ${isSimpleHomeNav ? "max-w-none" : "max-w-[920px]"}`}>
         <motion.div
           className={`relative z-10 flex items-center gap-3 overflow-x-auto transition-all duration-300 sm:gap-5 ${
             isSimpleHomeNav
               ? "min-h-12 rounded-none border-0 bg-transparent px-0 py-0 shadow-none"
-              : "-mb-[2px] min-h-20 rounded-t-[2.1rem] border border-[#D8C6BA]/55 border-b-0 bg-[#F7F1EC] px-7 py-4 shadow-none sm:px-9"
+              : "-mb-[2px] min-h-20 rounded-t-[2.1rem] border border-border/55 border-b-0 bg-secondary px-7 py-4 shadow-none sm:px-9"
           }`}
           animate={{ y: 0 }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
@@ -273,11 +322,11 @@ function FolderTabs({
           <button
             type="button"
             onClick={() => onSelect("Home")}
-            className="mr-2 shrink-0 font-display text-3xl font-black leading-none text-[#0C1519] transition-transform duration-300 hover:-translate-y-0.5 sm:mr-4"
+            className="mr-2 shrink-0 font-display text-3xl font-black leading-none text-foreground transition-transform duration-300 hover:-translate-y-0.5 sm:mr-4"
           >
             Draftly.
           </button>
-          <span className="h-6 w-px shrink-0 bg-[#724B39]/30" />
+          <span className="h-6 w-px shrink-0 bg-button/30" />
           <nav className="flex min-w-max items-center gap-2 sm:gap-3">
             {navItems.map(label => {
               const active = activeTab === label;
@@ -288,18 +337,18 @@ function FolderTabs({
                   type="button"
                   onClick={() => onSelect(label)}
                   className={`group relative flex min-w-[7.25rem] justify-center rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_22px_rgba(207,157,123,0.28)] sm:px-5 ${
-                    active ? "text-[#F7F1EC]" : "text-[#0C1519]/82 hover:text-[#0C1519]"
+                    active ? "text-button-text" : "text-foreground/82 hover:text-foreground"
                   }`}
                 >
                   {active && (
                     <motion.span
                       layoutId="folder-nav-active-pill"
-                      className="absolute inset-0 rounded-full bg-[#724B39]"
+                      className="absolute inset-0 rounded-full bg-button"
                       transition={{ duration: 0.32, ease: "easeOut" }}
                     />
                   )}
                   <span className="relative z-10">{label}</span>
-                  {!active && <span className="absolute bottom-1.5 left-5 right-5 h-px scale-x-0 bg-[#724B39] transition-transform duration-300 group-hover:scale-x-100" />}
+                  {!active && <span className="absolute bottom-1.5 left-5 right-5 h-px scale-x-0 bg-button transition-transform duration-300 group-hover:scale-x-100" />}
                 </button>
               );
             })}
@@ -311,7 +360,7 @@ function FolderTabs({
         <button
           type="button"
           onClick={controls.onThemeToggle}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-[#F7F1EC]/20 bg-[#162127] text-[#F7F1EC] shadow-[0_10px_24px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#CF9D7B]"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-border/20 bg-button text-button-text shadow-[0_10px_24px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:border-highlight"
           aria-label="Toggle dark mode"
         >
           {controls.isDark ? <Sun size={15} /> : <Moon size={15} />}
@@ -319,12 +368,12 @@ function FolderTabs({
         <button
           type="button"
           onClick={controls.onLanguageToggle}
-          className="flex min-w-[6.25rem] justify-center rounded-full border border-[#F7F1EC]/20 bg-[#162127] px-4 py-2.5 text-sm font-semibold text-[#F7F1EC] shadow-[0_10px_24px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#CF9D7B]"
+          className="flex min-w-[6.25rem] justify-center rounded-full border border-border/20 bg-button px-4 py-2.5 text-sm font-semibold text-button-text shadow-[0_10px_24px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:border-highlight"
           aria-label="Switch language"
         >
-          🌐 {controls.languageLabel}
+          {controls.languageLabel}
         </button>
-        <button className="min-w-[8.5rem] rounded-full bg-[#0C1519] px-6 py-2.5 text-sm font-semibold text-white shadow-[0_10px_26px_rgba(0,0,0,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_26px_rgba(207,157,123,0.32)]">
+        <button className="min-w-[8.5rem] rounded-full bg-button px-6 py-2.5 text-sm font-semibold text-button-text shadow-[0_10px_26px_rgba(0,0,0,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_26px_rgba(207,157,123,0.32)]">
           {controls.loginLabel}
         </button>
       </div>
@@ -359,19 +408,19 @@ function HomeSimpleNav({
 
   return (
     <motion.header
-      className="fixed left-0 right-0 top-0 z-50 flex items-center gap-4 bg-[#F7F1EC]/96 px-5 py-3 shadow-[0_14px_34px_rgba(12,21,25,0.10)] backdrop-blur-md sm:px-8"
+      className="fixed left-0 right-0 top-0 z-50 flex items-center gap-4 bg-navbar/96 px-5 py-3 shadow-[0_14px_34px_rgba(12,21,25,0.10)] backdrop-blur-md sm:px-8"
       animate={{ y: isVisible ? 0 : -90, opacity: isVisible ? 1 : 0 }}
       transition={{ duration: 0.32, ease: "easeOut" }}
-      style={{ pointerEvents: isVisible ? "auto" : "none" }}
+      style={{ pointerEvents: isVisible ? "auto" : "none", zoom: 1.25 }}
     >
       <button
         type="button"
         onClick={() => onSelect("Home")}
-        className="mr-3 shrink-0 font-display text-3xl font-black leading-none text-[#0C1519] transition-transform duration-300 hover:-translate-y-0.5"
+        className="mr-3 shrink-0 font-display text-3xl font-black leading-none text-foreground transition-transform duration-300 hover:-translate-y-0.5"
       >
         Draftly.
       </button>
-      <span className="h-6 w-px shrink-0 bg-[#724B39]/30" />
+      <span className="h-6 w-px shrink-0 bg-button/30" />
       <nav className="flex min-w-max items-center gap-2 sm:gap-3">
         {navItems.map(label => (
           <button
@@ -379,10 +428,10 @@ function HomeSimpleNav({
             type="button"
             onClick={() => onSelect(label)}
             className={`group relative flex min-w-[7.25rem] justify-center rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 sm:px-5 ${
-              label === "Home" ? "text-[#F7F1EC]" : "text-[#0C1519]/82 hover:text-[#0C1519]"
+              label === "Home" ? "text-button-text" : "text-foreground/82 hover:text-foreground"
             }`}
           >
-            {label === "Home" && <span className="absolute inset-0 rounded-full bg-[#724B39]" />}
+            {label === "Home" && <span className="absolute inset-0 rounded-full bg-button" />}
             <span className="relative z-10">{label}</span>
           </button>
         ))}
@@ -392,7 +441,7 @@ function HomeSimpleNav({
         <button
           type="button"
           onClick={controls.onThemeToggle}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-[#F7F1EC]/20 bg-[#162127] text-[#F7F1EC] shadow-[0_10px_24px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#CF9D7B]"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-border/20 bg-button text-button-text shadow-[0_10px_24px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:border-highlight"
           aria-label="Toggle dark mode"
         >
           {controls.isDark ? <Sun size={15} /> : <Moon size={15} />}
@@ -400,12 +449,12 @@ function HomeSimpleNav({
         <button
           type="button"
           onClick={controls.onLanguageToggle}
-          className="flex min-w-[6.25rem] justify-center rounded-full border border-[#F7F1EC]/20 bg-[#162127] px-4 py-2.5 text-sm font-semibold text-[#F7F1EC] shadow-[0_10px_24px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#CF9D7B]"
+          className="flex min-w-[6.25rem] justify-center rounded-full border border-border/20 bg-button px-4 py-2.5 text-sm font-semibold text-button-text shadow-[0_10px_24px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:border-highlight"
           aria-label="Switch language"
         >
-          🌐 {controls.languageLabel}
+          {controls.languageLabel}
         </button>
-        <button className="min-w-[8.5rem] rounded-full bg-[#0C1519] px-6 py-2.5 text-sm font-semibold text-white shadow-[0_10px_26px_rgba(0,0,0,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_26px_rgba(207,157,123,0.32)]">
+        <button className="min-w-[8.5rem] rounded-full bg-button px-6 py-2.5 text-sm font-semibold text-button-text shadow-[0_10px_26px_rgba(0,0,0,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_26px_rgba(207,157,123,0.32)]">
           {controls.loginLabel}
         </button>
       </div>
@@ -421,7 +470,7 @@ function AnalysisStepper({ step }: { step: AnalysisStep }) {
       {STEP_LABELS.map((item, index) => {
         const active = item.key === step;
         const completed = index < currentIndex;
-        const color = active ? "#0C1519" : completed ? "#724B39" : "#D8C6BA";
+        const color = active ? "var(--button)" : completed ? "var(--highlight)" : "var(--border)";
 
         return (
           <motion.div
@@ -435,7 +484,7 @@ function AnalysisStepper({ step }: { step: AnalysisStep }) {
               animate={{ backgroundColor: color, scale: active ? 1.08 : 1 }}
               transition={{ duration: 0.35 }}
             />
-            <span className="hidden text-xs font-semibold uppercase tracking-[0.16em] text-[#3A3534]/70 dark:text-[#F7F1EC]/70 lg:block">
+            <span className="hidden text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground/70 dark:text-foreground/70 lg:block">
               {item.label}
             </span>
           </motion.div>
@@ -471,13 +520,11 @@ function AnalysisWorkflow({
   }, [step]);
 
   return (
-    <section className="px-3 pt-3 pb-6 min-h-screen flex flex-col bg-[#EFE5DC] dark:bg-[#0C1519]">
+    <section className="px-3 pt-3 pb-6 min-h-screen flex flex-col bg-background">
       <FolderTabs activeTab="Analysis" onSelect={onTabSelect} controls={navControls} />
 
       <motion.div
-        className="relative flex-1 overflow-hidden rounded-b-[2rem] rounded-tr-[2rem] border border-[#D8C6BA]/70 bg-[#FFFDF9] shadow-[0_16px_70px_rgba(12,21,25,0.12)] dark:border-[#CF9D7B]/15 dark:bg-[#162127] dark:shadow-[0_18px_80px_rgba(0,0,0,0.34)]"
-        animate={{ y: [0, -4, 0] }}
-        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+        className="relative flex-1 overflow-hidden rounded-b-[2rem] rounded-tr-[2rem] border border-border/70 bg-secondary shadow-[0_16px_70px_rgba(12,21,25,0.12)] dark:border-highlight/15 dark:bg-secondary dark:shadow-[0_18px_80px_rgba(0,0,0,0.34)]"
       >
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(207,157,123,0.14),transparent_26%),radial-gradient(circle_at_82%_14%,rgba(216,198,186,0.22),transparent_24%)]" />
         {step === "processing" && (
@@ -485,7 +532,7 @@ function AnalysisWorkflow({
             {[...Array(14)].map((_, index) => (
               <motion.span
                 key={index}
-                className="absolute h-1 w-1 rounded-full bg-[#CF9D7B]/45"
+                className="absolute h-1 w-1 rounded-full bg-highlight/45"
                 style={{ left: `${8 + index * 6}%`, top: `${18 + (index % 5) * 13}%` }}
                 animate={{ y: [-8, -34, -8], opacity: [0.12, 0.65, 0.12] }}
                 transition={{ duration: 2.6 + index * 0.08, repeat: Infinity, ease: "easeInOut" }}
@@ -499,12 +546,12 @@ function AnalysisWorkflow({
             <button
               type="button"
               onClick={onBack}
-              className="group flex h-10 w-10 items-center justify-center rounded-full border border-[#D8C6BA] bg-white/60 text-[#0C1519] transition-all duration-300 hover:border-[#CF9D7B] hover:bg-[#F7F1EC] dark:border-[#CF9D7B]/25 dark:bg-[#0C1519]/70 dark:text-[#F7F1EC] dark:hover:bg-[#3A3534]"
+              className="group flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card/60 text-foreground transition-all duration-300 hover:border-highlight hover:bg-secondary dark:border-highlight/25 dark:bg-card/70 dark:text-foreground dark:hover:bg-card"
               aria-label="Back to homepage"
             >
               <ArrowLeft size={17} className="transition-transform duration-300 group-hover:-translate-x-0.5" />
             </button>
-            <span className="font-display text-2xl font-black text-[#0C1519] dark:text-[#F7F1EC]">Draftly.</span>
+            <span className="font-display text-2xl font-black text-foreground dark:text-foreground">Draftly.</span>
           </div>
 
           <div className="grid flex-1 gap-8 lg:grid-cols-[120px_minmax(0,1fr)]">
@@ -522,7 +569,7 @@ function AnalysisWorkflow({
                   exit={{ opacity: 0, x: -32 }}
                   transition={{ duration: 0.38, ease: "easeOut" }}
                 >
-                  <h1 className="mb-12 font-display text-4xl font-bold text-[#0C1519] dark:text-[#F7F1EC] md:text-5xl">
+                  <h1 className="mb-12 font-display text-4xl font-bold text-foreground dark:text-foreground md:text-5xl">
                     Анализ хийх хэсэг
                   </h1>
                   <input
@@ -535,13 +582,11 @@ function AnalysisWorkflow({
                     }}
                   />
                   <motion.div
-                    className={`relative w-full max-w-xl rounded-[2rem] border-2 border-dashed bg-white px-8 py-14 shadow-[0_28px_70px_rgba(12,21,25,0.12)] transition-all duration-300 dark:bg-[#0C1519]/58 dark:shadow-[0_28px_70px_rgba(0,0,0,0.24)] ${
+                    className={`relative w-full max-w-xl rounded-[2rem] border-2 border-dashed bg-card px-8 py-14 shadow-[0_28px_70px_rgba(12,21,25,0.12)] transition-all duration-300 dark:bg-card/80 dark:shadow-[0_28px_70px_rgba(0,0,0,0.24)] ${
                       isDragActive
-                        ? "scale-[1.02] border-[#CF9D7B] shadow-[0_0_0_6px_rgba(207,157,123,0.12),0_32px_80px_rgba(12,21,25,0.15)]"
-                        : "border-[#D8C6BA]"
+                        ? "scale-[1.02] border-highlight shadow-[0_0_0_6px_rgba(207,157,123,0.12),0_32px_80px_rgba(12,21,25,0.15)]"
+                        : "border-border"
                     }`}
-                    animate={{ y: [0, -8, 0] }}
-                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                     onDragEnter={() => setIsDragActive(true)}
                     onDragLeave={() => setIsDragActive(false)}
                     onDragOver={event => event.preventDefault()}
@@ -550,20 +595,20 @@ function AnalysisWorkflow({
                       startProcessing();
                     }}
                   >
-                    <div className="absolute -inset-x-3 top-5 -z-10 h-full rounded-[2rem] border border-[#D8C6BA]/60 bg-[#EFE5DC]" />
-                    <div className="absolute -inset-x-6 top-10 -z-20 h-full rounded-[2rem] border border-[#D8C6BA]/50 bg-[#D8C6BA]" />
-                    <div className="mx-auto mb-7 flex h-16 w-16 items-center justify-center rounded-2xl border border-[#D8C6BA] bg-[#F7F1EC] text-[#724B39] shadow-sm">
+                    <div className="absolute -inset-x-3 top-5 -z-10 h-full rounded-[2rem] border border-border/60 bg-background" />
+                    <div className="absolute -inset-x-6 top-10 -z-20 h-full rounded-[2rem] border border-border/50 bg-border" />
+                    <div className="mx-auto mb-7 flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-secondary text-accent shadow-sm">
                       <UploadCloud size={26} strokeWidth={1.7} />
                     </div>
-                    <p className="mb-4 text-[10px] font-mono uppercase tracking-[0.2em] text-[#724B39]">
+                    <p className="mb-4 text-[10px] font-mono uppercase tracking-[0.2em] text-accent">
                       UPLOAD & ORGANIZE DOCUMENT
                     </p>
-                    <h2 className="mb-2 text-xl font-semibold text-[#0C1519] dark:text-[#F7F1EC]">Drop your documents here</h2>
-                    <p className="mb-8 text-sm text-[#3A3534]/68 dark:text-[#EFE5DC]/62">PDF DOCX TXT up to 50MB</p>
+                    <h2 className="mb-2 text-xl font-semibold text-foreground dark:text-foreground">Drop your documents here</h2>
+                    <p className="mb-8 text-sm text-muted-foreground/68 dark:text-muted-foreground/62">PDF DOCX TXT up to 50MB</p>
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="rounded-full bg-[#0C1519] px-8 py-3 text-sm font-semibold text-[#F7F1EC] shadow-[0_10px_24px_rgba(12,21,25,0.16)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#724B39] hover:shadow-[0_14px_30px_rgba(114,75,57,0.22)]"
+                      className="rounded-full bg-button px-8 py-3 text-sm font-semibold text-button-text shadow-[0_10px_24px_rgba(12,21,25,0.16)] transition-all duration-300 hover:-translate-y-1 hover:bg-accent hover:shadow-[0_14px_30px_rgba(114,75,57,0.22)]"
                     >
                       Browse Files
                     </button>
@@ -580,27 +625,21 @@ function AnalysisWorkflow({
                   exit={{ opacity: 0, x: -32 }}
                   transition={{ duration: 0.38, ease: "easeOut" }}
                 >
-                  <h1 className="mb-12 font-display text-4xl font-bold text-[#0C1519] dark:text-[#F7F1EC] md:text-5xl">
+                  <h1 className="mb-12 font-display text-4xl font-bold text-foreground dark:text-foreground md:text-5xl">
                     Анализ хийж байна
                   </h1>
                   <motion.div
-                    className="relative w-full max-w-lg rounded-[2rem] border border-[#D8C6BA] bg-white px-8 py-16 shadow-[0_30px_80px_rgba(12,21,25,0.14)] dark:border-[#CF9D7B]/20 dark:bg-[#0C1519]/58 dark:shadow-[0_30px_80px_rgba(0,0,0,0.28)]"
-                    animate={{ y: [0, -8, 0], scale: [1, 1.01, 1] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    className="relative w-full max-w-lg rounded-[2rem] border border-border bg-card px-8 py-16 shadow-[0_30px_80px_rgba(12,21,25,0.14)] dark:border-highlight/20 dark:bg-card/80 dark:shadow-[0_30px_80px_rgba(0,0,0,0.28)]"
                   >
                     <motion.div
-                      className="absolute -inset-x-4 top-6 -z-10 h-full rounded-[2rem] border border-[#D8C6BA]/70 bg-[#EFE5DC]"
-                      animate={{ y: [0, -9, 0] }}
-                      transition={{ duration: 3.4, repeat: Infinity, ease: "easeInOut" }}
+                      className="absolute -inset-x-4 top-6 -z-10 h-full rounded-[2rem] border border-border/70 bg-background"
                     />
                     <motion.div
-                      className="absolute -inset-x-8 top-12 -z-20 h-full rounded-[2rem] border border-[#D8C6BA]/60 bg-[#D8C6BA]"
-                      animate={{ y: [0, -13, 0] }}
-                      transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
+                      className="absolute -inset-x-8 top-12 -z-20 h-full rounded-[2rem] border border-border/60 bg-border"
                     />
-                    <LoaderCircle className="mx-auto mb-8 h-16 w-16 animate-spin text-[#724B39]" strokeWidth={1.5} />
-                    <h2 className="mb-3 text-xl font-semibold text-[#0C1519] dark:text-[#F7F1EC]">AI таны гэрээг шалгаж байна</h2>
-                    <p className="mx-auto max-w-sm text-sm leading-6 text-[#3A3534]/68 dark:text-[#EFE5DC]/62">
+                    <LoaderCircle className="mx-auto mb-8 h-16 w-16 animate-spin text-accent" strokeWidth={1.5} />
+                    <h2 className="mb-3 text-xl font-semibold text-foreground dark:text-foreground">AI таны гэрээг шалгаж байна</h2>
+                    <p className="mx-auto max-w-sm text-sm leading-6 text-muted-foreground/68 dark:text-muted-foreground/62">
                       Эрсдэл, дутуу нөхцөлүүд боловсруулагдаж байна
                     </p>
                   </motion.div>
@@ -618,32 +657,32 @@ function AnalysisWorkflow({
       <AnimatePresence>
         {showFinishModal && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-[#0C1519]/35 px-5 backdrop-blur-md"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-background/35 px-5 backdrop-blur-md"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="w-full max-w-md rounded-[2rem] border border-[#D8C6BA] bg-[#FFFDF9] p-8 text-center shadow-[0_30px_90px_rgba(12,21,25,0.28)]"
+              className="w-full max-w-md rounded-[2rem] border border-border bg-secondary p-8 text-center shadow-[0_30px_90px_rgba(12,21,25,0.28)]"
               initial={{ opacity: 0, y: 24, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 16, scale: 0.98 }}
               transition={{ duration: 0.3 }}
             >
-              <h2 className="mb-3 font-display text-3xl font-bold text-[#0C1519]">Анализ дууссан</h2>
-              <p className="mb-8 text-sm text-[#3A3534]/72">Анализ хийсэн баримтыг хадгалах уу?</p>
+              <h2 className="mb-3 font-display text-3xl font-bold text-foreground">Анализ дууссан</h2>
+              <p className="mb-8 text-sm text-muted-foreground/72">Анализ хийсэн баримтыг хадгалах уу?</p>
               <div className="flex gap-3">
                 <button
                   type="button"
                   onClick={onBack}
-                  className="flex flex-1 items-center justify-center gap-2 rounded-full bg-[#0C1519] px-5 py-3 text-sm font-semibold text-[#F7F1EC] transition-transform duration-300 hover:scale-[1.03]"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-full bg-button px-5 py-3 text-sm font-semibold text-button-text transition-transform duration-300 hover:scale-[1.03]"
                 >
                   <Archive size={16} /> Archive
                 </button>
                 <button
                   type="button"
                   onClick={onBack}
-                  className="flex flex-1 items-center justify-center gap-2 rounded-full border border-[#D8C6BA] bg-white px-5 py-3 text-sm font-semibold text-[#3A3534] transition-transform duration-300 hover:scale-[1.03] hover:bg-[#F7F1EC]"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-sm font-semibold text-muted-foreground transition-transform duration-300 hover:scale-[1.03] hover:bg-secondary"
                 >
                   <Trash2 size={16} /> Delete
                 </button>
@@ -662,12 +701,12 @@ function AnalysisResult({ onFinish }: { onFinish: () => void }) {
       <div>
         <div className="mb-5 flex items-end justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#724B39]">Risk Score</p>
-            <p className="mt-2 text-4xl font-bold text-[#0C1519] dark:text-[#F7F1EC]">7.5/10</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">Risk Score</p>
+            <p className="mt-2 text-4xl font-bold text-foreground dark:text-foreground">7.5/10</p>
           </div>
-          <div className="relative h-16 w-16 rounded-full bg-[#EFE5DC]">
+          <div className="relative h-16 w-16 rounded-full bg-background">
             <motion.div
-              className="absolute inset-0 rounded-full border-[6px] border-[#724B39]"
+              className="absolute inset-0 rounded-full border-[6px] border-accent"
               initial={{ clipPath: "inset(100% 0 0 0)" }}
               animate={{ clipPath: "inset(25% 0 0 0)" }}
               transition={{ duration: 1.1, ease: "easeOut" }}
@@ -675,25 +714,25 @@ function AnalysisResult({ onFinish }: { onFinish: () => void }) {
           </div>
         </div>
         {["Scope of Work", "Payment Terms", "Confidentiality"].map(item => (
-          <p key={item} className="mb-2 flex items-center gap-2 text-sm text-[#3A3534] dark:text-[#EFE5DC]/75">
-            <Check size={15} className="text-[#724B39]" /> {item}
+          <p key={item} className="mb-2 flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground/75">
+            <Check size={15} className="text-accent" /> {item}
           </p>
         ))}
       </div>
     ),
     (
       <div>
-        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-[#724B39]">Missing Clauses</p>
+        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-accent">Missing Clauses</p>
         {["Termination missing", "Liability missing", "Payment delay condition missing"].map(item => (
-          <p key={item} className="mb-3 text-sm text-[#3A3534]/82 dark:text-[#EFE5DC]/75">- {item}</p>
+          <p key={item} className="mb-3 text-sm text-muted-foreground/82 dark:text-muted-foreground/75">- {item}</p>
         ))}
       </div>
     ),
     (
       <div>
-        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-[#724B39]">AI Analysis Result</p>
+        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-accent">AI Analysis Result</p>
         <motion.p
-          className="overflow-hidden whitespace-nowrap text-sm leading-6 text-[#3A3534]/82 dark:text-[#EFE5DC]/75"
+          className="overflow-hidden whitespace-nowrap text-sm leading-6 text-muted-foreground/82 dark:text-muted-foreground/75"
           initial={{ width: 0 }}
           animate={{ width: "100%" }}
           transition={{ duration: 1.4, ease: "easeOut" }}
@@ -714,13 +753,11 @@ function AnalysisResult({ onFinish }: { onFinish: () => void }) {
       transition={{ duration: 0.38, ease: "easeOut" }}
     >
       <motion.div
-        className="relative min-h-[560px] overflow-hidden rounded-[2rem] border border-[#D8C6BA] bg-white p-8 shadow-[0_24px_70px_rgba(12,21,25,0.12)] dark:border-[#CF9D7B]/20 dark:bg-[#0C1519]/58 dark:shadow-[0_24px_70px_rgba(0,0,0,0.28)]"
-        animate={{ y: [0, -6, 0] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        className="relative min-h-[560px] overflow-hidden rounded-[2rem] border border-border bg-card p-8 shadow-[0_24px_70px_rgba(12,21,25,0.12)] dark:border-highlight/20 dark:bg-card/80 dark:shadow-[0_24px_70px_rgba(0,0,0,0.28)]"
       >
-        <div className="absolute inset-x-8 top-7 h-px bg-[#D8C6BA]/70" />
-        <div className="h-full overflow-y-auto pr-3 text-left text-sm leading-7 text-[#3A3534]/78 dark:text-[#EFE5DC]/70">
-          <h2 className="mb-7 text-2xl font-semibold text-[#0C1519] dark:text-[#F7F1EC]">Service Agreement Preview</h2>
+        <div className="absolute inset-x-8 top-7 h-px bg-border/70" />
+        <div className="h-full overflow-y-auto pr-3 text-left text-sm leading-7 text-muted-foreground/78 dark:text-muted-foreground/70">
+          <h2 className="mb-7 text-2xl font-semibold text-foreground dark:text-foreground">Service Agreement Preview</h2>
           {[...Array(10)].map((_, index) => (
             <p key={index} className="mb-5">
               This agreement outlines scope, payment terms, confidentiality expectations, delivery dates,
@@ -735,7 +772,7 @@ function AnalysisResult({ onFinish }: { onFinish: () => void }) {
         {cards.map((card, index) => (
           <motion.div
             key={index}
-            className="rounded-[1.5rem] border border-[#D8C6BA] bg-white/82 p-6 shadow-[0_16px_38px_rgba(12,21,25,0.08)] dark:border-[#CF9D7B]/20 dark:bg-[#0C1519]/52 dark:shadow-[0_16px_38px_rgba(0,0,0,0.22)]"
+            className="rounded-[1.5rem] border border-border bg-card/82 p-6 shadow-[0_16px_38px_rgba(12,21,25,0.08)] dark:border-highlight/20 dark:bg-background/52 dark:shadow-[0_16px_38px_rgba(0,0,0,0.22)]"
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.42, delay: index * 0.12 }}
@@ -748,16 +785,16 @@ function AnalysisResult({ onFinish }: { onFinish: () => void }) {
           <button
             type="button"
             onClick={onFinish}
-            className="flex-1 rounded-full bg-[#0C1519] px-8 py-3.5 text-sm font-semibold text-[#F7F1EC] shadow-[0_12px_26px_rgba(12,21,25,0.16)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#724B39]"
+            className="flex-1 rounded-full bg-button px-8 py-3.5 text-sm font-semibold text-button-text shadow-[0_12px_26px_rgba(12,21,25,0.16)] transition-all duration-300 hover:-translate-y-1 hover:bg-accent"
           >
-            Дуусгах
+            Хадгалах
           </button>
           <div className="flex gap-2">
             {[Archive, Download].map((Icon, index) => (
               <button
                 key={index}
                 type="button"
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-[#D8C6BA] bg-white text-[#724B39] transition-all duration-300 hover:-translate-y-1 hover:bg-[#F7F1EC] dark:border-[#CF9D7B]/25 dark:bg-[#0C1519]/60 dark:text-[#CF9D7B] dark:hover:bg-[#3A3534]"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-accent transition-all duration-300 hover:-translate-y-1 hover:bg-secondary dark:border-highlight/25 dark:bg-card/60 dark:text-highlight dark:hover:bg-card"
                 aria-label={index === 0 ? "Archive" : "Download"}
               >
                 <Icon size={17} />
@@ -778,7 +815,7 @@ function TemplateStepper({ step }: { step: TemplateStep }) {
       {TEMPLATE_STEPS.map((item, index) => {
         const active = item.key === step;
         const completed = index < currentIndex;
-        const color = active ? "#F7F1EC" : completed ? "#CF9D7B" : "#724B39";
+        const color = active ? "var(--button)" : completed ? "var(--highlight)" : "var(--border)";
 
         return (
           <motion.div
@@ -792,7 +829,7 @@ function TemplateStepper({ step }: { step: TemplateStep }) {
               animate={{ backgroundColor: color, scale: active ? 1.08 : 1 }}
               transition={{ duration: 0.35 }}
             />
-            <span className="hidden text-xs font-semibold uppercase tracking-[0.16em] text-[#3A3534]/70 dark:text-[#F7F1EC]/70 lg:block">
+            <span className="hidden text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground/70 dark:text-foreground/70 lg:block">
               {item.label}
             </span>
           </motion.div>
@@ -816,27 +853,29 @@ function TemplateShell({
   children: ReactNode;
 }) {
   return (
-    <section className="px-3 pt-3 pb-6 min-h-screen flex flex-col bg-[#EFE5DC] dark:bg-[#0C1519]">
+    <section className="px-3 pt-3 pb-6 min-h-screen flex flex-col bg-background">
       <FolderTabs activeTab="Template" onSelect={onTabSelect} controls={navControls} />
-      <div className="relative flex-1 overflow-hidden rounded-b-[2rem] rounded-tr-[2rem] border border-[#D8C6BA]/70 bg-[#FFFDF9] shadow-[0_16px_70px_rgba(12,21,25,0.12)] dark:border-[#CF9D7B]/15 dark:bg-[#162127] dark:shadow-[0_18px_80px_rgba(0,0,0,0.34)]">
+      <div className="relative flex-1 overflow-hidden rounded-b-[2rem] rounded-tr-[2rem] border border-border/70 bg-secondary shadow-[0_16px_70px_rgba(12,21,25,0.12)] dark:border-highlight/15 dark:bg-secondary dark:shadow-[0_18px_80px_rgba(0,0,0,0.34)]">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(207,157,123,0.12),transparent_26%),radial-gradient(circle_at_82%_12%,rgba(216,198,186,0.20),transparent_24%)]" />
         <div className="relative z-10 flex min-h-[calc(100vh-7rem)] flex-col px-5 py-5 sm:px-8 lg:px-10">
           <div className="mb-8 flex items-center justify-between">
             <button
               type="button"
               onClick={onBackHome}
-              className="group flex h-10 w-10 items-center justify-center rounded-full border border-[#D8C6BA] bg-white/60 text-[#0C1519] transition-all duration-300 hover:border-[#CF9D7B] hover:bg-[#F7F1EC] dark:border-[#CF9D7B]/25 dark:bg-[#0C1519]/70 dark:text-[#F7F1EC] dark:hover:bg-[#3A3534]"
+              className="group flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card/60 text-foreground transition-all duration-300 hover:border-highlight hover:bg-secondary dark:border-highlight/25 dark:bg-card/70 dark:text-foreground dark:hover:bg-card"
               aria-label="Back to homepage"
             >
               <ArrowLeft size={17} className="transition-transform duration-300 group-hover:-translate-x-0.5" />
             </button>
-            <span className="font-display text-2xl font-black text-[#0C1519] dark:text-[#F7F1EC]">Draftly.</span>
+            <span className="font-display text-2xl font-black text-foreground dark:text-foreground">Draftly.</span>
           </div>
           <div className="grid flex-1 gap-8 lg:grid-cols-[140px_minmax(0,1fr)]">
             <aside className="pt-2">
               <TemplateStepper step={step} />
             </aside>
-            {children}
+            <div className="relative min-h-[calc(100vh-13rem)] overflow-hidden rounded-[2rem]">
+              {children}
+            </div>
           </div>
         </div>
       </div>
@@ -859,6 +898,7 @@ function TemplateWorkflow({
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
+  const [stepDirection, setStepDirection] = useState(1);
 
   const filteredTemplates = TEMPLATE_CARDS.filter(item =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -867,153 +907,155 @@ function TemplateWorkflow({
   const nextStep = () => {
     const current = TEMPLATE_STEPS.findIndex(item => item.key === step);
     const next = TEMPLATE_STEPS[Math.min(current + 1, TEMPLATE_STEPS.length - 1)];
+    setStepDirection(1);
     setStep(next.key);
   };
 
   const previousStep = () => {
     const current = TEMPLATE_STEPS.findIndex(item => item.key === step);
     const previous = TEMPLATE_STEPS[Math.max(current - 1, 0)];
+    setStepDirection(-1);
     setStep(previous.key);
+  };
+
+  const renderStep = () => {
+    if (step === "template") {
+      return (
+        <div className="pb-8">
+          <div className="mb-10 text-center">
+            <h1 className="font-display text-4xl font-bold text-foreground dark:text-foreground md:text-6xl">Choose your contract type.</h1>
+            <p className="mt-3 text-sm text-muted-foreground/66 dark:text-muted-foreground/62">Choose and forget...</p>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-[minmax(280px,420px)_1fr]">
+            <motion.div
+              className="relative min-h-[360px] rounded-[2rem] border border-border/25 bg-card p-8 text-foreground shadow-[0_28px_80px_rgba(0,0,0,0.26)]"
+            >
+              <div className="absolute -inset-x-3 top-7 -z-10 h-full rounded-[2rem] bg-background/70" />
+              <FileText size={38} className="mb-10 text-accent" />
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-accent">Featured Template</p>
+              <h2 className="mb-4 text-3xl font-bold">{selectedTemplate}</h2>
+              <p className="max-w-sm text-sm leading-6 text-muted-foreground/75">
+                Premium AI-guided contract template with structured clauses, editable details, and document-ready output.
+              </p>
+            </motion.div>
+
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {TEMPLATE_CATEGORIES.map(category => {
+                const expanded = expandedCategory === category.name;
+                return (
+                  <motion.button
+                    key={category.name}
+                    type="button"
+                    onClick={() => setExpandedCategory(expanded ? "" : category.name)}
+                    className="rounded-[1.4rem] border border-border/20 bg-card/80 p-5 text-left text-foreground shadow-[0_16px_38px_rgba(0,0,0,0.18)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-highlight/70"
+                    layout
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="font-semibold">{category.name}</span>
+                      <FileText size={15} className="text-highlight" />
+                    </div>
+                    <AnimatePresence>
+                      {expanded && (
+                        <motion.div
+                          className="mt-4 space-y-2 overflow-hidden text-sm text-muted-foreground/70"
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          {category.items.map(item => (
+                            <p key={item}>- {item}</p>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="my-8 flex justify-center">
+            <div className={`group flex items-center rounded-full border border-border/25 bg-secondary/90 px-4 py-3 text-foreground transition-all duration-300 ${searchOpen ? "w-full max-w-xl" : "w-64"}`}>
+              <Search size={17} className="mr-3 text-highlight transition-transform duration-300 group-focus-within:rotate-12" />
+              <input
+                value={searchTerm}
+                onFocus={() => setSearchOpen(true)}
+                onChange={event => setSearchTerm(event.target.value)}
+                placeholder="Search templates..."
+                className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground/45"
+              />
+            </div>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {filteredTemplates.map(card => (
+              <button
+                key={card.name}
+                type="button"
+                onClick={() => setSelectedTemplate(card.name)}
+                className={`rounded-[1.5rem] border bg-card/80 p-6 text-left text-foreground shadow-[0_16px_38px_rgba(0,0,0,0.18)] transition-all duration-300 hover:-translate-y-1 ${
+                  selectedTemplate === card.name ? "border-highlight" : "border-border/18"
+                }`}
+              >
+                <FileText size={22} className="mb-5 text-highlight" />
+                <h3 className="mb-2 text-lg font-semibold">{card.name}</h3>
+                <p className="text-sm leading-6 text-muted-foreground/62">{card.desc}</p>
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-8 flex justify-end">
+            <CoffeeButton onClick={nextStep}>Continue</CoffeeButton>
+          </div>
+        </div>
+      );
+    }
+
+    if (step === "details") return <TemplateDetails onBack={previousStep} onContinue={nextStep} />;
+    if (step === "verification") return <TemplateVerification onBack={previousStep} onContinue={nextStep} />;
+    if (step === "payment") return <TemplatePayment onBack={previousStep} onContinue={nextStep} />;
+    return <TemplateResult onBack={previousStep} onFinish={() => setShowConfirm(true)} />;
   };
 
   return (
     <TemplateShell step={step} onBackHome={onBackHome} onTabSelect={onTabSelect} navControls={navControls}>
-      <AnimatePresence mode="wait">
-        {step === "template" && (
-          <motion.div
-            key="template-select"
-            className="pb-8"
-            initial={{ opacity: 0, x: 36 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -36 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-          >
-            <div className="mb-10 text-center">
-              <h1 className="font-display text-4xl font-bold text-[#0C1519] dark:text-[#F7F1EC] md:text-6xl">Choose your contract type.</h1>
-              <p className="mt-3 text-sm text-[#3A3534]/66 dark:text-[#EFE5DC]/62">Choose and forget...</p>
-            </div>
-
-            <div className="grid gap-6 lg:grid-cols-[minmax(280px,420px)_1fr]">
-              <motion.div
-                className="relative min-h-[360px] rounded-[2rem] border border-[#D8C6BA]/25 bg-[#F7F1EC] p-8 text-[#0C1519] shadow-[0_28px_80px_rgba(0,0,0,0.26)]"
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <div className="absolute -inset-x-3 top-7 -z-10 h-full rounded-[2rem] bg-[#EFE5DC]/70" />
-                <FileText size={38} className="mb-10 text-[#724B39]" />
-                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#724B39]">Featured Template</p>
-                <h2 className="mb-4 text-3xl font-bold">{selectedTemplate}</h2>
-                <p className="max-w-sm text-sm leading-6 text-[#3A3534]/75">
-                  Premium AI-guided contract template with structured clauses, editable details, and document-ready output.
-                </p>
-              </motion.div>
-
-              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                {TEMPLATE_CATEGORIES.map(category => {
-                  const expanded = expandedCategory === category.name;
-                  return (
-                    <motion.button
-                      key={category.name}
-                      type="button"
-                      onClick={() => setExpandedCategory(expanded ? "" : category.name)}
-                      className="rounded-[1.4rem] border border-[#D8C6BA]/20 bg-[#162127]/80 p-5 text-left text-[#F7F1EC] shadow-[0_16px_38px_rgba(0,0,0,0.18)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#CF9D7B]/70"
-                      layout
-                    >
-                      <div className="flex items-center justify-between gap-3">
-                        <span className="font-semibold">{category.name}</span>
-                        <FileText size={15} className="text-[#CF9D7B]" />
-                      </div>
-                      <AnimatePresence>
-                        {expanded && (
-                          <motion.div
-                            className="mt-4 space-y-2 overflow-hidden text-sm text-[#EFE5DC]/70"
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                          >
-                            {category.items.map(item => (
-                              <p key={item}>- {item}</p>
-                            ))}
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </motion.button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="my-8 flex justify-center">
-              <div className={`group flex items-center rounded-full border border-[#D8C6BA]/25 bg-[#162127]/90 px-4 py-3 text-[#F7F1EC] transition-all duration-300 ${searchOpen ? "w-full max-w-xl" : "w-64"}`}>
-                <Search size={17} className="mr-3 text-[#CF9D7B] transition-transform duration-300 group-focus-within:rotate-12" />
-                <input
-                  value={searchTerm}
-                  onFocus={() => setSearchOpen(true)}
-                  onChange={event => setSearchTerm(event.target.value)}
-                  placeholder="Search templates..."
-                  className="w-full bg-transparent text-sm outline-none placeholder:text-[#EFE5DC]/45"
-                />
-              </div>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {filteredTemplates.map(card => (
-                <button
-                  key={card.name}
-                  type="button"
-                  onClick={() => setSelectedTemplate(card.name)}
-                  className={`rounded-[1.5rem] border bg-[#162127]/80 p-6 text-left text-[#F7F1EC] shadow-[0_16px_38px_rgba(0,0,0,0.18)] transition-all duration-300 hover:-translate-y-1 ${
-                    selectedTemplate === card.name ? "border-[#CF9D7B]" : "border-[#D8C6BA]/18"
-                  }`}
-                >
-                  <FileText size={22} className="mb-5 text-[#CF9D7B]" />
-                  <h3 className="mb-2 text-lg font-semibold">{card.name}</h3>
-                  <p className="text-sm leading-6 text-[#EFE5DC]/62">{card.desc}</p>
-                </button>
-              ))}
-            </div>
-
-            <div className="mt-8 flex justify-end">
-              <CoffeeButton onClick={nextStep}>Continue</CoffeeButton>
-            </div>
-          </motion.div>
-        )}
-
-        {step === "details" && (
-          <TemplateDetails onBack={previousStep} onContinue={nextStep} />
-        )}
-        {step === "verification" && (
-          <TemplateVerification onBack={previousStep} onContinue={nextStep} />
-        )}
-        {step === "payment" && (
-          <TemplatePayment onBack={previousStep} onContinue={nextStep} />
-        )}
-        {step === "result" && (
-          <TemplateResult onBack={previousStep} onFinish={() => setShowConfirm(true)} />
-        )}
+      <AnimatePresence custom={stepDirection} initial={false}>
+        <motion.div
+          key={step}
+          custom={stepDirection}
+          variants={stackedStepVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          className="absolute inset-0 overflow-y-auto rounded-t-[2rem] bg-secondary p-1 shadow-[0_-15px_50px_rgba(0,0,0,0.15)]"
+          style={{ borderRadius: "32px 32px 0 0" }}
+        >
+          {renderStep()}
+        </motion.div>
       </AnimatePresence>
 
       <AnimatePresence>
         {showConfirm && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-[#0C1519]/50 px-5 backdrop-blur-md"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-background/50 px-5 backdrop-blur-md"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="w-full max-w-md rounded-[2rem] border border-[#D8C6BA]/35 bg-[#F7F1EC] p-8 text-center shadow-[0_30px_90px_rgba(0,0,0,0.32)]"
+              className="w-full max-w-md rounded-[2rem] border border-border/35 bg-secondary p-8 text-center shadow-[0_30px_90px_rgba(0,0,0,0.32)]"
               initial={{ opacity: 0, y: 24, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 16, scale: 0.98 }}
             >
-              <h2 className="mb-8 font-display text-3xl font-bold text-[#0C1519]">Та итгэлтэй байна уу?</h2>
+              <h2 className="mb-8 font-display text-3xl font-bold text-foreground">Та итгэлтэй байна уу?</h2>
               <div className="flex gap-3">
-                <button onClick={onBackHome} className="flex flex-1 items-center justify-center gap-2 rounded-full bg-[#0C1519] px-5 py-3 text-sm font-semibold text-[#F7F1EC] transition-transform duration-300 hover:scale-[1.03]">
+                <button onClick={onBackHome} className="flex flex-1 items-center justify-center gap-2 rounded-full bg-button px-5 py-3 text-sm font-semibold text-button-text transition-transform duration-300 hover:scale-[1.03]">
                   <Archive size={16} /> Archive
                 </button>
-                <button onClick={onBackHome} className="flex flex-1 items-center justify-center gap-2 rounded-full border border-[#D8C6BA] bg-white px-5 py-3 text-sm font-semibold text-[#3A3534] transition-transform duration-300 hover:scale-[1.03]">
+                <button onClick={onBackHome} className="flex flex-1 items-center justify-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-sm font-semibold text-muted-foreground transition-transform duration-300 hover:scale-[1.03]">
                   <Trash2 size={16} /> Delete
                 </button>
               </div>
@@ -1030,7 +1072,7 @@ function CoffeeButton({ children, onClick }: { children: ReactNode; onClick: () 
     <button
       type="button"
       onClick={onClick}
-      className="rounded-full bg-[#724B39] px-9 py-3.5 text-sm font-semibold text-[#F7F1EC] shadow-[0_0_0_rgba(207,157,123,0)] transition-all duration-300 hover:scale-[1.02] hover:bg-[#8a5b45] hover:shadow-[0_0_30px_rgba(207,157,123,0.28)]"
+      className="rounded-full bg-button px-9 py-3.5 text-sm font-semibold text-button-text shadow-[0_0_0_rgba(207,157,123,0)] transition-all duration-300 hover:scale-[1.02] hover:bg-accent hover:shadow-[0_0_30px_rgba(207,157,123,0.28)]"
     >
       {children}
     </button>
@@ -1043,7 +1085,7 @@ function StepActions({ onBack, onContinue }: { onBack: () => void; onContinue: (
       <button
         type="button"
         onClick={onBack}
-        className="group flex items-center gap-2 rounded-full border border-[#D8C6BA]/35 bg-[#162127]/70 px-6 py-3 text-sm font-semibold text-[#F7F1EC] transition-all duration-300 hover:border-[#CF9D7B] hover:bg-[#3A3534]"
+        className="group flex items-center gap-2 rounded-full border border-border/35 bg-secondary/70 px-6 py-3 text-sm font-semibold text-foreground transition-all duration-300 hover:border-highlight hover:bg-card"
       >
         <ArrowLeft size={15} className="transition-transform duration-300 group-hover:-translate-x-0.5" /> Back
       </button>
@@ -1057,18 +1099,14 @@ function TemplateDetails({ onBack, onContinue }: { onBack: () => void; onContinu
     <motion.div
       key="details"
       className="flex flex-col"
-      initial={{ opacity: 0, x: 36 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -36 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
     >
-      <h1 className="mb-12 text-center font-display text-4xl font-bold text-[#0C1519] dark:text-[#F7F1EC] md:text-6xl">Details Input</h1>
+      <h1 className="mb-12 text-center font-display text-4xl font-bold text-foreground dark:text-foreground md:text-6xl">Details Input</h1>
       <div className="grid flex-1 gap-6 lg:grid-cols-2">
         {["Text Area 1", "Text Area 2"].map(label => (
           <textarea
             key={label}
             placeholder={label}
-            className="min-h-[420px] resize-none rounded-[2rem] border border-[#D8C6BA]/24 bg-[#162127]/80 p-8 text-[#F7F1EC] shadow-[0_22px_60px_rgba(0,0,0,0.22)] outline-none transition-all duration-300 placeholder:text-[#EFE5DC]/40 focus:border-[#CF9D7B] focus:shadow-[0_0_0_5px_rgba(207,157,123,0.12),0_24px_70px_rgba(0,0,0,0.28)]"
+            className="min-h-[420px] resize-none rounded-[2rem] border border-border/24 bg-secondary/80 p-8 text-foreground shadow-[0_22px_60px_rgba(0,0,0,0.22)] outline-none transition-all duration-300 placeholder:text-muted-foreground/40 focus:border-highlight focus:shadow-[0_0_0_5px_rgba(207,157,123,0.12),0_24px_70px_rgba(0,0,0,0.28)]"
           />
         ))}
       </div>
@@ -1082,21 +1120,17 @@ function TemplateVerification({ onBack, onContinue }: { onBack: () => void; onCo
     <motion.div
       key="verification"
       className="flex flex-col"
-      initial={{ opacity: 0, x: 36 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -36 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
     >
       <div className="flex flex-1 items-center justify-center">
         <motion.div
-          className="w-full max-w-3xl rounded-[2rem] border border-[#D8C6BA]/25 bg-[#162127]/80 p-10 text-[#F7F1EC] shadow-[0_26px_70px_rgba(0,0,0,0.25)]"
+          className="w-full max-w-3xl rounded-[2rem] border border-border/25 bg-secondary/80 p-10 text-foreground shadow-[0_26px_70px_rgba(0,0,0,0.25)]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
         >
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-[#CF9D7B]">Verification</p>
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-highlight">Verification</p>
           <h1 className="mb-8 font-display text-4xl font-bold">Entered information preview</h1>
-          <p className="leading-8 text-[#EFE5DC]/62">
+          <p className="leading-8 text-muted-foreground/62">
             Placeholder text only. The information entered in the previous step will appear here for review before payment.
           </p>
         </motion.div>
@@ -1111,27 +1145,23 @@ function TemplatePayment({ onBack, onContinue }: { onBack: () => void; onContinu
     <motion.div
       key="payment"
       className="flex flex-col"
-      initial={{ opacity: 0, x: 36 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -36 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
     >
       <div className="flex flex-1 items-center justify-center">
         <motion.div
-          className="w-full max-w-md rounded-[2rem] border border-[#D8C6BA]/25 bg-[#F7F1EC] p-10 text-center text-[#0C1519] shadow-[0_28px_80px_rgba(0,0,0,0.28)]"
+          className="w-full max-w-md rounded-[2rem] border border-border/25 bg-secondary p-10 text-center text-foreground shadow-[0_28px_80px_rgba(0,0,0,0.28)]"
           animate={{ scale: [1, 1.015, 1] }}
           transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
         >
           <motion.div
-            className="mx-auto mb-8 flex h-56 w-56 items-center justify-center rounded-[1.5rem] border border-[#D8C6BA] bg-white shadow-inner"
+            className="mx-auto mb-8 flex h-56 w-56 items-center justify-center rounded-[1.5rem] border border-border bg-card shadow-inner"
             animate={{ boxShadow: ["0 0 0 rgba(207,157,123,0)", "0 0 34px rgba(207,157,123,0.28)", "0 0 0 rgba(207,157,123,0)"] }}
             transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
           >
-            <QrCode size={132} strokeWidth={1.25} className="text-[#0C1519]" />
+            <QrCode size={132} strokeWidth={1.25} className="text-foreground" />
           </motion.div>
           <button
             type="button"
-            className="rounded-full bg-[#0C1519] px-8 py-3 text-sm font-semibold text-[#F7F1EC] transition-transform duration-300 hover:scale-[1.04] hover:bg-[#724B39]"
+            className="rounded-full bg-button px-8 py-3 text-sm font-semibold text-button-text transition-transform duration-300 hover:scale-[1.04] hover:bg-accent"
           >
             Check Payment
           </button>
@@ -1147,20 +1177,14 @@ function TemplateResult({ onBack, onFinish }: { onBack: () => void; onFinish: ()
     <motion.div
       key="template-result"
       className="grid gap-8 pb-6 lg:grid-cols-[minmax(0,1fr)_380px]"
-      initial={{ opacity: 0, x: 36 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -36 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
     >
       <motion.div
-        className="relative min-h-[560px] overflow-hidden rounded-[2rem] border border-[#D8C6BA]/30 bg-[#F7F1EC] p-8 text-[#0C1519] shadow-[0_28px_80px_rgba(0,0,0,0.28)]"
-        animate={{ y: [0, -7, 0] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        className="relative min-h-[560px] overflow-hidden rounded-[2rem] border border-border/30 bg-secondary p-8 text-foreground shadow-[0_28px_80px_rgba(0,0,0,0.28)]"
       >
-        <div className="absolute -inset-x-4 top-6 -z-10 h-full rounded-[2rem] bg-[#EFE5DC]/70" />
-        <div className="absolute -inset-x-8 top-12 -z-20 h-full rounded-[2rem] bg-[#D8C6BA]/65" />
-        <div className="h-full overflow-y-auto pr-3 text-sm leading-7 text-[#3A3534]/80">
-          <h2 className="mb-7 text-2xl font-semibold text-[#0C1519]">Generated Document Preview</h2>
+        <div className="absolute -inset-x-4 top-6 -z-10 h-full rounded-[2rem] bg-background/70" />
+        <div className="absolute -inset-x-8 top-12 -z-20 h-full rounded-[2rem] bg-border/65" />
+        <div className="h-full overflow-y-auto pr-3 text-sm leading-7 text-muted-foreground/80">
+          <h2 className="mb-7 text-2xl font-semibold text-foreground">Generated Document Preview</h2>
           {[...Array(11)].map((_, index) => (
             <p key={index} className="mb-5">
               Draftly generated document content preview. Clauses, party information, obligations, and legal terms will be assembled into this paper-style document.
@@ -1177,35 +1201,35 @@ function TemplateResult({ onBack, onFinish }: { onBack: () => void; onFinish: ()
         ].map(([title, text], index) => (
           <motion.div
             key={title}
-            className="rounded-[1.5rem] border border-[#D8C6BA]/20 bg-[#162127]/80 p-6 text-[#F7F1EC] shadow-[0_16px_38px_rgba(0,0,0,0.18)]"
+            className="rounded-[1.5rem] border border-border/20 bg-card/80 p-6 text-foreground shadow-[0_16px_38px_rgba(0,0,0,0.18)]"
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.42, delay: index * 0.12 }}
           >
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#CF9D7B]">{title}</p>
-            <p className="text-sm leading-6 text-[#EFE5DC]/68">{text}</p>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-highlight">{title}</p>
+            <p className="text-sm leading-6 text-muted-foreground/68">{text}</p>
           </motion.div>
         ))}
 
         <div className="mt-auto space-y-4 pt-3">
           <div className="flex flex-wrap gap-2">
             {["PPT", "Word", "Docs"].map(label => (
-              <button key={label} type="button" className="flex h-11 min-w-16 items-center justify-center rounded-full border border-[#D8C6BA]/25 bg-[#162127]/80 px-4 text-xs font-semibold text-[#F7F1EC] transition-all duration-300 hover:-translate-y-1 hover:border-[#CF9D7B]">
+              <button key={label} type="button" className="flex h-11 min-w-16 items-center justify-center rounded-full border border-border/25 bg-secondary/80 px-4 text-xs font-semibold text-foreground transition-all duration-300 hover:-translate-y-1 hover:border-highlight">
                 {label}
               </button>
             ))}
             {[Archive, Trash2].map((Icon, index) => (
-              <button key={index} type="button" className="flex h-11 w-11 items-center justify-center rounded-full border border-[#D8C6BA]/25 bg-[#162127]/80 text-[#CF9D7B] transition-all duration-300 hover:-translate-y-1 hover:border-[#CF9D7B]">
+              <button key={index} type="button" className="flex h-11 w-11 items-center justify-center rounded-full border border-border/25 bg-secondary/80 text-highlight transition-all duration-300 hover:-translate-y-1 hover:border-highlight">
                 <Icon size={16} />
               </button>
             ))}
           </div>
           <div className="flex items-center justify-between gap-4">
-            <button type="button" onClick={onBack} className="rounded-full border border-[#D8C6BA]/35 bg-[#162127]/70 px-6 py-3 text-sm font-semibold text-[#F7F1EC] transition-all duration-300 hover:bg-[#3A3534]">
+            <button type="button" onClick={onBack} className="rounded-full border border-border/35 bg-secondary/70 px-6 py-3 text-sm font-semibold text-foreground transition-all duration-300 hover:bg-card">
               Back
             </button>
-            <button type="button" onClick={onFinish} className="flex-1 rounded-full bg-[#724B39] px-8 py-3.5 text-sm font-semibold text-[#F7F1EC] shadow-[0_0_0_rgba(207,157,123,0)] transition-all duration-300 hover:scale-[1.02] hover:bg-[#8a5b45] hover:shadow-[0_0_30px_rgba(207,157,123,0.28)]">
-              Дуусгах
+            <button type="button" onClick={onFinish} className="flex-1 rounded-full bg-button px-8 py-3.5 text-sm font-semibold text-button-text shadow-[0_0_0_rgba(207,157,123,0)] transition-all duration-300 hover:scale-[1.02] hover:bg-accent hover:shadow-[0_0_30px_rgba(207,157,123,0.28)]">
+              Үүсгэх
             </button>
           </div>
         </div>
@@ -1214,13 +1238,14 @@ function TemplateResult({ onBack, onFinish }: { onBack: () => void; onFinish: ()
   );
 }
 
-// â”€â”€â”€ Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Component ───────────────────────────────────────────────────────────────
 
 export default function App() {
   const [locale, setLocale] = useState<Locale>("mn");
   const [isDark, setIsDark] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
   const [page, setPage] = useState<AppPage>("home");
+  const [pageDirection, setPageDirection] = useState(1);
   const [activeFeature, setActiveFeature] = useState(1);
   const [circleTilt, setCircleTilt] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -1244,6 +1269,7 @@ export default function App() {
   }, []);
 
   const openHome = () => {
+    setPageDirection(-1);
     setPage("home");
     window.setTimeout(() => {
       homeScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
@@ -1251,16 +1277,19 @@ export default function App() {
   };
 
   const openAnalysis = () => {
+    setPageDirection(1);
     setPage("analysis");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const openTemplate = () => {
+    setPageDirection(1);
     setPage("template");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const scrollHomeTo = (ref: RefObject<HTMLElement>) => {
+    setPageDirection(-1);
     setPage("home");
     window.setTimeout(() => {
       ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1300,28 +1329,34 @@ export default function App() {
   };
 
   return (
-    <div className="bg-[#EFE5DC] dark:bg-[#0C1519] min-h-screen transition-colors duration-700">
+    <div className="relative h-screen overflow-hidden bg-background transition-colors duration-700">
       <AnimatePresence>
         {showSplash && <OpeningSplash onComplete={() => setShowSplash(false)} />}
       </AnimatePresence>
-      <AnimatePresence mode="wait">
+      <AnimatePresence custom={pageDirection} initial={false}>
         {page === "template" ? (
           <motion.div
             key="template"
-            initial={{ opacity: 0, x: 44 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -44 }}
-            transition={{ duration: 0.42, ease: "easeOut" }}
+            custom={pageDirection}
+            variants={stackedPageVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            className="absolute inset-0 overflow-hidden rounded-t-[2rem] shadow-[0_-15px_50px_rgba(0,0,0,0.15)]"
+            style={{ borderRadius: "32px 32px 0 0" }}
           >
             <TemplateWorkflow onBackHome={openHome} onTabSelect={handleTabSelect} navControls={navControls} />
           </motion.div>
         ) : page === "analysis" ? (
           <motion.div
             key="analysis"
-            initial={{ opacity: 0, x: 44 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -44 }}
-            transition={{ duration: 0.42, ease: "easeOut" }}
+            custom={pageDirection}
+            variants={stackedPageVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            className="absolute inset-0 overflow-hidden rounded-t-[2rem] shadow-[0_-15px_50px_rgba(0,0,0,0.15)]"
+            style={{ borderRadius: "32px 32px 0 0" }}
           >
             <AnalysisWorkflow onBack={openHome} onTabSelect={handleTabSelect} navControls={navControls} />
           </motion.div>
@@ -1329,30 +1364,30 @@ export default function App() {
           <motion.div
             key="home"
             ref={homeScrollRef}
-            className="h-screen overflow-y-auto scroll-smooth"
-            initial={{ opacity: 0, x: -44, y: 18 }}
-            animate={{ opacity: showSplash ? 0 : 1, x: 0, y: showSplash ? 18 : 0 }}
-            exit={{ opacity: 0, x: 44 }}
-            transition={{ duration: 0.58, ease: "easeOut" }}
+            custom={pageDirection}
+            variants={stackedPageVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            className="absolute inset-0 overflow-y-auto scroll-smooth bg-background"
           >
             <HomeSimpleNav onSelect={handleTabSelect} controls={navControls} scrollContainerRef={homeScrollRef} />
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-          PAGE 1 â€” HERO
-          â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/* ═══════════════════════════════════════
+          PAGE 1 — HERO
+          ═══════════════════════════════════════ */}
       <motion.section
-        className="px-3 pb-6 pt-3 min-h-screen flex flex-col"
+        className="sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary px-3 pb-6 pt-3 shadow-[0_-18px_55px_rgba(0,0,0,0.10)] flex flex-col"
+        style={{ zIndex: 1 }}
         variants={SECTION_REVEAL}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.35 }}
+        viewport={{ once: false, amount: 0.16 }}
       >
         <FolderTabs activeTab="Home" onSelect={handleTabSelect} controls={navControls} />
         {/* Document body */}
         <motion.div
           className="relative flex-1 bg-background border border-border rounded-b-[2rem] rounded-tr-[2rem] shadow-[0_12px_70px_rgba(0,0,0,0.07)] overflow-hidden flex flex-col"
-          animate={{ y: [0, -5, 0] }}
-          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
         >
           <div className="pointer-events-none absolute left-0 top-0 z-20 h-px w-[920px] max-w-[calc(100vw-1.5rem)] bg-background" />
           {/* Hero content */}
@@ -1368,7 +1403,7 @@ export default function App() {
               className="flex gap-3 mb-11"
               variants={REVEAL_ITEM}
             >
-              <button className="flex min-w-[10rem] items-center justify-center gap-2 bg-foreground text-background px-8 py-3.5 rounded-full text-sm font-medium hover:opacity-85 active:scale-95 transition-all duration-200">
+              <button className="flex min-w-[10rem] items-center justify-center gap-2 bg-button text-button-text px-8 py-3.5 rounded-full text-sm font-medium hover:opacity-85 active:scale-95 transition-all duration-200">
                 {content.hero.primaryCta} <ArrowRight size={14} />
               </button>
               <button className="min-w-[10rem] px-8 py-3.5 rounded-full text-sm font-medium border border-border hover:bg-secondary active:scale-95 transition-all duration-200 text-foreground">
@@ -1401,16 +1436,17 @@ export default function App() {
         </motion.div>
       </motion.section>
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-          PAGE 2 â€” WHAT DO WE DO?
-          â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/* ═══════════════════════════════════════
+          PAGE 2 — WHAT DO WE DO?
+          ═══════════════════════════════════════ */}
       <motion.section
-        className="overflow-hidden bg-[#0C1519] py-20 md:py-24 min-h-screen"
+        className="sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-background py-20 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-24"
+        style={{ zIndex: 2 }}
         ref={featuresRef.ref}
         variants={SECTION_REVEAL}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.3 }}
+        viewport={{ once: false, amount: 0.14 }}
       >
         <div
           className="flex min-h-[calc(100vh-9rem)] items-center"
@@ -1421,7 +1457,7 @@ export default function App() {
           }}
           onMouseLeave={() => setCircleTilt(0)}
         >
-          {/* â”€â”€ Circle carousel â”€â”€ */}
+          {/* ── Circle carousel ── */}
           <motion.div className="relative -ml-[3vw] aspect-square w-[41vw] min-w-[390px] max-w-[650px] flex-shrink-0 md:-ml-[2vw]" variants={REVEAL_ITEM}>
 
             <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(207,157,123,0.10),transparent_48%)]" />
@@ -1437,19 +1473,19 @@ export default function App() {
                   key={radius}
                   className={`absolute rounded-full border ${
                     index === activeFeature
-                      ? "border-[#CF9D7B]/42 shadow-[0_0_28px_rgba(207,157,123,0.16)]"
-                      : "border-[#724B39]/18"
+                      ? "border-highlight/42 shadow-[0_0_28px_rgba(207,157,123,0.16)]"
+                      : "border-accent/18"
                   }`}
                   style={{
                     inset: `${(100 - radius) / 2}%`,
                   }}
                 />
               ))}
-              <div className="absolute inset-[5%] rounded-full border border-[#CF9D7B]/12 shadow-[0_0_80px_rgba(207,157,123,0.12)]" />
+              <div className="absolute inset-[5%] rounded-full border border-highlight/12 shadow-[0_0_80px_rgba(207,157,123,0.12)]" />
               {ORBIT_PARTICLES.map((particle, index) => (
                 <span
                   key={`${particle.left}-${particle.top}`}
-                  className="absolute h-1 w-1 rounded-full bg-[#724B39]/55 shadow-[0_0_12px_rgba(207,157,123,0.22)]"
+                  className="absolute h-1 w-1 rounded-full bg-button/55 shadow-[0_0_12px_rgba(207,157,123,0.22)]"
                   style={{
                     left: particle.left,
                     top: particle.top,
@@ -1478,8 +1514,8 @@ export default function App() {
                     type="button"
                     className={`absolute flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border font-mono leading-none backdrop-blur-md transition-colors duration-500 ${
                       isActive
-                        ? "h-16 w-16 border-[#CF9D7B] bg-[#162127]/88 text-2xl font-bold text-[#F7F1EC] shadow-[0_0_34px_rgba(207,157,123,0.42),inset_0_0_24px_rgba(207,157,123,0.08)]"
-                        : "h-11 w-11 border-[#F7F1EC]/10 bg-[#3A3534]/26 text-sm font-semibold text-[#F7F1EC]/50 shadow-[0_12px_30px_rgba(0,0,0,0.22)] hover:border-[#724B39]/70 hover:text-[#F7F1EC]/80"
+                        ? "h-16 w-16 border-highlight bg-secondary/88 text-2xl font-bold text-foreground shadow-[0_0_34px_rgba(207,157,123,0.42),inset_0_0_24px_rgba(207,157,123,0.08)]"
+                        : "h-11 w-11 border-border/20 bg-card/26 text-sm font-semibold text-foreground/50 shadow-[0_12px_30px_rgba(0,0,0,0.22)] hover:border-accent/70 hover:text-foreground/80"
                     }`}
                     style={{ left: `${x}%`, top: `${y}%` }}
                     animate={{ scale: isActive ? 1.08 : 1, opacity: isActive ? 1 : 0.58 }}
@@ -1499,15 +1535,15 @@ export default function App() {
             </motion.div>
 
             {/* Quiet center field */}
-            <div className="pointer-events-none absolute inset-[30%] rounded-full border border-[#724B39]/22 bg-[#0C1519]/24 shadow-[inset_0_0_54px_rgba(0,0,0,0.22)]">
-              <div className="absolute inset-[22%] rounded-full border border-[#F7F1EC]/7 bg-[#0C1519]/18" />
+            <div className="pointer-events-none absolute inset-[30%] rounded-full border border-accent/22 bg-background/24 shadow-[inset_0_0_54px_rgba(0,0,0,0.22)]">
+              <div className="absolute inset-[22%] rounded-full border border-border/20 bg-background/18" />
             </div>
           </motion.div>
 
-          {/* â”€â”€ Feature content â”€â”€ */}
+          {/* ── Feature content ── */}
           <motion.div className="flex-1 pl-10 pr-8 md:pl-16 md:pr-24" variants={REVEAL_ITEM}>
-            <div className="mb-7 inline-flex rounded-full border border-[#CF9D7B]/24 bg-[#162127] px-7 py-3 shadow-[0_18px_40px_rgba(0,0,0,0.18)]">
-              <h2 className="font-display text-2xl font-bold text-[#F7F1EC] md:text-3xl">
+            <div className="mb-7 inline-flex rounded-full border border-highlight/24 bg-secondary px-7 py-3 shadow-[0_18px_40px_rgba(0,0,0,0.18)]">
+              <h2 className="font-display text-2xl font-bold text-foreground md:text-3xl">
                 {content.featuresSectionTitle}
               </h2>
             </div>
@@ -1519,13 +1555,13 @@ export default function App() {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.45 }}
               >
-                <p className="mb-5 font-mono text-sm text-[#CF9D7B]">
+                <p className="mb-5 font-mono text-sm text-highlight">
                   {ORBIT_FEATURES[activeFeature].num}
                 </p>
-                <h3 className="mb-7 font-display text-6xl font-bold leading-none text-[#F7F1EC] md:text-7xl">
+                <h3 className="mb-7 font-display text-6xl font-bold leading-none text-foreground md:text-7xl">
                   {ORBIT_FEATURES[activeFeature].title}
                 </h3>
-                <p className="max-w-sm text-lg leading-relaxed text-[#F7F1EC]/68">
+                <p className="max-w-sm text-lg leading-relaxed text-foreground/68">
                   {ORBIT_FEATURES[activeFeature].desc}
                 </p>
               </motion.div>
@@ -1539,8 +1575,8 @@ export default function App() {
                   onClick={() => setActiveFeature(i)}
                   className={`h-0.5 rounded-full transition-all duration-500 ${
                     i === activeFeature
-                      ? "w-10 bg-[#CF9D7B]"
-                      : "w-2 bg-[#F7F1EC]/18 hover:bg-[#CF9D7B]/48"
+                      ? "w-10 bg-highlight"
+                      : "w-2 bg-secondary/18 hover:bg-highlight/48"
                   }`}
                   aria-label={`Go to feature ${i + 1}`}
                 />
@@ -1550,30 +1586,31 @@ export default function App() {
         </div>
       </motion.section>
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-          PAGE 3 â€” TEMPLATE FLOW
-          â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/* ═══════════════════════════════════════
+          PAGE 3 — TEMPLATE FLOW
+          ═══════════════════════════════════════ */}
       <motion.section
-        className="min-h-screen py-28 flex items-center"
+        className="sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary py-28 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] flex items-center"
+        style={{ zIndex: 3 }}
         ref={templateRef.ref}
         variants={SECTION_REVEAL}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.35 }}
+        viewport={{ once: false, amount: 0.16 }}
       >
         <div className="max-w-screen-xl mx-auto px-8 flex items-center gap-16 md:gap-24">
 
-          {/* â”€â”€ 3D screen card â”€â”€ */}
+          {/* ── 3D screen card ── */}
           <motion.div
             className="flex-shrink-0 w-72 md:w-80"
             variants={REVEAL_ITEM}
           >
             <div
-              className="bg-secondary dark:bg-[#162127] rounded-3xl overflow-hidden shadow-[0_40px_80px_rgba(0,0,0,0.13)] border border-border animate-floatscreen"
+              className="bg-secondary dark:bg-secondary rounded-3xl overflow-hidden shadow-[0_40px_80px_rgba(0,0,0,0.13)] border border-border"
             >
               {/* Title bar */}
-              <div className="bg-muted/50 dark:bg-[#3A3534]/50 px-5 py-3.5 flex items-center gap-2 border-b border-border/50">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#CF9D7B]" />
+              <div className="bg-muted/50 dark:bg-card/50 px-5 py-3.5 flex items-center gap-2 border-b border-border/50">
+                <div className="w-2.5 h-2.5 rounded-full bg-highlight" />
                 <div className="w-2.5 h-2.5 rounded-full bg-border" />
                 <div className="w-2.5 h-2.5 rounded-full bg-border/50" />
                 <span className="ml-3 text-[11px] text-muted-foreground">{content.templateFlow.windowTitle}</span>
@@ -1587,7 +1624,7 @@ export default function App() {
                       key={i}
                       className="bg-background rounded-2xl px-4 py-3.5 flex items-center gap-3 border border-border/60"
                     >
-                      <div className="w-8 h-8 rounded-xl bg-secondary dark:bg-[#0C1519] flex items-center justify-center flex-shrink-0">
+                      <div className="w-8 h-8 rounded-xl bg-secondary dark:bg-background flex items-center justify-center flex-shrink-0">
                         <FileText size={13} className="text-muted-foreground" />
                       </div>
                       <div>
@@ -1597,12 +1634,12 @@ export default function App() {
                     </div>
                   ))}
                 </div>
-                <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-secondary dark:from-[#162127] to-transparent pointer-events-none" />
+                <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-secondary to-transparent pointer-events-none" />
               </div>
             </div>
           </motion.div>
 
-          {/* â”€â”€ Text â”€â”€ */}
+          {/* ── Text ── */}
           <motion.div
             className="flex-1"
             variants={REVEAL_ITEM}
@@ -1625,20 +1662,21 @@ export default function App() {
         </div>
       </motion.section>
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-          PAGE 4 â€” UPLOAD & ANALYSE
-          â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/* ═══════════════════════════════════════
+          PAGE 4 — UPLOAD & ANALYSE
+          ═══════════════════════════════════════ */}
       <motion.section
-        className="min-h-screen py-28 flex items-center"
+        className="sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary py-28 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] flex items-center"
+        style={{ zIndex: 4 }}
         ref={uploadRef.ref}
         variants={SECTION_REVEAL}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.35 }}
+        viewport={{ once: false, amount: 0.16 }}
       >
         <div className="max-w-screen-xl mx-auto px-8 flex items-start gap-16 md:gap-24">
 
-          {/* â”€â”€ Analysis labels â”€â”€ */}
+          {/* ── Analysis labels ── */}
           <div className="flex-1 pt-4">
             {content.upload.labels.map((text, i) => (
               <motion.div
@@ -1657,7 +1695,7 @@ export default function App() {
             ))}
           </div>
 
-          {/* â”€â”€ Upload card â”€â”€ */}
+          {/* ── Upload card ── */}
           <motion.div
             className="flex-shrink-0 w-72 md:w-80 pt-4"
             variants={REVEAL_ITEM}
@@ -1665,8 +1703,6 @@ export default function App() {
             {/* Bouncing icon */}
             <motion.div
               className="w-14 h-14 bg-background border border-border rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-sm"
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
             >
               <FileText size={24} className="text-muted-foreground" />
             </motion.div>
@@ -1674,7 +1710,7 @@ export default function App() {
             <div
               className={`relative bg-background border-2 border-dashed rounded-3xl p-8 text-center transition-all duration-300 ${
                 isDragging
-                  ? "border-[#CF9D7B] bg-[#CF9D7B]/5 scale-[1.01]"
+                  ? "border-highlight bg-highlight/5 scale-[1.01]"
                   : "border-border"
               }`}
               onDragEnter={() => setIsDragging(true)}
@@ -1696,22 +1732,23 @@ export default function App() {
               </button>
 
               {/* Accent line at bottom */}
-              <div className="absolute bottom-0 left-6 right-6 h-px rounded-full bg-gradient-to-r from-transparent via-[#CF9D7B] to-transparent opacity-60" />
+              <div className="absolute bottom-0 left-6 right-6 h-px rounded-full bg-gradient-to-r from-transparent via-highlight to-transparent opacity-60" />
             </div>
           </motion.div>
         </div>
       </motion.section>
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-          PAGE 5 â€” FOOTER
-          â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/* ═══════════════════════════════════════
+          PAGE 5 — FOOTER
+          ═══════════════════════════════════════ */}
       <motion.footer
-        className="min-h-screen flex items-center bg-background border-t border-border"
+        className="sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] flex items-center bg-secondary border-t border-border shadow-[0_-18px_55px_rgba(0,0,0,0.12)]"
+        style={{ zIndex: 5 }}
         ref={footerRef.ref}
         variants={SECTION_REVEAL}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.35 }}
+        viewport={{ once: false, amount: 0.16 }}
       >
         <div className="max-w-screen-xl mx-auto px-8 py-20">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
@@ -1789,5 +1826,6 @@ export default function App() {
     </div>
   );
 }
+
 
 
