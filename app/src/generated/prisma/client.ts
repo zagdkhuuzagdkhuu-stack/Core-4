@@ -132,6 +132,21 @@ export type Subscription = Prisma.SubscriptionModel
  */
 export type AuditLog = Prisma.AuditLogModel
 /**
+ * Model Law
+ * 
+ */
+export type Law = Prisma.LawModel
+/**
+ * Model LawArticle
+ * 
+ */
+export type LawArticle = Prisma.LawArticleModel
+/**
+ * Model ClauseTemplate
+ * 
+ */
+export type ClauseTemplate = Prisma.ClauseTemplateModel
+/**
  * Model FileUpload
  * 
  */

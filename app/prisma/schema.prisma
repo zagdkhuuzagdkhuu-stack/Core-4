@@ -232,6 +232,7 @@ model RiskAnalysis {
   inconsistentWording Json?
   complianceWarnings  Json?
   estimatedCost       Decimal? @db.Decimal(14, 2)
+  legalReferences     Json?
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
@@ -317,6 +318,40 @@ model AuditLog {
 
   @@index([userId])
   @@index([entityType, entityId])
+}
+
+model Law {
+  id        String       @id @default(cuid())
+  title     String
+  category  String?
+  sourceUrl String?
+  fullText  String?      @db.Text
+
+  articles  LawArticle[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model LawArticle {
+  id            String @id @default(cuid())
+  lawId         String
+  articleNumber String?
+  title         String?
+  content       String @db.Text
+
+  law Law @relation(fields: [lawId], references: [id], onDelete: Cascade)
+
+  @@index([lawId])
+}
+
+model ClauseTemplate {
+  id           String @id @default(cuid())
+  title        String
+  contractType String?
+  content      String @db.Text
+  riskLevel    String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model FileUpload {

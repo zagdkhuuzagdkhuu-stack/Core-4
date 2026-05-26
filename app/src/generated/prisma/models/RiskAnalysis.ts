@@ -70,6 +70,7 @@ export type RiskAnalysisCountAggregateOutputType = {
   inconsistentWording: number
   complianceWarnings: number
   estimatedCost: number
+  legalReferences: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -120,6 +121,7 @@ export type RiskAnalysisCountAggregateInputType = {
   inconsistentWording?: true
   complianceWarnings?: true
   estimatedCost?: true
+  legalReferences?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -223,6 +225,7 @@ export type RiskAnalysisGroupByOutputType = {
   inconsistentWording: runtime.JsonValue | null
   complianceWarnings: runtime.JsonValue | null
   estimatedCost: runtime.Decimal | null
+  legalReferences: runtime.JsonValue | null
   createdAt: Date
   updatedAt: Date
   _count: RiskAnalysisCountAggregateOutputType | null
@@ -262,6 +265,7 @@ export type RiskAnalysisWhereInput = {
   inconsistentWording?: Prisma.JsonNullableFilter<"RiskAnalysis">
   complianceWarnings?: Prisma.JsonNullableFilter<"RiskAnalysis">
   estimatedCost?: Prisma.DecimalNullableFilter<"RiskAnalysis"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  legalReferences?: Prisma.JsonNullableFilter<"RiskAnalysis">
   createdAt?: Prisma.DateTimeFilter<"RiskAnalysis"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"RiskAnalysis"> | Date | string
   contract?: Prisma.XOR<Prisma.ContractNullableScalarRelationFilter, Prisma.ContractWhereInput> | null
@@ -280,6 +284,7 @@ export type RiskAnalysisOrderByWithRelationInput = {
   inconsistentWording?: Prisma.SortOrderInput | Prisma.SortOrder
   complianceWarnings?: Prisma.SortOrderInput | Prisma.SortOrder
   estimatedCost?: Prisma.SortOrderInput | Prisma.SortOrder
+  legalReferences?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   contract?: Prisma.ContractOrderByWithRelationInput
@@ -301,6 +306,7 @@ export type RiskAnalysisWhereUniqueInput = Prisma.AtLeast<{
   inconsistentWording?: Prisma.JsonNullableFilter<"RiskAnalysis">
   complianceWarnings?: Prisma.JsonNullableFilter<"RiskAnalysis">
   estimatedCost?: Prisma.DecimalNullableFilter<"RiskAnalysis"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  legalReferences?: Prisma.JsonNullableFilter<"RiskAnalysis">
   createdAt?: Prisma.DateTimeFilter<"RiskAnalysis"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"RiskAnalysis"> | Date | string
   contract?: Prisma.XOR<Prisma.ContractNullableScalarRelationFilter, Prisma.ContractWhereInput> | null
@@ -319,6 +325,7 @@ export type RiskAnalysisOrderByWithAggregationInput = {
   inconsistentWording?: Prisma.SortOrderInput | Prisma.SortOrder
   complianceWarnings?: Prisma.SortOrderInput | Prisma.SortOrder
   estimatedCost?: Prisma.SortOrderInput | Prisma.SortOrder
+  legalReferences?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.RiskAnalysisCountOrderByAggregateInput
@@ -343,6 +350,7 @@ export type RiskAnalysisScalarWhereWithAggregatesInput = {
   inconsistentWording?: Prisma.JsonNullableWithAggregatesFilter<"RiskAnalysis">
   complianceWarnings?: Prisma.JsonNullableWithAggregatesFilter<"RiskAnalysis">
   estimatedCost?: Prisma.DecimalNullableWithAggregatesFilter<"RiskAnalysis"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  legalReferences?: Prisma.JsonNullableWithAggregatesFilter<"RiskAnalysis">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"RiskAnalysis"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"RiskAnalysis"> | Date | string
 }
@@ -357,6 +365,7 @@ export type RiskAnalysisCreateInput = {
   inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   estimatedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  legalReferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   contract?: Prisma.ContractCreateNestedOneWithoutRiskAnalysisInput
@@ -375,6 +384,7 @@ export type RiskAnalysisUncheckedCreateInput = {
   inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   estimatedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  legalReferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -389,6 +399,7 @@ export type RiskAnalysisUpdateInput = {
   inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   estimatedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  legalReferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   contract?: Prisma.ContractUpdateOneWithoutRiskAnalysisNestedInput
@@ -407,6 +418,7 @@ export type RiskAnalysisUncheckedUpdateInput = {
   inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   estimatedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  legalReferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -423,6 +435,7 @@ export type RiskAnalysisCreateManyInput = {
   inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   estimatedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  legalReferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -437,6 +450,7 @@ export type RiskAnalysisUpdateManyMutationInput = {
   inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   estimatedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  legalReferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -453,6 +467,7 @@ export type RiskAnalysisUncheckedUpdateManyInput = {
   inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   estimatedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  legalReferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -474,6 +489,7 @@ export type RiskAnalysisCountOrderByAggregateInput = {
   inconsistentWording?: Prisma.SortOrder
   complianceWarnings?: Prisma.SortOrder
   estimatedCost?: Prisma.SortOrder
+  legalReferences?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -584,6 +600,7 @@ export type RiskAnalysisCreateWithoutDocumentInput = {
   inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   estimatedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  legalReferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   contract?: Prisma.ContractCreateNestedOneWithoutRiskAnalysisInput
@@ -600,6 +617,7 @@ export type RiskAnalysisUncheckedCreateWithoutDocumentInput = {
   inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   estimatedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  legalReferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -630,6 +648,7 @@ export type RiskAnalysisUpdateWithoutDocumentInput = {
   inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   estimatedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  legalReferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   contract?: Prisma.ContractUpdateOneWithoutRiskAnalysisNestedInput
@@ -646,6 +665,7 @@ export type RiskAnalysisUncheckedUpdateWithoutDocumentInput = {
   inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   estimatedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  legalReferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -660,6 +680,7 @@ export type RiskAnalysisCreateWithoutContractInput = {
   inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   estimatedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  legalReferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   document?: Prisma.DocumentCreateNestedOneWithoutRiskAnalysisInput
@@ -676,6 +697,7 @@ export type RiskAnalysisUncheckedCreateWithoutContractInput = {
   inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   estimatedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  legalReferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -706,6 +728,7 @@ export type RiskAnalysisUpdateWithoutContractInput = {
   inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   estimatedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  legalReferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   document?: Prisma.DocumentUpdateOneWithoutRiskAnalysisNestedInput
@@ -722,6 +745,7 @@ export type RiskAnalysisUncheckedUpdateWithoutContractInput = {
   inconsistentWording?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   complianceWarnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   estimatedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  legalReferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -740,6 +764,7 @@ export type RiskAnalysisSelect<ExtArgs extends runtime.Types.Extensions.Internal
   inconsistentWording?: boolean
   complianceWarnings?: boolean
   estimatedCost?: boolean
+  legalReferences?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   contract?: boolean | Prisma.RiskAnalysis$contractArgs<ExtArgs>
@@ -758,6 +783,7 @@ export type RiskAnalysisSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   inconsistentWording?: boolean
   complianceWarnings?: boolean
   estimatedCost?: boolean
+  legalReferences?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   contract?: boolean | Prisma.RiskAnalysis$contractArgs<ExtArgs>
@@ -776,6 +802,7 @@ export type RiskAnalysisSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   inconsistentWording?: boolean
   complianceWarnings?: boolean
   estimatedCost?: boolean
+  legalReferences?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   contract?: boolean | Prisma.RiskAnalysis$contractArgs<ExtArgs>
@@ -794,11 +821,12 @@ export type RiskAnalysisSelectScalar = {
   inconsistentWording?: boolean
   complianceWarnings?: boolean
   estimatedCost?: boolean
+  legalReferences?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type RiskAnalysisOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "contractId" | "documentId" | "summary" | "riskScore" | "risks" | "missingClauses" | "riskyTerms" | "inconsistentWording" | "complianceWarnings" | "estimatedCost" | "createdAt" | "updatedAt", ExtArgs["result"]["riskAnalysis"]>
+export type RiskAnalysisOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "contractId" | "documentId" | "summary" | "riskScore" | "risks" | "missingClauses" | "riskyTerms" | "inconsistentWording" | "complianceWarnings" | "estimatedCost" | "legalReferences" | "createdAt" | "updatedAt", ExtArgs["result"]["riskAnalysis"]>
 export type RiskAnalysisInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   contract?: boolean | Prisma.RiskAnalysis$contractArgs<ExtArgs>
   document?: boolean | Prisma.RiskAnalysis$documentArgs<ExtArgs>
@@ -830,6 +858,7 @@ export type $RiskAnalysisPayload<ExtArgs extends runtime.Types.Extensions.Intern
     inconsistentWording: runtime.JsonValue | null
     complianceWarnings: runtime.JsonValue | null
     estimatedCost: runtime.Decimal | null
+    legalReferences: runtime.JsonValue | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["riskAnalysis"]>
@@ -1268,6 +1297,7 @@ export interface RiskAnalysisFieldRefs {
   readonly inconsistentWording: Prisma.FieldRef<"RiskAnalysis", 'Json'>
   readonly complianceWarnings: Prisma.FieldRef<"RiskAnalysis", 'Json'>
   readonly estimatedCost: Prisma.FieldRef<"RiskAnalysis", 'Decimal'>
+  readonly legalReferences: Prisma.FieldRef<"RiskAnalysis", 'Json'>
   readonly createdAt: Prisma.FieldRef<"RiskAnalysis", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"RiskAnalysis", 'DateTime'>
 }

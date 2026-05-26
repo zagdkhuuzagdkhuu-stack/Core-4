@@ -3,6 +3,7 @@ import database from "../database";
 import { AuthenticatedRequest } from "../middleware/auth.middleware";
 import { extractText } from "../utils/textExtractor";
 import { analyzeContract } from "../services/aiService";
+import { getLegalContext } from "../services/lawService";
 
 export async function uploadAndAnalyze(req: Request, res: Response) {
   try {
@@ -21,7 +22,8 @@ export async function uploadAndAnalyze(req: Request, res: Response) {
       return res.status(422).json({ message: "Could not extract any text from the file." });
     }
 
-    const result = await analyzeContract(text, analysisMode);
+    const legalCtx = await getLegalContext(text);
+    const result = await analyzeContract(text, legalCtx, analysisMode);
 
     const contractTitle = req.body.title || file.originalname.replace(/\.[^/.]+$/, "");
 
@@ -69,6 +71,7 @@ export async function uploadAndAnalyze(req: Request, res: Response) {
           inconsistentWording: result.inconsistentWording,
           complianceWarnings: result.complianceWarnings,
           estimatedCost: result.estimatedCost,
+          legalReferences: result.legalReferences,
         },
       });
 
@@ -113,6 +116,8 @@ export async function uploadAndAnalyze(req: Request, res: Response) {
         complianceWarnings: analysis.complianceWarnings,
         estimatedCost: analysis.estimatedCost,
         inconsistentWording: analysis.inconsistentWording,
+        legalReferences: result.legalReferences,
+        costEstimate: result.costEstimate,
       },
       clauses: result.clauses,
       mode: analysisMode,
@@ -146,7 +151,8 @@ export async function analyzeDocumentText(req: Request, res: Response) {
       return res.status(422).json({ message: "Document has no text content to analyze." });
     }
 
-    const result = await analyzeContract(text, analysisMode);
+    const legalCtx = await getLegalContext(text);
+    const result = await analyzeContract(text, legalCtx, analysisMode);
     const contractId = document.contract?.id;
 
     const analysis = await database.riskAnalysis.upsert({
@@ -162,6 +168,7 @@ export async function analyzeDocumentText(req: Request, res: Response) {
         inconsistentWording: result.inconsistentWording,
         complianceWarnings: result.complianceWarnings,
         estimatedCost: result.estimatedCost,
+        legalReferences: result.legalReferences,
       },
       update: {
         summary: result.summary,
@@ -172,6 +179,7 @@ export async function analyzeDocumentText(req: Request, res: Response) {
         inconsistentWording: result.inconsistentWording,
         complianceWarnings: result.complianceWarnings,
         estimatedCost: result.estimatedCost,
+        legalReferences: result.legalReferences,
       },
     });
 
@@ -190,7 +198,15 @@ export async function analyzeDocumentText(req: Request, res: Response) {
       });
     }
 
-    return res.json({ analysis, clauses: result.clauses, mode: analysisMode });
+    return res.json({
+      analysis: {
+        ...analysis,
+        legalReferences: result.legalReferences,
+        costEstimate: result.costEstimate,
+      },
+      clauses: result.clauses,
+      mode: analysisMode,
+    });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     return res.status(500).json({

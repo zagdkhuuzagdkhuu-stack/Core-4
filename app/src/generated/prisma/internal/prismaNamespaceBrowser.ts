@@ -69,6 +69,9 @@ export const ModelName = {
   Notification: 'Notification',
   Subscription: 'Subscription',
   AuditLog: 'AuditLog',
+  Law: 'Law',
+  LawArticle: 'LawArticle',
+  ClauseTemplate: 'ClauseTemplate',
   FileUpload: 'FileUpload'
 } as const
 
@@ -271,6 +274,7 @@ export const RiskAnalysisScalarFieldEnum = {
   inconsistentWording: 'inconsistentWording',
   complianceWarnings: 'complianceWarnings',
   estimatedCost: 'estimatedCost',
+  legalReferences: 'legalReferences',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -346,6 +350,43 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const LawScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  category: 'category',
+  sourceUrl: 'sourceUrl',
+  fullText: 'fullText',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LawScalarFieldEnum = (typeof LawScalarFieldEnum)[keyof typeof LawScalarFieldEnum]
+
+
+export const LawArticleScalarFieldEnum = {
+  id: 'id',
+  lawId: 'lawId',
+  articleNumber: 'articleNumber',
+  title: 'title',
+  content: 'content'
+} as const
+
+export type LawArticleScalarFieldEnum = (typeof LawArticleScalarFieldEnum)[keyof typeof LawArticleScalarFieldEnum]
+
+
+export const ClauseTemplateScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  contractType: 'contractType',
+  content: 'content',
+  riskLevel: 'riskLevel',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ClauseTemplateScalarFieldEnum = (typeof ClauseTemplateScalarFieldEnum)[keyof typeof ClauseTemplateScalarFieldEnum]
 
 
 export const FileUploadScalarFieldEnum = {

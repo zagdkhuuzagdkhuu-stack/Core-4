@@ -402,6 +402,9 @@ export const ModelName = {
   Notification: 'Notification',
   Subscription: 'Subscription',
   AuditLog: 'AuditLog',
+  Law: 'Law',
+  LawArticle: 'LawArticle',
+  ClauseTemplate: 'ClauseTemplate',
   FileUpload: 'FileUpload'
 } as const
 
@@ -418,7 +421,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userSession" | "company" | "userCompany" | "templateCategory" | "template" | "document" | "contract" | "contractParty" | "clause" | "clauseTag" | "clauseTagMap" | "riskAnalysis" | "approval" | "payment" | "notification" | "subscription" | "auditLog" | "fileUpload"
+    modelProps: "user" | "userSession" | "company" | "userCompany" | "templateCategory" | "template" | "document" | "contract" | "contractParty" | "clause" | "clauseTag" | "clauseTagMap" | "riskAnalysis" | "approval" | "payment" | "notification" | "subscription" | "auditLog" | "law" | "lawArticle" | "clauseTemplate" | "fileUpload"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1754,6 +1757,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Law: {
+      payload: Prisma.$LawPayload<ExtArgs>
+      fields: Prisma.LawFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LawFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LawFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawPayload>
+        }
+        findFirst: {
+          args: Prisma.LawFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LawFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawPayload>
+        }
+        findMany: {
+          args: Prisma.LawFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawPayload>[]
+        }
+        create: {
+          args: Prisma.LawCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawPayload>
+        }
+        createMany: {
+          args: Prisma.LawCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LawCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawPayload>[]
+        }
+        delete: {
+          args: Prisma.LawDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawPayload>
+        }
+        update: {
+          args: Prisma.LawUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawPayload>
+        }
+        deleteMany: {
+          args: Prisma.LawDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LawUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LawUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawPayload>[]
+        }
+        upsert: {
+          args: Prisma.LawUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawPayload>
+        }
+        aggregate: {
+          args: Prisma.LawAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLaw>
+        }
+        groupBy: {
+          args: Prisma.LawGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LawGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LawCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LawCountAggregateOutputType> | number
+        }
+      }
+    }
+    LawArticle: {
+      payload: Prisma.$LawArticlePayload<ExtArgs>
+      fields: Prisma.LawArticleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LawArticleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawArticlePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LawArticleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawArticlePayload>
+        }
+        findFirst: {
+          args: Prisma.LawArticleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawArticlePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LawArticleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawArticlePayload>
+        }
+        findMany: {
+          args: Prisma.LawArticleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawArticlePayload>[]
+        }
+        create: {
+          args: Prisma.LawArticleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawArticlePayload>
+        }
+        createMany: {
+          args: Prisma.LawArticleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LawArticleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawArticlePayload>[]
+        }
+        delete: {
+          args: Prisma.LawArticleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawArticlePayload>
+        }
+        update: {
+          args: Prisma.LawArticleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawArticlePayload>
+        }
+        deleteMany: {
+          args: Prisma.LawArticleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LawArticleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LawArticleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawArticlePayload>[]
+        }
+        upsert: {
+          args: Prisma.LawArticleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LawArticlePayload>
+        }
+        aggregate: {
+          args: Prisma.LawArticleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLawArticle>
+        }
+        groupBy: {
+          args: Prisma.LawArticleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LawArticleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LawArticleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LawArticleCountAggregateOutputType> | number
+        }
+      }
+    }
+    ClauseTemplate: {
+      payload: Prisma.$ClauseTemplatePayload<ExtArgs>
+      fields: Prisma.ClauseTemplateFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ClauseTemplateFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClauseTemplatePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ClauseTemplateFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClauseTemplatePayload>
+        }
+        findFirst: {
+          args: Prisma.ClauseTemplateFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClauseTemplatePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ClauseTemplateFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClauseTemplatePayload>
+        }
+        findMany: {
+          args: Prisma.ClauseTemplateFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClauseTemplatePayload>[]
+        }
+        create: {
+          args: Prisma.ClauseTemplateCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClauseTemplatePayload>
+        }
+        createMany: {
+          args: Prisma.ClauseTemplateCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ClauseTemplateCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClauseTemplatePayload>[]
+        }
+        delete: {
+          args: Prisma.ClauseTemplateDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClauseTemplatePayload>
+        }
+        update: {
+          args: Prisma.ClauseTemplateUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClauseTemplatePayload>
+        }
+        deleteMany: {
+          args: Prisma.ClauseTemplateDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ClauseTemplateUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ClauseTemplateUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClauseTemplatePayload>[]
+        }
+        upsert: {
+          args: Prisma.ClauseTemplateUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClauseTemplatePayload>
+        }
+        aggregate: {
+          args: Prisma.ClauseTemplateAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateClauseTemplate>
+        }
+        groupBy: {
+          args: Prisma.ClauseTemplateGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClauseTemplateGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ClauseTemplateCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClauseTemplateCountAggregateOutputType> | number
+        }
+      }
+    }
     FileUpload: {
       payload: Prisma.$FileUploadPayload<ExtArgs>
       fields: Prisma.FileUploadFieldRefs
@@ -2050,6 +2275,7 @@ export const RiskAnalysisScalarFieldEnum = {
   inconsistentWording: 'inconsistentWording',
   complianceWarnings: 'complianceWarnings',
   estimatedCost: 'estimatedCost',
+  legalReferences: 'legalReferences',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2125,6 +2351,43 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const LawScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  category: 'category',
+  sourceUrl: 'sourceUrl',
+  fullText: 'fullText',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LawScalarFieldEnum = (typeof LawScalarFieldEnum)[keyof typeof LawScalarFieldEnum]
+
+
+export const LawArticleScalarFieldEnum = {
+  id: 'id',
+  lawId: 'lawId',
+  articleNumber: 'articleNumber',
+  title: 'title',
+  content: 'content'
+} as const
+
+export type LawArticleScalarFieldEnum = (typeof LawArticleScalarFieldEnum)[keyof typeof LawArticleScalarFieldEnum]
+
+
+export const ClauseTemplateScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  contractType: 'contractType',
+  content: 'content',
+  riskLevel: 'riskLevel',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ClauseTemplateScalarFieldEnum = (typeof ClauseTemplateScalarFieldEnum)[keyof typeof ClauseTemplateScalarFieldEnum]
 
 
 export const FileUploadScalarFieldEnum = {
@@ -2546,6 +2809,9 @@ export type GlobalOmitConfig = {
   notification?: Prisma.NotificationOmit
   subscription?: Prisma.SubscriptionOmit
   auditLog?: Prisma.AuditLogOmit
+  law?: Prisma.LawOmit
+  lawArticle?: Prisma.LawArticleOmit
+  clauseTemplate?: Prisma.ClauseTemplateOmit
   fileUpload?: Prisma.FileUploadOmit
 }
 
