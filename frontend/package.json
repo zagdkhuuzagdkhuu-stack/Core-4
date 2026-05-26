@@ -1,25 +1,24 @@
 {
-  "name": "ai-contract-automation-frontend",
-  "version": "1.0.0",
+  "name": "draftly-frontend",
   "private": true,
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "dev": "vite"
   },
   "dependencies": {
-    "@react-oauth/google": "^0.13.5",
-    "@tailwindcss/vite": "^4.2.4",
-    "axios": "^1.6.8",
-    "lucide-react": "^1.14.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.22.3",
-    "tailwindcss": "^4.2.4"
+    "lucide-react": "0.487.0",
+    "motion": "12.23.24",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "tw-animate-css": "1.3.8"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^5.2.0",
-    "vite": "^5.4.21"
+    "@tailwindcss/vite": "4.1.12",
+    "@vitejs/plugin-react": "4.7.0",
+    "tailwindcss": "4.1.12",
+    "typescript": "5.9.3",
+    "vite": "6.3.5"
   }
 }

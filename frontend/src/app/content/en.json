@@ -1,0 +1,91 @@
+{
+  "brand": "Draftly.",
+  "tabs": ["contract_v3.doc", "template_nda", "analysis"],
+  "navLinks": ["Template", "Analyze", "Contact us"],
+  "language": "ENG",
+  "switchLabel": "MN",
+  "login": "Login",
+  "hero": {
+    "title": "Artificial intelligence-based contract and document automation system",
+    "primaryCta": "Get started",
+    "secondaryCta": "Try free",
+    "partnerLabel": "Partner organizations"
+  },
+  "partners": [
+    "LexisNexis",
+    "DocuSign",
+    "Clio",
+    "Westlaw",
+    "Ironclad",
+    "ContractPod+",
+    "Luminance",
+    "Kira Systems",
+    "Litera",
+    "NetDocuments",
+    "Knowably",
+    "Juro"
+  ],
+  "featuresSectionTitle": "What do we do?",
+  "features": [
+    {
+      "num": "01",
+      "title": "Flexible",
+      "desc": "Create contracts and documents based on your specific needs using intelligent templates that adapt to every requirement."
+    },
+    {
+      "num": "02",
+      "title": "Analyze",
+      "desc": "AI checks risks, missing clauses, and unclear terms. Get instant insights on every document you upload."
+    },
+    {
+      "num": "00",
+      "title": "Edit",
+      "desc": "Rewrite, simplify, or improve document content with AI assistance that understands legal context deeply."
+    }
+  ],
+  "templateFlow": {
+    "windowTitle": "Contract Templates",
+    "itemSubtitle": "Legal template",
+    "titleLines": [
+      "Share your information",
+      "We prepare your",
+      "document"
+    ],
+    "description": "Choose a contract type and enter the required information. Draftly generates the first version of your document with AI.",
+    "cta": "Start"
+  },
+  "templates": [
+    "Employment Agreement",
+    "Service Agreement",
+    "Loan Agreement",
+    "Lease Agreement",
+    "NDA Agreement",
+    "Shareholders Agreement",
+    "Consulting Agreement",
+    "Partnership Agreement",
+    "Purchase Agreement"
+  ],
+  "upload": {
+    "labels": ["Deep analysis", "Risk analysis", "Edit"],
+    "eyebrow": "Upload & Organize Document",
+    "title": "Drop your documents here",
+    "description": "PDF, DOCX, TXT up to 10MB",
+    "cta": "Browse Files"
+  },
+  "footer": {
+    "tagline": "Developed by Core 4",
+    "copyright": "©2026 Core 4",
+    "companyTitle": "Company",
+    "companyLinks": ["About us", "User guide"],
+    "contactTitle": "Contact",
+    "address": "Mongolia, Ulaanbaatar",
+    "phone": "+976 7707 1777",
+    "email": "info@draftly.mn",
+    "additionalTitle": "Additional",
+    "additionalLinks": [
+      "Terms of service",
+      "Privacy policy",
+      "FAQ"
+    ]
+  }
+}
