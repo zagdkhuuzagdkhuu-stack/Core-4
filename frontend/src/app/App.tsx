@@ -1,8 +1,8 @@
 ﻿import { useState, useEffect, useRef } from "react";
-import type { ReactNode } from "react";
+import type { ReactNode, RefObject } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
-  FileText, BarChart3, ArrowRight, ArrowLeft, Globe, Twitter, Linkedin,
+  FileText, BarChart3, ArrowRight, ArrowLeft, Twitter, Linkedin,
   Instagram, Facebook, Phone, Mail, MapPin, Sun, Moon, UploadCloud,
   LoaderCircle, Check, Archive, Download, Trash2, House, Search, QrCode,
 } from "lucide-react";
@@ -14,14 +14,99 @@ type HeaderTab = "Home" | "Template" | "Analysis" | "Contact us";
 type AppPage = "home" | "template" | "analysis";
 type AnalysisStep = "upload" | "processing" | "result";
 type TemplateStep = "template" | "details" | "verification" | "payment" | "result";
+type FolderNavControls = {
+  isDark: boolean;
+  languageLabel: string;
+  loginLabel: string;
+  onThemeToggle: () => void;
+  onLanguageToggle: () => void;
+};
 
 const LOCALES = {
   mn: mnContent,
   en: enContent,
 };
 
-// Positions of the 3 numbers on the right semicircle (degrees from top, clockwise)
-const CIRCLE_ANGLES = [52, 96, 140];
+const ORBIT_FEATURES = [
+  {
+    num: "01",
+    title: "Template Creation",
+    desc: "Choose from AI-powered legal templates.",
+  },
+  {
+    num: "02",
+    title: "Analysis",
+    desc: "AI checks risks and missing clauses.",
+  },
+  {
+    num: "03",
+    title: "Smart Editing",
+    desc: "Rewrite and improve documents.",
+  },
+  {
+    num: "04",
+    title: "Risk Detection",
+    desc: "Detect unclear conditions.",
+  },
+  {
+    num: "05",
+    title: "Contract Generation",
+    desc: "Generate complete agreements.",
+  },
+  {
+    num: "06",
+    title: "Recommendations",
+    desc: "Receive AI suggestions.",
+  },
+  {
+    num: "07",
+    title: "Export Options",
+    desc: "Download as PDF, DOCX, PPT.",
+  },
+  {
+    num: "08",
+    title: "Archive System",
+    desc: "Store and manage documents.",
+  },
+];
+
+const ORBIT_ANGLES = [18, 64, 109, 154, 205, 250, 298, 336];
+const ORBIT_RADII = [28, 36, 44, 52, 60, 68, 76, 84];
+const ORBIT_PARTICLES = [
+  { left: "17%", top: "22%" },
+  { left: "31%", top: "76%" },
+  { left: "45%", top: "13%" },
+  { left: "62%", top: "82%" },
+  { left: "74%", top: "28%" },
+  { left: "86%", top: "61%" },
+  { left: "22%", top: "54%" },
+  { left: "56%", top: "39%" },
+  { left: "39%", top: "91%" },
+  { left: "79%", top: "8%" },
+];
+
+const SECTION_REVEAL = {
+  hidden: { opacity: 0, y: 60 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: "easeOut",
+      staggerChildren: 0.12,
+      when: "beforeChildren",
+    },
+  },
+};
+
+const REVEAL_ITEM = {
+  hidden: { opacity: 0, y: 28 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: "easeOut" },
+  },
+};
 
 const HEADER_TABS = [
   { label: "Home", Icon: House, tone: "#F7F1EC" },
@@ -66,7 +151,7 @@ const TEMPLATE_CARDS = [
 // â”€â”€â”€ Hooks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function useInView(threshold = 0.15) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLElement>(null);
   const [inView, setInView] = useState(false);
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -79,45 +164,252 @@ function useInView(threshold = 0.15) {
   return { ref, inView };
 }
 
+function OpeningSplash({ onComplete }: { onComplete: () => void }) {
+  const letters = "Draftly.".split("");
+
+  useEffect(() => {
+    const timer = window.setTimeout(onComplete, 2850);
+    return () => window.clearTimeout(timer);
+  }, [onComplete]);
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0C1519]"
+      initial={{ opacity: 1 }}
+      animate={{ opacity: [1, 1, 0] }}
+      transition={{ duration: 2.85, times: [0, 0.86, 1], ease: "easeInOut" }}
+      aria-hidden="true"
+    >
+      <motion.div
+        className="font-display text-6xl font-black tracking-normal text-[#F7F1EC] md:text-7xl"
+        initial={{ x: 0, y: 0, scale: 1 }}
+        animate={{
+          x: ["0vw", "0vw", "calc(-50vw + 120px)"],
+          y: ["0vh", "0vh", "calc(-50vh + 78px)"],
+          scale: [1, 1, 0.58],
+          textShadow: [
+            "0 0 0 rgba(207,157,123,0)",
+            "0 0 28px rgba(207,157,123,0.36)",
+            "0 0 12px rgba(207,157,123,0.18)",
+          ],
+        }}
+        transition={{ duration: 2.55, times: [0, 0.66, 1], ease: [0.22, 1, 0.36, 1] }}
+      >
+        {letters.map((letter, index) => (
+          <motion.span
+            key={`${letter}-${index}`}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.16 + index * 0.085, duration: 0.28, ease: "easeOut" }}
+          >
+            {letter}
+          </motion.span>
+        ))}
+      </motion.div>
+    </motion.div>
+  );
+}
+
 function FolderTabs({
   activeTab,
   onSelect,
+  controls,
+  homeGlobal = false,
+  scrollContainerRef,
 }: {
   activeTab: HeaderTab;
   onSelect: (tab: HeaderTab) => void;
+  controls: FolderNavControls;
+  homeGlobal?: boolean;
+  scrollContainerRef?: RefObject<HTMLElement>;
 }) {
-  return (
-    <div className="relative z-10 overflow-x-auto rounded-t-[2rem] bg-[#0C1519] px-4 pt-5 sm:px-7">
-      <div className="flex min-w-max items-end pl-1">
-        {HEADER_TABS.map(({ label, Icon, tone }, index) => {
-          const active = label === activeTab;
+  const navItems: HeaderTab[] = ["Home", "Template", "Analysis", "Contact us"];
+  const [isHidden, setIsHidden] = useState(false);
+  const [isSimpleHomeNav, setIsSimpleHomeNav] = useState(false);
+  const lastScrollY = useRef(0);
 
-          return (
-            <button
-              key={label}
-              type="button"
-              onClick={() => onSelect(label)}
-              style={{
-                backgroundColor: active ? "#FFFDF9" : tone,
-                zIndex: active ? 30 : 20 - index,
-              }}
-              className={`group relative -mb-px flex h-14 min-w-[156px] items-center justify-center gap-2.5 border border-[#D8C6BA] border-b-0 px-6 text-sm font-semibold text-[#162127] shadow-[0_10px_22px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.55)] transition-all duration-300 ease-out first:ml-0 sm:h-16 sm:min-w-[190px] ${
-                index > 0 ? "-ml-5 sm:-ml-7" : ""
-              } ${
-                active
-                  ? "rounded-t-[24px] -translate-y-1 shadow-[0_18px_38px_rgba(0,0,0,0.38),0_-3px_18px_rgba(247,241,236,0.14),inset_0_1px_0_rgba(255,255,255,0.9)]"
-                  : "rounded-t-[20px] opacity-95 hover:-translate-y-1 hover:brightness-105 hover:shadow-[0_14px_30px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.55)]"
-              }`}
-            >
-              <span className="pointer-events-none absolute inset-x-4 bottom-0 h-px bg-[#D8C6BA]/70" />
-              <span className="pointer-events-none absolute inset-x-6 top-1 h-px rounded-full bg-white/55 opacity-80" />
-              <Icon size={16} strokeWidth={1.8} className="shrink-0 text-[#724B39]" />
-              <span className="leading-none">{label}</span>
-            </button>
-          );
-        })}
+  useEffect(() => {
+    const onScroll = () => {
+      const scrollElement = scrollContainerRef?.current;
+      const currentScrollY = scrollElement ? scrollElement.scrollTop : window.scrollY;
+      const scrollingDown = currentScrollY > lastScrollY.current;
+      const simpleThreshold = (scrollElement?.clientHeight ?? window.innerHeight) * 0.55;
+
+      setIsHidden(scrollingDown && currentScrollY > 90);
+      setIsSimpleHomeNav(homeGlobal && currentScrollY > simpleThreshold);
+      lastScrollY.current = currentScrollY;
+    };
+
+    const scrollTarget = scrollContainerRef?.current ?? window;
+    onScroll();
+    scrollTarget.addEventListener("scroll", onScroll, { passive: true });
+    return () => scrollTarget.removeEventListener("scroll", onScroll);
+  }, [homeGlobal, scrollContainerRef]);
+
+  return (
+    <motion.header
+      className={`top-0 z-50 flex items-start gap-4 transition-all duration-300 ${
+        homeGlobal ? "fixed left-0 right-0" : "sticky"
+      } ${
+        isSimpleHomeNav
+          ? "bg-[#F7F1EC]/96 px-5 py-3 shadow-[0_14px_34px_rgba(12,21,25,0.10)] backdrop-blur-md sm:px-8"
+          : `bg-transparent ${
+              homeGlobal ? "px-3 pt-3 sm:pr-7" : "-mb-[2px] pl-0 pr-4 pt-0 sm:pr-7"
+            }`
+      }`}
+      animate={{ y: isHidden ? -120 : 0, opacity: isHidden ? 0 : 1 }}
+      transition={{ duration: 0.36, ease: "easeOut" }}
+    >
+      <div className={`relative w-full text-[#0C1519] ${isSimpleHomeNav ? "max-w-none" : "max-w-[920px]"}`}>
+        <motion.div
+          className={`relative z-10 flex items-center gap-3 overflow-x-auto transition-all duration-300 sm:gap-5 ${
+            isSimpleHomeNav
+              ? "min-h-12 rounded-none border-0 bg-transparent px-0 py-0 shadow-none"
+              : "-mb-[2px] min-h-20 rounded-t-[2.1rem] border border-[#D8C6BA]/55 border-b-0 bg-[#F7F1EC] px-7 py-4 shadow-none sm:px-9"
+          }`}
+          animate={{ y: 0 }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <button
+            type="button"
+            onClick={() => onSelect("Home")}
+            className="mr-2 shrink-0 font-display text-3xl font-black leading-none text-[#0C1519] transition-transform duration-300 hover:-translate-y-0.5 sm:mr-4"
+          >
+            Draftly.
+          </button>
+          <span className="h-6 w-px shrink-0 bg-[#724B39]/30" />
+          <nav className="flex min-w-max items-center gap-2 sm:gap-3">
+            {navItems.map(label => {
+              const active = activeTab === label;
+
+              return (
+                <button
+                  key={label}
+                  type="button"
+                  onClick={() => onSelect(label)}
+                  className={`group relative flex min-w-[7.25rem] justify-center rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_22px_rgba(207,157,123,0.28)] sm:px-5 ${
+                    active ? "text-[#F7F1EC]" : "text-[#0C1519]/82 hover:text-[#0C1519]"
+                  }`}
+                >
+                  {active && (
+                    <motion.span
+                      layoutId="folder-nav-active-pill"
+                      className="absolute inset-0 rounded-full bg-[#724B39]"
+                      transition={{ duration: 0.32, ease: "easeOut" }}
+                    />
+                  )}
+                  <span className="relative z-10">{label}</span>
+                  {!active && <span className="absolute bottom-1.5 left-5 right-5 h-px scale-x-0 bg-[#724B39] transition-transform duration-300 group-hover:scale-x-100" />}
+                </button>
+              );
+            })}
+          </nav>
+        </motion.div>
       </div>
-    </div>
+
+      <div className={`ml-auto hidden shrink-0 items-center gap-2 md:flex ${isSimpleHomeNav ? "pt-0" : "pt-4"}`}>
+        <button
+          type="button"
+          onClick={controls.onThemeToggle}
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-[#F7F1EC]/20 bg-[#162127] text-[#F7F1EC] shadow-[0_10px_24px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#CF9D7B]"
+          aria-label="Toggle dark mode"
+        >
+          {controls.isDark ? <Sun size={15} /> : <Moon size={15} />}
+        </button>
+        <button
+          type="button"
+          onClick={controls.onLanguageToggle}
+          className="flex min-w-[6.25rem] justify-center rounded-full border border-[#F7F1EC]/20 bg-[#162127] px-4 py-2.5 text-sm font-semibold text-[#F7F1EC] shadow-[0_10px_24px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#CF9D7B]"
+          aria-label="Switch language"
+        >
+          🌐 {controls.languageLabel}
+        </button>
+        <button className="min-w-[8.5rem] rounded-full bg-[#0C1519] px-6 py-2.5 text-sm font-semibold text-white shadow-[0_10px_26px_rgba(0,0,0,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_26px_rgba(207,157,123,0.32)]">
+          {controls.loginLabel}
+        </button>
+      </div>
+    </motion.header>
+  );
+}
+
+function HomeSimpleNav({
+  onSelect,
+  controls,
+  scrollContainerRef,
+}: {
+  onSelect: (tab: HeaderTab) => void;
+  controls: FolderNavControls;
+  scrollContainerRef: RefObject<HTMLElement>;
+}) {
+  const navItems: HeaderTab[] = ["Home", "Template", "Analysis", "Contact us"];
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const scrollElement = scrollContainerRef.current;
+    if (!scrollElement) return;
+
+    const onScroll = () => {
+      setIsVisible(scrollElement.scrollTop > scrollElement.clientHeight * 0.55);
+    };
+
+    onScroll();
+    scrollElement.addEventListener("scroll", onScroll, { passive: true });
+    return () => scrollElement.removeEventListener("scroll", onScroll);
+  }, [scrollContainerRef]);
+
+  return (
+    <motion.header
+      className="fixed left-0 right-0 top-0 z-50 flex items-center gap-4 bg-[#F7F1EC]/96 px-5 py-3 shadow-[0_14px_34px_rgba(12,21,25,0.10)] backdrop-blur-md sm:px-8"
+      animate={{ y: isVisible ? 0 : -90, opacity: isVisible ? 1 : 0 }}
+      transition={{ duration: 0.32, ease: "easeOut" }}
+      style={{ pointerEvents: isVisible ? "auto" : "none" }}
+    >
+      <button
+        type="button"
+        onClick={() => onSelect("Home")}
+        className="mr-3 shrink-0 font-display text-3xl font-black leading-none text-[#0C1519] transition-transform duration-300 hover:-translate-y-0.5"
+      >
+        Draftly.
+      </button>
+      <span className="h-6 w-px shrink-0 bg-[#724B39]/30" />
+      <nav className="flex min-w-max items-center gap-2 sm:gap-3">
+        {navItems.map(label => (
+          <button
+            key={label}
+            type="button"
+            onClick={() => onSelect(label)}
+            className={`group relative flex min-w-[7.25rem] justify-center rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 sm:px-5 ${
+              label === "Home" ? "text-[#F7F1EC]" : "text-[#0C1519]/82 hover:text-[#0C1519]"
+            }`}
+          >
+            {label === "Home" && <span className="absolute inset-0 rounded-full bg-[#724B39]" />}
+            <span className="relative z-10">{label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="ml-auto hidden shrink-0 items-center gap-2 md:flex">
+        <button
+          type="button"
+          onClick={controls.onThemeToggle}
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-[#F7F1EC]/20 bg-[#162127] text-[#F7F1EC] shadow-[0_10px_24px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#CF9D7B]"
+          aria-label="Toggle dark mode"
+        >
+          {controls.isDark ? <Sun size={15} /> : <Moon size={15} />}
+        </button>
+        <button
+          type="button"
+          onClick={controls.onLanguageToggle}
+          className="flex min-w-[6.25rem] justify-center rounded-full border border-[#F7F1EC]/20 bg-[#162127] px-4 py-2.5 text-sm font-semibold text-[#F7F1EC] shadow-[0_10px_24px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#CF9D7B]"
+          aria-label="Switch language"
+        >
+          🌐 {controls.languageLabel}
+        </button>
+        <button className="min-w-[8.5rem] rounded-full bg-[#0C1519] px-6 py-2.5 text-sm font-semibold text-white shadow-[0_10px_26px_rgba(0,0,0,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_26px_rgba(207,157,123,0.32)]">
+          {controls.loginLabel}
+        </button>
+      </div>
+    </motion.header>
   );
 }
 
@@ -143,7 +435,7 @@ function AnalysisStepper({ step }: { step: AnalysisStep }) {
               animate={{ backgroundColor: color, scale: active ? 1.08 : 1 }}
               transition={{ duration: 0.35 }}
             />
-            <span className="hidden text-xs font-semibold uppercase tracking-[0.16em] text-[#3A3534]/70 lg:block">
+            <span className="hidden text-xs font-semibold uppercase tracking-[0.16em] text-[#3A3534]/70 dark:text-[#F7F1EC]/70 lg:block">
               {item.label}
             </span>
           </motion.div>
@@ -156,9 +448,11 @@ function AnalysisStepper({ step }: { step: AnalysisStep }) {
 function AnalysisWorkflow({
   onBack,
   onTabSelect,
+  navControls,
 }: {
   onBack: () => void;
   onTabSelect: (tab: HeaderTab) => void;
+  navControls: FolderNavControls;
 }) {
   const [step, setStep] = useState<AnalysisStep>("upload");
   const [isDragActive, setIsDragActive] = useState(false);
@@ -177,11 +471,11 @@ function AnalysisWorkflow({
   }, [step]);
 
   return (
-    <section className="px-3 pt-3 pb-6 min-h-screen flex flex-col">
-      <FolderTabs activeTab="Analysis" onSelect={onTabSelect} />
+    <section className="px-3 pt-3 pb-6 min-h-screen flex flex-col bg-[#EFE5DC] dark:bg-[#0C1519]">
+      <FolderTabs activeTab="Analysis" onSelect={onTabSelect} controls={navControls} />
 
       <motion.div
-        className="relative flex-1 overflow-hidden rounded-b-[2rem] rounded-tr-[2rem] border border-[#D8C6BA]/70 bg-[#FFFDF9] shadow-[0_16px_70px_rgba(12,21,25,0.12)]"
+        className="relative flex-1 overflow-hidden rounded-b-[2rem] rounded-tr-[2rem] border border-[#D8C6BA]/70 bg-[#FFFDF9] shadow-[0_16px_70px_rgba(12,21,25,0.12)] dark:border-[#CF9D7B]/15 dark:bg-[#162127] dark:shadow-[0_18px_80px_rgba(0,0,0,0.34)]"
         animate={{ y: [0, -4, 0] }}
         transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
       >
@@ -205,12 +499,12 @@ function AnalysisWorkflow({
             <button
               type="button"
               onClick={onBack}
-              className="group flex h-10 w-10 items-center justify-center rounded-full border border-[#D8C6BA] bg-white/60 text-[#0C1519] transition-all duration-300 hover:border-[#CF9D7B] hover:bg-[#F7F1EC]"
+              className="group flex h-10 w-10 items-center justify-center rounded-full border border-[#D8C6BA] bg-white/60 text-[#0C1519] transition-all duration-300 hover:border-[#CF9D7B] hover:bg-[#F7F1EC] dark:border-[#CF9D7B]/25 dark:bg-[#0C1519]/70 dark:text-[#F7F1EC] dark:hover:bg-[#3A3534]"
               aria-label="Back to homepage"
             >
               <ArrowLeft size={17} className="transition-transform duration-300 group-hover:-translate-x-0.5" />
             </button>
-            <span className="font-display text-2xl font-black text-[#0C1519]">Draftly.</span>
+            <span className="font-display text-2xl font-black text-[#0C1519] dark:text-[#F7F1EC]">Draftly.</span>
           </div>
 
           <div className="grid flex-1 gap-8 lg:grid-cols-[120px_minmax(0,1fr)]">
@@ -228,7 +522,7 @@ function AnalysisWorkflow({
                   exit={{ opacity: 0, x: -32 }}
                   transition={{ duration: 0.38, ease: "easeOut" }}
                 >
-                  <h1 className="mb-12 font-display text-4xl font-bold text-[#0C1519] md:text-5xl">
+                  <h1 className="mb-12 font-display text-4xl font-bold text-[#0C1519] dark:text-[#F7F1EC] md:text-5xl">
                     Анализ хийх хэсэг
                   </h1>
                   <input
@@ -241,7 +535,7 @@ function AnalysisWorkflow({
                     }}
                   />
                   <motion.div
-                    className={`relative w-full max-w-xl rounded-[2rem] border-2 border-dashed bg-white px-8 py-14 shadow-[0_28px_70px_rgba(12,21,25,0.12)] transition-all duration-300 ${
+                    className={`relative w-full max-w-xl rounded-[2rem] border-2 border-dashed bg-white px-8 py-14 shadow-[0_28px_70px_rgba(12,21,25,0.12)] transition-all duration-300 dark:bg-[#0C1519]/58 dark:shadow-[0_28px_70px_rgba(0,0,0,0.24)] ${
                       isDragActive
                         ? "scale-[1.02] border-[#CF9D7B] shadow-[0_0_0_6px_rgba(207,157,123,0.12),0_32px_80px_rgba(12,21,25,0.15)]"
                         : "border-[#D8C6BA]"
@@ -264,8 +558,8 @@ function AnalysisWorkflow({
                     <p className="mb-4 text-[10px] font-mono uppercase tracking-[0.2em] text-[#724B39]">
                       UPLOAD & ORGANIZE DOCUMENT
                     </p>
-                    <h2 className="mb-2 text-xl font-semibold text-[#0C1519]">Drop your documents here</h2>
-                    <p className="mb-8 text-sm text-[#3A3534]/68">PDF DOCX TXT up to 50MB</p>
+                    <h2 className="mb-2 text-xl font-semibold text-[#0C1519] dark:text-[#F7F1EC]">Drop your documents here</h2>
+                    <p className="mb-8 text-sm text-[#3A3534]/68 dark:text-[#EFE5DC]/62">PDF DOCX TXT up to 50MB</p>
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
@@ -286,11 +580,11 @@ function AnalysisWorkflow({
                   exit={{ opacity: 0, x: -32 }}
                   transition={{ duration: 0.38, ease: "easeOut" }}
                 >
-                  <h1 className="mb-12 font-display text-4xl font-bold text-[#0C1519] md:text-5xl">
+                  <h1 className="mb-12 font-display text-4xl font-bold text-[#0C1519] dark:text-[#F7F1EC] md:text-5xl">
                     Анализ хийж байна
                   </h1>
                   <motion.div
-                    className="relative w-full max-w-lg rounded-[2rem] border border-[#D8C6BA] bg-white px-8 py-16 shadow-[0_30px_80px_rgba(12,21,25,0.14)]"
+                    className="relative w-full max-w-lg rounded-[2rem] border border-[#D8C6BA] bg-white px-8 py-16 shadow-[0_30px_80px_rgba(12,21,25,0.14)] dark:border-[#CF9D7B]/20 dark:bg-[#0C1519]/58 dark:shadow-[0_30px_80px_rgba(0,0,0,0.28)]"
                     animate={{ y: [0, -8, 0], scale: [1, 1.01, 1] }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                   >
@@ -305,8 +599,8 @@ function AnalysisWorkflow({
                       transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
                     />
                     <LoaderCircle className="mx-auto mb-8 h-16 w-16 animate-spin text-[#724B39]" strokeWidth={1.5} />
-                    <h2 className="mb-3 text-xl font-semibold text-[#0C1519]">AI таны гэрээг шалгаж байна</h2>
-                    <p className="mx-auto max-w-sm text-sm leading-6 text-[#3A3534]/68">
+                    <h2 className="mb-3 text-xl font-semibold text-[#0C1519] dark:text-[#F7F1EC]">AI таны гэрээг шалгаж байна</h2>
+                    <p className="mx-auto max-w-sm text-sm leading-6 text-[#3A3534]/68 dark:text-[#EFE5DC]/62">
                       Эрсдэл, дутуу нөхцөлүүд боловсруулагдаж байна
                     </p>
                   </motion.div>
@@ -369,7 +663,7 @@ function AnalysisResult({ onFinish }: { onFinish: () => void }) {
         <div className="mb-5 flex items-end justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#724B39]">Risk Score</p>
-            <p className="mt-2 text-4xl font-bold text-[#0C1519]">7.5/10</p>
+            <p className="mt-2 text-4xl font-bold text-[#0C1519] dark:text-[#F7F1EC]">7.5/10</p>
           </div>
           <div className="relative h-16 w-16 rounded-full bg-[#EFE5DC]">
             <motion.div
@@ -381,7 +675,7 @@ function AnalysisResult({ onFinish }: { onFinish: () => void }) {
           </div>
         </div>
         {["Scope of Work", "Payment Terms", "Confidentiality"].map(item => (
-          <p key={item} className="mb-2 flex items-center gap-2 text-sm text-[#3A3534]">
+          <p key={item} className="mb-2 flex items-center gap-2 text-sm text-[#3A3534] dark:text-[#EFE5DC]/75">
             <Check size={15} className="text-[#724B39]" /> {item}
           </p>
         ))}
@@ -391,7 +685,7 @@ function AnalysisResult({ onFinish }: { onFinish: () => void }) {
       <div>
         <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-[#724B39]">Missing Clauses</p>
         {["Termination missing", "Liability missing", "Payment delay condition missing"].map(item => (
-          <p key={item} className="mb-3 text-sm text-[#3A3534]/82">- {item}</p>
+          <p key={item} className="mb-3 text-sm text-[#3A3534]/82 dark:text-[#EFE5DC]/75">- {item}</p>
         ))}
       </div>
     ),
@@ -399,7 +693,7 @@ function AnalysisResult({ onFinish }: { onFinish: () => void }) {
       <div>
         <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-[#724B39]">AI Analysis Result</p>
         <motion.p
-          className="overflow-hidden whitespace-nowrap text-sm leading-6 text-[#3A3534]/82"
+          className="overflow-hidden whitespace-nowrap text-sm leading-6 text-[#3A3534]/82 dark:text-[#EFE5DC]/75"
           initial={{ width: 0 }}
           animate={{ width: "100%" }}
           transition={{ duration: 1.4, ease: "easeOut" }}
@@ -420,13 +714,13 @@ function AnalysisResult({ onFinish }: { onFinish: () => void }) {
       transition={{ duration: 0.38, ease: "easeOut" }}
     >
       <motion.div
-        className="relative min-h-[560px] overflow-hidden rounded-[2rem] border border-[#D8C6BA] bg-white p-8 shadow-[0_24px_70px_rgba(12,21,25,0.12)]"
+        className="relative min-h-[560px] overflow-hidden rounded-[2rem] border border-[#D8C6BA] bg-white p-8 shadow-[0_24px_70px_rgba(12,21,25,0.12)] dark:border-[#CF9D7B]/20 dark:bg-[#0C1519]/58 dark:shadow-[0_24px_70px_rgba(0,0,0,0.28)]"
         animate={{ y: [0, -6, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
       >
         <div className="absolute inset-x-8 top-7 h-px bg-[#D8C6BA]/70" />
-        <div className="h-full overflow-y-auto pr-3 text-left text-sm leading-7 text-[#3A3534]/78">
-          <h2 className="mb-7 text-2xl font-semibold text-[#0C1519]">Service Agreement Preview</h2>
+        <div className="h-full overflow-y-auto pr-3 text-left text-sm leading-7 text-[#3A3534]/78 dark:text-[#EFE5DC]/70">
+          <h2 className="mb-7 text-2xl font-semibold text-[#0C1519] dark:text-[#F7F1EC]">Service Agreement Preview</h2>
           {[...Array(10)].map((_, index) => (
             <p key={index} className="mb-5">
               This agreement outlines scope, payment terms, confidentiality expectations, delivery dates,
@@ -441,7 +735,7 @@ function AnalysisResult({ onFinish }: { onFinish: () => void }) {
         {cards.map((card, index) => (
           <motion.div
             key={index}
-            className="rounded-[1.5rem] border border-[#D8C6BA] bg-white/82 p-6 shadow-[0_16px_38px_rgba(12,21,25,0.08)]"
+            className="rounded-[1.5rem] border border-[#D8C6BA] bg-white/82 p-6 shadow-[0_16px_38px_rgba(12,21,25,0.08)] dark:border-[#CF9D7B]/20 dark:bg-[#0C1519]/52 dark:shadow-[0_16px_38px_rgba(0,0,0,0.22)]"
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.42, delay: index * 0.12 }}
@@ -463,7 +757,7 @@ function AnalysisResult({ onFinish }: { onFinish: () => void }) {
               <button
                 key={index}
                 type="button"
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-[#D8C6BA] bg-white text-[#724B39] transition-all duration-300 hover:-translate-y-1 hover:bg-[#F7F1EC]"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-[#D8C6BA] bg-white text-[#724B39] transition-all duration-300 hover:-translate-y-1 hover:bg-[#F7F1EC] dark:border-[#CF9D7B]/25 dark:bg-[#0C1519]/60 dark:text-[#CF9D7B] dark:hover:bg-[#3A3534]"
                 aria-label={index === 0 ? "Archive" : "Download"}
               >
                 <Icon size={17} />
@@ -498,7 +792,7 @@ function TemplateStepper({ step }: { step: TemplateStep }) {
               animate={{ backgroundColor: color, scale: active ? 1.08 : 1 }}
               transition={{ duration: 0.35 }}
             />
-            <span className="hidden text-xs font-semibold uppercase tracking-[0.16em] text-[#F7F1EC]/72 lg:block">
+            <span className="hidden text-xs font-semibold uppercase tracking-[0.16em] text-[#3A3534]/70 dark:text-[#F7F1EC]/70 lg:block">
               {item.label}
             </span>
           </motion.div>
@@ -512,29 +806,31 @@ function TemplateShell({
   step,
   onBackHome,
   onTabSelect,
+  navControls,
   children,
 }: {
   step: TemplateStep;
   onBackHome: () => void;
   onTabSelect: (tab: HeaderTab) => void;
+  navControls: FolderNavControls;
   children: ReactNode;
 }) {
   return (
-    <section className="px-3 pt-3 pb-6 min-h-screen flex flex-col bg-[#0C1519]">
-      <FolderTabs activeTab="Template" onSelect={onTabSelect} />
-      <div className="relative flex-1 overflow-hidden rounded-b-[2rem] rounded-tr-[2rem] border border-[#D8C6BA]/20 bg-[#0C1519] shadow-[0_18px_80px_rgba(0,0,0,0.34)]">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(207,157,123,0.16),transparent_26%),radial-gradient(circle_at_82%_12%,rgba(247,241,236,0.09),transparent_24%)]" />
+    <section className="px-3 pt-3 pb-6 min-h-screen flex flex-col bg-[#EFE5DC] dark:bg-[#0C1519]">
+      <FolderTabs activeTab="Template" onSelect={onTabSelect} controls={navControls} />
+      <div className="relative flex-1 overflow-hidden rounded-b-[2rem] rounded-tr-[2rem] border border-[#D8C6BA]/70 bg-[#FFFDF9] shadow-[0_16px_70px_rgba(12,21,25,0.12)] dark:border-[#CF9D7B]/15 dark:bg-[#162127] dark:shadow-[0_18px_80px_rgba(0,0,0,0.34)]">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(207,157,123,0.12),transparent_26%),radial-gradient(circle_at_82%_12%,rgba(216,198,186,0.20),transparent_24%)]" />
         <div className="relative z-10 flex min-h-[calc(100vh-7rem)] flex-col px-5 py-5 sm:px-8 lg:px-10">
           <div className="mb-8 flex items-center justify-between">
             <button
               type="button"
               onClick={onBackHome}
-              className="group flex h-10 w-10 items-center justify-center rounded-full border border-[#D8C6BA]/35 bg-[#162127]/80 text-[#F7F1EC] transition-all duration-300 hover:border-[#CF9D7B] hover:bg-[#3A3534]"
+              className="group flex h-10 w-10 items-center justify-center rounded-full border border-[#D8C6BA] bg-white/60 text-[#0C1519] transition-all duration-300 hover:border-[#CF9D7B] hover:bg-[#F7F1EC] dark:border-[#CF9D7B]/25 dark:bg-[#0C1519]/70 dark:text-[#F7F1EC] dark:hover:bg-[#3A3534]"
               aria-label="Back to homepage"
             >
               <ArrowLeft size={17} className="transition-transform duration-300 group-hover:-translate-x-0.5" />
             </button>
-            <span className="font-display text-2xl font-black text-[#F7F1EC]">Draftly.</span>
+            <span className="font-display text-2xl font-black text-[#0C1519] dark:text-[#F7F1EC]">Draftly.</span>
           </div>
           <div className="grid flex-1 gap-8 lg:grid-cols-[140px_minmax(0,1fr)]">
             <aside className="pt-2">
@@ -551,9 +847,11 @@ function TemplateShell({
 function TemplateWorkflow({
   onBackHome,
   onTabSelect,
+  navControls,
 }: {
   onBackHome: () => void;
   onTabSelect: (tab: HeaderTab) => void;
+  navControls: FolderNavControls;
 }) {
   const [step, setStep] = useState<TemplateStep>("template");
   const [expandedCategory, setExpandedCategory] = useState("Employment");
@@ -579,7 +877,7 @@ function TemplateWorkflow({
   };
 
   return (
-    <TemplateShell step={step} onBackHome={onBackHome} onTabSelect={onTabSelect}>
+    <TemplateShell step={step} onBackHome={onBackHome} onTabSelect={onTabSelect} navControls={navControls}>
       <AnimatePresence mode="wait">
         {step === "template" && (
           <motion.div
@@ -591,8 +889,8 @@ function TemplateWorkflow({
             transition={{ duration: 0.4, ease: "easeOut" }}
           >
             <div className="mb-10 text-center">
-              <h1 className="font-display text-4xl font-bold text-[#F7F1EC] md:text-6xl">Choose your contract type.</h1>
-              <p className="mt-3 text-sm text-[#EFE5DC]/66">Choose and forget...</p>
+              <h1 className="font-display text-4xl font-bold text-[#0C1519] dark:text-[#F7F1EC] md:text-6xl">Choose your contract type.</h1>
+              <p className="mt-3 text-sm text-[#3A3534]/66 dark:text-[#EFE5DC]/62">Choose and forget...</p>
             </div>
 
             <div className="grid gap-6 lg:grid-cols-[minmax(280px,420px)_1fr]">
@@ -764,7 +1062,7 @@ function TemplateDetails({ onBack, onContinue }: { onBack: () => void; onContinu
       exit={{ opacity: 0, x: -36 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
     >
-      <h1 className="mb-12 text-center font-display text-4xl font-bold text-[#F7F1EC] md:text-6xl">Details Input</h1>
+      <h1 className="mb-12 text-center font-display text-4xl font-bold text-[#0C1519] dark:text-[#F7F1EC] md:text-6xl">Details Input</h1>
       <div className="grid flex-1 gap-6 lg:grid-cols-2">
         {["Text Area 1", "Text Area 2"].map(label => (
           <textarea
@@ -921,37 +1219,35 @@ function TemplateResult({ onBack, onFinish }: { onBack: () => void; onFinish: ()
 export default function App() {
   const [locale, setLocale] = useState<Locale>("mn");
   const [isDark, setIsDark] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
   const [page, setPage] = useState<AppPage>("home");
-  const [activeFeature, setActiveFeature] = useState(0);
+  const [activeFeature, setActiveFeature] = useState(1);
+  const [circleTilt, setCircleTilt] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const homeScrollRef = useRef<HTMLDivElement>(null);
   const content = LOCALES[locale];
   const PARTNERS = content.partners;
-  const FEATURES = content.features;
   const TEMPLATES = content.templates;
 
   const featuresRef = useInView();
   const templateRef = useInView();
   const uploadRef   = useInView();
+  const footerRef   = useInView();
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", isDark);
   }, [isDark]);
 
   useEffect(() => {
-    const t = setInterval(() => setActiveFeature(p => (p + 1) % 3), 3800);
+    const t = setInterval(() => setActiveFeature(p => (p + 1) % ORBIT_FEATURES.length), 3800);
     return () => clearInterval(t);
   }, []);
 
-  // Circle: [prev, active, next] feature indices mapped to positions
-  const orderedByPos = [
-    (activeFeature + 2) % 3,
-    activeFeature,
-    (activeFeature + 1) % 3,
-  ];
-
   const openHome = () => {
     setPage("home");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.setTimeout(() => {
+      homeScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+    }, 80);
   };
 
   const openAnalysis = () => {
@@ -964,7 +1260,19 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const scrollHomeTo = (ref: RefObject<HTMLElement>) => {
+    setPage("home");
+    window.setTimeout(() => {
+      ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 80);
+  };
+
   const handleTabSelect = (tab: HeaderTab) => {
+    if (tab === "Home") {
+      openHome();
+      return;
+    }
+
     if (tab === "Template") {
       openTemplate();
       return;
@@ -975,11 +1283,27 @@ export default function App() {
       return;
     }
 
+    if (tab === "Contact us") {
+      scrollHomeTo(footerRef.ref);
+      return;
+    }
+
     openHome();
+  };
+
+  const navControls: FolderNavControls = {
+    isDark,
+    languageLabel: locale === "mn" ? "MN" : "ENG",
+    loginLabel: content.login,
+    onThemeToggle: () => setIsDark(d => !d),
+    onLanguageToggle: () => setLocale(current => current === "mn" ? "en" : "mn"),
   };
 
   return (
     <div className="bg-[#EFE5DC] dark:bg-[#0C1519] min-h-screen transition-colors duration-700">
+      <AnimatePresence>
+        {showSplash && <OpeningSplash onComplete={() => setShowSplash(false)} />}
+      </AnimatePresence>
       <AnimatePresence mode="wait">
         {page === "template" ? (
           <motion.div
@@ -989,7 +1313,7 @@ export default function App() {
             exit={{ opacity: 0, x: -44 }}
             transition={{ duration: 0.42, ease: "easeOut" }}
           >
-            <TemplateWorkflow onBackHome={openHome} onTabSelect={handleTabSelect} />
+            <TemplateWorkflow onBackHome={openHome} onTabSelect={handleTabSelect} navControls={navControls} />
           </motion.div>
         ) : page === "analysis" ? (
           <motion.div
@@ -999,88 +1323,63 @@ export default function App() {
             exit={{ opacity: 0, x: -44 }}
             transition={{ duration: 0.42, ease: "easeOut" }}
           >
-            <AnalysisWorkflow onBack={openHome} onTabSelect={handleTabSelect} />
+            <AnalysisWorkflow onBack={openHome} onTabSelect={handleTabSelect} navControls={navControls} />
           </motion.div>
         ) : (
           <motion.div
             key="home"
-            initial={{ opacity: 0, x: -44 }}
-            animate={{ opacity: 1, x: 0 }}
+            ref={homeScrollRef}
+            className="h-screen overflow-y-auto scroll-smooth"
+            initial={{ opacity: 0, x: -44, y: 18 }}
+            animate={{ opacity: showSplash ? 0 : 1, x: 0, y: showSplash ? 18 : 0 }}
             exit={{ opacity: 0, x: 44 }}
-            transition={{ duration: 0.42, ease: "easeOut" }}
+            transition={{ duration: 0.58, ease: "easeOut" }}
           >
+            <HomeSimpleNav onSelect={handleTabSelect} controls={navControls} scrollContainerRef={homeScrollRef} />
 
       {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
           PAGE 1 â€” HERO
           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
-      <section className="px-3 pt-3 pb-6 min-h-screen flex flex-col">
-
-        {/* Tab strip - sits above the document */}
-        <FolderTabs activeTab="Home" onSelect={handleTabSelect} />
-
+      <motion.section
+        className="px-3 pb-6 pt-3 min-h-screen flex flex-col"
+        variants={SECTION_REVEAL}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.35 }}
+      >
+        <FolderTabs activeTab="Home" onSelect={handleTabSelect} controls={navControls} />
         {/* Document body */}
         <motion.div
-          className="flex-1 bg-background border border-border rounded-b-[2rem] rounded-tr-[2rem] shadow-[0_12px_70px_rgba(0,0,0,0.07)] overflow-hidden flex flex-col"
+          className="relative flex-1 bg-background border border-border rounded-b-[2rem] rounded-tr-[2rem] shadow-[0_12px_70px_rgba(0,0,0,0.07)] overflow-hidden flex flex-col"
           animate={{ y: [0, -5, 0] }}
           transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
         >
-          {/* Nav */}
-          <nav className="flex flex-shrink-0 flex-wrap items-center justify-between gap-4 border-b border-[#D8C6BA]/80 bg-[#FFFDF9]/82 px-5 py-4 backdrop-blur-sm transition-all duration-300 sm:px-8 lg:px-10">
-            <span className="font-display text-2xl font-black tracking-[0.01em] text-[#0C1519] transition-colors duration-300">
-              {content.brand}
-            </span>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setIsDark(d => !d)}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-[#D8C6BA] bg-[#F7F1EC] text-[#3A3534] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#CF9D7B] hover:bg-[#EFE5DC] hover:text-[#0C1519]"
-                aria-label="Toggle dark mode"
-              >
-                {isDark ? <Sun size={14} /> : <Moon size={14} />}
-              </button>
-              <button
-                onClick={() => setLocale(current => current === "mn" ? "en" : "mn")}
-                className="flex items-center gap-1.5 rounded-full border border-[#D8C6BA] bg-[#F7F1EC] px-3 py-2 text-sm font-medium text-[#3A3534] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#CF9D7B] hover:bg-[#EFE5DC] hover:text-[#0C1519]"
-                aria-label="Switch language"
-              >
-                <Globe size={14} /> {content.switchLabel}
-              </button>
-              <button className="rounded-full bg-[#0C1519] px-5 py-2.5 text-sm font-semibold text-[#F7F1EC] shadow-[0_8px_20px_rgba(12,21,25,0.12)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#724B39] hover:shadow-[0_12px_26px_rgba(114,75,57,0.18)]">
-                {content.login}
-              </button>
-            </div>
-          </nav>
-
+          <div className="pointer-events-none absolute left-0 top-0 z-20 h-px w-[920px] max-w-[calc(100vw-1.5rem)] bg-background" />
           {/* Hero content */}
-          <div className="flex-1 flex flex-col items-center justify-center text-center px-6 py-20">
+          <motion.div className="flex-1 flex flex-col items-center justify-center text-center px-6 py-12 md:py-14">
             <motion.h1
-              className="font-display text-5xl md:text-[4.5rem] font-bold leading-[1.07] max-w-3xl text-foreground mb-9"
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+              className="font-display text-4xl md:text-[3.55rem] lg:text-[3.9rem] font-bold leading-[1.08] max-w-3xl text-foreground mb-7"
+              variants={REVEAL_ITEM}
             >
               {content.hero.title}
             </motion.h1>
 
             <motion.div
-              className="flex gap-3 mb-16"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.25 }}
+              className="flex gap-3 mb-11"
+              variants={REVEAL_ITEM}
             >
-              <button className="flex items-center gap-2 bg-foreground text-background px-8 py-3.5 rounded-full text-sm font-medium hover:opacity-85 active:scale-95 transition-all duration-200">
+              <button className="flex min-w-[10rem] items-center justify-center gap-2 bg-foreground text-background px-8 py-3.5 rounded-full text-sm font-medium hover:opacity-85 active:scale-95 transition-all duration-200">
                 {content.hero.primaryCta} <ArrowRight size={14} />
               </button>
-              <button className="px-8 py-3.5 rounded-full text-sm font-medium border border-border hover:bg-secondary active:scale-95 transition-all duration-200 text-foreground">
+              <button className="min-w-[10rem] px-8 py-3.5 rounded-full text-sm font-medium border border-border hover:bg-secondary active:scale-95 transition-all duration-200 text-foreground">
                 {content.hero.secondaryCta}
               </button>
             </motion.div>
 
             {/* Partner logos */}
             <motion.div
-              className="space-y-3.5 w-full max-w-lg"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.55 }}
+              className="space-y-3 w-full max-w-lg"
+              variants={REVEAL_ITEM}
             >
               <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
                 {content.hero.partnerLabel}
@@ -1098,87 +1397,120 @@ export default function App() {
                 </div>
               </div>
             </motion.div>
-          </div>
+          </motion.div>
         </motion.div>
-      </section>
+      </motion.section>
 
       {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
           PAGE 2 â€” WHAT DO WE DO?
           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
-      <section className="py-28 overflow-hidden" ref={featuresRef.ref}>
-
-        {/* Title pill */}
-        <div className="max-w-screen-xl mx-auto px-8 mb-20">
-          <motion.div
-            className="inline-flex bg-secondary dark:bg-[#162127] border border-border rounded-full px-9 py-4"
-            initial={{ opacity: 0, x: -20 }}
-            animate={featuresRef.inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="font-display text-3xl font-bold text-foreground">
-              {content.featuresSectionTitle}
-            </h2>
-          </motion.div>
-        </div>
-
-        <div className="flex items-center">
+      <motion.section
+        className="overflow-hidden bg-[#0C1519] py-20 md:py-24 min-h-screen"
+        ref={featuresRef.ref}
+        variants={SECTION_REVEAL}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.3 }}
+      >
+        <div
+          className="flex min-h-[calc(100vh-9rem)] items-center"
+          onMouseMove={event => {
+            const rect = event.currentTarget.getBoundingClientRect();
+            const offset = (event.clientX - rect.left) / rect.width - 0.5;
+            setCircleTilt(offset * 10);
+          }}
+          onMouseLeave={() => setCircleTilt(0)}
+        >
           {/* â”€â”€ Circle carousel â”€â”€ */}
-          <div className="relative flex-shrink-0 w-[280px] h-[280px] -ml-[140px]">
+          <motion.div className="relative -ml-[3vw] aspect-square w-[41vw] min-w-[390px] max-w-[650px] flex-shrink-0 md:-ml-[2vw]" variants={REVEAL_ITEM}>
 
-            {/* Outer rotating ring */}
+            <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(207,157,123,0.10),transparent_48%)]" />
+
+            {/* Subtle orbital field */}
             <motion.div
-              className="absolute inset-0 rounded-full border-2 border-border"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-            />
-
-            {/* Inner static ring */}
-            <div className="absolute inset-10 rounded-full border border-border/30" />
-
-            {/* Center dot */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-foreground/40" />
-
-            {/* Numbers â€” fixed positions, content cycles */}
-            {CIRCLE_ANGLES.map((angleDeg, posIdx) => {
-              const fIdx = orderedByPos[posIdx];
-              const f = FEATURES[fIdx];
-              const isActive = posIdx === 1;
-              const rad = (angleDeg * Math.PI) / 180;
-              const r = 106;
-              const cx = 140, cy = 140;
-              const x = cx + r * Math.sin(rad);
-              const y = cy - r * Math.cos(rad);
-
-              return (
+              className="absolute inset-0 rounded-full"
+              animate={{ rotate: 360 + circleTilt }}
+              transition={{ duration: 96, repeat: Infinity, ease: "linear" }}
+            >
+              {ORBIT_RADII.map((radius, index) => (
                 <div
-                  key={posIdx}
-                  className="absolute"
-                  style={{ left: x - 20, top: y - 14 }}
-                >
-                  <AnimatePresence mode="wait">
-                    <motion.button
-                      key={`${posIdx}-${f.num}`}
-                      className={`font-mono leading-none cursor-pointer select-none ${
-                        isActive
-                          ? "text-3xl font-bold text-foreground"
-                          : "text-sm text-muted-foreground/35"
-                      }`}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.35 }}
-                      onClick={() => setActiveFeature(fIdx)}
+                  key={radius}
+                  className={`absolute rounded-full border ${
+                    index === activeFeature
+                      ? "border-[#CF9D7B]/42 shadow-[0_0_28px_rgba(207,157,123,0.16)]"
+                      : "border-[#724B39]/18"
+                  }`}
+                  style={{
+                    inset: `${(100 - radius) / 2}%`,
+                  }}
+                />
+              ))}
+              <div className="absolute inset-[5%] rounded-full border border-[#CF9D7B]/12 shadow-[0_0_80px_rgba(207,157,123,0.12)]" />
+              {ORBIT_PARTICLES.map((particle, index) => (
+                <span
+                  key={`${particle.left}-${particle.top}`}
+                  className="absolute h-1 w-1 rounded-full bg-[#724B39]/55 shadow-[0_0_12px_rgba(207,157,123,0.22)]"
+                  style={{
+                    left: particle.left,
+                    top: particle.top,
+                    opacity: 0.26 + (index % 4) * 0.08,
+                  }}
+                />
+              ))}
+            </motion.div>
+
+            {/* Nodes */}
+            <motion.div
+              className="absolute inset-0 rounded-full"
+              animate={{ rotate: 360 + circleTilt * 1.35 }}
+              transition={{ duration: 118, repeat: Infinity, ease: "linear" }}
+            >
+              {ORBIT_FEATURES.map((feature, index) => {
+                const isActive = index === activeFeature;
+                const rad = (ORBIT_ANGLES[index] * Math.PI) / 180;
+                const radius = ORBIT_RADII[index] / 2;
+                const x = 50 + radius * Math.sin(rad);
+                const y = 50 - radius * Math.cos(rad);
+
+                return (
+                  <motion.button
+                    key={feature.num}
+                    type="button"
+                    className={`absolute flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border font-mono leading-none backdrop-blur-md transition-colors duration-500 ${
+                      isActive
+                        ? "h-16 w-16 border-[#CF9D7B] bg-[#162127]/88 text-2xl font-bold text-[#F7F1EC] shadow-[0_0_34px_rgba(207,157,123,0.42),inset_0_0_24px_rgba(207,157,123,0.08)]"
+                        : "h-11 w-11 border-[#F7F1EC]/10 bg-[#3A3534]/26 text-sm font-semibold text-[#F7F1EC]/50 shadow-[0_12px_30px_rgba(0,0,0,0.22)] hover:border-[#724B39]/70 hover:text-[#F7F1EC]/80"
+                    }`}
+                    style={{ left: `${x}%`, top: `${y}%` }}
+                    animate={{ scale: isActive ? 1.08 : 1, opacity: isActive ? 1 : 0.58 }}
+                    transition={{ duration: 0.48, ease: "easeOut" }}
+                    onClick={() => setActiveFeature(index)}
+                    aria-label={`Show ${feature.title}`}
+                  >
+                    <motion.span
+                      animate={{ rotate: -360 - circleTilt * 1.35 }}
+                      transition={{ duration: 118, repeat: Infinity, ease: "linear" }}
                     >
-                      {f.num}
-                    </motion.button>
-                  </AnimatePresence>
-                </div>
-              );
-            })}
-          </div>
+                      {feature.num}
+                    </motion.span>
+                  </motion.button>
+                );
+              })}
+            </motion.div>
+
+            {/* Quiet center field */}
+            <div className="pointer-events-none absolute inset-[30%] rounded-full border border-[#724B39]/22 bg-[#0C1519]/24 shadow-[inset_0_0_54px_rgba(0,0,0,0.22)]">
+              <div className="absolute inset-[22%] rounded-full border border-[#F7F1EC]/7 bg-[#0C1519]/18" />
+            </div>
+          </motion.div>
 
           {/* â”€â”€ Feature content â”€â”€ */}
-          <div className="flex-1 pl-16 pr-8 md:pr-24">
+          <motion.div className="flex-1 pl-10 pr-8 md:pl-16 md:pr-24" variants={REVEAL_ITEM}>
+            <div className="mb-7 inline-flex rounded-full border border-[#CF9D7B]/24 bg-[#162127] px-7 py-3 shadow-[0_18px_40px_rgba(0,0,0,0.18)]">
+              <h2 className="font-display text-2xl font-bold text-[#F7F1EC] md:text-3xl">
+                {content.featuresSectionTitle}
+              </h2>
+            </div>
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeFeature}
@@ -1187,48 +1519,54 @@ export default function App() {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.45 }}
               >
-                <p className="font-mono text-sm text-muted-foreground mb-4">
-                  {FEATURES[activeFeature].num}
+                <p className="mb-5 font-mono text-sm text-[#CF9D7B]">
+                  {ORBIT_FEATURES[activeFeature].num}
                 </p>
-                <h3 className="font-display text-6xl md:text-7xl font-bold text-foreground mb-7 leading-none">
-                  {FEATURES[activeFeature].title}
+                <h3 className="mb-7 font-display text-6xl font-bold leading-none text-[#F7F1EC] md:text-7xl">
+                  {ORBIT_FEATURES[activeFeature].title}
                 </h3>
-                <p className="text-muted-foreground text-lg leading-relaxed max-w-sm">
-                  {FEATURES[activeFeature].desc}
+                <p className="max-w-sm text-lg leading-relaxed text-[#F7F1EC]/68">
+                  {ORBIT_FEATURES[activeFeature].desc}
                 </p>
               </motion.div>
             </AnimatePresence>
 
             {/* Progress indicators */}
-            <div className="flex gap-2 mt-12">
-              {FEATURES.map((_, i) => (
+            <div className="mt-9 flex gap-2">
+              {ORBIT_FEATURES.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setActiveFeature(i)}
                   className={`h-0.5 rounded-full transition-all duration-500 ${
                     i === activeFeature
-                      ? "w-10 bg-foreground"
-                      : "w-2 bg-border hover:bg-muted-foreground/40"
+                      ? "w-10 bg-[#CF9D7B]"
+                      : "w-2 bg-[#F7F1EC]/18 hover:bg-[#CF9D7B]/48"
                   }`}
+                  aria-label={`Go to feature ${i + 1}`}
                 />
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
           PAGE 3 â€” TEMPLATE FLOW
           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
-      <section className="py-28" ref={templateRef.ref}>
+      <motion.section
+        className="min-h-screen py-28 flex items-center"
+        ref={templateRef.ref}
+        variants={SECTION_REVEAL}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.35 }}
+      >
         <div className="max-w-screen-xl mx-auto px-8 flex items-center gap-16 md:gap-24">
 
           {/* â”€â”€ 3D screen card â”€â”€ */}
           <motion.div
             className="flex-shrink-0 w-72 md:w-80"
-            initial={{ opacity: 0, x: -40 }}
-            animate={templateRef.inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.9, ease: "easeOut" }}
+            variants={REVEAL_ITEM}
           >
             <div
               className="bg-secondary dark:bg-[#162127] rounded-3xl overflow-hidden shadow-[0_40px_80px_rgba(0,0,0,0.13)] border border-border animate-floatscreen"
@@ -1267,9 +1605,7 @@ export default function App() {
           {/* â”€â”€ Text â”€â”€ */}
           <motion.div
             className="flex-1"
-            initial={{ opacity: 0, x: 40 }}
-            animate={templateRef.inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.9, delay: 0.2, ease: "easeOut" }}
+            variants={REVEAL_ITEM}
           >
             <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground leading-[1.15] mb-6">
               {content.templateFlow.titleLines.map((line, index) => (
@@ -1282,17 +1618,24 @@ export default function App() {
             <p className="text-muted-foreground leading-relaxed max-w-md mb-10 text-base">
               {content.templateFlow.description}
             </p>
-            <button className="flex items-center gap-2 bg-foreground text-background px-7 py-3.5 rounded-full text-sm font-medium hover:opacity-85 active:scale-95 transition-all duration-200">
+            <button className="flex min-w-[10rem] items-center justify-center gap-2 bg-foreground text-background px-7 py-3.5 rounded-full text-sm font-medium hover:opacity-85 active:scale-95 transition-all duration-200">
               {content.templateFlow.cta} <ArrowRight size={14} />
             </button>
           </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
           PAGE 4 â€” UPLOAD & ANALYSE
           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
-      <section className="py-28" ref={uploadRef.ref}>
+      <motion.section
+        className="min-h-screen py-28 flex items-center"
+        ref={uploadRef.ref}
+        variants={SECTION_REVEAL}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.35 }}
+      >
         <div className="max-w-screen-xl mx-auto px-8 flex items-start gap-16 md:gap-24">
 
           {/* â”€â”€ Analysis labels â”€â”€ */}
@@ -1301,9 +1644,8 @@ export default function App() {
               <motion.div
                 key={text}
                 className="py-9 border-b border-border"
-                initial={{ opacity: 0, x: -30 }}
-                animate={uploadRef.inView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.65, delay: i * 0.16 }}
+                variants={REVEAL_ITEM}
+                transition={{ duration: 0.65, delay: i * 0.1, ease: "easeOut" }}
               >
                 <div className="flex items-center justify-between">
                   <h3 className="font-display text-4xl md:text-5xl font-bold text-foreground">
@@ -1318,9 +1660,7 @@ export default function App() {
           {/* â”€â”€ Upload card â”€â”€ */}
           <motion.div
             className="flex-shrink-0 w-72 md:w-80 pt-4"
-            initial={{ opacity: 0, y: 30 }}
-            animate={uploadRef.inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.3 }}
+            variants={REVEAL_ITEM}
           >
             {/* Bouncing icon */}
             <motion.div
@@ -1360,17 +1700,24 @@ export default function App() {
             </div>
           </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
           PAGE 5 â€” FOOTER
           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
-      <footer className="bg-background border-t border-border mt-8">
+      <motion.footer
+        className="min-h-screen flex items-center bg-background border-t border-border"
+        ref={footerRef.ref}
+        variants={SECTION_REVEAL}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.35 }}
+      >
         <div className="max-w-screen-xl mx-auto px-8 py-20">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
 
             {/* Brand */}
-            <div className="space-y-5">
+            <motion.div className="space-y-5" variants={REVEAL_ITEM}>
               <div className="font-display text-2xl font-bold text-foreground">{content.brand}</div>
               <p className="text-sm text-muted-foreground">{content.footer.tagline}</p>
               <div className="flex gap-2">
@@ -1385,10 +1732,10 @@ export default function App() {
                 ))}
               </div>
               <p className="text-xs text-muted-foreground pt-2">{content.footer.copyright}</p>
-            </div>
+            </motion.div>
 
             {/* Company */}
-            <div>
+            <motion.div variants={REVEAL_ITEM}>
               <h6 className="text-sm font-semibold text-foreground mb-5">{content.footer.companyTitle}</h6>
               <ul className="space-y-3.5">
                 {content.footer.companyLinks.map(l => (
@@ -1399,10 +1746,10 @@ export default function App() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
 
             {/* Contact */}
-            <div>
+            <motion.div variants={REVEAL_ITEM}>
               <h6 className="text-sm font-semibold text-foreground mb-5">{content.footer.contactTitle}</h6>
               <ul className="space-y-4">
                 <li className="flex items-start gap-2.5">
@@ -1418,10 +1765,10 @@ export default function App() {
                   <span className="text-sm text-muted-foreground">{content.footer.email}</span>
                 </li>
               </ul>
-            </div>
+            </motion.div>
 
             {/* Additional */}
-            <div>
+            <motion.div variants={REVEAL_ITEM}>
               <h6 className="text-sm font-semibold text-foreground mb-5">{content.footer.additionalTitle}</h6>
               <ul className="space-y-3.5">
                 {content.footer.additionalLinks.map(l => (
@@ -1432,10 +1779,10 @@ export default function App() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </footer>
+      </motion.footer>
           </motion.div>
         )}
       </AnimatePresence>
