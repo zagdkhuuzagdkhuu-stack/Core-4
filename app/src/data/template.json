@@ -1,0 +1,3069 @@
+[
+  {
+    "category": "Үйлчилгээ үзүүлэх гэрээ",
+    "name": "Агентийн гэрээ",
+    "description": "Компани болон агентын хооронд бүтээгдэхүүн борлуулах, сурталчлах гэрээ",
+    "content": "АГЕНТИЙН ГЭРЭЭ\n\nНэг талаас {{companyName}} (цаашид \"Компани\" гэх), түүнийг {{companyRepresentative}} төлөөлөн,\n\nНөгөө талаас {{agentName}} (цаашид \"Агент\" гэх), түүнийг {{agentRepresentative}} төлөөлөн энэхүү гэрээг байгуулав.\n\n1. Гэрээний агуулга\n1.1 Компани Агентад {{productName}} бүтээгдэхүүнийг {{territory}} нутаг дэвсгэр дээр сурталчлах, борлуулах боломжийг судлах эрх олгоно.\n\n2. Агентийн үүрэг\n- Зах зээлийн судалгаа хийх\n- Захиалагч олох\n- Худалдааны уулзалт зохион байгуулах\n\n3. Төлбөр\n4.1 Компани Агентад борлуулсан үнийн дүнгийн {{commissionRate}} хувьтай тэнцэх шагнал олгоно.\n4.2 Төлбөрийг {{paymentDays}} хоногийн дотор шилжүүлнэ.\n\n5. Энэхүү гэрээ {{contractDuration}} хугацаанд хүчинтэй байна.",
+    "variables": [
+      {
+        "key": "companyName",
+        "label": "Компаний нэр",
+        "type": "text",
+        "required": true
+      },
+      {
+        "key": "agentName",
+        "label": "Агентийн нэр",
+        "type": "text",
+        "required": true
+      },
+      {
+        "key": "productName",
+        "label": "Бүтээгдэхүүний нэр",
+        "type": "text",
+        "required": true
+      },
+      {
+        "key": "commissionRate",
+        "label": "Шагнал (%)",
+        "type": "number",
+        "required": true
+      }
+    ]
+  },
+
+  {
+    "category": "Үйлчилгээ үзүүлэх гэрээ",
+    "name": "Агуулахад эд хөрөнгө хадгалуулах гэрээ",
+    "description": "Эд хөрөнгийг тодорхой хугацаанд хадгалах үйлчилгээний гэрээ",
+    "content": "АГУУЛАХАД ЭД ХӨРӨНГӨ ХАДГАЛУУЛАХ ГЭРЭЭ\n\nНэг талаас {{hadgaluulagchNer}} (цаашид \"хадгалуулагч\" гэх)\n\nНөгөө талаас {{hadgalagchNer}} (цаашид \"хадгалагч\" гэх)\n\n1. Хадгалах эд хөрөнгийн мэдээлэл\n\nЭд хөрөнгийн тайлбар: {{edHorongoDescription}}\nЭд хөрөнгийн хэмжээ: {{quantity}}\nЭд хөрөнгийн үнэ: {{price}}\nХадгалах хаяг: {{storageAddress}}\nТемператур: {{temperature}}\nЧийглэг: {{humidity}}\n\nТөлбөр: {{paymentAmount}}\n\nГэрээний хугацаа: {{startDate}} - {{endDate}}",
+    "variables": [
+      {
+        "key": "hadgaluulagchNer",
+        "label": "Хадгалуулагчийн нэр",
+        "type": "text",
+        "required": true
+      },
+      {
+        "key": "hadgalagchNer",
+        "label": "Хадгалагчийн нэр",
+        "type": "text",
+        "required": true
+      },
+      {
+        "key": "edHorongoDescription",
+        "label": "Эд хөрөнгийн тайлбар",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "key": "paymentAmount",
+        "label": "Төлбөр",
+        "type": "number",
+        "required": true
+      }
+    ]
+  },
+  {
+  "category": "Үйлчилгээ үзүүлэх гэрээ",
+  "name": "Ажил гүйцэтгэх гэрээ",
+  "description": "Захиалагч болон ажил гүйцэтгэгчийн хооронд тодорхой ажил гүйцэтгэх гэрээ",
+
+  "content": "АЖИЛ ГҮЙЦЭТГЭХ ГЭРЭЭ\n\nНэг талаас {{zahialagchName}} (цаашид \"Захиалагч\" гэх), түүнийг {{zahialagchRepresentative}} төлөөлөн,\n\nНөгөө талаас {{guitsetgegchName}} (цаашид \"Ажил гүйцэтгэгч\" гэх), түүнийг {{guitsetgegchRepresentative}} төлөөлөн энэхүү гэрээг байгуулав.\n\n1. Гэрээний агуулга\n\n1.1 Гүйцэтгэгч {{workDescription}} ажлыг {{materialType}} материалаар гүйцэтгэнэ.\n\n2. Гэрээний хугацаа\n\nАжил эхлэх огноо: {{startDate}}\nАжил дуусах огноо: {{endDate}}\nЕрөнхий хугацаа: {{duration}}\n\n3. Ажлын хөлс\n\nНийт төлбөр: {{paymentAmount}} төгрөг\n\n4. Захиалагчийн эрх, үүрэг\n\n- Материал нийлүүлэх\n- Шаардлагатай мэдээлэл өгөх\n- Ажлыг хүлээн авах\n\n5. Ажил гүйцэтгэгчийн эрх, үүрэг\n\n- Ажлыг хугацаанд нь гүйцэтгэх\n- Материалын тайлан гаргах\n- Стандарт мөрдөх\n\n6. Хариуцлага\n\nХугацаа хэтэрсэн хоног тутамд {{penaltyRate}}% алданги тооцно.",
+
+  "variables": [
+    {
+      "key":"zahialagchName",
+      "label":"Захиалагчийн нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"zahialagchRepresentative",
+      "label":"Захиалагчийн төлөөлөгч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"guitsetgegchName",
+      "label":"Гүйцэтгэгчийн нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"guitsetgegchRepresentative",
+      "label":"Гүйцэтгэгчийн төлөөлөгч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"workDescription",
+      "label":"Ажлын тайлбар",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"materialType",
+      "label":"Материалын төрөл",
+      "type":"text",
+      "required":false
+    },
+    {
+      "key":"startDate",
+      "label":"Эхлэх огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"endDate",
+      "label":"Дуусах огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"duration",
+      "label":"Хугацаа",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"paymentAmount",
+      "label":"Нийт төлбөр",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"penaltyRate",
+      "label":"Алдангийн хувь",
+      "type":"number",
+      "required":false
+    }
+  ]
+}, 
+
+{
+  "category": "Түрээсийн гэрээ",
+  "name": "Ажлын байр түрээслэх гэрээ",
+  "description": "Ажлын байр, оффис болон зориулалтын талбай түрээслэх гэрээ",
+
+  "content":"АЖЛЫН БАЙР ТҮРЭЭСЛЭХ ГЭРЭЭ\n\nНэг талаас {{turuulegchName}} (цаашид \"Түрээслүүлэгч\" гэх), түүнийг {{turuulegchRepresentative}} төлөөлөн,\n\nНөгөө талаас {{turuuslegchName}} (цаашид \"Түрээслэгч\" гэх), түүнийг {{turuuslegchRepresentative}} төлөөлөн энэхүү гэрээг байгуулав.\n\n1. Нийтлэг үндэслэл\n\nТүрээслүүлэгч {{roomPurpose}} зориулалттай {{roomArea}} хэмжээтэй талбайг {{startDate}} өдрөөс {{duration}} хугацаагаар {{usagePurpose}} зориулалтаар ашиглуулахаар тохиролцов.\n\n2. Түрээслүүлэгчийн эрх, үүрэг\n\n- Барилгын тоног төхөөрөмжийг хүлээлгэн өгөх\n- Засвар үйлчилгээ хийх\n- Хяналт тавих\n\n3. Түрээслэгчийн эрх, үүрэг\n\n- Байрыг зориулалтын дагуу ашиглах\n- Түрээсийн төлбөр төлөх\n- Гэрээ дуусмагц хүлээлгэн өгөх\n\n4. Төлбөр\n\nСарын түрээс: {{rentAmount}} төгрөг\nТөлбөр төлөх өдөр: {{paymentDate}}\nТоргууль: {{penaltyRate}}%",
+
+  "variables":[
+    {
+      "key":"turuulegchName",
+      "label":"Түрээслүүлэгчийн нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"turuulegchRepresentative",
+      "label":"Түрээслүүлэгчийн төлөөлөгч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"turuuslegchName",
+      "label":"Түрээслэгчийн нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"turuuslegchRepresentative",
+      "label":"Түрээслэгчийн төлөөлөгч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"roomPurpose",
+      "label":"Өрөөний зориулалт",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"roomArea",
+      "label":"Талбай (м²)",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"usagePurpose",
+      "label":"Ашиглах зориулалт",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"startDate",
+      "label":"Эхлэх огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"duration",
+      "label":"Түрээсийн хугацаа",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"rentAmount",
+      "label":"Сарын түрээс",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"paymentDate",
+      "label":"Төлбөр төлөх өдөр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"penaltyRate",
+      "label":"Торгуулийн хувь",
+      "type":"number",
+      "required":false
+    }
+  ]
+}, 
+
+{
+  "category": "Тээвэрлэлтийн гэрээ",
+  "name": "Ачаа тээвэрлэлтийн гэрээ",
+  "description": "Ачаа илгээгч болон тээвэрлэгчийн хооронд байгуулах тээвэрлэлтийн гэрээ",
+
+  "content":"АЧАА ТЭЭВЭРЛЭЛТИЙН ГЭРЭЭ\n\nНэг. Нийтлэг үндэслэл\n\nАчаа илгээгч {{senderName}} болон Тээвэрлэгч {{carrierName}} нар энэхүү гэрээг байгуулав.\n\n2. Тээврийн мэдээлэл\n\nТээврийн хэрэгслийн төрөл: {{vehicleType}}\nТээврийн хэрэгслийн дугаар: {{vehicleNumber}}\n\nАчаа илгээгчийн хаяг:\n{{senderAddress}}\n\nТээвэрлэгчийн хаяг:\n{{carrierAddress}}\n\nАчаа хүлээлгэн өгөх газар: {{pickupLocation}}\n\nАчаа хүргэх газар: {{deliveryLocation}}\n\nАчааны нэр:\n{{cargoName}}\n\nАчааны хэмжээ:\n{{cargoQuantity}}\n\nАчааны жин:\n{{cargoWeight}}\n\nТээврийн зардал:\n{{transportCost}}\n\nНэмэлт нөхцөл:\n{{additionalConditions}}\n\n3. Давагдашгүй хүчин зүйл\n\nГазар хөдлөлт, үер, гал түймэр, халдварт өвчин зэрэг нөхцөл үүссэн тохиолдолд талууд хариуцлагаас чөлөөлөгдөнө.\n\n4. Маргаан шийдвэрлэх\n\nМаргааныг Монгол Улсын Арбитрын журмаар шийдвэрлэнэ.",
+
+  "variables":[
+    {
+      "key":"senderName",
+      "label":"Ачаа илгээгчийн нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"carrierName",
+      "label":"Тээвэрлэгчийн нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"vehicleType",
+      "label":"Тээврийн хэрэгслийн төрөл",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"vehicleNumber",
+      "label":"Тээврийн хэрэгслийн дугаар",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"pickupLocation",
+      "label":"Ачаа авах газар",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"deliveryLocation",
+      "label":"Ачаа хүргэх газар",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"cargoName",
+      "label":"Ачааны нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"cargoQuantity",
+      "label":"Ачааны тоо хэмжээ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"cargoWeight",
+      "label":"Ачааны жин",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"transportCost",
+      "label":"Тээврийн төлбөр",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"additionalConditions",
+      "label":"Нэмэлт нөхцөл",
+      "type":"textarea",
+      "required":false
+    }
+  ]
+},
+
+{
+  "category": "Худалдах, худалдан авах гэрээ",
+  "name": "Бараа арилжих тухай гэрээ",
+  "description": "Хоёр тал мөнгөн төлбөргүйгээр ижил үнэ бүхий барааг харилцан нийлүүлэх гэрээ",
+
+  "content":"БАРАА АРИЛЖИХ ТУХАЙ ГЭРЭЭ\n\nНэг талаас {{partyAName}} (цаашид \"А тал\" гэх), нөгөө талаас {{partyBName}} (цаашид \"Б тал\" гэх) энэхүү гэрээг байгуулав.\n\n1. Гэрээний агуулга\n\nТалууд мөнгөн төлбөр хэрэглэхгүйгээр ижил үнэ бүхий барааг харилцан нийлүүлнэ.\n\n2. А тал нийлүүлэх бараа\n\nБарааны нэр: {{productAName}}\nҮйлдвэрлэгч: {{manufacturerA}}\nТоо хэмжээ: {{quantityA}}\nНэгж үнэ: {{unitPriceA}}\nНийт үнэ: {{totalPriceA}}\nНийлүүлэх газар: {{deliveryLocationA}}\n\n3. Б тал нийлүүлэх бараа\n\nБарааны нэр: {{productBName}}\nҮйлдвэрлэгч: {{manufacturerB}}\nТоо хэмжээ: {{quantityB}}\nНэгж үнэ: {{unitPriceB}}\nНийт үнэ: {{totalPriceB}}\nНийлүүлэх газар: {{deliveryLocationB}}\n\n4. Гэрээний хугацаа\n\nГэрээ {{contractStartDate}} өдрөөс {{contractEndDate}} хүртэл хүчинтэй.\n\n5. Хариуцлага\n\nГэрээний нөхцөл зөрчсөн тохиолдолд {{penaltyRate}}%-ийн торгууль ногдуулна.",
+
+  "variables":[
+    {
+      "key":"partyAName",
+      "label":"А талын нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"partyBName",
+      "label":"Б талын нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"productAName",
+      "label":"А талын барааны нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"quantityA",
+      "label":"А талын барааны тоо",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"totalPriceA",
+      "label":"А талын нийт үнэ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"productBName",
+      "label":"Б талын барааны нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"quantityB",
+      "label":"Б талын барааны тоо",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"totalPriceB",
+      "label":"Б талын нийт үнэ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"contractStartDate",
+      "label":"Эхлэх огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"contractEndDate",
+      "label":"Дуусах огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"penaltyRate",
+      "label":"Торгуулийн хувь",
+      "type":"number",
+      "required":false
+    }
+  ]
+},
+
+{
+  "category": "Худалдах, худалдан авах гэрээ",
+  "name": "Бараа бөөнөөр худалдах, худалдан авах гэрээ",
+  "description": "Барааг бөөнөөр худалдах болон худалдан авахтай холбоотой гэрээ",
+
+  "content":"БАРАА БӨӨНӨӨР ХУДАЛДАХ, ХУДАЛДАН АВАХ ГЭРЭЭ\n\nНэг талаас {{sellerName}} (цаашид \"Худалдагч\" гэх), нөгөө талаас {{buyerName}} (цаашид \"Худалдан авагч\" гэх) энэхүү гэрээг байгуулав.\n\n1. Барааны мэдээлэл\n\nБарааны нэр: {{productName}}\nТоо хэмжээ: {{quantity}}\nНэгж үнэ: {{unitPrice}}\nНийт үнэ: {{totalPrice}}\nНӨТ: {{vatIncluded}}\nБарааны байршил: {{productLocation}}\nЧанарын шаардлага: {{qualityRequirement}}\n\n2. Худалдагчийн үүрэг\n\n- Барааг хугацаанд нь нийлүүлэх\n- Холбогдох баримт бичиг өгөх\n- Доголдолгүй бараа нийлүүлэх\n\n3. Худалдан авагчийн үүрэг\n\n- Барааг хугацаанд нь хүлээн авах\n- Төлбөрийг төлөх\n- Доголдол илэрсэн тохиолдолд мэдэгдэх\n\n4. Төлбөрийн нөхцөл\n\nТөлбөрийн хэлбэр: {{paymentMethod}}\nТөлбөрийн хугацаа: {{paymentDays}} хоног\n\n5. Хариуцлага\n\nГэрээ зөрчсөн тохиолдолд {{penaltyRate}}%-ийн торгууль ногдуулна.\n\n6. Гэрээний хугацаа\n\nЭнэхүү гэрээ {{contractStartDate}} өдрөөс {{contractEndDate}} хүртэл хүчинтэй.",
+
+  "variables":[
+    {
+      "key":"sellerName",
+      "label":"Худалдагчийн нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"buyerName",
+      "label":"Худалдан авагчийн нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"productName",
+      "label":"Барааны нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"quantity",
+      "label":"Тоо хэмжээ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"unitPrice",
+      "label":"Нэгж үнэ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"totalPrice",
+      "label":"Нийт үнэ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"vatIncluded",
+      "label":"НӨТ орсон эсэх",
+      "type":"text",
+      "required":false
+    },
+    {
+      "key":"paymentMethod",
+      "label":"Төлбөрийн хэлбэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"paymentDays",
+      "label":"Төлбөрийн хугацаа (хоног)",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"penaltyRate",
+      "label":"Торгуулийн хувь",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"contractStartDate",
+      "label":"Эхлэх огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"contractEndDate",
+      "label":"Дуусах огноо",
+      "type":"date",
+      "required":true
+    }
+  ]
+},
+
+{
+  "category": "Үйлчилгээ үзүүлэх гэрээ",
+  "name": "Барааг зуучлалын байгууллагаар дамжуулан бэлтгэн нийлүүлэх гэрээ",
+  "description": "Зуучлагч байгууллагаар дамжуулан бараа бүтээгдэхүүн нийлүүлэх гэрээ",
+
+  "content":"БАРААГ ЗУУЧЛАЛЫН БАЙГУУЛЛАГААР ДАМЖУУЛАН БЭЛТГЭН НИЙЛҮҮЛЭХ ГЭРЭЭ\n\nНэг талаас {{brokerName}} (цаашид \"Зуучлагч\" гэх), нөгөө талаас {{buyerName}} (цаашид \"Худалдан авагч\" гэх) энэхүү гэрээг байгуулав.\n\n1. Гэрээний агуулга\n\nЗуучлагч дараах барааг нийлүүлэх үүрэг хүлээнэ:\n{{productList}}\n\n2. Бараа нийлүүлэлтийн мэдээлэл\n\nНийлүүлэх хугацаа: {{deliverySchedule}}\nБаглаа боодлын шаардлага: {{packagingRequirement}}\nНэмэлт үйлчилгээ: {{additionalServices}}\n\n3. Төлбөрийн нөхцөл\n\nТөлбөрийн хэлбэр: {{paymentMethod}}\nТөлбөрийн хугацаа: {{paymentDays}} хоног\n\n4. Хариуцлага\n\nЧанарын шаардлага хангаагүй бараа нийлүүлсэн тохиолдолд {{penaltyRate}}%-ийн торгууль төлнө.\n\n5. Гэрээний хугацаа\n\nЭнэхүү гэрээ {{contractStartDate}} өдрөөс {{contractEndDate}} хүртэл хүчинтэй.",
+
+  "variables":[
+    {
+      "key":"brokerName",
+      "label":"Зуучлагч байгууллагын нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"buyerName",
+      "label":"Худалдан авагчийн нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"productList",
+      "label":"Барааны жагсаалт",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"deliverySchedule",
+      "label":"Нийлүүлэх хугацаа",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"packagingRequirement",
+      "label":"Баглаа боодлын шаардлага",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"additionalServices",
+      "label":"Нэмэлт үйлчилгээ",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"paymentMethod",
+      "label":"Төлбөрийн хэлбэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"paymentDays",
+      "label":"Төлбөрийн хугацаа (хоног)",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"penaltyRate",
+      "label":"Торгуулийн хувь",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"contractStartDate",
+      "label":"Эхлэх огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"contractEndDate",
+      "label":"Дуусах огноо",
+      "type":"date",
+      "required":true
+    }
+  ]
+},
+
+{
+  "category": "Барилга, засварын гэрээ",
+  "name": "Барилгад засвар хийх гэрээ",
+  "description": "Барилгын засвар үйлчилгээ хийхтэй холбоотой гэрээ",
+
+  "content":"БАРИЛГАД ЗАСВАР ХИЙХ ГЭРЭЭ\n\nНэг талаас {{clientName}} (цаашид \"Захиалагч\" гэх), нөгөө талаас {{contractorName}} (цаашид \"Гүйцэтгэгч\" гэх) энэхүү гэрээг байгуулав.\n\n1. Гэрээний агуулга\n\nЗасвар хийх объект: {{buildingName}}\nАжлын тайлбар:\n{{workDescription}}\n\n2. Ажлын хугацаа\n\nЭхлэх огноо: {{startDate}}\nДуусах огноо: {{endDate}}\n\n3. Ажлын төлбөр\n\nНийт ажлын хөлс: {{paymentAmount}} төгрөг\n\n4. Захиалагчийн үүрэг\n\n- Төсөл зураг гаргаж өгөх\n- Материал нийлүүлэх\n- Ажлыг хүлээн авах\n\n5. Гүйцэтгэгчийн үүрэг\n\n- Ажлыг зураг төсөл, төсвийн дагуу гүйцэтгэх\n- Доголдол арилгах\n- Ажлыг хугацаанд нь дуусгах\n\n6. Хариуцлага\n\nТоргууль: {{penaltyRate}}%\nАлданги: {{latePenaltyRate}}%",
+
+  "variables":[
+    {
+      "key":"clientName",
+      "label":"Захиалагчийн нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"contractorName",
+      "label":"Гүйцэтгэгчийн нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"buildingName",
+      "label":"Барилгын нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"workDescription",
+      "label":"Засварын ажлын тайлбар",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"startDate",
+      "label":"Эхлэх огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"endDate",
+      "label":"Дуусах огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"paymentAmount",
+      "label":"Нийт төлбөр",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"penaltyRate",
+      "label":"Торгуулийн хувь",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"latePenaltyRate",
+      "label":"Алдангийн хувь",
+      "type":"number",
+      "required":false
+    }
+  ]
+},
+
+{
+  "category": "Санхүүгийн гэрээ",
+  "name": "Барьцаат зээлийн гэрээ",
+  "description": "Барьцаа хөрөнгө ашиглан зээл олгох гэрээ",
+
+  "content":"БАРЬЦААТ ЗЭЭЛИЙН ГЭРЭЭ\n\nНэг талаас {{borrowerName}} (цаашид \"Зээл авагч\" гэх), нөгөө талаас {{lenderName}} (цаашид \"Зээл олгогч\" гэх) энэхүү гэрээг байгуулав.\n\n1. Зээлийн мэдээлэл\n\nЗээлийн дүн: {{loanAmount}} төгрөг\nЭхлэх огноо: {{loanStartDate}}\nДуусах огноо: {{loanEndDate}}\nХүү: {{interestRate}}\n\n2. Зээлийн олголтын нөхцөл\n\nАнхны олголт: {{firstPayment}}\nХоёр дахь олголт: {{secondPayment}}\nГурав дахь олголт: {{thirdPayment}}\n\n3. Барьцааны мэдээлэл\n\nБарьцаанд өгөх хөрөнгө:\n{{collateralDescription}}\n\nБарьцааны үнэ:\n{{collateralValue}}\n\n4. Талуудын эрх, үүрэг\n\n- Зээл авагч барьцааны хөрөнгийг зөвшөөрөлгүй захиран зарцуулахгүй.\n- Зээл олгогч төлбөр төлөгдөөгүй тохиолдолд барьцааг борлуулах эрхтэй.\n\n5. Хариуцлага\n\nТөлбөр төлөгдөөгүй бол барьцааг борлуулж өр барагдуулна.\n\n6. Давагдашгүй хүчин зүйл\n\nГазар хөдлөлт, үер, гал түймэр, халдварт өвчин зэрэг нөхцөлд талууд хариуцлагаас чөлөөлөгдөнө.",
+
+  "variables":[
+    {
+      "key":"borrowerName",
+      "label":"Зээл авагчийн нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"lenderName",
+      "label":"Зээл олгогчийн нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"loanAmount",
+      "label":"Зээлийн дүн",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"loanStartDate",
+      "label":"Эхлэх огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"loanEndDate",
+      "label":"Дуусах огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"interestRate",
+      "label":"Хүү (%)",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"collateralDescription",
+      "label":"Барьцааны хөрөнгийн тайлбар",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"collateralValue",
+      "label":"Барьцааны үнэ",
+      "type":"number",
+      "required":true
+    }
+  ]
+},
+
+{
+  "category": "Нууцлалын гэрээ",
+  "name": "Бизнесийн мэдээллийн нууцыг хадгалах тухай гэрээ",
+  "description": "Бизнесийн нууц мэдээллийг хамгаалах болон задруулахгүй байх гэрээ",
+
+  "content":"БИЗНЕСИЙН МЭДЭЭЛЛИЙН НУУЦЫГ ХАДГАЛАХ ТУХАЙ ГЭРЭЭ\n\nНэг талаас {{discloserName}} (цаашид \"Мэдээлэгч\" гэх), нөгөө талаас {{receiverName}} (цаашид \"Хүлээн авагч\" гэх) энэхүү гэрээг байгуулав.\n\n1. Гэрээний агуулга\n\nНууц мэдээллийн төрөл:\n{{secretInformation}}\n\nХүлээн авах зорилго:\n{{usagePurpose}}\n\nХамтын ажиллагааны үндэслэл:\n{{cooperationPurpose}}\n\n2. Нууц хадгалах үүрэг\n\nХүлээн авагч тал {{confidentialityYears}} жилийн хугацаанд мэдээллийг задруулахгүй.\n\n3. Нууцад хамаарахгүй нөхцөл\n\n- Өмнө нь мэдэгдэж байсан мэдээлэл\n- Нийтэд ил болсон мэдээлэл\n- Хуулийн дагуу гаргаж өгсөн мэдээлэл\n\n4. Хариуцлага\n\nНууц мэдээлэл задруулсан тохиолдолд:\n{{penaltyCondition}}\n\n5. Гэрээний хугацаа\n\nЭнэхүү гэрээ {{startDate}} өдрөөс {{endDate}} хүртэл хүчинтэй.",
+
+  "variables":[
+    {
+      "key":"discloserName",
+      "label":"Мэдээлэгч тал",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"receiverName",
+      "label":"Хүлээн авагч тал",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"secretInformation",
+      "label":"Нууц мэдээллийн тайлбар",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"usagePurpose",
+      "label":"Мэдээлэл ашиглах зорилго",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"cooperationPurpose",
+      "label":"Хамтын ажиллагааны зорилго",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"confidentialityYears",
+      "label":"Нууц хадгалах хугацаа (жил)",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"penaltyCondition",
+      "label":"Торгууль / хариуцлагын нөхцөл",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"startDate",
+      "label":"Эхлэх огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"endDate",
+      "label":"Дуусах огноо",
+      "type":"date",
+      "required":true
+    }
+  ]
+},
+
+{
+  "category": "Худалдах, худалдан авах гэрээ",
+  "name": "Бэлтгэн нийлүүлэх гэрээ",
+  "description": "Бараа бүтээгдэхүүнийг тогтмол хугацаанд нийлүүлэх гэрээ",
+
+  "content":"БЭЛТГЭН НИЙЛҮҮЛЭХ ГЭРЭЭ\n\nНэг талаас {{supplierName}} (цаашид \"Бэлтгэн нийлүүлэгч\" гэх), нөгөө талаас {{buyerName}} (цаашид \"Худалдан авагч\" гэх) энэхүү гэрээг байгуулав.\n\n1. Гэрээний агуулга\n\nБараа бүтээгдэхүүний жагсаалт:\n{{productList}}\n\n2. Нийлүүлэлтийн мэдээлэл\n\nНийлүүлэх хугацаа: {{deliverySchedule}}\nНийт тоо хэмжээ: {{totalQuantity}}\nХэмжих нэгж: {{unitType}}\n\n3. Чанарын шаардлага\n\nСтандарт:\n{{qualityStandard}}\n\nБаталгаат хугацаа: {{warrantyPeriod}}\n\n4. Төлбөрийн нөхцөл\n\nТөлбөрийн хэлбэр: {{paymentMethod}}\nТөлбөр хийх хугацаа: {{paymentDays}} хоног\nНийт үнэ: {{totalPrice}}\n\n5. Тээвэрлэлт\n\nХүргэлтийн газар: {{deliveryLocation}}\nТээврийн төрөл: {{transportType}}\n\n6. Хариуцлага\n\nГэрээ зөрчсөн тохиолдолд {{penaltyRate}}% торгууль төлнө.\n\n7. Гэрээний хугацаа\n\nЭнэхүү гэрээ {{startDate}} өдрөөс {{endDate}} хүртэл хүчинтэй.",
+
+  "variables":[
+    {
+      "key":"supplierName",
+      "label":"Бэлтгэн нийлүүлэгч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"buyerName",
+      "label":"Худалдан авагч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"productList",
+      "label":"Барааны жагсаалт",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"deliverySchedule",
+      "label":"Нийлүүлэх хугацаа",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"totalQuantity",
+      "label":"Нийт тоо хэмжээ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"unitType",
+      "label":"Хэмжих нэгж",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"qualityStandard",
+      "label":"Чанарын стандарт",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"warrantyPeriod",
+      "label":"Баталгаат хугацаа",
+      "type":"text",
+      "required":false
+    },
+    {
+      "key":"paymentMethod",
+      "label":"Төлбөрийн хэлбэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"paymentDays",
+      "label":"Төлбөрийн хугацаа (хоног)",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"totalPrice",
+      "label":"Нийт үнэ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"deliveryLocation",
+      "label":"Хүргэлтийн газар",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"transportType",
+      "label":"Тээврийн төрөл",
+      "type":"text",
+      "required":false
+    },
+    {
+      "key":"penaltyRate",
+      "label":"Торгуулийн хувь",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"startDate",
+      "label":"Эхлэх огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"endDate",
+      "label":"Дуусах огноо",
+      "type":"date",
+      "required":true
+    }
+  ]
+},
+
+{
+  "category": "Үйлдвэрлэл, боловсруулалтын гэрээ",
+  "name": "Бэлтгэн нийлүүлэх материал, түүхий эдийг дахин боловсруулах тухай гэрээ",
+  "description": "Түүхий эд нийлүүлж, нөгөө талаас боловсруулан бүтээгдэхүүн үйлдвэрлэх гэрээ",
+
+  "content":"БЭЛТГЭН НИЙЛҮҮЛЭХ МАТЕРИАЛ, ТҮҮХИЙ ЭДИЙГ ДАХИН БОЛОВСРУУЛАХ ТУХАЙ ГЭРЭЭ\n\nНэг талаас {{supplierName}} (цаашид \"Бэлтгэн нийлүүлэгч\" гэх), нөгөө талаас {{processorName}} (цаашид \"Дахин боловсруулагч\" гэх) энэхүү гэрээг байгуулав.\n\n1. Гэрээний агуулга\n\nНийлүүлэх түүхий эд:\n{{rawMaterial}}\n\nҮйлдвэрлэх бүтээгдэхүүн:\n{{finalProduct}}\n\n2. Нийлүүлэлтийн мэдээлэл\n\nТүүхий эдийн хэмжээ: {{materialQuantity}}\nБүтээгдэхүүний хэмжээ: {{productQuantity}}\nЧанарын стандарт: {{qualityStandard}}\n\n3. Төлбөрийн нөхцөл\n\nБоловсруулалтын төлбөр: {{processingCost}} төгрөг\nТөлбөрийн хугацаа: {{paymentDays}} хоног\n\n4. Хариуцлага\n\nЧанарын шаардлага хангаагүй бүтээгдэхүүн үйлдвэрлэсэн бол {{penaltyRate}}% торгууль төлнө.\n\n5. Гэрээний хугацаа\n\nЭнэхүү гэрээ {{startDate}} өдрөөс {{endDate}} хүртэл хүчинтэй.",
+
+  "variables":[
+    {
+      "key":"supplierName",
+      "label":"Бэлтгэн нийлүүлэгч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"processorName",
+      "label":"Дахин боловсруулагч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"rawMaterial",
+      "label":"Түүхий эд",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"finalProduct",
+      "label":"Үйлдвэрлэх бүтээгдэхүүн",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"materialQuantity",
+      "label":"Түүхий эдийн хэмжээ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"productQuantity",
+      "label":"Бүтээгдэхүүний хэмжээ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"qualityStandard",
+      "label":"Чанарын стандарт",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"processingCost",
+      "label":"Боловсруулалтын төлбөр",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"paymentDays",
+      "label":"Төлбөрийн хугацаа (хоног)",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"penaltyRate",
+      "label":"Торгуулийн хувь",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"startDate",
+      "label":"Эхлэх огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"endDate",
+      "label":"Дуусах огноо",
+      "type":"date",
+      "required":true
+    }
+  ]
+},
+
+{
+  "category": "Өмч шилжүүлэх гэрээ",
+  "name": "Бэлэглэлийн гэрээ",
+  "description": "Эд хөрөнгийг үнэ төлбөргүйгээр өмчлөлд шилжүүлэх гэрээ",
+
+  "content":"БЭЛЭГЛЭЛИЙН ГЭРЭЭ\n\nНэг талаас {{giverName}} (цаашид \"Бэлэглэгч\" гэх), нөгөө талаас {{receiverName}} (цаашид \"Бэлэг хүлээн авагч\" гэх) энэхүү гэрээг байгуулав.\n\n1. Гэрээний агуулга\n\nБэлэглэх эд хөрөнгө:\n{{giftDescription}}\n\nЭд хөрөнгийн төрөл: {{giftType}}\n\nЭд хөрөнгийн үнэлгээ:\n{{giftValue}} төгрөг\n\n2. Талуудын эрх, үүрэг\n\n- Бэлэглэгч эд хөрөнгийг үнэ төлбөргүй шилжүүлнэ.\n- Бэлэг хүлээн авагч өмчлөх эрхтэй болно.\n- Хүлээн авагч эд хөрөнгийг хуульд нийцүүлэн ашиглана.\n\n3. Хариуцлага\n\nГэрээний нөхцөл зөрчсөн бол Иргэний хуулийн дагуу хариуцлага хүлээнэ.\n\n4. Нэмэлт нөхцөл\n\n{{additionalConditions}}\n\n5. Гэрээний хугацаа\n\nЭнэхүү гэрээ {{agreementDate}} өдөр хүчин төгөлдөр болно.",
+
+  "variables":[
+    {
+      "key":"giverName",
+      "label":"Бэлэглэгч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"receiverName",
+      "label":"Бэлэг хүлээн авагч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"giftDescription",
+      "label":"Эд хөрөнгийн тайлбар",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"giftType",
+      "label":"Эд хөрөнгийн төрөл",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"giftValue",
+      "label":"Эд хөрөнгийн үнэ",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"additionalConditions",
+      "label":"Нэмэлт нөхцөл",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"agreementDate",
+      "label":"Гэрээ байгуулах огноо",
+      "type":"date",
+      "required":true
+    }
+  ]
+},
+
+{
+  "category": "Худалдах, худалдан авах гэрээ",
+  "name": "Бүтээгдэхүүнийг удаан хугацаанд аж ахуйн харилцааны дагуу бэлтгэн нийлүүлэх тухай гэрээ",
+  "description": "Урт хугацааны хамтын ажиллагааны хүрээнд бүтээгдэхүүн тогтмол нийлүүлэх гэрээ",
+
+  "content":"БҮТЭЭГДЭХҮҮНИЙГ УДААН ХУГАЦААНД АЖ АХУЙН ХАРИЛЦААНЫ ДАГУУ БЭЛТГЭН НИЙЛҮҮЛЭХ ТУХАЙ ГЭРЭЭ\n\nНэг талаас {{supplierName}} (цаашид \"Бэлтгэн нийлүүлэгч\" гэх), нөгөө талаас {{buyerName}} (цаашид \"Худалдан авагч\" гэх) энэхүү гэрээг байгуулав.\n\n1. Бэлтгэн нийлүүлэх зүйл\n\nБарааны жагсаалт:\n{{productList}}\n\nХэмжих нэгж:\n{{unitType}}\n\nНийлүүлэх хэмжээ:\n{{supplyQuantity}}\n\nНийт үнэ:\n{{totalPrice}}\n\n2. Чанар ба иж бүрдэл\n\nЧанарын стандарт:\n{{qualityStandard}}\n\nБаталгаат хугацаа:\n{{warrantyPeriod}}\n\n3. Нийлүүлэлтийн нөхцөл\n\nНийлүүлэх график:\n{{deliverySchedule}}\n\nТээврийн төрөл:\n{{transportMethod}}\n\nБаглаа боодлын шаардлага:\n{{packagingRequirement}}\n\n4. Төлбөрийн нөхцөл\n\nТөлбөрийн арга:\n{{paymentMethod}}\n\nТөлбөрийн хугацаа: {{paymentDays}} хоног\n\n5. Хамтын ажиллагаа\n\nНэмэлт үйлчилгээ:\n{{additionalServices}}\n\n6. Хариуцлага\n\nТоргууль: {{penaltyRate}}%\n\n7. Гэрээний хугацаа\n\nЭнэхүү гэрээ {{startDate}} өдрөөс {{endDate}} хүртэл хүчинтэй.",
+
+  "variables":[
+    {
+      "key":"supplierName",
+      "label":"Бэлтгэн нийлүүлэгч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"buyerName",
+      "label":"Худалдан авагч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"productList",
+      "label":"Барааны жагсаалт",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"unitType",
+      "label":"Хэмжих нэгж",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"supplyQuantity",
+      "label":"Нийлүүлэх хэмжээ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"totalPrice",
+      "label":"Нийт үнэ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"qualityStandard",
+      "label":"Чанарын стандарт",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"warrantyPeriod",
+      "label":"Баталгаат хугацаа",
+      "type":"text",
+      "required":false
+    },
+    {
+      "key":"deliverySchedule",
+      "label":"Нийлүүлэх график",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"paymentMethod",
+      "label":"Төлбөрийн арга",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"paymentDays",
+      "label":"Төлбөрийн хугацаа (хоног)",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"penaltyRate",
+      "label":"Торгуулийн хувь",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"startDate",
+      "label":"Эхлэх огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"endDate",
+      "label":"Дуусах огноо",
+      "type":"date",
+      "required":true
+    }
+  ]
+},
+
+{
+  "category": "Санхүүгийн гэрээ",
+  "name": "Валют худалдах, худалдан авах гэрээ",
+  "description": "Валют худалдах болон худалдан авахтай холбоотой гэрээ",
+
+  "content":"ВАЛЮТ ХУДАЛДАХ, ХУДАЛДАН АВАХ ГЭРЭЭ\n\nНэг талаас {{sellerName}} (цаашид \"Худалдагч\" гэх), нөгөө талаас {{buyerName}} (цаашид \"Худалдан авагч\" гэх) энэхүү гэрээг байгуулав.\n\n1. Гэрээний агуулга\n\nХудалдан авах валют: {{currencyName}}\nВалютын хэмжээ: {{currencyAmount}}\nВалютын ханш: {{exchangeRate}}\nГэрээ байгуулах үндэслэл:\n{{legalBasis}}\n\n2. Төлбөрийн нөхцөл\n\nУрьдчилгаа төлбөр: {{advancePayment}}\nУрьдчилгаа төлөх хугацаа: {{advanceDays}} хоног\nЭцсийн төлбөр хийх хугацаа: {{finalPaymentDays}} хоног\n\nТөлбөрийн төрөл: {{paymentType}}\nТөлбөрийн хэлбэр: {{paymentMethod}}\n\n3. Валют шилжүүлэх\n\nВалют шилжүүлэх хугацаа: {{transferDays}} хоног\nХүлээн авах валютын данс:\n{{receiverAccount}}\n\n4. Хариуцлага\n\nВалют шилжүүлэх хугацаа хэтэрсэн тохиолдолд {{sellerPenaltyRate}}% алданги төлнө.\n\nТөлбөр төлөх хугацаа хэтэрсэн тохиолдолд {{buyerPenaltyRate}}% алданги төлнө.\n\n5. Нэмэлт нөхцөл\n\n{{additionalConditions}}",
+
+  "variables":[
+    {
+      "key":"sellerName",
+      "label":"Худалдагч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"buyerName",
+      "label":"Худалдан авагч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"currencyName",
+      "label":"Валютын нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"currencyAmount",
+      "label":"Валютын хэмжээ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"exchangeRate",
+      "label":"Валютын ханш",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"legalBasis",
+      "label":"Эрх зүйн үндэслэл",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"advancePayment",
+      "label":"Урьдчилгаа төлбөр",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"advanceDays",
+      "label":"Урьдчилгаа хугацаа (хоног)",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"finalPaymentDays",
+      "label":"Эцсийн төлбөрийн хугацаа",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"paymentType",
+      "label":"Төлбөрийн төрөл",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"paymentMethod",
+      "label":"Төлбөрийн хэлбэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"transferDays",
+      "label":"Шилжүүлэх хугацаа",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"receiverAccount",
+      "label":"Хүлээн авах данс",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"sellerPenaltyRate",
+      "label":"Худалдагчийн алданги (%)",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"buyerPenaltyRate",
+      "label":"Худалдан авагчийн алданги (%)",
+      "type":"number",
+      "required":false
+    }
+  ]
+},
+
+{
+  "category": "Тээвэр, ложистикийн гэрээ",
+  "name": "Гадаад худалдааны тээвэр-экспедиторын үйлчилгээ үзүүлэх гэрээ",
+  "description": "Гадаад худалдааны ачаа тээвэрлэх болон тээвэр-экспедиторын үйлчилгээ үзүүлэх гэрээ",
+
+  "content":"ГАДААД ХУДАЛДААНЫ ТЭЭВЭР-ЭКСПЕДИТОРЫН ҮЙЛЧИЛГЭЭ ҮЗҮҮЛЭХ ГЭРЭЭ\n\nНэг талаас {{executorName}} (цаашид \"Ажил гүйцэтгэгч\" гэх), нөгөө талаас {{clientName}} (цаашид \"Захиалагч\" гэх) энэхүү гэрээг байгуулав.\n\n1. Гэрээний агуулга\n\nТээвэрлэх ачааны мэдээлэл:\n{{cargoDescription}}\n\nТээврийн төрөл:\n{{transportType}}\n\nМаршрут:\n{{route}}\n\nОчих улс:\n{{destinationCountry}}\n\n2. Үйлчилгээний нөхцөл\n\nНэмэлт үйлчилгээ:\n{{serviceDescription}}\n\nАгуулах ашиглах эсэх:\n{{warehouseUsage}}\n\nДаатгал хийх эсэх:\n{{insuranceRequired}}\n\n3. Төлбөрийн нөхцөл\n\nҮйлчилгээний төлбөр:\n{{serviceFee}}\n\nТөлбөрийн хэлбэр:\n{{paymentMethod}}\n\nТөлбөр хийх хугацаа: {{paymentDays}} хоног\n\n4. Хариуцлага\n\nАчаа гэмтсэн, алдагдсан тохиолдолд:\n{{damageCondition}}\n\nТоргууль:\n{{penaltyRate}}%\n\n5. Гэрээний хугацаа\n\nЭнэхүү гэрээ {{startDate}} өдрөөс {{endDate}} хүртэл хүчинтэй.",
+
+  "variables":[
+    {
+      "key":"executorName",
+      "label":"Ажил гүйцэтгэгч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"clientName",
+      "label":"Захиалагч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"cargoDescription",
+      "label":"Ачааны мэдээлэл",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"transportType",
+      "label":"Тээврийн төрөл",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"route",
+      "label":"Тээврийн маршрут",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"destinationCountry",
+      "label":"Очих улс",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"serviceDescription",
+      "label":"Нэмэлт үйлчилгээ",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"warehouseUsage",
+      "label":"Агуулах ашиглах",
+      "type":"text",
+      "required":false
+    },
+    {
+      "key":"insuranceRequired",
+      "label":"Даатгал хийх",
+      "type":"text",
+      "required":false
+    },
+    {
+      "key":"serviceFee",
+      "label":"Үйлчилгээний төлбөр",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"paymentMethod",
+      "label":"Төлбөрийн хэлбэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"paymentDays",
+      "label":"Төлбөрийн хугацаа (хоног)",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"damageCondition",
+      "label":"Хариуцлагын нөхцөл",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"penaltyRate",
+      "label":"Торгуулийн хувь",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"startDate",
+      "label":"Эхлэх огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"endDate",
+      "label":"Дуусах огноо",
+      "type":"date",
+      "required":true
+    }
+  ]
+},
+
+{
+  "category": "Олон улсын худалдааны гэрээ",
+  "name": "Гадаадаас хүнсний бараа худалдан авах гэрээ",
+  "description": "Гадаадаас хүнсний бүтээгдэхүүн импортлон худалдан авах гэрээ",
+
+  "content":"ГАДААДААС ХҮНСНИЙ БАРАА ХУДАЛДАН АВАХ ГЭРЭЭ\n\nНэг талаас {{sellerName}} (цаашид \"Худалдагч\" гэх), нөгөө талаас {{buyerName}} (цаашид \"Худалдан авагч\" гэх) энэхүү гэрээг байгуулав.\n\n1. Гэрээний агуулга\n\nБарааны нэр:\n{{productName}}\n\nҮйлдвэрлэгч:\n{{manufacturerName}}\n\nТоо хэмжээ:\n{{quantity}}\n\nНэгж үнэ:\n{{unitPrice}}\n\nНийт үнэ:\n{{totalPrice}}\n\nВалют:\n{{currencyType}}\n\n2. Чанарын шаардлага\n\nЧанарын гэрчилгээ:\n{{qualityCertificate}}\n\nМал эмнэлгийн гэрчилгээ:\n{{veterinaryCertificate}}\n\nАриун цэврийн гэрчилгээ:\n{{sanitaryCertificate}}\n\n3. Нийлүүлэлтийн нөхцөл\n\nНийлүүлэх хугацаа:\n{{deliveryDate}}\n\nХүлээн авах газар:\n{{deliveryLocation}}\n\nТээврийн төрөл:\n{{transportType}}\n\n4. Төлбөрийн нөхцөл\n\nУрьдчилгаа төлбөр: {{advancePayment}}\n\nТөлбөрийн хэлбэр:\n{{paymentMethod}}\n\n5. Хариуцлага\n\nХугацаа хэтэрсэн торгууль:\n{{latePenalty}}\n\nЧанарын шаардлага зөрчсөн торгууль:\n{{qualityPenalty}}\n\n6. Давагдашгүй хүчин зүйл\n\nГазар хөдлөлт, үер, гал түймэр, халдварт өвчин зэрэг нөхцөлд талууд хариуцлагаас чөлөөлөгдөнө.",
+
+  "variables":[
+    {
+      "key":"sellerName",
+      "label":"Худалдагч байгууллага",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"buyerName",
+      "label":"Худалдан авагч байгууллага",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"productName",
+      "label":"Барааны нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"manufacturerName",
+      "label":"Үйлдвэрлэгч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"quantity",
+      "label":"Тоо хэмжээ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"unitPrice",
+      "label":"Нэгж үнэ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"totalPrice",
+      "label":"Нийт үнэ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"currencyType",
+      "label":"Валют",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"qualityCertificate",
+      "label":"Чанарын гэрчилгээ",
+      "type":"text",
+      "required":false
+    },
+    {
+      "key":"veterinaryCertificate",
+      "label":"Мал эмнэлгийн гэрчилгээ",
+      "type":"text",
+      "required":false
+    },
+    {
+      "key":"sanitaryCertificate",
+      "label":"Ариун цэврийн гэрчилгээ",
+      "type":"text",
+      "required":false
+    },
+    {
+      "key":"deliveryDate",
+      "label":"Нийлүүлэх хугацаа",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"deliveryLocation",
+      "label":"Хүлээн авах газар",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"transportType",
+      "label":"Тээврийн төрөл",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"advancePayment",
+      "label":"Урьдчилгаа төлбөр",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"paymentMethod",
+      "label":"Төлбөрийн хэлбэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"latePenalty",
+      "label":"Хугацаа хэтэрсэн торгууль (%)",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"qualityPenalty",
+      "label":"Чанарын зөрчлийн торгууль (%)",
+      "type":"number",
+      "required":false
+    }
+  ]
+},
+
+{
+  "category": "Олон улсын худалдааны гэрээ",
+  "name": "Гадаадад бараа бэлтгэн нийлүүлэх гэрээ",
+  "description": "Бараа бүтээгдэхүүнийг гадаад зах зээлд нийлүүлэх экспортын гэрээ",
+
+  "content":"ГАДААДАД БАРАА БЭЛТГЭН НИЙЛҮҮЛЭХ ГЭРЭЭ\n\nНэг талаас {{manufacturerName}} (цаашид \"Үйлдвэр\" гэх), нөгөө талаас {{foreignTradeCompany}} (цаашид \"Гадаад худалдааны байгууллага\" гэх) энэхүү гэрээг байгуулав.\n\n1. Гэрээний агуулга\n\nБарааны нэр:\n{{productName}}\n\nТоо хэмжээ:\n{{quantity}}\n\nИж бүрдэл:\n{{productPackage}}\n\n2. Чанарын шаардлага\n\nСтандарт:\n{{qualityStandard}}\n\nЧанарын баталгаажуулалт:\n{{qualityCertificate}}\n\nБаталгаат хугацаа:\n{{warrantyPeriod}}\n\n3. Нийлүүлэлтийн нөхцөл\n\nНийлүүлэх график:\n{{deliverySchedule}}\n\nХүлээлгэн өгөх газар:\n{{deliveryLocation}}\n\nТээврийн төрөл:\n{{transportMethod}}\n\n4. Сав баглаа боодол\n\nСав баглаа боодлын шаардлага:\n{{packagingRequirement}}\n\nШошго тэмдэг:\n{{labelRequirement}}\n\n5. Төлбөрийн нөхцөл\n\nНийт үнэ:\n{{totalPrice}}\n\nВалют:\n{{currencyType}}\n\nТөлбөрийн хэлбэр:\n{{paymentMethod}}\n\n6. Давагдашгүй хүчин зүйл\n\nГазар хөдлөлт, үер, гал түймэр, халдварт өвчин зэрэг нөхцөлд талууд хариуцлагаас чөлөөлөгдөнө.\n\n7. Гэрээний хугацаа\n\nЭнэхүү гэрээ {{startDate}} өдрөөс {{endDate}} хүртэл хүчинтэй.",
+
+  "variables":[
+    {
+      "key":"manufacturerName",
+      "label":"Үйлдвэрийн нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"foreignTradeCompany",
+      "label":"Гадаад худалдааны байгууллага",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"productName",
+      "label":"Барааны нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"quantity",
+      "label":"Тоо хэмжээ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"productPackage",
+      "label":"Иж бүрдэл",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"qualityStandard",
+      "label":"Чанарын стандарт",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"qualityCertificate",
+      "label":"Чанарын гэрчилгээ",
+      "type":"text",
+      "required":false
+    },
+    {
+      "key":"warrantyPeriod",
+      "label":"Баталгаат хугацаа",
+      "type":"text",
+      "required":false
+    },
+    {
+      "key":"deliverySchedule",
+      "label":"Нийлүүлэх график",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"deliveryLocation",
+      "label":"Хүлээлгэн өгөх газар",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"transportMethod",
+      "label":"Тээврийн төрөл",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"packagingRequirement",
+      "label":"Сав баглаа боодлын шаардлага",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"labelRequirement",
+      "label":"Шошго тэмдэг",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"totalPrice",
+      "label":"Нийт үнэ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"currencyType",
+      "label":"Валют",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"paymentMethod",
+      "label":"Төлбөрийн хэлбэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"startDate",
+      "label":"Эхлэх огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"endDate",
+      "label":"Дуусах огноо",
+      "type":"date",
+      "required":true
+    }
+  ]
+},
+
+{
+  "category": "Олон улсын худалдааны гэрээ",
+  "name": "Гадаадын тоног төхөөрөмж худалдан авах гэрээ",
+  "description": "Гадаад улсаас тоног төхөөрөмж болон техникийн зориулалттай бүтээгдэхүүн худалдан авах гэрээ",
+
+  "content":"ГАДААДЫН ТОНОГ ТӨХӨӨРӨМЖ ХУДАЛДАН АВАХ ГЭРЭЭ\n\nНэг талаас {{supplierName}} (цаашид \"Бэлтгэн нийлүүлэгч\" гэх), нөгөө талаас {{buyerName}} (цаашид \"Худалдан авагч\" гэх) энэхүү гэрээг байгуулав.\n\n1. Гэрээний агуулга\n\nТоног төхөөрөмжийн нэр:\n{{equipmentName}}\n\nТоо хэмжээ:\n{{quantity}}\n\nЗагвар / Модель:\n{{model}}\n\nТехникийн үзүүлэлт:\n{{technicalSpecification}}\n\n2. Үнэ болон төлбөр\n\nНийт үнэ:\n{{totalPrice}}\n\nВалют:\n{{currencyType}}\n\nТөлбөрийн хэлбэр:\n{{paymentMethod}}\n\n3. Нийлүүлэлтийн мэдээлэл\n\nНийлүүлэх хугацаа:\n{{deliveryDate}}\n\nТээврийн төрөл:\n{{transportMethod}}\n\nАчаа хүлээн авах газар:\n{{deliveryLocation}}\n\n4. Баталгаат хугацаа\n\nБаталгаат хугацаа:\n{{warrantyPeriod}}\n\nТехникийн үйлчилгээ:\n{{serviceCondition}}\n\n5. Сав баглаа боодол\n\nСав баглаа боодлын шаардлага:\n{{packagingRequirement}}\n\n6. Хариуцлага\n\nГэмтэл илэрсэн тохиолдолд {{replacementCondition}}\n\n7. Давагдашгүй хүчин зүйл\n\nГазар хөдлөлт, үер, гал түймэр, халдварт өвчин зэрэг нөхцөлд талууд хариуцлагаас чөлөөлөгдөнө.",
+
+  "variables":[
+    {
+      "key":"supplierName",
+      "label":"Бэлтгэн нийлүүлэгч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"buyerName",
+      "label":"Худалдан авагч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"equipmentName",
+      "label":"Тоног төхөөрөмжийн нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"quantity",
+      "label":"Тоо хэмжээ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"model",
+      "label":"Загвар / Модель",
+      "type":"text",
+      "required":false
+    },
+    {
+      "key":"technicalSpecification",
+      "label":"Техникийн үзүүлэлт",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"totalPrice",
+      "label":"Нийт үнэ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"currencyType",
+      "label":"Валют",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"paymentMethod",
+      "label":"Төлбөрийн хэлбэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"deliveryDate",
+      "label":"Нийлүүлэх хугацаа",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"transportMethod",
+      "label":"Тээврийн төрөл",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"deliveryLocation",
+      "label":"Ачаа хүлээн авах газар",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"warrantyPeriod",
+      "label":"Баталгаат хугацаа",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"serviceCondition",
+      "label":"Техникийн үйлчилгээ",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"packagingRequirement",
+      "label":"Сав баглаа боодлын шаардлага",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"replacementCondition",
+      "label":"Солих нөхцөл",
+      "type":"textarea",
+      "required":false
+    }
+  ]
+},
+
+{
+  "category": "Даатгалын гэрээ",
+  "name": "Даатгалын гэрээ",
+  "description": "Эд хөрөнгө болон хариуцлагын даатгал хийх гэрээ",
+
+  "content":"ДААТГАЛЫН ГЭРЭЭ\n\nНэг талаас {{insurerName}} (цаашид \"Даатгагч\" гэх), нөгөө талаас {{insuredName}} (цаашид \"Даатгуулагч\" гэх) энэхүү гэрээг байгуулав.\n\n1. Гэрээний агуулга\n\nДаатгуулах эд зүйл:\n{{insuredObject}}\n\nДаатгалын төрөл:\n{{insuranceType}}\n\nДаатгалын зорилго:\n{{insurancePurpose}}\n\n2. Даатгуулагчийн үүрэг\n\nДаатгалын хураамж төлөх хугацаа:\n{{paymentDeadline}}\n\nНэмэлт мэдээлэл:\n{{additionalInfo}}\n\n3. Даатгагчийн үүрэг\n\nДаатгалын нөхөн төлбөрийг {{compensationDays}} хоногийн дотор олгоно.\n\n4. Үнэлгээ ба хураамж\n\nДаатгалын үнэлгээ:\n{{insuranceValue}}\n\nХураамжийн хувь:\n{{premiumRate}}\n\nХураамжийн дүн:\n{{premiumAmount}}\n\n5. Даатгуулагчийн өөрөө хүлээх хариуцлага:\n{{selfLiability}}\n\n6. Нөхөн төлбөрийн дээд хэмжээ:\n{{maxCompensation}}\n\n7. Маргаан шийдвэрлэх\n\nМаргааныг Монгол Улсын холбогдох хууль тогтоомж болон арбитрын журмаар шийдвэрлэнэ.",
+
+  "variables":[
+    {
+      "key":"insurerName",
+      "label":"Даатгагч байгууллага",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"insuredName",
+      "label":"Даатгуулагч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"insuredObject",
+      "label":"Даатгуулах эд зүйл",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"insuranceType",
+      "label":"Даатгалын төрөл",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"insurancePurpose",
+      "label":"Даатгалын зорилго",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"paymentDeadline",
+      "label":"Хураамж төлөх хугацаа",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"compensationDays",
+      "label":"Нөхөн төлбөр олгох хугацаа (хоног)",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"insuranceValue",
+      "label":"Даатгалын үнэлгээ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"premiumRate",
+      "label":"Хураамжийн хувь",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"premiumAmount",
+      "label":"Хураамжийн дүн",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"selfLiability",
+      "label":"Өөрөө хүлээх хариуцлага",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"maxCompensation",
+      "label":"Нөхөн төлбөрийн дээд хэмжээ",
+      "type":"number",
+      "required":false
+    }
+  ]
+},
+
+{
+  "category": "Борлуулалт, дистрибьюторын гэрээ",
+  "name": "Дистрибьюторын гэрээ",
+  "description": "Бараа бүтээгдэхүүнийг тодорхой бүс нутагт борлуулах дистрибьюторын гэрээ",
+
+  "content":"ДИСТРИБЬЮТОРЫН ГЭРЭЭ\n\nНэг талаас {{supplierName}} (цаашид \"Бэлтгэн нийлүүлэгч\" гэх), нөгөө талаас {{distributorName}} (цаашид \"Дистрибьютор\" гэх) энэхүү гэрээг байгуулав.\n\n1. Гэрээний агуулга\n\nБараа бүтээгдэхүүний жагсаалт:\n{{productList}}\n\nГазар нутаг:\n{{territory}}\n\n2. Дистрибьюторын үүрэг\n\n- Барааг сурталчлах\n- Борлуулалт зохион байгуулах\n- Зах зээлийн мэдээлэл өгөх\n\n3. Бэлтгэн нийлүүлэгчийн үүрэг\n\n- Бараа нийлүүлэх\n- Шаардлагатай мэдээлэл өгөх\n- Маркетингийн дэмжлэг үзүүлэх\n\n4. Борлуулалтын нөхцөл\n\nХямдралын хувь:\n{{discountRate}}\n\nТөлбөрийн хугацаа: {{paymentDays}} хоног\n\nҮнийн жагсаалт:\n{{priceList}}\n\n5. Зар сурталчилгаа\n\nМаркетингийн төлөвлөгөө:\n{{marketingPlan}}\n\nЗардал хуваах нөхцөл:\n{{marketingCostCondition}}\n\n6. Нууцлал\n\nНууц мэдээлэл:\n{{confidentialInformation}}\n\n7. Давагдашгүй хүчин зүйл\n\n{{forceMajeureCondition}}\n\n8. Гэрээний хугацаа\n\nЭхлэх огноо: {{startDate}}\n\nДуусах огноо: {{endDate}}",
+
+  "variables":[
+    {
+      "key":"supplierName",
+      "label":"Бэлтгэн нийлүүлэгч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"distributorName",
+      "label":"Дистрибьютор",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"productList",
+      "label":"Барааны жагсаалт",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"territory",
+      "label":"Борлуулах бүс нутаг",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"discountRate",
+      "label":"Хямдрал (%)",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"paymentDays",
+      "label":"Төлбөрийн хугацаа (хоног)",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"priceList",
+      "label":"Үнийн жагсаалт",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"marketingPlan",
+      "label":"Маркетингийн төлөвлөгөө",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"marketingCostCondition",
+      "label":"Зардал хуваах нөхцөл",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"confidentialInformation",
+      "label":"Нууц мэдээлэл",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"forceMajeureCondition",
+      "label":"Давагдашгүй хүчин зүйл",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"startDate",
+      "label":"Эхлэх огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"endDate",
+      "label":"Дуусах огноо",
+      "type":"date",
+      "required":true
+    }
+  ]
+},
+
+{
+  "category": "Санхүүгийн гэрээ",
+  "name": "Зээлийн баталгаа өгөх гэрээ",
+  "description": "Зээл авагчийн үүргийг гуравдагч этгээдээр баталгаажуулах гэрээ",
+
+  "content":"ЗЭЭЛИЙН БАТАЛГАА ӨГӨХ ГЭРЭЭ\n\nНэг талаас {{guarantorName}} (цаашид \"Баталгаа өгөгч\" гэх), нөгөө талаас {{lenderName}} (цаашид \"Зээл олгогч\" гэх), {{borrowerName}} (цаашид \"Зээл авагч\" гэх) энэхүү гэрээг байгуулав.\n\n1. Гэрээний үндэс\n\nЗээлийн дүн: {{loanAmount}} төгрөг\n\nЗээлийн хүү: {{interestAmount}} төгрөг\n\nНийт төлөх дүн: {{totalAmount}} төгрөг\n\n2. Баталгаа өгөгчийн үүрэг\n\nБаталгаа өгөгч нь зээл авагчийн үүргийг хангах үүрэгтэй.\n\nТөлөх хугацаа хэтэрсэн тохиолдолд {{guaranteeDays}} хоногийн дотор төлбөрийг барагдуулна.\n\n3. Торгууль ба алданги\n\nАлдангийн хувь: {{penaltyRate}}%\n\nХугацаа хэтэрсэн хоног тутам:\n{{latePenaltyCondition}}\n\n4. Баталгааны хугацаа\n\nБаталгаа хүчинтэй хугацаа:\n{{guaranteePeriod}}\n\n5. Нэмэлт нөхцөл\n\n{{additionalConditions}}\n\n6. Маргаан шийдвэрлэх\n\nМаргааныг Монголын Үндэсний Арбитрын журмаар шийдвэрлэнэ.",
+
+  "variables":[
+    {
+      "key":"guarantorName",
+      "label":"Баталгаа өгөгч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"lenderName",
+      "label":"Зээл олгогч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"borrowerName",
+      "label":"Зээл авагч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"loanAmount",
+      "label":"Зээлийн хэмжээ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"interestAmount",
+      "label":"Хүүгийн дүн",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"totalAmount",
+      "label":"Нийт төлөх дүн",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"guaranteeDays",
+      "label":"Баталгаагаар төлөх хугацаа (хоног)",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"penaltyRate",
+      "label":"Алдангийн хувь",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"latePenaltyCondition",
+      "label":"Хугацаа хэтэрсэн нөхцөл",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"guaranteePeriod",
+      "label":"Баталгааны хугацаа",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"additionalConditions",
+      "label":"Нэмэлт нөхцөл",
+      "type":"textarea",
+      "required":false
+    }
+  ]
+},
+
+{
+  "category": "Санхүүгийн гэрээ",
+  "name": "Зээлийн гэрээ",
+  "description": "Зээл олгох, авах нөхцөл болон эргэн төлөлтийг зохицуулах гэрээ",
+
+  "content":"ЗЭЭЛИЙН ГЭРЭЭ\n\nНэг талаас {{lenderName}} (цаашид \"Зээл өгөгч\" гэх), нөгөө талаас {{borrowerName}} (цаашид \"Зээл авагч\" гэх) энэхүү гэрээг байгуулав.\n\n1. Зээлийн мэдээлэл\n\nЗээлийн хэмжээ: {{loanAmount}} {{currencyType}}\n\nЭхлэх огноо: {{loanStartDate}}\n\nДуусах огноо: {{loanEndDate}}\n\nХугацаа: {{loanDuration}}\n\n2. Хүүгийн нөхцөл\n\nХүүгийн хувь: {{interestRate}}%\n\nХүү тооцох хугацаа: {{interestPeriod}}\n\n3. Барьцааны мэдээлэл\n\nБарьцааны хөрөнгө:\n{{collateralDescription}}\n\nБарьцааны үнэлгээ:\n{{collateralValue}}\n\n4. Төлбөрийн нөхцөл\n\nТөлбөр төлөх график:\n{{paymentSchedule}}\n\n5. Хугацаа хэтэрсэн нөхцөл\n\nАлдангийн хувь: {{penaltyRate}}%\n\nХугацаа хэтэрсэн хоног тутам:\n{{lateCondition}}\n\n6. Нэмэлт нөхцөл\n\n{{additionalConditions}}\n\n7. Маргаан шийдвэрлэх\n\nМаргааныг Монголын Үндэсний Арбитрын журмаар шийдвэрлэнэ.",
+
+  "variables":[
+    {
+      "key":"lenderName",
+      "label":"Зээл өгөгч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"borrowerName",
+      "label":"Зээл авагч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"loanAmount",
+      "label":"Зээлийн хэмжээ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"currencyType",
+      "label":"Валют",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"loanStartDate",
+      "label":"Эхлэх огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"loanEndDate",
+      "label":"Дуусах огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"loanDuration",
+      "label":"Зээлийн хугацаа",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"interestRate",
+      "label":"Хүү (%)",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"interestPeriod",
+      "label":"Хүүгийн хугацаа",
+      "type":"text",
+      "required":false
+    },
+    {
+      "key":"collateralDescription",
+      "label":"Барьцааны хөрөнгө",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"collateralValue",
+      "label":"Барьцааны үнэлгээ",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"paymentSchedule",
+      "label":"Төлбөрийн график",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"penaltyRate",
+      "label":"Алданги (%)",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"lateCondition",
+      "label":"Хугацаа хэтэрсэн нөхцөл",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"additionalConditions",
+      "label":"Нэмэлт нөхцөл",
+      "type":"textarea",
+      "required":false
+    }
+  ]
+},
+
+{
+  "category": "Компанийн эрх шилжүүлэх гэрээ",
+  "name": "Компанийн эрх шилжүүлэх тухай гэрээ",
+  "description": "Компанийн эрх, үүрэг, эд хөрөнгө болон өмчлөх эрхийг шилжүүлэх гэрээ",
+
+  "content":"КОМПАНИЙН ЭРХ ШИЛЖҮҮЛЭХ ТУХАЙ ГЭРЭЭ\n\nНэг талаас {{ownerName}} (цаашид \"Үүсгэн байгуулагч\" гэх), нөгөө талаас {{receiverName}} (цаашид \"Эрх хүлээн авагч\" гэх) энэхүү гэрээг байгуулав.\n\n1. Гэрээний зорилго\n\nКомпанийн нэр:\n{{companyName}}\n\nКомпанийн регистр:\n{{companyRegister}}\n\nШилжүүлэх шалтгаан:\n{{transferReason}}\n\n2. Шилжүүлэгчийн эрх, үүрэг\n\nШилжүүлэх эд хөрөнгө:\n{{assetDescription}}\n\nЭргэлтийн хөрөнгө:\n{{workingCapital}}\n\nСанхүүгийн тайлан:\n{{financialReport}}\n\n3. Эрх хүлээн авагчийн эрх, үүрэг\n\nКомпанийн удирдлага авах огноо:\n{{managementDate}}\n\nҮйл ажиллагааны зорилго:\n{{businessPurpose}}\n\n4. Хариуцлага\n\nХариуцлага шилжих хугацаа:\n{{responsibilityDate}}\n\nНэмэлт нөхцөл:\n{{additionalConditions}}\n\n5. Гэрээний хүчинтэй хугацаа\n\nЭнэхүү гэрээ {{agreementDate}} өдөр хүчин төгөлдөр болно.",
+
+  "variables":[
+    {
+      "key":"ownerName",
+      "label":"Үүсгэн байгуулагч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"receiverName",
+      "label":"Эрх хүлээн авагч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"companyName",
+      "label":"Компанийн нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"companyRegister",
+      "label":"Компанийн регистр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"transferReason",
+      "label":"Шилжүүлэх шалтгаан",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"assetDescription",
+      "label":"Шилжүүлэх хөрөнгө",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"workingCapital",
+      "label":"Эргэлтийн хөрөнгө",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"financialReport",
+      "label":"Санхүүгийн тайлан",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"managementDate",
+      "label":"Удирдлага шилжүүлэх огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"businessPurpose",
+      "label":"Үйл ажиллагааны зорилго",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"responsibilityDate",
+      "label":"Хариуцлага шилжих хугацаа",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"additionalConditions",
+      "label":"Нэмэлт нөхцөл",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"agreementDate",
+      "label":"Гэрээ байгуулах огноо",
+      "type":"date",
+      "required":true
+    }
+  ]
+},
+
+{
+  "category": "Оюуны өмч, нууцын гэрээ",
+  "name": "Ноу-Хау /Үйлдвэрлэлийн нууц/ худалдах, худалдан авах гэрээ",
+  "description": "Үйлдвэрлэлийн нууц, технологийн мэдлэг, туршлага ашиглах эрх шилжүүлэх гэрээ",
+
+  "content":"НОУ-ХАУ /ҮЙЛДВЭРЛЭЛИЙН НУУЦ/ ХУДАЛДАХ, ХУДАЛДАН АВАХ ГЭРЭЭ\n\nНэг талаас {{sellerName}} (цаашид \"Худалдагч\" гэх), нөгөө талаас {{buyerName}} (цаашид \"Худалдан авагч\" гэх) энэхүү гэрээг байгуулав.\n\n1. Гэрээний агуулга\n\nНоу-Хау нэр:\n{{knowHowName}}\n\nАшиглах зорилго:\n{{usagePurpose}}\n\nҮйлдвэрлэх бүтээгдэхүүн:\n{{productDescription}}\n\n2. Ноу-Хау агуулга\n\nНууц технологийн тайлбар:\n{{knowHowDescription}}\n\nШилжүүлэх техникийн баримт бичиг:\n{{technicalDocuments}}\n\n3. Үнэ ба төлбөр\n\nНоу-Хау үнэ:\n{{knowHowPrice}}\n\nСургалтын зардал:\n{{trainingCost}}\n\nНийт үнэ:\n{{totalPrice}}\n\n4. Төлбөрийн нөхцөл\n\nУрьдчилгаа:\n{{advancePayment}}\n\nЭцсийн төлбөр:\n{{finalPayment}}\n\nТөлбөрийн хэлбэр:\n{{paymentMethod}}\n\n5. Шилжүүлэх нөхцөл\n\nШилжүүлэх огноо:\n{{transferDate}}\n\nШилжүүлэх газар:\n{{transferLocation}}\n\n6. Хариуцлага\n\nХугацаа хэтэрсэн алданги:\n{{penaltyRate}}%\n\n7. Нэмэлт нөхцөл\n\n{{additionalConditions}}\n\n8. Маргаан шийдвэрлэх\n\nМаргааныг Монголын Үндэсний Арбитрын журмаар шийдвэрлэнэ.",
+
+  "variables":[
+    {
+      "key":"sellerName",
+      "label":"Худалдагч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"buyerName",
+      "label":"Худалдан авагч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"knowHowName",
+      "label":"Ноу-Хау нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"usagePurpose",
+      "label":"Ашиглах зорилго",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"productDescription",
+      "label":"Үйлдвэрлэх бүтээгдэхүүн",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"knowHowDescription",
+      "label":"Нууц технологийн тайлбар",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"technicalDocuments",
+      "label":"Техникийн баримт бичиг",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"knowHowPrice",
+      "label":"Ноу-Хау үнэ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"trainingCost",
+      "label":"Сургалтын зардал",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"totalPrice",
+      "label":"Нийт үнэ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"advancePayment",
+      "label":"Урьдчилгаа",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"finalPayment",
+      "label":"Эцсийн төлбөр",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"paymentMethod",
+      "label":"Төлбөрийн хэлбэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"transferDate",
+      "label":"Шилжүүлэх огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"transferLocation",
+      "label":"Шилжүүлэх газар",
+      "type":"text",
+      "required":false
+    },
+    {
+      "key":"penaltyRate",
+      "label":"Алданги (%)",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"additionalConditions",
+      "label":"Нэмэлт нөхцөл",
+      "type":"textarea",
+      "required":false
+    }
+  ]
+},
+
+{
+  "category": "Тээвэр, ложистикийн гэрээ",
+  "name": "Олон улсын хэмжээнд ачаа тээврийн шуурхай мэдээллээр хангах тухай гэрээ",
+  "description": "Олон улсын ачаа тээврийн үнэ тариф, зөвлөгөө, мэдээллийн үйлчилгээ үзүүлэх гэрээ",
+
+  "content":"ОЛОН УЛСЫН ХЭМЖЭЭНД АЧАА ТЭЭВРИЙН ШУУРХАЙ МЭДЭЭЛЛЭЭР ХАНГАХ ТУХАЙ ГЭРЭЭ\n\nНэг талаас {{executorName}} (цаашид \"Гүйцэтгэгч\" гэх), нөгөө талаас {{clientName}} (цаашид \"Захиалагч\" гэх) энэхүү гэрээг байгуулав.\n\n1. Үйлчилгээний агуулга\n\nҮзүүлэх мэдээллийн төрөл:\n{{serviceType}}\n\nТээврийн төрөл:\n{{transportType}}\n\nНэмэлт зөвлөгөө:\n{{consultationDescription}}\n\n2. Гүйцэтгэгчийн үүрэг\n\nӨгөх мэдээлэл:\n{{providedInformation}}\n\nМэдээлэл хүргэх хугацаа:\n{{responseTime}}\n\n3. Захиалагчийн үүрэг\n\nХүлээн авсан мэдээллийг зөвхөн өөрийн зориулалтаар ашиглана.\n\n4. Төлбөрийн нөхцөл\n\nҮйлчилгээний төлбөр:\n{{serviceFee}}\n\nУрьдчилгаа:\n{{advancePayment}}\n\nСар бүрийн төлбөр:\n{{monthlyPayment}}\n\nТөлбөрийн хэлбэр:\n{{paymentMethod}}\n\n5. Хариуцлага\n\nХугацаа хэтэрсэн алданги:\n{{penaltyRate}}%\n\n6. Гэрээний хугацаа\n\nЭхлэх огноо: {{startDate}}\n\nДуусах огноо: {{endDate}}\n\n7. Маргаан шийдвэрлэх\n\nМаргааныг Монголын Үндэсний Арбитрын журмаар шийдвэрлэнэ.",
+
+  "variables":[
+    {
+      "key":"executorName",
+      "label":"Гүйцэтгэгч байгууллага",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"clientName",
+      "label":"Захиалагч байгууллага",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"serviceType",
+      "label":"Мэдээллийн үйлчилгээний төрөл",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"transportType",
+      "label":"Тээврийн төрөл",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"consultationDescription",
+      "label":"Нэмэлт зөвлөгөө",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"providedInformation",
+      "label":"Өгөх мэдээлэл",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"responseTime",
+      "label":"Мэдээлэл өгөх хугацаа",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"serviceFee",
+      "label":"Үйлчилгээний төлбөр",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"advancePayment",
+      "label":"Урьдчилгаа",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"monthlyPayment",
+      "label":"Сар бүрийн төлбөр",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"paymentMethod",
+      "label":"Төлбөрийн хэлбэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"penaltyRate",
+      "label":"Алданги (%)",
+      "type":"number",
+      "required":false
+    },
+    {
+      "key":"startDate",
+      "label":"Эхлэх огноо",
+      "type":"date",
+      "required":true
+    },
+    {
+      "key":"endDate",
+      "label":"Дуусах огноо",
+      "type":"date",
+      "required":true
+    }
+  ]
+},
+
+{
+  "category": "Оюуны өмч, эрх шилжүүлэх гэрээ",
+  "name": "Оюуны үнэт зүйл, эд хөрөнгийн эрхийг худалдах, худалдан авах гэрээ",
+  "description": "Оюуны өмч, зохиогчийн эрх болон өмчлөх эрх худалдах, шилжүүлэх гэрээ",
+
+  "content":"ОЮУНЫ ҮНЭТ ЗҮЙЛ, ЭД ХӨРӨНГИЙН ЭРХИЙГ ХУДАЛДАХ, ХУДАЛДАН АВАХ ГЭРЭЭ\n\nНэг талаас {{sellerName}} (цаашид \"Худалдагч\" гэх), нөгөө талаас {{buyerName}} (цаашид \"Худалдан авагч\" гэх) энэхүү гэрээг байгуулав.\n\n1. Оюуны өмчийн мэдээлэл\n\nОюуны өмчийн нэр:\n{{intellectualPropertyName}}\n\nБүртгэлийн байгууллага:\n{{registrationAuthority}}\n\nБүртгэлийн дугаар:\n{{registrationNumber}}\n\nБүртгэгдсэн огноо:\n{{registrationDate}}\n\nОюуны өмчийн онцлог:\n{{propertyDescription}}\n\n2. Худалдах үнэ\n\nЭрхийн үнэ:\n{{salePrice}}\n\n3. Ашиглах нөхцөл\n\nАшиглах хэлбэр:\n{{usageMethod}}\n\nНэмэлт нөхцөл:\n{{usageCondition}}\n\n4. Худалдагчийн үүрэг\n\nШилжүүлэх баримт бичиг:\n{{documentList}}\n\n5. Худалдан авагчийн эрх\n\nЭрх хэрэгжүүлэх нөхцөл:\n{{rightsCondition}}\n\n6. Хариуцлага\n\nҮүргээ биелүүлээгүй нөхцөл:\n{{penaltyCondition}}\n\n7. Маргаан шийдвэрлэх\n\nМаргааныг Монголын Үндэсний Арбитрын журмаар шийдвэрлэнэ.\n\n8. Гэрээний хугацаа\n\nЭнэхүү гэрээ {{agreementDate}} өдрөөс хүчин төгөлдөр болно.",
+
+  "variables":[
+    {
+      "key":"sellerName",
+      "label":"Худалдагч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"buyerName",
+      "label":"Худалдан авагч",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"intellectualPropertyName",
+      "label":"Оюуны өмчийн нэр",
+      "type":"text",
+      "required":true
+    },
+    {
+      "key":"registrationAuthority",
+      "label":"Бүртгэлийн байгууллага",
+      "type":"text",
+      "required":false
+    },
+    {
+      "key":"registrationNumber",
+      "label":"Бүртгэлийн дугаар",
+      "type":"text",
+      "required":false
+    },
+    {
+      "key":"registrationDate",
+      "label":"Бүртгэгдсэн огноо",
+      "type":"date",
+      "required":false
+    },
+    {
+      "key":"propertyDescription",
+      "label":"Оюуны өмчийн тайлбар",
+      "type":"textarea",
+      "required":true
+    },
+    {
+      "key":"salePrice",
+      "label":"Эрхийн үнэ",
+      "type":"number",
+      "required":true
+    },
+    {
+      "key":"usageMethod",
+      "label":"Ашиглах хэлбэр",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"usageCondition",
+      "label":"Ашиглах нөхцөл",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"documentList",
+      "label":"Шилжүүлэх баримт бичиг",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"rightsCondition",
+      "label":"Эрх хэрэгжүүлэх нөхцөл",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"penaltyCondition",
+      "label":"Хариуцлагын нөхцөл",
+      "type":"textarea",
+      "required":false
+    },
+    {
+      "key":"agreementDate",
+      "label":"Гэрээ байгуулах огноо",
+      "type":"date",
+      "required":true
+    }
+  ]
+},
+
+  {
+    "category": "Тоног төхөөрөмжийн түрээс",
+    "name": "Тоног төхөөрөмж түрээслэх гэрээ",
+    "description": "Тоног төхөөрөмжийг түр хугацаагаар эзэмшүүлэх, ашиглуулах, төлбөр, хариуцлага болон буцаан хүлээлгэн өгөх нөхцөлийг зохицуулах гэрээ",
+    "content": "ТОНОГ ТӨХӨӨРӨМЖ ТҮРЭЭСЛЭХ ТУХАЙ ГЭРЭЭ\n\nГэрээний дугаар: {{contractNumber}}\nБайгуулсан огноо: {{contractDate}}\nБайршил: {{city}}\n\nНэг талаас {{lessorCompanyName}}, хаяг: {{lessorAddress}} /цаашид \"Түрээслүүлэгч\" гэх/, түүнийг {{lessorRepresentativePosition}} албан тушаалтай {{lessorRepresentativeName}} төлөөлөн,\n\nНөгөө талаас {{lesseeCompanyName}}, хаяг: {{lesseeAddress}} /цаашид \"Түрээслэн авагч\" гэх/, түүнийг {{lesseeRepresentativePosition}} албан тушаалтай {{lesseeRepresentativeName}} төлөөлөн энэхүү гэрээг байгуулав.\n\n1. ГЭРЭЭНИЙ АГУУЛГА\n1.1 Түрээслүүлэгч нь {{equipmentName}} тоног төхөөрөмжийг түр хугацаагаар эзэмшүүлэн ашиглуулахаар шилжүүлнэ.\n1.2 Тоног төхөөрөмжийн байдал: {{equipmentCondition}}\n1.3 Тоног төхөөрөмжийн дэлгэрэнгүй мэдээлэл: {{equipmentDescription}}\n\n2. ТҮРЭЭСИЙН ЗОРИУЛАЛТ\n2.1 Түрээслэн авагч нь тоног төхөөрөмжийг {{usagePurpose}} зориулалтаар ашиглана.\n\n3. ШИЛЖҮҮЛЭН ӨГӨХ ЖУРАМ\n3.1 Гэрээнд гарын үсэг зурснаас хойш {{deliveryDays}} хоногийн дотор тоног төхөөрөмжийг шилжүүлнэ.\n3.2 Хүлээлгэн өгөх, хүлээн авах ажиллагааг акт үйлдэн баталгаажуулна.\n\n4. ТҮРЭЭСИЙН ХУГАЦАА\n4.1 Түрээсийн эхлэх огноо: {{leaseStartDate}}\n4.2 Түрээсийн дуусах огноо: {{leaseEndDate}}\n4.3 Түрээсийн нийт хугацаа: {{leaseDuration}}\n\n5. ТҮРЭЭСИЙН ТӨЛБӨР\n5.1 Түрээсийн төлбөрийн хэмжээ: {{leaseAmount}} {{currency}}\n5.2 Төлбөрийн давтамж: {{paymentFrequency}}\n5.3 Төлбөр төлөх хугацаа: {{paymentDueDate}}\n5.4 Төлбөрийг {{bankAccount}} дансанд шилжүүлнэ.\n\n6. ТҮРЭЭСЛҮҮЛЭГЧИЙН ЭРХ, ҮҮРЭГ\n6.1 Түрээслүүлэгч нь тоног төхөөрөмжийн ашиглалтад хяналт тавих эрхтэй.\n6.2 Түрээслүүлэгч нь техникийн мэдээлэл, зааварчилгаа, зөвлөгөө өгнө.\n\n7. ТҮРЭЭСЛЭН АВАГЧИЙН ЭРХ, ҮҮРЭГ\n7.1 Тоног төхөөрөмжийг зориулалтын дагуу ашиглана.\n7.2 Түрээсийн төлбөрийг хугацаанд төлнө.\n7.3 Тоног төхөөрөмжийг бүрэн бүтэн хадгална.\n7.4 Мэргэжлийн бус хүнээр ажиллуулахгүй.\n\n8. БУЦААН ӨГӨХ ЖУРАМ\n8.1 Түрээсийн хугацаа дууссанаас хойш {{returnDays}} хоногийн дотор тоног төхөөрөмжийг буцаан өгнө.\n8.2 Буцаан өгөхдөө акт үйлдэнэ.\n8.3 Хэвийн элэгдэл хорогдлыг тооцно.\n8.4 Худалдан авах боломж: {{purchaseOption}}\n\n9. ХАРИУЦЛАГА\n9.1 Хүлээн авах хугацаа хэтэрсэн бол {{lateAcceptancePenalty}} хувийн алданги төлнө.\n9.2 Төлбөр хоцорсон бол {{latePaymentPenalty}} хувийн алданги төлнө.\n9.3 Зориулалт бусаар ашиглавал {{misusePenalty}} хувийн торгууль төлнө.\n9.4 Зөвшөөрөлгүй дахин түрээслүүлсэн бол {{subleasePenaltyAmount}} {{currency}} торгууль төлнө.\n\n10. ДАВАГДАШГҮЙ ХҮЧИН ЗҮЙЛ\n10.1 Байгалийн гамшиг, цар тахал, төрийн шийдвэр болон бусад нөхцөлөөс шалтгаалан үүргээ биелүүлэх боломжгүй болсон тохиолдолд талууд хариуцлагаас чөлөөлөгдөнө.\n\n11. МАРГААН ШИЙДВЭРЛЭХ\n11.1 Маргааныг {{disputeResolutionMethod}} журмаар шийдвэрлэнэ.\n\n12. ГЭРЭЭ ЦУЦЛАХ\n12.1 Гэрээний үүрэг ноцтой зөрчигдсөн тохиолдолд гэрээг цуцалж болно.\n12.2 Нэмэлт нөхцөл: {{terminationConditions}}\n\n13. ХОЛБОО БАРИХ\nТүрээслүүлэгч: {{lessorContactPerson}}, {{lessorPhone}}\nТүрээслэн авагч: {{lesseeContactPerson}}, {{lesseePhone}}\n\n14. ХАВСРАЛТ\n{{attachments}}",
+    "variables": [
+      {"key":"contractNumber","label":"Гэрээний дугаар","type":"text","required":true},
+      {"key":"contractDate","label":"Гэрээ байгуулсан огноо","type":"date","required":true},
+      {"key":"city","label":"Байршил / хот","type":"text","required":true},
+      {"key":"lessorCompanyName","label":"Түрээслүүлэгч байгууллагын нэр","type":"text","required":true},
+      {"key":"lessorAddress","label":"Түрээслүүлэгчийн хаяг","type":"textarea","required":true},
+      {"key":"lessorRepresentativeName","label":"Түрээслүүлэгчийг төлөөлсөн хүний нэр","type":"text","required":true},
+      {"key":"lessorRepresentativePosition","label":"Түрээслүүлэгчийг төлөөлсөн хүний албан тушаал","type":"text","required":true},
+      {"key":"lesseeCompanyName","label":"Түрээслэн авагч байгууллагын нэр","type":"text","required":true},
+      {"key":"lesseeAddress","label":"Түрээслэн авагчийн хаяг","type":"textarea","required":true},
+      {"key":"lesseeRepresentativeName","label":"Түрээслэн авагчийг төлөөлсөн хүний нэр","type":"text","required":true},
+      {"key":"lesseeRepresentativePosition","label":"Түрээслэн авагчийг төлөөлсөн хүний албан тушаал","type":"text","required":true},
+      {"key":"equipmentName","label":"Тоног төхөөрөмжийн нэр","type":"text","required":true},
+      {"key":"equipmentDescription","label":"Тоног төхөөрөмжийн дэлгэрэнгүй мэдээлэл","type":"textarea","required":false},
+      {"key":"equipmentCondition","label":"Тоног төхөөрөмжийн төлөв байдал","type":"textarea","required":true},
+      {"key":"usagePurpose","label":"Ашиглах зориулалт","type":"textarea","required":true},
+      {"key":"deliveryDays","label":"Шилжүүлэн өгөх хоног","type":"number","required":true},
+      {"key":"leaseStartDate","label":"Түрээс эхлэх огноо","type":"date","required":true},
+      {"key":"leaseEndDate","label":"Түрээс дуусах огноо","type":"date","required":true},
+      {"key":"leaseDuration","label":"Түрээсийн хугацаа","type":"text","required":true},
+      {"key":"leaseAmount","label":"Түрээсийн төлбөр","type":"number","required":true},
+      {"key":"currency","label":"Валют","type":"select","required":true},
+      {"key":"paymentFrequency","label":"Төлбөрийн давтамж","type":"select","required":true},
+      {"key":"paymentDueDate","label":"Төлбөр төлөх хугацаа","type":"text","required":true},
+      {"key":"bankAccount","label":"Төлбөр хүлээн авах данс","type":"text","required":true},
+      {"key":"returnDays","label":"Буцаан өгөх хоног","type":"number","required":true},
+      {"key":"purchaseOption","label":"Худалдан авах боломж","type":"boolean","required":false},
+      {"key":"lateAcceptancePenalty","label":"Хүлээн авах хугацаа хэтрүүлсний алданги хувь","type":"number","required":false},
+      {"key":"latePaymentPenalty","label":"Төлбөр хоцроосны алданги хувь","type":"number","required":false},
+      {"key":"misusePenalty","label":"Зориулалт бусаар ашигласны торгууль хувь","type":"number","required":false},
+      {"key":"subleasePenaltyAmount","label":"Дахин түрээслүүлсний торгуулийн хэмжээ","type":"number","required":false},
+      {"key":"disputeResolutionMethod","label":"Маргаан шийдвэрлэх журам","type":"text","required":true},
+      {"key":"terminationConditions","label":"Гэрээ цуцлах нэмэлт нөхцөл","type":"textarea","required":false},
+      {"key":"lessorContactPerson","label":"Түрээслүүлэгчийн холбоо барих хүн","type":"text","required":true},
+      {"key":"lessorPhone","label":"Түрээслүүлэгчийн утас","type":"text","required":true},
+      {"key":"lesseeContactPerson","label":"Түрээслэн авагчийн холбоо барих хүн","type":"text","required":true},
+      {"key":"lesseePhone","label":"Түрээслэн авагчийн утас","type":"text","required":true},
+      {"key":"attachments","label":"Хавсралтууд","type":"textarea","required":false}
+    ]
+  },
+  {
+    "category": "Тээврийн хэрэгсэл худалдах",
+    "name": "Тээврийн хэрэгсэл худалдах, худалдан авах гэрээ",
+    "description": "Тээврийн хэрэгслийн өмчлөх эрх шилжүүлэх, төлбөр, баталгаа, доголдол, торгууль болон маргаан шийдвэрлэх нөхцөлийг зохицуулах гэрээ",
+    "content": "ТЭЭВРИЙН ХЭРЭГСЭЛ ХУДАЛДАХ, ХУДАЛДАН АВАХ ГЭРЭЭ\n\nГэрээний дугаар: {{contractNumber}}\nБайгуулсан огноо: {{contractDate}}\nБайршил: {{city}}\n\nНэг талаас {{sellerName}}, хаяг: {{sellerAddress}} /цаашид \"Худалдагч\" гэх/,\n\nНөгөө талаас {{buyerName}}, хаяг: {{buyerAddress}} /цаашид \"Худалдан авагч\" гэх/, талууд харилцан тохиролцож энэхүү гэрээг байгуулав.\n\n1. ГЭРЭЭНИЙ ЗҮЙЛ\n1.1 Худалдагч нь биет болон эрхийн доголдолгүй {{vehicleType}} төрлийн, {{vehicleBrand}} маркийн, {{vehicleModel}} загварын, улсын бүртгэлийн дугаар {{plateNumber}} бүхий тээврийн хэрэгслийг холбогдох баримт бичгийн хамт Худалдан авагчид шилжүүлнэ.\n1.2 Арлын дугаар: {{vehicleVin}}\n1.3 Үйлдвэрлэсэн он: {{manufactureYear}}\n1.4 Өнгө: {{vehicleColor}}\n1.5 Явсан километр: {{mileage}}\n\n2. ТӨЛБӨР БА ТООЦОО\n2.1 Тээврийн хэрэгслийн үнэ: {{vehiclePrice}} {{currency}}\n2.2 Худалдан авагч гэрээ байгуулснаас хойш {{paymentDays}} хоногийн дотор төлбөрийг төлнө.\n2.3 Төлбөрийн хэлбэр: {{paymentMethod}}\n\n3. ЧАНАР БА ИЖ БҮРДЭЛ\n3.1 Тээврийн хэрэгсэл чанар, иж бүрдлийн хувьд бүрэн байна.\n3.2 Нэмэлт дагалдах зүйлс: {{includedItems}}\n\n4. БАТАЛГАА\n4.1 Худалдагч нь тээврийн хэрэгсэлд {{warrantyPeriod}} хугацааны баталгаа олгоно.\n\n5. ДОГОЛДОЛ БА ГОМДОЛ ШААРДЛАГА\n5.1 Худалдан авагч доголдол илэрсэн тохиолдолд Худалдагчид бичгээр мэдэгдэнэ.\n5.2 Худалдагч доголдлыг {{repairDays}} хоногийн дотор өөрийн хөрөнгөөр арилгах, ижил төрлийн тээврийн хэрэгслээр солих эсвэл төлбөрийг буцаан олгоно.\n\n6. ТАЛУУДЫН ХАРИУЦЛАГА\n6.1 Худалдагч тээврийн хэрэгслийг хугацаанд нь шилжүүлээгүй бол {{sellerPenaltyPercent}} хувийн торгууль төлнө.\n6.2 Худалдан авагч төлбөрийг хугацаанд нь төлөөгүй бол хоног тутам {{buyerLatePenaltyPercent}} хувийн алданги төлнө.\n\n7. ҮНИЙН ЗӨРҮҮ\n7.1 Зах зээлийн үнээс илт зөрүү гарсан тохиолдолд талууд үнийн зөрүүг харилцан тохиролцож зохицуулна.\n\n8. ХОХИРОЛ НӨХӨН ТӨЛӨХ\n8.1 Гэрээний үүрэг зөрчигдсөний улмаас учирсан шууд хохирлыг буруутай тал нөхөн төлнө.\n\n9. ДАВАГДАШГҮЙ ХҮЧИН ЗҮЙЛ\n9.1 Үер, гал түймэр, газар хөдлөлт, цар тахал, төрийн шийдвэр болон бусад нөхцөлөөс шалтгаалан үүрэг биелүүлэх боломжгүй болсон тохиолдолд талууд хариуцлагаас чөлөөлөгдөнө.\n\n10. МАРГААН ШИЙДВЭРЛЭХ\n10.1 Маргааныг {{disputeResolutionMethod}} журмаар шийдвэрлэнэ.\n\n11. БУСАД НӨХЦӨЛ\n11.1 Гэрээг хоёр хувь үйлдэж тал тус бүр нэг хувийг хадгална.\n11.2 Гэрээнд тусгагдаагүй асуудлыг Монгол Улсын холбогдох хууль тогтоомжийн дагуу шийдвэрлэнэ.",
+    "variables": [
+      {"key":"contractNumber","label":"Гэрээний дугаар","type":"text","required":true},
+      {"key":"contractDate","label":"Гэрээ байгуулсан огноо","type":"date","required":true},
+      {"key":"city","label":"Байршил / хот","type":"text","required":true},
+      {"key":"sellerName","label":"Худалдагчийн нэр","type":"text","required":true},
+      {"key":"sellerAddress","label":"Худалдагчийн хаяг","type":"textarea","required":true},
+      {"key":"buyerName","label":"Худалдан авагчийн нэр","type":"text","required":true},
+      {"key":"buyerAddress","label":"Худалдан авагчийн хаяг","type":"textarea","required":true},
+      {"key":"vehicleType","label":"Тээврийн хэрэгслийн төрөл","type":"select","required":true},
+      {"key":"vehicleBrand","label":"Тээврийн хэрэгслийн марк","type":"text","required":true},
+      {"key":"vehicleModel","label":"Тээврийн хэрэгслийн загвар","type":"text","required":true},
+      {"key":"plateNumber","label":"Улсын бүртгэлийн дугаар","type":"text","required":true},
+      {"key":"vehicleVin","label":"Арлын дугаар","type":"text","required":true},
+      {"key":"manufactureYear","label":"Үйлдвэрлэсэн он","type":"number","required":true},
+      {"key":"vehicleColor","label":"Өнгө","type":"text","required":false},
+      {"key":"mileage","label":"Явсан километр","type":"number","required":false},
+      {"key":"vehiclePrice","label":"Тээврийн хэрэгслийн үнэ","type":"number","required":true},
+      {"key":"currency","label":"Валют","type":"select","required":true},
+      {"key":"paymentDays","label":"Төлбөр төлөх хоног","type":"number","required":true},
+      {"key":"paymentMethod","label":"Төлбөрийн хэлбэр","type":"select","required":true},
+      {"key":"includedItems","label":"Дагалдах зүйлс","type":"textarea","required":false},
+      {"key":"warrantyPeriod","label":"Баталгаат хугацаа","type":"text","required":false},
+      {"key":"repairDays","label":"Доголдол арилгах хоног","type":"number","required":false},
+      {"key":"sellerPenaltyPercent","label":"Худалдагчийн торгуулийн хувь","type":"number","required":false},
+      {"key":"buyerLatePenaltyPercent","label":"Худалдан авагчийн алдангийн хувь","type":"number","required":false},
+      {"key":"disputeResolutionMethod","label":"Маргаан шийдвэрлэх журам","type":"text","required":true}
+    ]
+  },
+  {
+    "category": "Түрээс",
+    "name": "Түрээсийн гэрээ",
+    "description": "Эд хөрөнгийг түр хугацаагаар эзэмшүүлэх, ашиглуулах, төлбөр, үүрэг, торгууль болон буцаан өгөх нөхцөлийг зохицуулах ерөнхий түрээсийн гэрээ",
+    "content": "ТҮРЭЭСИЙН ГЭРЭЭ\n\nГэрээний дугаар: {{contractNumber}}\nБайгуулсан огноо: {{contractDate}}\nБайршил: {{city}}\n\nНэг талаас {{lessorName}} /цаашид \"Түрээслүүлэгч\" гэх/, түүнийг {{lessorRepresentativePosition}} албан тушаалтай {{lessorRepresentativeName}} төлөөлөн,\n\nНөгөө талаас {{lesseeName}} /цаашид \"Түрээслэгч\" гэх/, түүнийг {{lesseeRepresentativePosition}} албан тушаалтай {{lesseeRepresentativeName}} төлөөлөн энэхүү гэрээг байгуулав.\n\n1. НИЙТЛЭГ ЗААЛТ\n1.1 Түрээслүүлэгч нь {{assetName}} эд хөрөнгийг түр хугацаагаар эзэмшүүлэн ашиглуулахаар Түрээслэгчид шилжүүлнэ.\n1.2 Эд хөрөнгийн тодорхойлолт: {{assetDescription}}\n1.3 Эд хөрөнгийн зориулалт: {{assetPurpose}}\n\n2. ГЭРЭЭНИЙ ҮНЭ\n2.1 Түрээсийн төлбөр: {{rentalAmount}} {{currency}}\n2.2 Төлбөр төлөх хугацаа: {{paymentPeriod}}\n\n3. ТӨЛБӨРИЙН НӨХЦӨЛ\n3.1 Төлбөрийн хэлбэр: {{paymentMethod}}\n3.2 Төлбөр төлөх төрөл: {{paymentType}}\n\n4. ҮҮРЭГ ГҮЙЦЭТГЭХ ХУГАЦАА\n4.1 Эд хөрөнгийг гэрээнд гарын үсэг зурснаас хойш {{deliveryDays}} хоногийн дотор шилжүүлнэ.\n4.2 Түрээсийн эхлэх огноо: {{leaseStartDate}}\n4.3 Түрээсийн дуусах огноо: {{leaseEndDate}}\n\n5. ТАЛУУДЫН ҮҮРЭГ\n5.1 Түрээслүүлэгч нь гэрээний нөхцөлийг хангасан эд хөрөнгийг хугацаанд нь шилжүүлнэ.\n5.2 Түрээслүүлэгч нь {{majorRepairPeriod}} хугацаанд их засвар хийх үүрэгтэй.\n5.3 Түрээслэгч нь эд хөрөнгийг зориулалтын дагуу ашиглана.\n5.4 Түрээслэгч нь урсгал засварыг өөрийн зардлаар хийнэ.\n5.5 Түрээслэгч нь түрээсийн төлбөрийг хугацаанд нь төлнө.\n5.6 Гэрээ дуусмагц эд хөрөнгийг хэвийн элэгдэл хорогдлыг тооцон бүрэн бүтэн буцаан өгнө.\n\n6. ХАРИУЦЛАГА\n6.1 Түрээсийн төлбөр хугацаа хэтэрсэн бол хоног тутам {{latePaymentPenaltyPercent}} хувийн торгууль төлнө.\n6.2 Хугацаа {{terminationDelayDays}} хоногоос дээш хэтэрвэл Түрээслүүлэгч гэрээг цуцлах эрхтэй.\n6.3 Бусад үүргээ биелүүлээгүй бол жилийн түрээсийн төлбөрийн {{breachPenaltyPercent}} хувийн торгууль төлнө.\n\n7. ДАВАГДАШГҮЙ ХҮЧИН ЗҮЙЛ\n7.1 Дайн, нийтийг хамарсан өвчлөл, газар хөдлөлт, үер, гал түймэр болон бусад нөхцөлөөс шалтгаалан гэрээг биелүүлэх боломжгүй болсон бол талууд хариуцлага хүлээхгүй.\n\n8. МАРГААН ШИЙДВЭРЛЭХ\n8.1 Маргааныг эхлээд эвийн журмаар шийдвэрлэнэ.\n8.2 Шийдвэрлэх боломжгүй бол {{disputeResolutionMethod}} журмаар шийдвэрлэнэ.\n\n9. НЭМЭЛТ ӨӨРЧЛӨЛТ БА ЦУЦЛАЛТ\n9.1 Нэмэлт өөрчлөлтийг зөвхөн бичгээр хийнэ.\n9.2 Гэрээг хугацаанаас өмнө цуцлах нөхцөл: {{terminationConditions}}\n\n10. НЭМЭЛТ НӨХЦӨЛ\n{{additionalTerms}}\n\n11. ХАВСРАЛТ\n{{attachments}}\n\n12. ТАЛУУДЫН ХАЯГ\nТүрээслүүлэгчийн хаяг: {{lessorAddress}}\nТүрээслүүлэгчийн утас: {{lessorPhone}}\n\nТүрээслэгчийн хаяг: {{lesseeAddress}}\nТүрээслэгчийн утас: {{lesseePhone}}",
+    "variables": [
+      {"key":"contractNumber","label":"Гэрээний дугаар","type":"text","required":true},
+      {"key":"contractDate","label":"Гэрээ байгуулсан огноо","type":"date","required":true},
+      {"key":"city","label":"Байршил / хот","type":"text","required":true},
+      {"key":"lessorName","label":"Түрээслүүлэгчийн нэр","type":"text","required":true},
+      {"key":"lessorRepresentativeName","label":"Түрээслүүлэгчийг төлөөлсөн хүний нэр","type":"text","required":true},
+      {"key":"lessorRepresentativePosition","label":"Түрээслүүлэгчийг төлөөлсөн хүний албан тушаал","type":"text","required":true},
+      {"key":"lesseeName","label":"Түрээслэгчийн нэр","type":"text","required":true},
+      {"key":"lesseeRepresentativeName","label":"Түрээслэгчийг төлөөлсөн хүний нэр","type":"text","required":true},
+      {"key":"lesseeRepresentativePosition","label":"Түрээслэгчийг төлөөлсөн хүний албан тушаал","type":"text","required":true},
+      {"key":"assetName","label":"Эд хөрөнгийн нэр","type":"text","required":true},
+      {"key":"assetDescription","label":"Эд хөрөнгийн тодорхойлолт","type":"textarea","required":false},
+      {"key":"assetPurpose","label":"Эд хөрөнгийн зориулалт","type":"textarea","required":true},
+      {"key":"rentalAmount","label":"Түрээсийн төлбөр","type":"number","required":true},
+      {"key":"currency","label":"Валют","type":"select","required":true},
+      {"key":"paymentPeriod","label":"Төлбөр төлөх хугацаа","type":"text","required":true},
+      {"key":"paymentMethod","label":"Төлбөрийн хэлбэр","type":"select","required":true},
+      {"key":"paymentType","label":"Төлбөр төлөх төрөл","type":"select","required":true},
+      {"key":"deliveryDays","label":"Эд хөрөнгө шилжүүлэх хоног","type":"number","required":true},
+      {"key":"leaseStartDate","label":"Түрээс эхлэх огноо","type":"date","required":true},
+      {"key":"leaseEndDate","label":"Түрээс дуусах огноо","type":"date","required":true},
+      {"key":"majorRepairPeriod","label":"Их засвар хийх хугацаа","type":"text","required":false},
+      {"key":"latePaymentPenaltyPercent","label":"Төлбөр хоцроосны торгуулийн хувь","type":"number","required":false},
+      {"key":"terminationDelayDays","label":"Гэрээ цуцлах боломжтой хоцролтын хоног","type":"number","required":false},
+      {"key":"breachPenaltyPercent","label":"Бусад зөрчлийн торгуулийн хувь","type":"number","required":false},
+      {"key":"disputeResolutionMethod","label":"Маргаан шийдвэрлэх журам","type":"text","required":true},
+      {"key":"terminationConditions","label":"Гэрээ цуцлах нөхцөл","type":"textarea","required":false},
+      {"key":"additionalTerms","label":"Нэмэлт нөхцөл","type":"textarea","required":false},
+      {"key":"attachments","label":"Хавсралтууд","type":"textarea","required":false},
+      {"key":"lessorAddress","label":"Түрээслүүлэгчийн хаяг","type":"textarea","required":true},
+      {"key":"lessorPhone","label":"Түрээслүүлэгчийн утас","type":"text","required":true},
+      {"key":"lesseeAddress","label":"Түрээслэгчийн хаяг","type":"textarea","required":true},
+      {"key":"lesseePhone","label":"Түрээслэгчийн утас","type":"text","required":true}
+    ]
+  },
+  {
+    "category": "Франчайз",
+    "name": "Франчайзингийн гэрээ",
+    "description": "Брэнд, худалдааны тэмдэг, бизнесийн систем, үйлдвэрлэлийн аргачлал, сургалт болон техникийн дэмжлэг ашиглах эрх олгох гэрээ",
+    "content": "ФРАНЧАЙЗИНГИЙН ГЭРЭЭ\n\nГэрээний дугаар: {{contractNumber}}\nБайгуулсан огноо: {{contractDate}}\nБайршил: {{city}}\n\nНэг талаас {{franchisorCompanyName}} /цаашид \"Зөвшөөрөл олгогч\" гэх/, түүнийг {{franchisorRepresentativePosition}} албан тушаалтай {{franchisorRepresentativeName}} төлөөлөн,\n\nНөгөө талаас {{franchiseeCompanyName}} /цаашид \"Зөвшөөрөл авагч\" гэх/, түүнийг {{franchiseeRepresentativePosition}} албан тушаалтай {{franchiseeRepresentativeName}} төлөөлөн энэхүү гэрээг байгуулав.\n\n1. ГЭРЭЭНИЙ ЗҮЙЛ\n1.1 Зөвшөөрөл олгогч нь {{productName}} бүтээгдэхүүн, үйлчилгээтэй холбоотой бизнесийн систем, худалдааны тэмдэг, технологи болон үйл ажиллагааны аргачлалыг ашиглах эрхийг Зөвшөөрөл авагчид олгоно.\n1.2 Үйл ажиллагааны бүс: {{territory}}\n1.3 Үйл ажиллагааны зорилго: {{businessPurpose}}\n\n2. ХАМТРАН АЖИЛЛАХ ЗОРИЛГО\n2.1 Үйлдвэрлэл, борлуулалт, үйлчилгээний үйл ажиллагааг өргөжүүлнэ.\n2.2 Зах зээлийн үр ашиг болон бүтээгдэхүүний хэмжээг нэмэгдүүлнэ.\n2.3 Үйлдвэрлэл, борлуулалтын уян хатан байдлыг хангана.\n\n3. ФРАНЧАЙЗЫН БАГЦ ҮЙЛЧИЛГЭЭ\n3.1 Зөвшөөрөл олгогч дараах үйлчилгээ үзүүлнэ: техникийн зөвлөгөө, үйл ажиллагааны аргачлал, сургалтын хөтөлбөр, брэнд ашиглалтын заавар, технологийн баримт бичиг.\n3.2 Багц үйлчилгээний үнэ: {{packageFee}} {{currency}}\n\n4. ЗӨВШӨӨРӨЛ АВАГЧИЙН ҮҮРЭГ\n4.1 Санхүүгийн хөрөнгө оруулалт: {{investmentAmount}} {{currency}}\n4.2 Байр, тоног төхөөрөмжөөр хангана.\n4.3 Шаардлагатай хүний нөөцөөр хангана.\n4.4 Брэндийн стандарт, үйлдвэрлэлийн шаардлагыг мөрдөнө.\n4.5 Нууц мэдээллийг хамгаална.\n\n5. ТӨЛБӨР БА ROYALTY\n5.1 Эхний франчайз төлбөр: {{initialFee}} {{currency}}\n5.2 Royalty хувь: {{royaltyPercent}}%\n5.3 Комисс төлбөр: {{commissionPercent}}%\n5.4 Төлбөрийн давтамж: {{paymentFrequency}}\n\n6. ЗӨВШӨӨРӨЛ ОЛГОГЧИЙН ҮҮРЭГ\n6.1 Техникийн болон зохион байгуулалтын дэмжлэг үзүүлнэ.\n6.2 Сургалт зохион байгуулна.\n6.3 Брэнд болон чанарын хяналт хийнэ.\n6.4 Материал, тоног төхөөрөмж болон шаардлагатай баримт бичгээр хангана.\n\n7. ХАМТЫН БАЙГУУЛЛАГА\n7.1 Хамтын байгууллагын нэр: {{jointOrganizationName}}\n7.2 Удирдлагын бүтэц: {{organizationStructure}}\n\n8. ХУГАЦАА БА ЦУЦЛАЛТ\n8.1 Эхлэх огноо: {{startDate}}\n8.2 Дуусах огноо: {{endDate}}\n8.3 Автоматаар сунгах хугацаа: {{renewalPeriod}}\n8.4 Цуцлах нөхцөл: {{terminationConditions}}\n\n9. ДАВАГДАШГҮЙ ХҮЧИН ЗҮЙЛ\n9.1 Байгалийн гамшиг, цар тахал, төрийн шийдвэр болон бусад нөхцөлөөс шалтгаалан үүргээ биелүүлэх боломжгүй болсон тохиолдолд талууд хариуцлагаас чөлөөлөгдөнө.\n\n10. МАРГААН ШИЙДВЭРЛЭХ\n10.1 Маргааныг эхлээд харилцан хэлэлцэнэ.\n10.2 Шийдвэрлэх боломжгүй бол {{disputeResolutionMethod}} журмаар шийдвэрлэнэ.\n\n11. ТӨГСГӨЛИЙН ЗААЛТ\n11.1 Нэмэлт өөрчлөлтийг бичгээр хийнэ.\n11.2 Хавсралтууд: {{attachments}}\n\n12. ТАЛУУДЫН МЭДЭЭЛЭЛ\nЗөвшөөрөл олгогчийн хаяг: {{franchisorAddress}}\nУтас: {{franchisorPhone}}\nБанкны данс: {{franchisorBankAccount}}\n\nЗөвшөөрөл авагчийн хаяг: {{franchiseeAddress}}\nУтас: {{franchiseePhone}}\nБанкны данс: {{franchiseeBankAccount}}",
+    "variables": [
+      {"key":"contractNumber","label":"Гэрээний дугаар","type":"text","required":true},
+      {"key":"contractDate","label":"Гэрээ байгуулсан огноо","type":"date","required":true},
+      {"key":"city","label":"Байршил / хот","type":"text","required":true},
+      {"key":"franchisorCompanyName","label":"Зөвшөөрөл олгогч байгууллагын нэр","type":"text","required":true},
+      {"key":"franchisorRepresentativeName","label":"Зөвшөөрөл олгогчийг төлөөлсөн хүний нэр","type":"text","required":true},
+      {"key":"franchisorRepresentativePosition","label":"Зөвшөөрөл олгогчийг төлөөлсөн хүний албан тушаал","type":"text","required":true},
+      {"key":"franchisorAddress","label":"Зөвшөөрөл олгогчийн хаяг","type":"textarea","required":true},
+      {"key":"franchisorPhone","label":"Зөвшөөрөл олгогчийн утас","type":"text","required":true},
+      {"key":"franchisorBankAccount","label":"Зөвшөөрөл олгогчийн банкны данс","type":"text","required":true},
+      {"key":"franchiseeCompanyName","label":"Зөвшөөрөл авагч байгууллагын нэр","type":"text","required":true},
+      {"key":"franchiseeRepresentativeName","label":"Зөвшөөрөл авагчийг төлөөлсөн хүний нэр","type":"text","required":true},
+      {"key":"franchiseeRepresentativePosition","label":"Зөвшөөрөл авагчийг төлөөлсөн хүний албан тушаал","type":"text","required":true},
+      {"key":"franchiseeAddress","label":"Зөвшөөрөл авагчийн хаяг","type":"textarea","required":true},
+      {"key":"franchiseePhone","label":"Зөвшөөрөл авагчийн утас","type":"text","required":true},
+      {"key":"franchiseeBankAccount","label":"Зөвшөөрөл авагчийн банкны данс","type":"text","required":true},
+      {"key":"productName","label":"Бүтээгдэхүүн эсвэл үйлчилгээний нэр","type":"text","required":true},
+      {"key":"territory","label":"Үйл ажиллагааны бүс нутаг","type":"text","required":true},
+      {"key":"businessPurpose","label":"Үйл ажиллагааны зорилго","type":"textarea","required":true},
+      {"key":"packageFee","label":"Франчайзын багц үйлчилгээний үнэ","type":"number","required":true},
+      {"key":"investmentAmount","label":"Хөрөнгө оруулалтын хэмжээ","type":"number","required":true},
+      {"key":"initialFee","label":"Эхний франчайз төлбөр","type":"number","required":true},
+      {"key":"royaltyPercent","label":"Royalty хувь","type":"number","required":true},
+      {"key":"commissionPercent","label":"Комисс төлбөрийн хувь","type":"number","required":false},
+      {"key":"paymentFrequency","label":"Төлбөрийн давтамж","type":"select","required":true},
+      {"key":"jointOrganizationName","label":"Хамтын байгууллагын нэр","type":"text","required":false},
+      {"key":"organizationStructure","label":"Удирдлагын бүтэц","type":"textarea","required":false},
+      {"key":"startDate","label":"Гэрээ эхлэх огноо","type":"date","required":true},
+      {"key":"endDate","label":"Гэрээ дуусах огноо","type":"date","required":true},
+      {"key":"renewalPeriod","label":"Сунгах хугацаа","type":"text","required":false},
+      {"key":"terminationConditions","label":"Гэрээ цуцлах нөхцөл","type":"textarea","required":false},
+      {"key":"disputeResolutionMethod","label":"Маргаан шийдвэрлэх журам","type":"text","required":true},
+      {"key":"attachments","label":"Хавсралтууд","type":"textarea","required":false}
+    ]
+  },
+  {
+    "category": "Хамтарсан компани",
+    "name": "Хамтарсан компани байгуулах гэрээ",
+    "description": "Хамтарсан компани байгуулах, дүрмийн сан бүрдүүлэх, хувь эзэмшил, удирдлага, ашиг хуваарилалт, хувь шилжүүлэлт болон татан буулгалтыг зохицуулах гэрээ",
+    "content": "ХАМТАРСАН КОМПАНИ БАЙГУУЛАХ ТУХАЙ ГЭРЭЭ\n\nГэрээний дугаар: {{contractNumber}}\nБайгуулсан огноо: {{contractDate}}\nБайршил: {{city}}\n\nНэг талаас {{partyAName}} /цаашид \"А тал\" гэх/,\nНөгөө талаас {{partyBName}} /цаашид \"Б тал\" гэх/, хамтран {{companyName}} нэртэй хамтарсан компани байгуулахаар тохиролцов.\n\n1. ХАМТАРСАН КОМПАНИЙН ЗОРИЛГО\n1.1 Компанийн үйл ажиллагааны үндсэн чиглэл:\n{{businessActivities}}\n1.2 Компанийн бүтээгдэхүүн, үйлчилгээ нь {{qualityStandard}} стандартыг хангана.\n\n2. ОРОЛЦОГЧ ТАЛУУД\n2.1 А талын хаяг: {{partyAAddress}}\n2.2 А талын утас: {{partyAPhone}}\n2.3 Б талын хаяг: {{partyBAddress}}\n2.4 Б талын утас: {{partyBPhone}}\n\n3. ТАЛУУДЫН ҮҮРЭГ\n3.1 А тал нь компанийг бүртгүүлэх, данс нээлгэх, тамга тэмдэг хийлгэх болон бэлтгэл ажлыг хангахад дэмжлэг үзүүлнэ.\n3.2 А тал нь шаардлагатай тоног төхөөрөмж, түүхий эд, материал худалдан авахад дэмжлэг үзүүлнэ.\n3.3 Б тал нь санхүүжилт, технологи, зах зээл, сургалт болон гадаад хамтын ажиллагаанд дэмжлэг үзүүлнэ.\n\n4. КОМПАНИЙН НЭР БА БАЙРШИЛ\n4.1 Компанийн нэр: {{companyName}}\n4.2 Англи нэр: {{companyEnglishName}}\n4.3 Байршил: {{companyLocation}}\n\n5. ДҮРМИЙН САН\n5.1 Нийт дүрмийн сан: {{totalCapital}} {{currency}}\n5.2 А талын хувь: {{partyASharePercent}}%, хөрөнгийн хэмжээ: {{partyACapitalAmount}}\n5.3 Б талын хувь: {{partyBSharePercent}}%, хөрөнгийн хэмжээ: {{partyBCapitalAmount}}\n5.4 Хөрөнгө оруулалтын төрөл:\n{{capitalContributions}}\n\n6. УДИРДЛАГА\n6.1 Зөвлөлийн гишүүдийн тоо: {{boardMemberCount}}\n6.2 Ерөнхий захирал: {{generalDirector}}\n6.3 Ерөнхий нягтлан бодогч: {{chiefAccountant}}\n6.4 Компанийн өдөр тутмын үйл ажиллагааг Ерөнхий захирал удирдана.\n\n7. АЖИЛЛАХ ХҮЧ\n7.1 Компанийн ажиллах хүчний бодлого: {{employmentPolicy}}\n\n8. САНХҮҮ БА АШИГ ХУВААРИЛАЛТ\n8.1 Санхүүгийн жил: {{financialYear}}\n8.2 Ашиг хуваарилах давтамж: {{profitDistributionFrequency}}\n8.3 Ашгийг талуудын хувь эзэмшлийн хэмжээгээр хуваарилна.\n\n9. ДААТГАЛ\n9.1 Компанийн даатгалыг {{insuranceProvider}} байгууллагаар хийлгэнэ.\n\n10. ТАТАН БУУЛГАХ\n10.1 Компанийг дараах нөхцөлд татан буулгана:\n{{dissolutionConditions}}\n\n11. ХАРИУЦЛАГА\n11.1 Гэрээний үүрэг зөрчсөнөөс үүссэн шууд хохирлыг буруутай тал нөхөн төлнө.\n11.2 Торгуулийн хувь: {{penaltyPercent}}%\n\n12. ДАВАГДАШГҮЙ ХҮЧИН ЗҮЙЛ\n12.1 Байгалийн гамшиг, цар тахал, төрийн шийдвэр болон бусад нөхцөлөөс шалтгаалан үүрэг биелүүлэх боломжгүй болсон тохиолдолд талууд хариуцлагаас чөлөөлөгдөнө.\n\n13. МАРГААН ШИЙДВЭРЛЭХ\n13.1 Маргааныг {{disputeResolutionMethod}} журмаар шийдвэрлэнэ.\n\n14. ХУВЬ ШИЛЖҮҮЛЭЛТ\n14.1 Хувь эзэмшлийг гуравдагч этгээдэд шилжүүлэхэд нөгөө талын бичгээр өгсөн зөвшөөрөл шаардлагатай.\n\n15. ГЭРЭЭНИЙ ХУГАЦАА\n15.1 Эхлэх огноо: {{startDate}}\n15.2 Дуусах огноо: {{endDate}}\n15.3 Сунгалтын нөхцөл: {{renewalTerms}}\n\n16. ХЭЛ БА ХЭРЭГЛЭГДЭХ ХУУЛЬ\n16.1 Гэрээний хэл: {{agreementLanguage}}\n16.2 Хэрэглэгдэх хууль: {{governingLaw}}",
+    "variables": [
+      {"key":"contractNumber","label":"Гэрээний дугаар","type":"text","required":true},
+      {"key":"contractDate","label":"Гэрээ байгуулсан огноо","type":"date","required":true},
+      {"key":"city","label":"Байршил / хот","type":"text","required":true},
+      {"key":"partyAName","label":"А талын нэр","type":"text","required":true},
+      {"key":"partyAAddress","label":"А талын хаяг","type":"textarea","required":true},
+      {"key":"partyAPhone","label":"А талын утас","type":"text","required":true},
+      {"key":"partyBName","label":"Б талын нэр","type":"text","required":true},
+      {"key":"partyBAddress","label":"Б талын хаяг","type":"textarea","required":true},
+      {"key":"partyBPhone","label":"Б талын утас","type":"text","required":true},
+      {"key":"companyName","label":"Компанийн нэр","type":"text","required":true},
+      {"key":"companyEnglishName","label":"Компанийн англи нэр","type":"text","required":false},
+      {"key":"companyLocation","label":"Компанийн байршил","type":"text","required":true},
+      {"key":"businessActivities","label":"Үйл ажиллагааны чиглэл","type":"textarea","required":true},
+      {"key":"qualityStandard","label":"Чанарын стандарт","type":"text","required":false},
+      {"key":"totalCapital","label":"Нийт дүрмийн сан","type":"number","required":true},
+      {"key":"currency","label":"Валют","type":"select","required":true},
+      {"key":"partyASharePercent","label":"А талын хувь эзэмшил","type":"number","required":true},
+      {"key":"partyACapitalAmount","label":"А талын оруулах хөрөнгийн хэмжээ","type":"number","required":true},
+      {"key":"partyBSharePercent","label":"Б талын хувь эзэмшил","type":"number","required":true},
+      {"key":"partyBCapitalAmount","label":"Б талын оруулах хөрөнгийн хэмжээ","type":"number","required":true},
+      {"key":"capitalContributions","label":"Хөрөнгө оруулалтын төрөл, бүрэлдэхүүн","type":"textarea","required":true},
+      {"key":"boardMemberCount","label":"Зөвлөлийн гишүүдийн тоо","type":"number","required":true},
+      {"key":"generalDirector","label":"Ерөнхий захирал","type":"text","required":false},
+      {"key":"chiefAccountant","label":"Ерөнхий нягтлан бодогч","type":"text","required":false},
+      {"key":"employmentPolicy","label":"Ажиллах хүчний бодлого","type":"textarea","required":false},
+      {"key":"financialYear","label":"Санхүүгийн жил","type":"text","required":true},
+      {"key":"profitDistributionFrequency","label":"Ашиг хуваарилах давтамж","type":"text","required":true},
+      {"key":"insuranceProvider","label":"Даатгалын байгууллага","type":"text","required":false},
+      {"key":"dissolutionConditions","label":"Татан буулгах нөхцөл","type":"textarea","required":false},
+      {"key":"penaltyPercent","label":"Торгуулийн хувь","type":"number","required":false},
+      {"key":"disputeResolutionMethod","label":"Маргаан шийдвэрлэх журам","type":"text","required":true},
+      {"key":"startDate","label":"Гэрээ эхлэх огноо","type":"date","required":true},
+      {"key":"endDate","label":"Гэрээ дуусах огноо","type":"date","required":true},
+      {"key":"renewalTerms","label":"Гэрээ сунгах нөхцөл","type":"textarea","required":false},
+      {"key":"agreementLanguage","label":"Гэрээний хэл","type":"text","required":true},
+      {"key":"governingLaw","label":"Хэрэглэгдэх хууль","type":"text","required":true}
+    ]
+  },
+
+  {
+  "category": "Хамтын ажиллагаа",
+  "name": "Хамтран ажиллах гэрээ",
+  "description": "Хоёр тал тодорхой чиглэл, хэлбэрээр хамтран ажиллах, санхүүжилт, удирдлага, хяналт, эд хөрөнгө, хариуцлага болон гэрээ дуусгавар болгох нөхцөлийг зохицуулах гэрээ",
+  "content": "ХАМТРАН АЖИЛЛАХ ГЭРЭЭ\n\nГэрээний дугаар: {{contractNumber}}\nБайгуулсан огноо: {{contractDate}}\nБайршил: {{city}}\n\nНэг талаас {{partyAName}} /цаашид \"А тал\" гэх/, түүнийг {{partyARepresentativePosition}} албан тушаалтай {{partyARepresentativeName}} төлөөлөн,\n\nНөгөө талаас {{partyBName}} /цаашид \"Б тал\" гэх/, түүнийг {{partyBRepresentativePosition}} албан тушаалтай {{partyBRepresentativeName}} төлөөлөн энэхүү гэрээг байгуулав.\n\n1. НИЙТЛЭГ ҮНДЭСЛЭЛ\n1.1 Талууд {{cooperationField}} чиглэлээр {{cooperationForm}} хэлбэрээр хамтран ажиллана.\n1.2 Хамтын ажиллагааны санхүүжилттэй холбоотой хөрөнгийн эх үүсвэрийг талууд дараах байдлаар хариуцна:\nА тал: {{partyAFundingContribution}}\nБ тал: {{partyBFundingContribution}}\n1.3 Хамтын ажиллагааг хэрэгжүүлэх арга хэмжээг талууд дараах байдлаар зохион байгуулна:\nА талын хариуцах ажил: {{partyAResponsibilities}}\nБ талын хариуцах ажил: {{partyBResponsibilities}}\n1.4 Гэрээний хугацаа {{contractDuration}} байна. Гэрээний хугацааг талууд харилцан тохиролцож сунгаж болно.\n\n2. ХАМТЫН АЖИЛЛАГААНЫ УДИРДЛАГА, ХЯНАЛТ\n2.1 Хамтын ажиллагааг {{managementMethod}} журмаар удирдан явуулна.\n2.2 Удирдлагыг хэрэгжүүлж буй тал ажлын үр дүн болон хөрөнгө мөнгөний зарцуулалтыг {{reportingFrequency}} тутам тайлагнана.\n2.3 Гэрээний аль ч тал гэрээний хэрэгжилт болон бусад талын үйл ажиллагаанд хяналт тавих эрхтэй.\n2.4 Талууд хамтын ажиллагаатай холбоотой хийсэн ажлын тайланг шаардсан үед гаргаж өгөх үүрэгтэй.\n\n3. ЭД ХӨРӨНГӨ\n3.1 Хамтын үйл ажиллагаатай холбоотой хөрөнгө, зардал, орлого, өр, авлага болон бусад зүйлс нь {{ownershipType}} өмчлөлд байна.\n3.2 Хэсгээр өмчлөх тохиолдолд хувь хэмжээ: {{ownershipShare}}\n3.3 Үйл ажиллагааны орлогоос өөрт ногдох хэсгийг талууд өөрийн үзэмжээр захиран зарцуулна.\n3.4 Хамтын ажиллагааг үргэлжлүүлэхтэй холбоотой зардлыг талууд тухай бүр харилцан тохиролцож шийдвэрлэнэ.\n3.5 Хамтын ажиллагаанд зориулан хуримтлуулсан хөрөнгийг зөвхөн хамтын ажиллагааны зорилгод нийцүүлэн зарцуулна.\n\n4. ХАРИУЦЛАГА\n4.1 Хамтын үйл ажиллагааны үр дүн, алдагдал, хохирол болон гуравдагч этгээдийн өмнө үүсэх хариуцлагыг талууд {{liabilityPrinciple}} зарчмаар хариуцна.\n4.2 Гэрээгээр хүлээсэн үүргээ биелүүлээгүй буюу зохих ёсоор биелүүлээгүй тал {{penaltyPercent}} хувийн торгууль төлнө.\n4.3 Үүргийн гүйцэтгэлийг хожимдуулсан тохиолдолд хоног тутам {{latePenaltyPercent}} хувийн алданги төлнө.\n\n5. ДАВАГДАШГҮЙ ХҮЧИН ЗҮЙЛ\n5.1 Газар хөдлөлт, үер, гал түймэр, халдварт өвчин, ажил хаялт, төрийн шийдвэр болон бусад давагдашгүй хүчин зүйлийн улмаас гэрээгээр хүлээсэн үүргээ биелүүлэх боломжгүй болсон тохиолдолд талууд алданги, торгуулиас чөлөөлөгдөнө.\n5.2 Давагдашгүй хүчин зүйл бий болсон тухай нотолгоог эрх бүхий байгууллага гэрчилнэ.\n\n6. МАРГААН ШИЙДВЭРЛЭХ\n6.1 Маргааныг талууд эхлээд харилцан тохиролцох замаар шийдвэрлэхийг эрмэлзэнэ.\n6.2 Тохиролцоонд хүрч чадахгүй бол маргааныг {{disputeResolutionMethod}} журмаар шийдвэрлэнэ.\n\n7. БУСАД ЗААЛТ\n7.1 Талууд үйл ажиллагаандаа Монгол Улсын Иргэний хууль болон холбогдох хууль тогтоомжийг удирдлага болгоно.\n7.2 Хамтын үйл ажиллагааны тайланг талууд {{annualReviewTerms}} журмаар хэлэлцэнэ.\n\n8. ГЭРЭЭ ХҮЧИН ТӨГӨЛДӨР БАЙХ\n8.1 Гэрээ нь талууд гарын үсэг зурсан өдрөөс хүчин төгөлдөр болно.\n8.2 Гэрээг хугацаанаас өмнө дуусгавар болгох нөхцөл: {{earlyTerminationConditions}}\n8.3 Урьдчилан мэдэгдэх хугацаа: {{noticePeriod}}\n8.4 Талууд харилцан тохиролцвол гэрээнд нэмэлт, өөрчлөлт оруулж болно.\n\n9. ТАЛУУДЫН ХАЯГ, МЭДЭЭЛЭЛ\nА тал:\nХаяг: {{partyAAddress}}\nУтас: {{partyAPhone}}\nФакс: {{partyAFax}}\nЦахим шуудан: {{partyAEmail}}\nБанкны данс: {{partyABankAccount}}\n\nБ тал:\nХаяг: {{partyBAddress}}\nУтас: {{partyBPhone}}\nФакс: {{partyBFax}}\nЦахим шуудан: {{partyBEmail}}\nБанкны данс: {{partyBBankAccount}}",
+  "variables": [
+    {"key":"contractNumber","label":"Гэрээний дугаар","type":"text","required":true},
+    {"key":"contractDate","label":"Гэрээ байгуулсан огноо","type":"date","required":true},
+    {"key":"city","label":"Байршил / хот","type":"text","required":true},
+    {"key":"partyAName","label":"А талын нэр","type":"text","required":true},
+    {"key":"partyARepresentativeName","label":"А талыг төлөөлсөн хүний нэр","type":"text","required":true},
+    {"key":"partyARepresentativePosition","label":"А талыг төлөөлсөн хүний албан тушаал","type":"text","required":true},
+    {"key":"partyBName","label":"Б талын нэр","type":"text","required":true},
+    {"key":"partyBRepresentativeName","label":"Б талыг төлөөлсөн хүний нэр","type":"text","required":true},
+    {"key":"partyBRepresentativePosition","label":"Б талыг төлөөлсөн хүний албан тушаал","type":"text","required":true},
+    {"key":"cooperationField","label":"Хамтран ажиллах чиглэл","type":"text","required":true},
+    {"key":"cooperationForm","label":"Хамтын ажиллагааны хэлбэр","type":"textarea","required":true},
+    {"key":"partyAFundingContribution","label":"А талын санхүүжилт, хөрөнгийн эх үүсвэр","type":"textarea","required":true},
+    {"key":"partyBFundingContribution","label":"Б талын санхүүжилт, хөрөнгийн эх үүсвэр","type":"textarea","required":true},
+    {"key":"partyAResponsibilities","label":"А талын хариуцах ажил","type":"textarea","required":true},
+    {"key":"partyBResponsibilities","label":"Б талын хариуцах ажил","type":"textarea","required":true},
+    {"key":"contractDuration","label":"Гэрээний хугацаа","type":"text","required":true},
+    {"key":"managementMethod","label":"Хамтын ажиллагааг удирдах арга","type":"select","required":true},
+    {"key":"reportingFrequency","label":"Тайлагнах давтамж","type":"text","required":true},
+    {"key":"ownershipType","label":"Өмчлөлийн төрөл","type":"select","required":true},
+    {"key":"ownershipShare","label":"Өмчлөх хувь хэмжээ","type":"textarea","required":false},
+    {"key":"liabilityPrinciple","label":"Хариуцлага хүлээх зарчим","type":"select","required":true},
+    {"key":"penaltyPercent","label":"Торгуулийн хувь","type":"number","required":false},
+    {"key":"latePenaltyPercent","label":"Хоног тутмын алдангийн хувь","type":"number","required":false},
+    {"key":"disputeResolutionMethod","label":"Маргаан шийдвэрлэх журам","type":"text","required":true},
+    {"key":"annualReviewTerms","label":"Жилийн тайлан хэлэлцэх журам","type":"textarea","required":false},
+    {"key":"earlyTerminationConditions","label":"Гэрээг хугацаанаас өмнө дуусгавар болгох нөхцөл","type":"textarea","required":false},
+    {"key":"noticePeriod","label":"Урьдчилан мэдэгдэх хугацаа","type":"text","required":false},
+    {"key":"partyAAddress","label":"А талын хаяг","type":"textarea","required":true},
+    {"key":"partyAPhone","label":"А талын утас","type":"text","required":true},
+    {"key":"partyAFax","label":"А талын факс","type":"text","required":false},
+    {"key":"partyAEmail","label":"А талын цахим шуудан","type":"email","required":false},
+    {"key":"partyABankAccount","label":"А талын банкны данс","type":"text","required":true},
+    {"key":"partyBAddress","label":"Б талын хаяг","type":"textarea","required":true},
+    {"key":"partyBPhone","label":"Б талын утас","type":"text","required":true},
+    {"key":"partyBFax","label":"Б талын факс","type":"text","required":false},
+    {"key":"partyBEmail","label":"Б талын цахим шуудан","type":"email","required":false},
+    {"key":"partyBBankAccount","label":"Б талын банкны данс","type":"text","required":true}
+  ]
+},
+
+{
+  "category": "Худалдааны талбайн түрээс",
+  "name": "Худалдааны байранд талбай түрээслэх, үйлчилгээ үзүүлэх гэрээ",
+  "description": "Худалдааны байр, цогцолбор дахь талбайг түрээслүүлэх, үйлчилгээ үзүүлэх, төлбөр, үүрэг, хариуцлага, цуцлалт болон маргаан шийдвэрлэх нөхцөлийг зохицуулах гэрээ",
+  "content": "ХУДАЛДААНЫ БАЙРАНД ТАЛБАЙ ТҮРЭЭСЛЭХ, ҮЙЛЧИЛГЭЭ ҮЗҮҮЛЭХ ТУХАЙ ГЭРЭЭ\n\nГэрээний дугаар: {{contractNumber}}\nБайгуулсан огноо: {{contractDate}}\nБайршил: {{city}}\n\nНэг талаас {{lessorName}} /цаашид \"Түрээслүүлэгч\" гэх/, түүнийг {{lessorRepresentativeBasis}} үндсэн дээр {{lessorRepresentativePosition}} албан тушаалтай {{lessorRepresentativeName}} төлөөлөн,\n\nНөгөө талаас {{lesseeName}} /цаашид \"Түрээслэгч\" гэх/, түүнийг {{lesseeRepresentativeBasis}} үндсэн дээр {{lesseeRepresentativePosition}} албан тушаалтай {{lesseeRepresentativeName}} төлөөлөн энэхүү гэрээг байгуулав.\n\n1. НИЙТЛЭГ ЗААЛТ\n1.1 Түрээслүүлэгч нь {{propertyAddress}} хаягт байрлах худалдааны байр, цогцолборын {{rentalAreaSize}} кв.м худалдаа хийх зориулалттай талбайг Түрээслэгчид шилжүүлэн өгнө.\n1.2 Түрээсийн талбайд {{allowedGoods}} барааг худалдах зорилгоор түрээслүүлнэ.\n1.3 Түрээслүүлэгч нь Түрээслэгчид дараах үйлчилгээг үзүүлнэ:\n{{providedServices}}\n1.4 Түрээслэгч нь үүсч болох эрсдэл болон эрхлэх үйл ажиллагаатай холбоотой төрөөс олгодог зөвшөөрлийг өөрөө хариуцаж, худалдааны үйл ажиллагааг өөрийн нэрийн өмнөөс явуулна.\n\n2. ТООЦОО ХИЙХ ЖУРАМ\n2.1 Түрээсийн талбайн сарын хөлс: {{monthlyRentAmount}} {{currency}}\n2.2 Түрээсийн талбайн жилийн хөлс: {{annualRentAmount}} {{currency}}\n2.3 Үйлчилгээний нийт үнэ: {{serviceFeeAmount}} {{currency}}\n2.4 Түрээслэгч түрээсийн хөлсийг бэлэн бусаар Түрээслүүлэгчийн банк дахь {{lessorBankAccount}} дансанд сар бүрийн {{monthlyPaymentDueDay}}-аас өмнө урьдчилан шилжүүлнэ.\n\n3. ТАЛУУДЫН ҮҮРЭГ\n3.1 Түрээслүүлэгчийн үүрэг:\n3.1.1 Гэрээнд гарын үсэг зурснаас хойш {{handoverDays}} хоногийн дотор түрээсийн талбайг хүлээлгэн өгөх, хүлээн авах актаар Түрээслэгчид шилжүүлэн өгнө.\n3.1.2 Актад түрээслүүлж буй талбайн тухайн үеийн техникийн байдлыг тодорхой заана.\n3.1.3 Түрээслэгчээс шалтгаалаагүй осол гарсан нөхцөлд шаардлагатай арга хэмжээ авна.\n3.1.4 Үл хөдлөх эд хөрөнгө түрээслэх гэрээг холбогдох бүртгэлийн байгууллагад бүртгүүлэхэд хамтран ажиллана.\n3.1.5 Түрээслүүлэгчийн нэмэлт үүрэг: {{lessorAdditionalObligations}}\n\n3.2 Түрээслэгчийн үүрэг:\n3.2.1 Түрээсийн талбайг зөвхөн гэрээнд заасан зориулалтаар ашиглана.\n3.2.2 Түрээсийн байранд урсгал засварыг өөрийн хөрөнгөөр цаг тухайд нь хийнэ.\n3.2.3 Түрээслүүлэгчийн бичгээр өгсөн зөвшөөрөлгүйгээр талбайд өөрчлөлт, нэмэлт тоноглол хийхгүй.\n3.2.4 Гэрээний хугацаа дуусахад түрээсийн талбайг бүрэн бүтэн, хэвийн элэгдэл хорогдлыг харгалзан буцаан өгнө.\n3.2.5 Түрээсийн талбайд хийсэн салгаж үл болох засвар, сайжруулалтыг Түрээслүүлэгчид шилжүүлнэ.\n3.2.6 Захиргааны байгууллагаас байр ашиглалттай холбоотой төлбөр тавьсан тохиолдолд Түрээслүүлэгчид нэн даруй мэдэгдэнэ.\n3.2.7 Түрээсийн талбайг дамжуулан түрээслүүлэхгүй.\n3.2.8 Түрээслэгчийн нэмэлт үүрэг: {{lesseeAdditionalObligations}}\n\n4. ТАЛУУДЫН ХАРИУЦЛАГА\n4.1 Түрээслүүлэгч түрээсийн талбайг хугацаанд нь шилжүүлээгүй эсвэл ашиглахад саад учруулсан бол хугацаа хэтэрсэн өдөр бүр жилийн түрээсийн нийт төлбөрөөс {{lessorLatePenaltyPercent}} хувийн алданги төлнө.\n4.2 Түрээслэгч түрээсийн төлбөрийг хугацаанд нь төлөөгүй бол хугацаа хэтэрсэн өдөр бүр {{lesseeLatePaymentPenaltyPercent}} хувийн алданги төлнө.\n4.3 Түрээслэгч гэрээний үүргээ биелүүлээгүй бол {{lesseeBreachPenaltyAmount}} {{currency}} хэмжээний торгууль төлнө.\n4.4 Алданги, торгууль төлөх нь талуудыг үндсэн үүргээ биелүүлэх болон хохирол арилгах үүргээс чөлөөлөхгүй.\n\n5. ГЭРЭЭГ ХУГАЦААНААС ӨМНӨ ЦУЦЛАХ\n5.1 Дараах нөхцөлд Түрээслүүлэгч гэрээг хугацаанаас өмнө цуцалж болно:\n- Түрээсийн талбайг гэрээнд заасан зориулалтаар ашиглаагүй;\n- {{rentNonPaymentPeriod}} хугацаанд түрээсийн төлбөр төлөөгүй;\n- Түрээслэгч хүлээсэн үүргээ биелүүлээгүй;\n- Бусад үндэслэл: {{lessorTerminationGrounds}}\n5.2 Дараах нөхцөлд Түрээслэгч гэрээг цуцлах эрхтэй:\n- Түрээслүүлэгч хүлээсэн үүргээ биелүүлээгүй;\n- Түрээслэгчээс үл хамаарах нөхцөлөөс шалтгаалан талбайг ашиглах боломжгүй болсон;\n- Бусад үндэслэл: {{lesseeTerminationGrounds}}\n5.3 Нэг тал гэрээг цуцлах тухайгаа бичгээр мэдэгдсэн үеэс гэрээ цуцлагдсанд тооцно.\n5.4 Гэрээг хугацаанаас өмнө цуцалсан тохиолдолд түрээсийн талбайг {{returnDaysAfterTermination}} хоногийн дотор акт үйлдэн буцаан өгнө.\n\n6. ДАВАГДАШГҮЙ ХҮЧИН ЗҮЙЛ\n6.1 Газар хөдлөлт, үер, гал түймэр, халдварт өвчин, ажил хаялт, төрийн шийдвэр болон бусад давагдашгүй хүчин зүйлийн улмаас гэрээгээр хүлээсэн үүргээ биелүүлэх боломжгүй болсон тохиолдолд талууд алданги, торгуулиас чөлөөлөгдөнө.\n6.2 Давагдашгүй хүчин зүйл бий болсон тухай нотолгоог эрх бүхий байгууллага гэрчилнэ.\n\n7. БУСАД НӨХЦӨЛ\n7.1 Гэрээ нь талууд гарын үсэг зурсан өдрөөс хүчин төгөлдөр болж {{contractEndDate}} өдөр хүртэл үйлчилнэ.\n7.2 Гэрээг хоёр хувь үйлдэж тал тус бүр нэг хувийг хадгална.\n7.3 Гэрээнд тусгагдаагүй асуудлыг Монгол Улсын Иргэний хууль болон холбогдох хууль тогтоомжийн дагуу шийдвэрлэнэ.\n\n8. МАРГААН ШИЙДВЭРЛЭХ\n8.1 Гэрээтэй холбоотой маргааныг талууд харилцан тохиролцох замаар шийдвэрлэнэ.\n8.2 Тохиролцоонд хүрч чадахгүй бол маргааныг {{disputeResolutionMethod}} журмаар шийдвэрлэнэ.\n\n9. НЭМЭЛТ НӨХЦӨЛ\n{{additionalTerms}}\n\n10. НЭМЭЛТ ӨӨРЧЛӨЛТ\n10.1 Талууд гэрээний нэмэлт, өөрчлөлтийг бичгээр үйлдэж, хавсралтаар баталгаажуулна.\n\n11. ГЭРЭЭНИЙ ХАВСРАЛТ\n{{attachments}}\n\n12. ТАЛУУДЫН ХАЯГ\nТүрээслүүлэгч:\nХаяг: {{lessorAddress}}\nУтас: {{lessorPhone}}\nГарын үсэг: __________________\n\nТүрээслэгч:\nХаяг: {{lesseeAddress}}\nУтас: {{lesseePhone}}\nГарын үсэг: __________________",
+  "variables": [
+    {"key":"contractNumber","label":"Гэрээний дугаар","type":"text","required":true},
+    {"key":"contractDate","label":"Гэрээ байгуулсан огноо","type":"date","required":true},
+    {"key":"city","label":"Байршил / хот","type":"text","required":true},
+    {"key":"lessorName","label":"Түрээслүүлэгчийн нэр","type":"text","required":true},
+    {"key":"lessorRepresentativeBasis","label":"Түрээслүүлэгчийг төлөөлөх үндэслэл","type":"text","required":false},
+    {"key":"lessorRepresentativeName","label":"Түрээслүүлэгчийг төлөөлсөн хүний нэр","type":"text","required":true},
+    {"key":"lessorRepresentativePosition","label":"Түрээслүүлэгчийг төлөөлсөн хүний албан тушаал","type":"text","required":true},
+    {"key":"lesseeName","label":"Түрээслэгчийн нэр","type":"text","required":true},
+    {"key":"lesseeRepresentativeBasis","label":"Түрээслэгчийг төлөөлөх үндэслэл","type":"text","required":false},
+    {"key":"lesseeRepresentativeName","label":"Түрээслэгчийг төлөөлсөн хүний нэр","type":"text","required":true},
+    {"key":"lesseeRepresentativePosition","label":"Түрээслэгчийг төлөөлсөн хүний албан тушаал","type":"text","required":true},
+    {"key":"propertyAddress","label":"Худалдааны байрны хаяг","type":"textarea","required":true},
+    {"key":"rentalAreaSize","label":"Түрээсийн талбайн хэмжээ /кв.м/","type":"number","required":true},
+    {"key":"allowedGoods","label":"Худалдах барааны жагсаалт","type":"textarea","required":true},
+    {"key":"providedServices","label":"Түрээслүүлэгчийн үзүүлэх үйлчилгээ","type":"textarea","required":true},
+    {"key":"monthlyRentAmount","label":"Сарын түрээсийн төлбөр","type":"number","required":true},
+    {"key":"annualRentAmount","label":"Жилийн түрээсийн төлбөр","type":"number","required":true},
+    {"key":"serviceFeeAmount","label":"Үйлчилгээний нийт төлбөр","type":"number","required":false},
+    {"key":"currency","label":"Валют","type":"select","required":true},
+    {"key":"lessorBankAccount","label":"Түрээслүүлэгчийн банкны данс","type":"text","required":true},
+    {"key":"monthlyPaymentDueDay","label":"Сар бүр төлбөр төлөх өдөр","type":"number","required":true},
+    {"key":"handoverDays","label":"Талбай хүлээлгэн өгөх хоног","type":"number","required":true},
+    {"key":"lessorAdditionalObligations","label":"Түрээслүүлэгчийн нэмэлт үүрэг","type":"textarea","required":false},
+    {"key":"lesseeAdditionalObligations","label":"Түрээслэгчийн нэмэлт үүрэг","type":"textarea","required":false},
+    {"key":"lessorLatePenaltyPercent","label":"Түрээслүүлэгчийн алдангийн хувь","type":"number","required":false},
+    {"key":"lesseeLatePaymentPenaltyPercent","label":"Түрээслэгчийн төлбөр хоцроосны алдангийн хувь","type":"number","required":false},
+    {"key":"lesseeBreachPenaltyAmount","label":"Түрээслэгчийн үүрэг зөрчсөн торгуулийн хэмжээ","type":"number","required":false},
+    {"key":"rentNonPaymentPeriod","label":"Төлбөр төлөөгүй хугацаа","type":"text","required":false},
+    {"key":"lessorTerminationGrounds","label":"Түрээслүүлэгч гэрээ цуцлах бусад үндэслэл","type":"textarea","required":false},
+    {"key":"lesseeTerminationGrounds","label":"Түрээслэгч гэрээ цуцлах бусад үндэслэл","type":"textarea","required":false},
+    {"key":"returnDaysAfterTermination","label":"Цуцалсны дараа талбай буцаах хоног","type":"number","required":true},
+    {"key":"contractEndDate","label":"Гэрээ дуусах огноо","type":"date","required":true},
+    {"key":"disputeResolutionMethod","label":"Маргаан шийдвэрлэх журам","type":"text","required":true},
+    {"key":"additionalTerms","label":"Нэмэлт нөхцөл","type":"textarea","required":false},
+    {"key":"attachments","label":"Хавсралтууд","type":"textarea","required":false},
+    {"key":"lessorAddress","label":"Түрээслүүлэгчийн хаяг","type":"textarea","required":true},
+    {"key":"lessorPhone","label":"Түрээслүүлэгчийн утас","type":"text","required":true},
+    {"key":"lesseeAddress","label":"Түрээслэгчийн хаяг","type":"textarea","required":true},
+    {"key":"lesseePhone","label":"Түрээслэгчийн утас","type":"text","required":true}
+  ]
+},
+
+{
+  "category": "Хөдөлмөр",
+  "name": "Хөдөлмөрийн гэрээ",
+  "description": "Ажил олгогч болон ажилтны хооронд үүсэх хөдөлмөрийн харилцаа, ажил үүрэг, цалин, ажлын цаг, эрх үүрэг, хариуцлага болон гэрээ цуцлах нөхцөлийг зохицуулах гэрээ",
+  "content": "ХӨДӨЛМӨРИЙН ГЭРЭЭ\n\nГэрээний дугаар: {{contractNumber}}\nБайгуулсан огноо: {{contractDate}}\nБайршил: {{city}}\n\nНэг талаас {{employerAddress}} хаягт байрлах, улсын бүртгэлийн дугаар {{employerRegistrationNumber}} бүхий {{employerCompanyName}} /цаашид \"Ажил олгогч\" гэх/, түүнийг {{employerRepresentativePosition}} албан тушаалтай {{employerRepresentativeName}} төлөөлөн,\n\nНөгөө талаас {{employeeAddress}} хаягт оршин суух, регистрийн дугаар {{employeeRegisterNumber}} бүхий {{employeeLastName}} овогтой {{employeeFirstName}} /цаашид \"Ажилтан\" гэх/ нар энэхүү гэрээг байгуулав.\n\n1. НИЙТЛЭГ ҮНДЭСЛЭЛ\n1.1 Энэхүү гэрээгээр Ажил олгогч болон Ажилтны хооронд үүсэх хөдөлмөрийн харилцааг зохицуулна.\n1.2 Нууцын баталгаа, гэрээний сунгалт, нэмэлт өөрчлөлт нь энэхүү гэрээний салшгүй хэсэг болно.\n\n2. ХӨДӨЛМӨРИЙН ГЭРЭЭНИЙ ХУГАЦАА\n2.1 Гэрээ эхлэх огноо: {{employmentStartDate}}\n2.2 Гэрээний хүчинтэй хугацаа: {{employmentDuration}}\n2.3 Гэрээг хугацаа дуусахаас өмнө цуцлах санал гаргаагүй бол {{autoRenewPeriod}} хугацаагаар автоматаар сунгана.\n\n3. ҮНДСЭН НӨХЦӨЛ\n3.1 Ажлын байр: {{workplace}}\n3.2 Ажилтны албан тушаал: {{jobTitle}}\n3.3 Ажилтны ажил үүрэг:\n{{jobResponsibilities}}\n\n3.4 Хөдөлмөрийн нөхцөл: {{workingCondition}}\n\n3.5 Ажлын цаг:\n- Ажлын өдөр: {{workingDays}}\n- Долоо хоногийн ажиллах цаг: {{weeklyHours}}\n- Өдөрт ажиллах цаг: {{dailyHours}}\n- Ажил эхлэх цаг: {{workStartTime}}\n- Үдийн завсарлага: {{lunchBreakTime}}\n- Уян хатан цагийн нөхцөл: {{flexibleWorkCondition}}\n\n3.6 Цалин\n3.6.1 Нэг сарын үндсэн цалин: {{monthlySalary}} {{currency}}\n3.6.2 Нийгмийн даатгал болон татварыг хуульд заасны дагуу суутгана.\n3.6.3 Цалин олгох өдрүүд: {{salaryPaymentDates}}\n3.6.4 Илүү цагаар ажилласан бол нөхөн амруулна эсвэл хуульд заасан нөхөн олговор олгоно.\n\n3.7 Амралт\n3.7.1 Бүх нийтийн баярын болон амралтын өдрүүдэд амарна.\n3.7.2 Ээлжийн амралтыг байгууллагын журмын дагуу олгоно.\n\n4. АЖИЛТНЫ ЭРХ, ҮҮРЭГ\n4.1 Ажилтан дараах эрхтэй:\n- Эрүүл, аюулгүй ажлын нөхцөлөөр хангагдах\n- Шаардлагатай техник хэрэгсэл, ажлын материал авах\n- Цалингаа хугацаанд нь авах\n- Амралт эдлэх\n- Нийгмийн баталгаагаар хангагдах\n\n4.2 Ажилтан дараах үүрэгтэй:\n- Хөдөлмөрийн дотоод журмыг мөрдөх\n- Ажлын төлөвлөгөө гаргаж ажиллах\n- Ур чадвараа хөгжүүлэх\n- Ёс зүйтэй ажиллах\n- Байгууллагын нэр хүндийг хамгаалах\n\n5. АЖИЛ ОЛГОГЧИЙН ЭРХ, ҮҮРЭГ\n5.1 Ажил олгогч дараах эрхтэй:\n- Хөдөлмөрийн дотоод журам мөрдүүлэх\n- Ажилтнаас ажил үүргээ биелүүлэхийг шаардах\n- Хуульд заасны дагуу хариуцлага тооцох\n\n5.2 Ажил олгогч дараах үүрэгтэй:\n- Аюулгүй ажлын нөхцөл бүрдүүлэх\n- Цалин хөлсийг хугацаанд олгох\n- Нийгмийн даатгал төлөх\n- Сургалт хөгжлийн боломж олгох\n\n6. ХАРИУЦЛАГА\n6.1 Ажил үүргийн зөрчил гаргасан тохиолдолд хууль болон дотоод журмын дагуу хариуцлага хүлээлгэнэ.\n6.2 Байгууллагад учруулсан хохирлыг хуульд заасан журмаар барагдуулна.\n6.3 Байгууллагын нууц задруулсан тохиолдолд хөдөлмөрийн гэрээг цуцалж болно.\n\n7. ГЭРЭЭ ДУУСГАВАР БОЛГОХ, ЦУЦЛАХ\n7.1 Хөдөлмөрийн тухай хуульд заасан үндэслэлээр гэрээг дуусгавар болгоно.\n7.2 Ажилтан өөрийн хүсэлтээр гэрээг цуцлах бол {{employeeNoticeDays}} хоногийн өмнө мэдэгдэнэ.\n7.3 Ажил олгогч хуульд заасан үндэслэлээр гэрээг цуцалж болно.\n\n8. ГЭРЭЭНД НЭМЭЛТ ӨӨРЧЛӨЛТ ОРУУЛАХ\n8.1 Талууд харилцан тохиролцож гэрээнд нэмэлт өөрчлөлт оруулж болно.\n\n9. ДАВАГДАШГҮЙ ХҮЧИН ЗҮЙЛ\n9.1 Байгалийн гамшиг, цар тахал, төрийн шийдвэр зэрэг нөхцөлөөс шалтгаалан үүргээ биелүүлэх боломжгүй болсон тохиолдолд талууд хариуцлагаас чөлөөлөгдөнө.\n\n10. МАРГААН ШИЙДВЭРЛЭХ\n10.1 Маргааныг эхлээд эв зүйгээр шийдвэрлэнэ.\n10.2 Шийдвэрлэх боломжгүй бол шүүхээр шийдвэрлүүлнэ.\n\n11. ТАЛУУДЫН МЭДЭЭЛЭЛ\nАжил олгогч:\nХаяг: {{employerAddress}}\nУтас: {{employerPhone}}\nФакс: {{employerFax}}\n\nАжилтан:\nХаяг: {{employeeAddress}}\nУтас: {{employeePhone}}\nФакс: {{employeeFax}}",
+  "variables": [
+    {"key":"contractNumber","label":"Гэрээний дугаар","type":"text","required":true},
+    {"key":"contractDate","label":"Гэрээ байгуулсан огноо","type":"date","required":true},
+    {"key":"city","label":"Байршил / хот","type":"text","required":true},
+
+    {"key":"employerCompanyName","label":"Ажил олгогч байгууллагын нэр","type":"text","required":true},
+    {"key":"employerRegistrationNumber","label":"Улсын бүртгэлийн дугаар","type":"text","required":true},
+    {"key":"employerRepresentativeName","label":"Ажил олгогчийг төлөөлсөн хүний нэр","type":"text","required":true},
+    {"key":"employerRepresentativePosition","label":"Ажил олгогчийг төлөөлсөн хүний албан тушаал","type":"text","required":true},
+
+    {"key":"employeeLastName","label":"Ажилтны овог","type":"text","required":true},
+    {"key":"employeeFirstName","label":"Ажилтны нэр","type":"text","required":true},
+    {"key":"employeeRegisterNumber","label":"Ажилтны регистрийн дугаар","type":"text","required":true},
+
+    {"key":"employmentStartDate","label":"Ажил эхлэх огноо","type":"date","required":true},
+    {"key":"employmentDuration","label":"Гэрээний хүчинтэй хугацаа","type":"text","required":true},
+    {"key":"autoRenewPeriod","label":"Автоматаар сунгах хугацаа","type":"text","required":false},
+
+    {"key":"workplace","label":"Ажлын байр","type":"text","required":true},
+    {"key":"jobTitle","label":"Албан тушаал","type":"text","required":true},
+    {"key":"jobResponsibilities","label":"Ажил үүргийн тодорхойлолт","type":"textarea","required":true},
+    {"key":"workingCondition","label":"Хөдөлмөрийн нөхцөл","type":"textarea","required":true},
+
+    {"key":"workingDays","label":"Ажлын өдрүүд","type":"text","required":true},
+    {"key":"weeklyHours","label":"7 хоногийн ажиллах цаг","type":"number","required":true},
+    {"key":"dailyHours","label":"Өдөрт ажиллах цаг","type":"number","required":true},
+    {"key":"workStartTime","label":"Ажил эхлэх цаг","type":"text","required":true},
+    {"key":"lunchBreakTime","label":"Үдийн завсарлага","type":"text","required":true},
+    {"key":"flexibleWorkCondition","label":"Уян хатан цагийн нөхцөл","type":"textarea","required":false},
+
+    {"key":"monthlySalary","label":"Сарын үндсэн цалин","type":"number","required":true},
+    {"key":"currency","label":"Валют","type":"select","required":true},
+    {"key":"salaryPaymentDates","label":"Цалин олгох өдөр","type":"text","required":true},
+
+    {"key":"employeeNoticeDays","label":"Ажилтан мэдэгдэх хоног","type":"number","required":false},
+
+    {"key":"employerAddress","label":"Ажил олгогчийн хаяг","type":"textarea","required":true},
+    {"key":"employerPhone","label":"Ажил олгогчийн утас","type":"text","required":true},
+    {"key":"employerFax","label":"Ажил олгогчийн факс","type":"text","required":false},
+
+    {"key":"employeeAddress","label":"Ажилтны хаяг","type":"textarea","required":true},
+    {"key":"employeePhone","label":"Ажилтны утас","type":"text","required":true},
+    {"key":"employeeFax","label":"Ажилтны факс","type":"text","required":false}
+  ]
+},
+
+{
+  "category": "Хөлсөөр ажиллуулах",
+  "name": "Хөлсөөр ажиллуулах гэрээ",
+  "description": "Захиалагч болон хөлсөөр ажиллагчийн хооронд тодорхой ажил, үйлчилгээ гүйцэтгүүлэх, төлбөр, хугацаа, үүрэг, хариуцлага болон маргаан шийдвэрлэх нөхцөлийг зохицуулах гэрээ",
+  "content": "ХӨЛСӨӨР АЖИЛЛУУЛАХ ГЭРЭЭ\n\nГэрээний дугаар: {{contractNumber}}\nБайгуулсан огноо: {{contractDate}}\nБайршил: {{city}}\n\nНэг талаас {{clientName}} /цаашид \"Захиалагч\" гэх/, түүнийг {{clientRepresentativePosition}} албан тушаалтай {{clientRepresentativeName}} төлөөлөн,\n\nНөгөө талаас {{workerFullName}} /цаашид \"Хөлсөөр ажиллагч\" гэх/ нар Монгол Улсын Иргэний хуулийн холбогдох зүйл заалтыг үндэслэн энэхүү гэрээг байгуулав.\n\n1. НИЙТЛЭГ ҮНДЭСЛЭЛ\n1.1 Талууд хамтран ажиллах, эрх тэгш байх, харилцан ашигтай байх, түншлэлийн зарчмыг баримтална.\n1.2 Гэрээний эхлэх огноо: {{workStartDate}}\n1.3 Гэрээний хугацаа: {{contractDuration}}\n1.4 Гүйцэтгэх ажил дууссанаар гэрээ дуусгавар болно.\n1.5 Нийгмийн даатгал, ажлын цагийн нөхцөлийг талууд харилцан тохиролцоно.\n\n2. ЗАХИАЛАГЧИЙН ҮҮРЭГ\n2.1 Захиалагч нь дараах ажил, үйлчилгээг гүйцэтгүүлнэ:\n{{jobDescription}}\n\n2.2 Ажил гүйцэтгэхэд шаардлагатай дараах зүйлсээр хангана:\n- Байр: {{workplaceSupport}}\n- Тоног төхөөрөмж: {{equipmentSupport}}\n- Түүхий эд материал: {{materialsSupport}}\n- Багаж хэрэгсэл: {{toolsSupport}}\n- Бусад: {{otherSupport}}\n\n2.3 Хөдөлмөр хамгаалал, аюулгүй ажиллагааны нөхцөл:\n{{safetyConditions}}\n\n2.4 Ажил гүйцэтгэсний төлбөр:\nҮндсэн хөлс: {{paymentAmount}} {{currency}}\nУрамшуулал: {{bonusAmount}} {{currency}}\nУрамшууллын нөхцөл: {{bonusConditions}}\n\n2.5 Урьдчилгаа төлбөр:\n- Урьдчилгаа олгох эсэх: {{advancePaymentAllowed}}\n- Урьдчилгаа хувь: {{advancePercent}}%\n- Урьдчилгаа нөхцөл: {{advanceConditions}}\n\n2.6 Дараах зөрчил гаргасан тохиолдолд гэрээг цуцална:\n{{terminationViolations}}\n\n2.7 Захиалагчийн бусад үүрэг:\n{{clientAdditionalResponsibilities}}\n\n3. ХӨЛСӨӨР АЖИЛЛАГЧИЙН ҮҮРЭГ\n3.1 Дараах ажлыг {{workDeadline}} хугацаанд {{qualityLevel}} чанарын түвшинд гүйцэтгэнэ:\n{{assignedWork}}\n\n3.2 Ажлыг {{workLocation}} байранд гүйцэтгэнэ.\n\n3.3 Ажлыг дараах нөхцөлд гүйцэтгэнэ:\n{{workConditions}}\n\n3.4 Ажлын цаг болон хөдөлмөрийн аюулгүй ажиллагааны шаардлагыг өөрөө хариуцна.\n\n3.5 Захиалагч гэрээнд заасан нөхцөлийг хангаагүй бол ажил гүйцэтгэхээс татгалзах эрхтэй.\n\n3.6 Хөлсөөр ажиллагчийн бусад үүрэг:\n{{workerAdditionalResponsibilities}}\n\n4. ГЭРЭЭНИЙ БИЕЛЭЛТ БА ХАРИУЦЛАГА\n4.1 Гэрээг дараах нөхцөлд биелэгдсэнд тооцно:\n{{completionCriteria}}\n\n4.2 Төлбөрийг {{paymentDays}} хоногийн дотор {{paymentMethod}} аргаар шилжүүлнэ.\n\n4.3 Захиалагч үүргээ биелүүлээгүй тохиолдолд:\n- Хоног тутам {{clientPenaltyAmount}} {{currency}} торгууль төлнө\n- Бусад хариуцлага: {{clientPenaltyConditions}}\n\n4.4 Хөлсөөр ажиллагч үүргээ биелүүлээгүй тохиолдолд:\n- Чанаргүй гүйцэтгэсэн ажлыг үнэ төлбөргүй дахин гүйцэтгэнэ\n- Хугацаа хэтрүүлсэн бол хоног тутам {{workerPenaltyPercent}}% буюу {{workerPenaltyAmount}} {{currency}} торгууль төлнө\n\n4.5 Бусад хариуцлага:\n{{otherLiabilities}}\n\n5. МАРГААН ШИЙДВЭРЛЭХ\n5.1 Маргааныг эхлээд харилцан тохиролцох замаар шийдвэрлэнэ.\n5.2 Шийдвэрлэх боломжгүй бол {{disputeResolutionMethod}} журмаар шийдвэрлэнэ.\n\n6. ТАЛУУДЫН МЭДЭЭЛЭЛ\n\nЗахиалагч:\nХаяг: {{clientAddress}}\nУтас: {{clientPhone}}\nБанкны данс: {{clientBankAccount}}\n\nХөлсөөр ажиллагч:\nХаяг: {{workerAddress}}\nУтас: {{workerPhone}}\nИргэний үнэмлэхийн дугаар: {{workerIdNumber}}\nРегистрийн дугаар: {{workerRegisterNumber}}",
+  "variables": [
+    {"key":"contractNumber","label":"Гэрээний дугаар","type":"text","required":true},
+    {"key":"contractDate","label":"Гэрээ байгуулсан огноо","type":"date","required":true},
+    {"key":"city","label":"Байршил / хот","type":"text","required":true},
+
+    {"key":"clientName","label":"Захиалагчийн нэр","type":"text","required":true},
+    {"key":"clientRepresentativeName","label":"Захиалагчийг төлөөлсөн хүний нэр","type":"text","required":true},
+    {"key":"clientRepresentativePosition","label":"Захиалагчийг төлөөлсөн хүний албан тушаал","type":"text","required":true},
+
+    {"key":"workerFullName","label":"Хөлсөөр ажиллагчийн овог нэр","type":"text","required":true},
+    {"key":"workerAddress","label":"Хөлсөөр ажиллагчийн хаяг","type":"textarea","required":true},
+    {"key":"workerIdNumber","label":"Иргэний үнэмлэхийн дугаар","type":"text","required":false},
+    {"key":"workerRegisterNumber","label":"Регистрийн дугаар","type":"text","required":true},
+
+    {"key":"workStartDate","label":"Ажил эхлэх огноо","type":"date","required":true},
+    {"key":"contractDuration","label":"Гэрээний хугацаа","type":"text","required":true},
+
+    {"key":"jobDescription","label":"Гүйцэтгэх ажил","type":"textarea","required":true},
+    {"key":"workplaceSupport","label":"Ажлын байр","type":"textarea","required":false},
+    {"key":"equipmentSupport","label":"Тоног төхөөрөмж","type":"textarea","required":false},
+    {"key":"materialsSupport","label":"Түүхий эд материал","type":"textarea","required":false},
+    {"key":"toolsSupport","label":"Багаж хэрэгсэл","type":"textarea","required":false},
+    {"key":"otherSupport","label":"Бусад хангамж","type":"textarea","required":false},
+
+    {"key":"safetyConditions","label":"Хөдөлмөр хамгаалал, аюулгүй ажиллагааны нөхцөл","type":"textarea","required":false},
+
+    {"key":"paymentAmount","label":"Үндсэн хөлс","type":"number","required":true},
+    {"key":"currency","label":"Валют","type":"select","required":true},
+    {"key":"bonusAmount","label":"Урамшууллын хэмжээ","type":"number","required":false},
+    {"key":"bonusConditions","label":"Урамшууллын нөхцөл","type":"textarea","required":false},
+
+    {"key":"advancePaymentAllowed","label":"Урьдчилгаа олгох эсэх","type":"boolean","required":false},
+    {"key":"advancePercent","label":"Урьдчилгаа хувь","type":"number","required":false},
+    {"key":"advanceConditions","label":"Урьдчилгаа нөхцөл","type":"textarea","required":false},
+
+    {"key":"terminationViolations","label":"Гэрээ цуцлах зөрчлүүд","type":"textarea","required":false},
+
+    {"key":"assignedWork","label":"Хариуцах ажил","type":"textarea","required":true},
+    {"key":"workDeadline","label":"Ажил дуусгах хугацаа","type":"text","required":true},
+    {"key":"qualityLevel","label":"Чанарын түвшин","type":"text","required":true},
+    {"key":"workLocation","label":"Ажил гүйцэтгэх байршил","type":"text","required":true},
+    {"key":"workConditions","label":"Ажил гүйцэтгэх нөхцөл","type":"textarea","required":false},
+
+    {"key":"completionCriteria","label":"Ажил дууссан гэж үзэх нөхцөл","type":"textarea","required":true},
+    {"key":"paymentDays","label":"Төлбөр шилжүүлэх хоног","type":"number","required":true},
+    {"key":"paymentMethod","label":"Төлбөрийн хэлбэр","type":"select","required":true},
+
+    {"key":"clientPenaltyAmount","label":"Захиалагчийн торгуулийн хэмжээ","type":"number","required":false},
+    {"key":"clientPenaltyConditions","label":"Захиалагчийн бусад хариуцлага","type":"textarea","required":false},
+
+    {"key":"workerPenaltyPercent","label":"Хөлсөөр ажиллагчийн торгуулийн хувь","type":"number","required":false},
+    {"key":"workerPenaltyAmount","label":"Хөлсөөр ажиллагчийн торгуулийн хэмжээ","type":"number","required":false},
+    {"key":"otherLiabilities","label":"Бусад хариуцлага","type":"textarea","required":false},
+
+    {"key":"disputeResolutionMethod","label":"Маргаан шийдвэрлэх журам","type":"text","required":true},
+
+    {"key":"clientAddress","label":"Захиалагчийн хаяг","type":"textarea","required":true},
+    {"key":"clientPhone","label":"Захиалагчийн утас","type":"text","required":true},
+    {"key":"clientBankAccount","label":"Захиалагчийн банкны данс","type":"text","required":false}
+  ]
+},
+
+{
+  "category": "Хөрөнгө оруулалт",
+  "name": "Хөрөнгө оруулалтын гэрээ",
+  "description": "Талуудын хөрөнгө оруулалт хийх хэлбэр, хөрөнгийн хэмжээ, ашиг хуваарилалт, эрсдэл, удирдлага, нууцлал, хариуцлага болон гэрээний хэрэгжилтийг зохицуулах гэрээ",
+  "content": "ХӨРӨНГӨ ОРУУЛАЛТЫН ГЭРЭЭ\n\nГэрээний дугаар: {{contractNumber}}\nБайгуулсан огноо: {{contractDate}}\nБайршил: {{city}}\n\nНэг талаас {{investorAName}} /цаашид \"А тал\" гэх/,\n\nНөгөө талаас {{investorBCompanyName}} /цаашид \"Б тал\" гэх/, түүнийг {{investorBRepresentativeName}} төлөөлөн энэхүү гэрээг байгуулав.\n\n1. ГЭРЭЭНИЙ ЗОРИЛГО\n1.1 Энэхүү гэрээний зорилго нь {{projectPurpose}} төслийг хэрэгжүүлэх, хөрөнгө оруулалт хийх, хамтран ажиллахтай холбоотой харилцааг зохицуулахад оршино.\n1.2 Талууд хамтын үйл ажиллагааг ашгийн зорилгоор хэрэгжүүлнэ.\n1.3 Талууд хуулийн этгээд шинээр байгуулахгүйгээр хамтран ажиллана.\n\n2. ТӨСЛИЙН МЭДЭЭЛЭЛ\n2.1 Төслийн нэр: {{projectName}}\n2.2 Төслийн байршил: {{projectLocation}}\n2.3 Төслийн төрөл: {{projectType}}\n2.4 Төслийн тайлбар:\n{{projectDescription}}\n\n3. ХӨРӨНГӨ ОРУУЛАЛТЫН ХЭМЖЭЭ БА ТӨРӨЛ\n3.1 А тал дараах хөрөнгийг оруулна:\n{{investorAContribution}}\n\n3.2 Б тал дараах хөрөнгийг оруулна:\n{{investorBContribution}}\n\n3.3 Хөрөнгө оруулалтын нийт хэмжээ:\n{{totalInvestmentAmount}} {{currency}}\n\n4. АШИГ ХУВААРИЛАЛТ\n4.1 А талын ашиг хүртэх хувь: {{investorAProfitPercent}}%\n4.2 Б талын ашиг хүртэх хувь: {{investorBProfitPercent}}%\n4.3 Ашгийг {{profitDistributionFrequency}} давтамжаар хуваарилна.\n\n5. ЭРСДЭЛ ХУВААРИЛАЛТ\n5.1 Давагдашгүй хүчин зүйлээс үүссэн эрсдэлийг {{forceMajeureRiskDistribution}} зарчмаар хуваарилна.\n5.2 Талуудын буруутай үйл ажиллагааны улмаас үүссэн хохирлыг буруутай тал бүрэн хариуцна.\n\n6. ТАЛУУДЫН ЭРХ ҮҮРЭГ\n6.1 А талын үүрэг:\n{{investorAResponsibilities}}\n\n6.2 Б талын үүрэг:\n{{investorBResponsibilities}}\n\n6.3 Талууд шаардлагатай мэдээлэл, зөвшөөрөл, баримт бичгийг харилцан гаргаж өгнө.\n\n7. УДИРДЛАГА БА ХЯНАЛТ\n7.1 Төслийн ерөнхий удирдлагыг {{managementResponsibleParty}} хэрэгжүүлнэ.\n7.2 Тайланг {{reportingFrequency}} тутам гаргаж өгнө.\n7.3 Талууд төслийн хэрэгжилтэд хяналт тавих эрхтэй.\n\n8. ХАРИУЦЛАГА БА ГЭРЭЭ ЦУЦЛАХ\n8.1 Гэрээгээр хүлээсэн үүргээ биелүүлээгүй бол нөгөө тал гэрээг цуцлах эрхтэй.\n8.2 Үүрэг зөрчсөн тал учруулсан бүх хохирлыг нөхөн төлнө.\n8.3 Нэмэлт хугацаа олгосон боловч үр дүн гараагүй бол гэрээг дуусгавар болгож болно.\n\n9. НУУЦЛАЛ\n9.1 Энэхүү гэрээтэй холбоотой бүх мэдээллийг нууцална.\n9.2 Дараах нөхцөлүүд нууц мэдээлэлд хамаарахгүй:\n{{confidentialityExceptions}}\n\n10. МАРГААН ШИЙДВЭРЛЭХ\n10.1 Маргааныг эхлээд харилцан тохиролцож шийдвэрлэнэ.\n10.2 Шийдвэрлэх боломжгүй бол {{disputeResolutionMethod}} журмаар шийдвэрлэнэ.\n\n11. БУСАД НӨХЦӨЛ\n11.1 Гэрээний хугацаа: {{agreementDuration}}\n11.2 Гэрээний хэл: {{agreementLanguage}}\n11.3 Гэрээний үүргийг зөвшөөрөлгүйгээр бусдад шилжүүлэхгүй.\n11.4 Нэмэлт өөрчлөлтийг бичгээр үйлдэнэ.\n\n12. ТАЛУУДЫН МЭДЭЭЛЭЛ\n\nА тал:\nХаяг: {{investorAAddress}}\nУтас: {{investorAPhone}}\nРегистр: {{investorARegisterNumber}}\n\nБ тал:\nХаяг: {{investorBAddress}}\nУтас: {{investorBPhone}}\nРегистр: {{investorBRegisterNumber}}",
+  "variables": [
+    {"key":"contractNumber","label":"Гэрээний дугаар","type":"text","required":true},
+    {"key":"contractDate","label":"Гэрээ байгуулсан огноо","type":"date","required":true},
+    {"key":"city","label":"Байршил / хот","type":"text","required":true},
+
+    {"key":"investorAName","label":"А талын нэр","type":"text","required":true},
+    {"key":"investorAAddress","label":"А талын хаяг","type":"textarea","required":true},
+    {"key":"investorAPhone","label":"А талын утас","type":"text","required":true},
+    {"key":"investorARegisterNumber","label":"А талын регистр","type":"text","required":false},
+
+    {"key":"investorBCompanyName","label":"Б тал байгууллагын нэр","type":"text","required":true},
+    {"key":"investorBRepresentativeName","label":"Б талыг төлөөлсөн хүний нэр","type":"text","required":true},
+    {"key":"investorBAddress","label":"Б талын хаяг","type":"textarea","required":true},
+    {"key":"investorBPhone","label":"Б талын утас","type":"text","required":true},
+    {"key":"investorBRegisterNumber","label":"Б талын регистр","type":"text","required":false},
+
+    {"key":"projectName","label":"Төслийн нэр","type":"text","required":true},
+    {"key":"projectLocation","label":"Төслийн байршил","type":"textarea","required":true},
+    {"key":"projectType","label":"Төслийн төрөл","type":"text","required":true},
+    {"key":"projectDescription","label":"Төслийн тайлбар","type":"textarea","required":false},
+
+    {"key":"investorAContribution","label":"А талын хөрөнгө оруулалт","type":"textarea","required":true},
+    {"key":"investorBContribution","label":"Б талын хөрөнгө оруулалт","type":"textarea","required":true},
+    {"key":"totalInvestmentAmount","label":"Нийт хөрөнгө оруулалтын хэмжээ","type":"number","required":true},
+    {"key":"currency","label":"Валют","type":"select","required":true},
+
+    {"key":"investorAProfitPercent","label":"А талын ашиг хүртэх хувь","type":"number","required":true},
+    {"key":"investorBProfitPercent","label":"Б талын ашиг хүртэх хувь","type":"number","required":true},
+    {"key":"profitDistributionFrequency","label":"Ашиг хуваарилах давтамж","type":"text","required":true},
+
+    {"key":"forceMajeureRiskDistribution","label":"Эрсдэл хуваарилах зарчим","type":"text","required":true},
+
+    {"key":"investorAResponsibilities","label":"А талын үүрэг","type":"textarea","required":true},
+    {"key":"investorBResponsibilities","label":"Б талын үүрэг","type":"textarea","required":true},
+
+    {"key":"managementResponsibleParty","label":"Удирдлага хариуцах тал","type":"text","required":true},
+    {"key":"reportingFrequency","label":"Тайлагнах давтамж","type":"text","required":true},
+
+    {"key":"confidentialityExceptions","label":"Нууцлалын үл хамаарах нөхцөл","type":"textarea","required":false},
+
+    {"key":"disputeResolutionMethod","label":"Маргаан шийдвэрлэх журам","type":"text","required":true},
+
+    {"key":"agreementDuration","label":"Гэрээний хугацаа","type":"text","required":true},
+    {"key":"agreementLanguage","label":"Гэрээний хэл","type":"text","required":true}
+  ]
+},
+
+{
+  "category": "Үйлчилгээ",
+  "name": "Үйлчилгээ үзүүлэх гэрээ",
+  "description": "Захиалагч болон Гүйцэтгэгчийн хооронд үйлчилгээ үзүүлэх, зөвлөгөө өгөх, судалгаа хийх, төлбөр тооцоо, үүрэг хариуцлага болон нууцлалыг зохицуулах гэрээ",
+  "content": "ҮЙЛЧИЛГЭЭ ҮЗҮҮЛЭХ ГЭРЭЭ\n\nГэрээний дугаар: {{contractNumber}}\nБайгуулсан огноо: {{contractDate}}\nБайршил: {{city}}\n\nНэг талаас {{clientCompanyName}} /цаашид \"Захиалагч\" гэх/, түүнийг {{clientRepresentativePosition}} албан тушаалтай {{clientRepresentativeName}} төлөөлөн,\n\nНөгөө талаас {{providerCompanyName}} /цаашид \"Гүйцэтгэгч\" гэх/, түүнийг {{providerRepresentativePosition}} албан тушаалтай {{providerRepresentativeName}} төлөөлөн энэхүү гэрээг байгуулав.\n\n1. ГЭРЭЭНИЙ ЗҮЙЛ\n1.1 Гүйцэтгэгч нь дараах үйлчилгээ үзүүлэх үүрэг хүлээнэ:\n{{serviceDescription}}\n\n1.2 Үйлчилгээний хүрээнд дараах ажил хийгдэнэ:\n{{serviceScope}}\n\n1.3 Гүйцэтгэгч нь шаардлагатай зөвлөгөө, мэдээлэл, судалгаа болон холбогдох дэмжлэг үзүүлнэ.\n\n2. ГҮЙЦЭТГЭГЧИЙН ҮҮРЭГ\n2.1 Гүйцэтгэгч дараах үүрэгтэй:\n- Зах зээлийн судалгаа хийх\n- Холбогдох байгууллага, нийлүүлэгч, харилцагчийг тодорхойлох\n- Уулзалт, хэлэлцээр зохион байгуулах\n- Эрх зүйн болон худалдааны зөвлөгөө өгөх\n- Үйлчилгээтэй холбоотой шаардлагатай мэдээлэл боловсруулах\n- Бусад үйлчилгээ:\n{{providerResponsibilities}}\n\n3. ЗАХИАЛАГЧИЙН ҮҮРЭГ\n3.1 Захиалагч дараах үүрэгтэй:\n- Шаардлагатай мэдээлэл, материал өгөх\n- Гүйцэтгэгчийг техникийн болон худалдааны мэдээллээр хангах\n- Үйлчилгээний төлбөрийг хугацаанд төлөх\n- Гүйцэтгэгчид шаардлагатай дэмжлэг үзүүлэх\n- Бусад үүрэг:\n{{clientResponsibilities}}\n\n4. АЖИЛЛАХ НӨХЦӨЛ\n4.1 Талууд харилцан өгсөн зөвлөмж, мэдээллийг анхааралдаа авна.\n4.2 Саад бэрхшээл гарсан тохиолдолд тухай бүр мэдэгдэнэ.\n4.3 Үүргээ хугацаанд нь биелүүлэх боломжгүй болсон бол бичгээр мэдэгдэнэ.\n4.4 Үйлчилгээ үзүүлэх хугацаа:\n{{serviceDuration}}\n\n5. ТӨЛБӨР БА ТООЦОО\n5.1 Үйлчилгээний нийт төлбөр: {{serviceAmount}} {{currency}}\n5.2 Төлбөрийн хэлбэр: {{paymentMethod}}\n5.3 Урьдчилгаа төлбөр: {{advanceAmount}} {{currency}}\n5.4 Төлбөр төлөх хугацаа: {{paymentDeadline}}\n5.5 Төлбөрийг дараах дансанд шилжүүлнэ:\n{{bankAccount}}\n\n6. НУУЦЛАЛ\n6.1 Талууд гэрээний хүрээнд олж авсан мэдээллийг нууцална.\n6.2 Нууц мэдээллийг гуравдагч этгээдэд задруулахгүй.\n6.3 Дараах мэдээлэл нууцад хамаарахгүй:\n{{confidentialityExceptions}}\n\n7. ХАРИУЦЛАГА\n7.1 Гэрээгээр хүлээсэн үүргээ биелүүлээгүй тал хуулийн дагуу хариуцлага хүлээнэ.\n7.2 Үүргээ хугацаанд нь биелүүлээгүй бол {{latePenaltyPercent}}% алданги төлнө.\n7.3 Үүссэн хохирлыг буруутай тал нөхөн төлнө.\n\n8. МАРГААН ШИЙДВЭРЛЭХ\n8.1 Маргааныг эхлээд харилцан тохиролцож шийдвэрлэнэ.\n8.2 Тохиролцоонд хүрэхгүй бол {{disputeResolutionMethod}} журмаар шийдвэрлэнэ.\n\n9. БУСАД НӨХЦӨЛ\n9.1 Гэрээ хүчин төгөлдөр болох огноо: {{effectiveDate}}\n9.2 Гэрээ дуусах огноо: {{expirationDate}}\n9.3 Нэмэлт нөхцөл:\n{{additionalTerms}}\n\n10. ТАЛУУДЫН МЭДЭЭЛЭЛ\n\nЗахиалагч:\nХаяг: {{clientAddress}}\nУтас: {{clientPhone}}\nФакс: {{clientFax}}\nБанкны данс: {{clientBankAccount}}\n\nГүйцэтгэгч:\nХаяг: {{providerAddress}}\nУтас: {{providerPhone}}\nФакс: {{providerFax}}\nБанкны данс: {{providerBankAccount}}",
+  "variables": [
+    {"key":"contractNumber","label":"Гэрээний дугаар","type":"text","required":true},
+    {"key":"contractDate","label":"Гэрээ байгуулсан огноо","type":"date","required":true},
+    {"key":"city","label":"Байршил / хот","type":"text","required":true},
+
+    {"key":"clientCompanyName","label":"Захиалагч байгууллагын нэр","type":"text","required":true},
+    {"key":"clientRepresentativeName","label":"Захиалагчийг төлөөлсөн хүний нэр","type":"text","required":true},
+    {"key":"clientRepresentativePosition","label":"Захиалагчийг төлөөлсөн хүний албан тушаал","type":"text","required":true},
+
+    {"key":"providerCompanyName","label":"Гүйцэтгэгч байгууллагын нэр","type":"text","required":true},
+    {"key":"providerRepresentativeName","label":"Гүйцэтгэгчийг төлөөлсөн хүний нэр","type":"text","required":true},
+    {"key":"providerRepresentativePosition","label":"Гүйцэтгэгчийг төлөөлсөн хүний албан тушаал","type":"text","required":true},
+
+    {"key":"serviceDescription","label":"Үйлчилгээний тодорхойлолт","type":"textarea","required":true},
+    {"key":"serviceScope","label":"Үйлчилгээний хүрээ","type":"textarea","required":true},
+
+    {"key":"providerResponsibilities","label":"Гүйцэтгэгчийн нэмэлт үүрэг","type":"textarea","required":false},
+    {"key":"clientResponsibilities","label":"Захиалагчийн нэмэлт үүрэг","type":"textarea","required":false},
+
+    {"key":"serviceDuration","label":"Үйлчилгээ үзүүлэх хугацаа","type":"text","required":true},
+
+    {"key":"serviceAmount","label":"Үйлчилгээний төлбөр","type":"number","required":true},
+    {"key":"currency","label":"Валют","type":"select","required":true},
+    {"key":"advanceAmount","label":"Урьдчилгаа төлбөр","type":"number","required":false},
+    {"key":"paymentMethod","label":"Төлбөрийн хэлбэр","type":"select","required":true},
+    {"key":"paymentDeadline","label":"Төлбөр төлөх хугацаа","type":"text","required":true},
+    {"key":"bankAccount","label":"Төлбөр хүлээн авах данс","type":"text","required":true},
+
+    {"key":"confidentialityExceptions","label":"Нууцад хамаарахгүй мэдээлэл","type":"textarea","required":false},
+    {"key":"latePenaltyPercent","label":"Хугацаа хэтрүүлсний алдангийн хувь","type":"number","required":false},
+    {"key":"disputeResolutionMethod","label":"Маргаан шийдвэрлэх журам","type":"text","required":true},
+
+    {"key":"effectiveDate","label":"Гэрээ хүчин төгөлдөр болох огноо","type":"date","required":true},
+    {"key":"expirationDate","label":"Гэрээ дуусах огноо","type":"date","required":true},
+    {"key":"additionalTerms","label":"Нэмэлт нөхцөл","type":"textarea","required":false},
+
+    {"key":"clientAddress","label":"Захиалагчийн хаяг","type":"textarea","required":true},
+    {"key":"clientPhone","label":"Захиалагчийн утас","type":"text","required":true},
+    {"key":"clientFax","label":"Захиалагчийн факс","type":"text","required":false},
+    {"key":"clientBankAccount","label":"Захиалагчийн банкны данс","type":"text","required":false},
+
+    {"key":"providerAddress","label":"Гүйцэтгэгчийн хаяг","type":"textarea","required":true},
+    {"key":"providerPhone","label":"Гүйцэтгэгчийн утас","type":"text","required":true},
+    {"key":"providerFax","label":"Гүйцэтгэгчийн факс","type":"text","required":false},
+    {"key":"providerBankAccount","label":"Гүйцэтгэгчийн банкны данс","type":"text","required":false}
+  ]
+},
+
+{
+  "category":"Үл хөдлөх хөрөнгө худалдах",
+  "name":"Үл хөдлөх эд хөрөнгө худалдах, худалдан авах гэрээ",
+  "description":"Үл хөдлөх эд хөрөнгийг худалдах, худалдан авах, өмчлөх эрх шилжүүлэх, төлбөр тооцоо, хүлээлгэн өгөх, баталгаа, хариуцлага болон маргаан шийдвэрлэх нөхцөлийг зохицуулах гэрээ",
+  "content":"ҮЛ ХӨДЛӨХ ЭД ХӨРӨНГӨ ХУДАЛДАХ, ХУДАЛДАН АВАХ ГЭРЭЭ\n\nГэрээний дугаар: {{contractNumber}}\nБайгуулсан огноо: {{contractDate}}\nБайршил: {{city}}\n\nНэг талаас {{sellerCompanyName}} /цаашид \"Худалдагч\" гэх/, түүнийг {{sellerRepresentativePosition}} албан тушаалтай {{sellerRepresentativeName}} төлөөлөн,\n\nНөгөө талаас {{buyerCompanyName}} /цаашид \"Худалдан авагч\" гэх/, түүнийг {{buyerRepresentativePosition}} албан тушаалтай {{buyerRepresentativeName}} төлөөлөн энэхүү гэрээг байгуулав.\n\n1. ГЭРЭЭНИЙ ЗҮЙЛ\n1.1 Худалдагч нь {{propertyType}} зориулалттай {{propertyName}} үл хөдлөх хөрөнгийг Худалдан авагчид шилжүүлэн өгнө.\n1.2 Үл хөдлөх хөрөнгийн хаяг: {{propertyAddress}}\n1.3 Үл хөдлөх хөрөнгийн бүртгэлийн дугаар: {{propertyRegistrationNumber}}\n1.4 Барилгын хэмжээ:\n- Урт: {{buildingLength}}\n- Өргөн: {{buildingWidth}}\n- Өндөр: {{buildingHeight}}\n- Давхар: {{floorCount}}\n- Өрөөний тоо: {{roomCount}}\n- Ашигтай талбай: {{usableArea}}\n\n1.5 Хашаа болон тохижилтын мэдээлэл:\n{{propertyImprovementDetails}}\n\n1.6 Барилга ашиглалтад орсон огноо: {{commissionDate}}\n1.7 Барилгын материал: {{buildingMaterial}}\n1.8 Эд хөрөнгийн чанар:\n{{propertyCondition}}\n1.9 Эдэлгээний байдал: {{wearCondition}}\n1.10 Нэмэлт засвар шаардлагатай эсэх:\n{{repairRequirement}}\n\n2. ҮНЭ БА ТӨЛБӨР\n2.1 Барилгын үнэ: {{buildingPrice}} {{currency}}\n2.2 Хашааны үнэ: {{fencePrice}} {{currency}}\n2.3 Тоног төхөөрөмжийн үнэ: {{equipmentPrice}} {{currency}}\n2.4 Бусад хөрөнгийн үнэ: {{otherAssetsPrice}} {{currency}}\n2.5 Нийт үнэ: {{totalPrice}} {{currency}}\n2.6 Төлбөр төлөх хугацаа: {{paymentDeadline}}\n2.7 Төлбөрийн хэлбэр: {{paymentMethod}}\n2.8 Төлбөр шилжүүлэх данс: {{sellerBankAccount}}\n\n3. ХҮЛЭЭЛГЭН ӨГӨХ\n3.1 Үл хөдлөх хөрөнгийг {{handoverDate}} өдөр хүлээлгэн өгнө.\n3.2 Хүлээлгэн өгөхөд дараах баримт бичгийг хамт шилжүүлнэ:\n{{relatedDocuments}}\n3.3 Хүлээлгэн өгөх үед эд хөрөнгийн тоо хэмжээ, чанар, өнгө үзэмж болон холбогдох үйлчилгээг шалгана.\n\n4. ХУДАЛДАГЧИЙН ЭРХ ҮҮРЭГ\n4.1 Эд хөрөнгийг бүрэн бүтэн байдлаар шилжүүлнэ.\n4.2 Эд хөрөнгийн баримт бичгийг бүрэн шилжүүлнэ.\n4.3 Гуравдагч этгээдийн эрх байгаа эсэхийг мэдээлнэ.\n4.4 Чанарын доголдол гарсан тохиолдолд {{qualityWarrantyPeriod}} хугацаанд хариуцна.\n\n5. ХУДАЛДАН АВАГЧИЙН ЭРХ ҮҮРЭГ\n5.1 Худалдан авагч төлбөрийг хугацаанд нь төлнө.\n5.2 Эд хөрөнгийг хугацаанд нь хүлээн авна.\n5.3 Хүлээн авах үед илэрсэн доголдлыг мэдэгдэнэ.\n\n6. ДААТГАЛ БА ГАЗРЫН ЭРХ\n6.1 Даатгалын байгууллага: {{insuranceCompany}}\n6.2 Даатгалын үнэлгээ: {{insuranceAmount}}\n6.3 Газрын ашиглалт болон эзэмших эрх:\n{{landUseRights}}\n\n7. ДАВАГДАШГҮЙ ХҮЧИН ЗҮЙЛ\n7.1 Газар хөдлөлт, үер, гал түймэр, халдварт өвчин, төрийн шийдвэр болон бусад нөхцөлөөс шалтгаалан үүргээ биелүүлэх боломжгүй болсон тохиолдолд талууд хариуцлагаас чөлөөлөгдөнө.\n\n8. ХАРИУЦЛАГА\n8.1 Үүргээ хугацаанд нь биелүүлээгүй тал хоног тутам {{dailyPenaltyPercent}}% алданги төлнө.\n8.2 Алдангийн хэмжээ нь нийт үнийн {{maximumPenaltyPercent}}%-аас хэтрэхгүй байна.\n8.3 Үүссэн хохирлыг буруутай тал нөхөн төлнө.\n\n9. МАРГААН ШИЙДВЭРЛЭХ\n9.1 Маргааныг эхлээд харилцан тохиролцож шийдвэрлэнэ.\n9.2 Тохиролцоонд хүрээгүй бол {{disputeResolutionMethod}} журмаар шийдвэрлэнэ.\n\n10. БУСАД НӨХЦӨЛ\n10.1 Гэрээ хүчин төгөлдөр болох огноо: {{effectiveDate}}\n10.2 Гэрээний хувь: {{contractCopies}}\n10.3 Нэмэлт нөхцөл:\n{{additionalTerms}}",
+  "variables":[
+    {"key":"contractNumber","label":"Гэрээний дугаар","type":"text","required":true},
+    {"key":"contractDate","label":"Гэрээ байгуулсан огноо","type":"date","required":true},
+    {"key":"city","label":"Байршил / хот","type":"text","required":true},
+
+    {"key":"sellerCompanyName","label":"Худалдагч байгууллагын нэр","type":"text","required":true},
+    {"key":"sellerRepresentativeName","label":"Худалдагчийг төлөөлсөн хүний нэр","type":"text","required":true},
+    {"key":"sellerRepresentativePosition","label":"Худалдагчийг төлөөлсөн хүний албан тушаал","type":"text","required":true},
+
+    {"key":"buyerCompanyName","label":"Худалдан авагч байгууллагын нэр","type":"text","required":true},
+    {"key":"buyerRepresentativeName","label":"Худалдан авагчийг төлөөлсөн хүний нэр","type":"text","required":true},
+    {"key":"buyerRepresentativePosition","label":"Худалдан авагчийг төлөөлсөн хүний албан тушаал","type":"text","required":true},
+
+    {"key":"propertyType","label":"Үл хөдлөх хөрөнгийн зориулалт","type":"text","required":true},
+    {"key":"propertyName","label":"Үл хөдлөх хөрөнгийн нэр","type":"text","required":true},
+    {"key":"propertyAddress","label":"Үл хөдлөх хөрөнгийн хаяг","type":"textarea","required":true},
+    {"key":"propertyRegistrationNumber","label":"Үл хөдлөх хөрөнгийн бүртгэлийн дугаар","type":"text","required":true},
+
+    {"key":"buildingLength","label":"Урт","type":"number","required":false},
+    {"key":"buildingWidth","label":"Өргөн","type":"number","required":false},
+    {"key":"buildingHeight","label":"Өндөр","type":"number","required":false},
+    {"key":"floorCount","label":"Давхарын тоо","type":"number","required":false},
+    {"key":"roomCount","label":"Өрөөний тоо","type":"number","required":false},
+    {"key":"usableArea","label":"Ашигтай талбай","type":"number","required":true},
+
+    {"key":"propertyImprovementDetails","label":"Тохижилтын мэдээлэл","type":"textarea","required":false},
+    {"key":"commissionDate","label":"Ашиглалтад орсон огноо","type":"date","required":false},
+    {"key":"buildingMaterial","label":"Барилгын материал","type":"text","required":false},
+    {"key":"propertyCondition","label":"Эд хөрөнгийн чанар","type":"textarea","required":true},
+    {"key":"wearCondition","label":"Эдэлгээний байдал","type":"textarea","required":false},
+    {"key":"repairRequirement","label":"Засвар шаардлагатай эсэх","type":"textarea","required":false},
+
+    {"key":"buildingPrice","label":"Барилгын үнэ","type":"number","required":true},
+    {"key":"fencePrice","label":"Хашааны үнэ","type":"number","required":false},
+    {"key":"equipmentPrice","label":"Тоног төхөөрөмжийн үнэ","type":"number","required":false},
+    {"key":"otherAssetsPrice","label":"Бусад хөрөнгийн үнэ","type":"number","required":false},
+    {"key":"totalPrice","label":"Нийт үнэ","type":"number","required":true},
+    {"key":"currency","label":"Валют","type":"select","required":true},
+    {"key":"paymentDeadline","label":"Төлбөр төлөх хугацаа","type":"date","required":true},
+    {"key":"paymentMethod","label":"Төлбөрийн хэлбэр","type":"select","required":true},
+    {"key":"sellerBankAccount","label":"Худалдагчийн банкны данс","type":"text","required":true},
+
+    {"key":"handoverDate","label":"Хүлээлгэн өгөх огноо","type":"date","required":true},
+    {"key":"relatedDocuments","label":"Шилжүүлэх баримт бичгүүд","type":"textarea","required":false},
+
+    {"key":"qualityWarrantyPeriod","label":"Чанарын баталгааны хугацаа","type":"text","required":false},
+
+    {"key":"insuranceCompany","label":"Даатгалын байгууллага","type":"text","required":false},
+    {"key":"insuranceAmount","label":"Даатгалын үнэлгээ","type":"number","required":false},
+    {"key":"landUseRights","label":"Газрын ашиглах эрх","type":"textarea","required":false},
+
+    {"key":"dailyPenaltyPercent","label":"Өдрийн алдангийн хувь","type":"number","required":false},
+    {"key":"maximumPenaltyPercent","label":"Алдангийн дээд хувь","type":"number","required":false},
+
+    {"key":"disputeResolutionMethod","label":"Маргаан шийдвэрлэх журам","type":"text","required":true},
+
+    {"key":"effectiveDate","label":"Гэрээ хүчин төгөлдөр болох огноо","type":"date","required":true},
+    {"key":"contractCopies","label":"Гэрээний хувь","type":"number","required":false},
+    {"key":"additionalTerms","label":"Нэмэлт нөхцөл","type":"textarea","required":false}
+  ]
+},
+
+{
+  "category":"Үнэт цаас",
+  "name":"Үнэт цаас, хувьцаа худалдах, худалдан авах гэрээ",
+  "description":"Хувьцаа болон бусад үнэт цаасыг худалдах, худалдан авах, өмчлөх эрх шилжүүлэх, төлбөр тооцоо, татвар, бүртгэл болон маргаан шийдвэрлэх нөхцөлийг зохицуулах гэрээ",
+  "content":"ҮНЭТ ЦААС, ХУВЬЦАА ХУДАЛДАХ, ХУДАЛДАН АВАХ ГЭРЭЭ\n\nГэрээний дугаар: {{contractNumber}}\nБайгуулсан огноо: {{contractDate}}\nБайршил: {{city}}\n\nНэг талаас {{sellerName}} /цаашид \"Худалдагч\" гэх/, түүнийг {{sellerRepresentativePosition}} албан тушаалтай {{sellerRepresentativeName}} төлөөлөн,\n\nНөгөө талаас {{buyerName}} /цаашид \"Худалдан авагч\" гэх/, түүнийг {{buyerRepresentativePosition}} албан тушаалтай {{buyerRepresentativeName}} төлөөлөн энэхүү гэрээг байгуулав.\n\n1. ГЭРЭЭНИЙ ЗҮЙЛ\n1.1 Худалдагч нь дараах хувьцаа, үнэт цаасыг Худалдан авагчийн өмчлөлд шилжүүлнэ.\n\n1.2 Хувьцаа, үнэт цаасны нэр: {{securityName}}\n1.3 Хувьцаа, үнэт цаасны төрөл: {{securityType}}\n1.4 Хувьцаа, үнэт цаасны зэрэглэл: {{securityClass}}\n1.5 Нэгж хувьцааны нэрлэсэн үнэ: {{nominalValue}} {{currency}}\n1.6 Хувьцаа, үнэт цаасны тоо: {{securityQuantity}}\n1.7 Нэгж худалдах үнэ: {{unitSalePrice}} {{currency}}\n1.8 Нийт худалдах үнэ: {{totalPrice}} {{currency}}\n\n2. ӨМЧЛӨХ ЭРХ ШИЛЖҮҮЛЭЛТ\n2.1 Худалдагч нь өмчлөх эрх шилжүүлэхэд шаардлагатай бүх баримт бичгийг Худалдан авагчид шилжүүлнэ.\n2.2 Худалдан авагч нь төлбөрийг бүрэн төлсний дараа хувьцаа, үнэт цаасыг өмчлөх эрхтэй болно.\n2.3 Өмчлөх эрх шилжүүлэх огноо: {{ownershipTransferDate}}\n2.4 Хүлээлгэн өгөх актыг үйлдэнэ.\n\n3. ТӨЛБӨР БА ТООЦОО\n3.1 Төлбөрийн хэлбэр: {{paymentMethod}}\n3.2 Төлбөр төлөх хугацаа: {{paymentDeadline}}\n3.3 Төлбөрийг дараах банкны дансанд шилжүүлнэ:\n{{sellerBankAccount}}\n3.4 Урьдчилгаа төлбөр: {{advanceAmount}} {{currency}}\n\n4. ТАТВАР БА БҮРТГЭЛ\n4.1 Хувьцаа болон үнэт цаас худалдах, худалдан авахтай холбоотой татварыг {{taxResponsibilityMethod}} зарчмаар төлнө.\n4.2 Бүртгэлийн хураамжийн хувь: {{registrationFeePercent}}%\n4.3 Бүртгэлийн байгууллагад төлөх дүн: {{registrationFeeAmount}} {{currency}}\n\n5. ТАЛУУДЫН ЭРХ ҮҮРЭГ\n5.1 Худалдагчийн үүрэг:\n- Шаардлагатай баримт бичгийг бүрэн гаргаж өгөх\n- Өмчлөх эрхийг шилжүүлэх\n- Гуравдагч этгээдийн эрхгүй болохыг баталгаажуулах\n\n5.2 Худалдан авагчийн үүрэг:\n- Төлбөрийг хугацаанд нь төлөх\n- Бүртгэлийн ажиллагаанд оролцох\n- Шаардлагатай бичиг баримтыг бүрдүүлэх\n\n6. ХАРИУЦЛАГА\n6.1 Гэрээний үүргээ хугацаанд нь биелүүлээгүй тал хуульд заасан хариуцлага хүлээнэ.\n6.2 Үүргээ хугацаанд нь биелүүлээгүй бол хоног тутам {{dailyPenaltyPercent}}% алданги төлнө.\n6.3 Учирсан хохирлыг буруутай тал нөхөн төлнө.\n\n7. МАРГААН ШИЙДВЭРЛЭХ\n7.1 Маргааныг эхлээд харилцан тохиролцож шийдвэрлэнэ.\n7.2 Тохиролцоонд хүрэхгүй бол {{disputeResolutionMethod}} журмаар шийдвэрлэнэ.\n\n8. БУСАД НӨХЦӨЛ\n8.1 Гэрээг {{contractCopies}} хувь үйлдэнэ.\n8.2 Гэрээ талууд гарын үсэг зурсан өдрөөс хүчин төгөлдөр болно.\n8.3 Гэрээний үүргийг бүрэн биелүүлсэн тухай {{completionDocument}} баримтаар баталгаажуулна.\n8.4 Нэмэлт нөхцөл:\n{{additionalTerms}}\n\n9. ТАЛУУДЫН МЭДЭЭЛЭЛ\n\nХудалдагч:\nХаяг: {{sellerAddress}}\nУтас: {{sellerPhone}}\nФакс: {{sellerFax}}\nБанкны данс: {{sellerBankAccount}}\n\nХудалдан авагч:\nХаяг: {{buyerAddress}}\nУтас: {{buyerPhone}}\nФакс: {{buyerFax}}\nБанкны данс: {{buyerBankAccount}}",
+  "variables":[
+    {"key":"contractNumber","label":"Гэрээний дугаар","type":"text","required":true},
+    {"key":"contractDate","label":"Гэрээ байгуулсан огноо","type":"date","required":true},
+    {"key":"city","label":"Байршил / хот","type":"text","required":true},
+
+    {"key":"sellerName","label":"Худалдагчийн нэр","type":"text","required":true},
+    {"key":"sellerRepresentativeName","label":"Худалдагчийг төлөөлсөн хүний нэр","type":"text","required":true},
+    {"key":"sellerRepresentativePosition","label":"Худалдагчийг төлөөлсөн хүний албан тушаал","type":"text","required":true},
+    {"key":"sellerAddress","label":"Худалдагчийн хаяг","type":"textarea","required":true},
+    {"key":"sellerPhone","label":"Худалдагчийн утас","type":"text","required":true},
+    {"key":"sellerFax","label":"Худалдагчийн факс","type":"text","required":false},
+    {"key":"sellerBankAccount","label":"Худалдагчийн банкны данс","type":"text","required":true},
+
+    {"key":"buyerName","label":"Худалдан авагчийн нэр","type":"text","required":true},
+    {"key":"buyerRepresentativeName","label":"Худалдан авагчийг төлөөлсөн хүний нэр","type":"text","required":true},
+    {"key":"buyerRepresentativePosition","label":"Худалдан авагчийг төлөөлсөн хүний албан тушаал","type":"text","required":true},
+    {"key":"buyerAddress","label":"Худалдан авагчийн хаяг","type":"textarea","required":true},
+    {"key":"buyerPhone","label":"Худалдан авагчийн утас","type":"text","required":true},
+    {"key":"buyerFax","label":"Худалдан авагчийн факс","type":"text","required":false},
+    {"key":"buyerBankAccount","label":"Худалдан авагчийн банкны данс","type":"text","required":true},
+
+    {"key":"securityName","label":"Үнэт цаасны нэр","type":"text","required":true},
+    {"key":"securityType","label":"Үнэт цаасны төрөл","type":"select","required":true},
+    {"key":"securityClass","label":"Үнэт цаасны зэрэглэл","type":"text","required":false},
+    {"key":"nominalValue","label":"Нэрлэсэн үнэ","type":"number","required":true},
+    {"key":"securityQuantity","label":"Үнэт цаасны тоо хэмжээ","type":"number","required":true},
+    {"key":"unitSalePrice","label":"Нэгж худалдах үнэ","type":"number","required":true},
+    {"key":"totalPrice","label":"Нийт үнэ","type":"number","required":true},
+    {"key":"currency","label":"Валют","type":"select","required":true},
+
+    {"key":"ownershipTransferDate","label":"Өмчлөх эрх шилжүүлэх огноо","type":"date","required":true},
+
+    {"key":"paymentMethod","label":"Төлбөрийн хэлбэр","type":"select","required":true},
+    {"key":"paymentDeadline","label":"Төлбөр төлөх хугацаа","type":"date","required":true},
+    {"key":"advanceAmount","label":"Урьдчилгаа төлбөр","type":"number","required":false},
+
+    {"key":"taxResponsibilityMethod","label":"Татвар төлөх арга","type":"text","required":true},
+    {"key":"registrationFeePercent","label":"Бүртгэлийн хураамжийн хувь","type":"number","required":false},
+    {"key":"registrationFeeAmount","label":"Бүртгэлийн хураамж","type":"number","required":false},
+
+    {"key":"dailyPenaltyPercent","label":"Өдрийн алдангийн хувь","type":"number","required":false},
+    {"key":"disputeResolutionMethod","label":"Маргаан шийдвэрлэх журам","type":"text","required":true},
+
+    {"key":"contractCopies","label":"Гэрээний хувь","type":"number","required":false},
+    {"key":"completionDocument","label":"Гүйцэтгэл баталгаажуулах баримт","type":"text","required":false},
+    {"key":"additionalTerms","label":"Нэмэлт нөхцөл","type":"textarea","required":false}
+  ]
+},
+
+{
+  "category":"Уул уурхай",
+  "name":"Алмазан өрөмдлөгийн ажил гүйцэтгэх гэрээ",
+  "description":"Уул уурхайн хайгуул, геологийн судалгааны зориулалттай алмазан өрөмдлөгийн ажил гүйцэтгэх, ажлын хэмжээ, төлбөр тооцоо, чанар, дээжийн гарц, эрх үүрэг, эрсдэл болон маргаан шийдвэрлэх нөхцөлийг зохицуулах гэрээ",
+  "content":"АЛМАЗАН ӨРӨМДЛӨГИЙН АЖИЛ ГҮЙЦЭТГЭХ ГЭРЭЭ\n\nГэрээний дугаар: {{contractNumber}}\nБайгуулсан огноо: {{contractDate}}\nБайршил: {{city}}\n\nНэг талаас {{contractorCompanyName}} /цаашид \"Гүйцэтгэгч\" гэх/, түүнийг {{contractorRepresentativePosition}} албан тушаалтай {{contractorRepresentativeName}} төлөөлөн,\n\nНөгөө талаас {{clientCompanyName}} /цаашид \"Захиалагч\" гэх/, түүнийг {{clientRepresentativePosition}} албан тушаалтай {{clientRepresentativeName}} төлөөлөн энэхүү гэрээг байгуулав.\n\n1. ГЭРЭЭНИЙ ЗҮЙЛ\n1.1 Гүйцэтгэгч нь {{mineLocation}} байршилд алмазан өрөмдлөгийн ажлыг хийж гүйцэтгэнэ.\n1.2 Нийт өрөмдлөгийн хэмжээ: {{totalDrillingMeters}} уртааш метр.\n1.3 Нэг цооногийн төлөвлөсөн гүн: {{holeDepth}} метр.\n1.4 Цооногийн өнцөг: {{holeAngle}}\n1.5 Азимут: {{azimuth}}\n1.6 Өрөмдлөгийн диаметр: {{drillDiameter}}\n1.7 Дээжийн гарцын шаардлага:\n{{sampleRequirements}}\n\n2. АЖИЛ ГҮЙЦЭТГЭХ ХУГАЦАА\n2.1 Урьдчилгаа төлбөр хийгдсэнээс хойш {{mobilizationDays}} хоногийн дотор техник тоног төхөөрөмж болон ажилчдыг талбайд байршуулна.\n2.2 Ажил эхлэх огноо: {{workStartDate}}\n2.3 Ажил дуусах огноо: {{workEndDate}}\n2.4 Нийт ажил гүйцэтгэх хугацаа: {{workDurationDays}} хоног.\n\n3. ТӨЛБӨР БА ТООЦОО\n3.1 Нэг метр өрөмдлөгийн үнэ: {{drillingPricePerMeter}} {{currency}}\n3.2 Өрөмдлөгийн нийт үнэ: {{totalContractAmount}} {{currency}}\n3.3 Урьдчилгаа төлбөр: {{advancePercent}}%\n3.4 Тээврийн зардал: {{transportCost}} {{currency}}\n3.5 НӨАТ оруулах эсэх: {{vatIncluded}}\n3.6 Төлбөрийн нөхцөл:\n{{paymentTerms}}\n3.7 Төлбөр хүлээн авах банкны данс:\n{{contractorBankAccount}}\n\n4. ЗАХИАЛАГЧИЙН ҮҮРЭГ\n4.1 Орон нутгийн зөвшөөрлийг бүрэн хариуцна.\n4.2 Геологийн ажлын даалгаврыг хугацаанд нь өгнө.\n4.3 Өрөмдлөгийн чанарт байнгын хяналт тавина.\n4.4 Зам засвар болон усан хангамжийг хариуцна.\n4.5 Геологичдыг байр, хоол хүнсээр хангана.\n4.6 Нэмэлт үүрэг:\n{{clientResponsibilities}}\n\n5. ГҮЙЦЭТГЭГЧИЙН ҮҮРЭГ\n5.1 Өрөмдлөгийн ажлыг техникийн шаардлагын дагуу гүйцэтгэнэ.\n5.2 Аюулгүй ажиллагааны дүрмийг мөрдөнө.\n5.3 Ажилчдын байр, кемпийг шаардлагын түвшинд ажиллуулна.\n5.4 Чанарын шаардлагыг хангана.\n5.5 Нэмэлт үүрэг:\n{{contractorResponsibilities}}\n\n6. ЧАНАРЫН ШААРДЛАГА\n6.1 Эхний цооногийн дээжийн гарц {{initialCoreRecoveryPercent}}%-аас багагүй байна.\n6.2 Хүдрийн бүсэд дээжийн гарц {{oreCoreRecoveryPercent}}%-аас багагүй байна.\n6.3 Бусад чулуулагт дээжийн гарц {{rockCoreRecoveryPercent}}%-аас багагүй байна.\n6.4 Цооногийн мэдээллийг өрөмдлөгийн тайланд бүртгэнэ.\n\n7. ХАРИУЦЛАГА\n7.1 Төлбөр хоцорсон тохиолдолд хоног тутам {{dailyPenaltyPercent}}% алданги төлнө.\n7.2 Алдангийн нийт хэмжээ гүйцэтгээгүй үнийн {{maximumPenaltyPercent}}%-аас хэтрэхгүй байна.\n7.3 Үүссэн хохирлыг буруутай тал бүрэн хариуцна.\n\n8. ДАВАГДАШГҮЙ ХҮЧИН ЗҮЙЛ\n8.1 Дайн, газар хөдлөлт, үер, гал түймэр, халдварт өвчин болон бусад форс-мажор нөхцөлд талууд хариуцлагаас чөлөөлөгдөнө.\n\n9. МАРГААН ШИЙДВЭРЛЭХ\n9.1 Маргааныг эхлээд харилцан тохиролцож шийдвэрлэнэ.\n9.2 Тохиролцоонд хүрээгүй тохиолдолд {{disputeResolutionMethod}} журмаар шийдвэрлэнэ.\n\n10. НУУЦЛАЛ\n10.1 Гэрээтэй холбоотой мэдээллийг гуравдагч этгээдэд задруулахгүй.\n\n11. БУСАД НӨХЦӨЛ\n11.1 Гэрээ {{agreementLanguage}} хэл дээр үйлдэгдэнэ.\n11.2 Гэрээг {{contractCopies}} хувь үйлдэнэ.\n11.3 Нэмэлт нөхцөл:\n{{additionalTerms}}\n\n12. ТАЛУУДЫН МЭДЭЭЛЭЛ\nГүйцэтгэгч:\nХаяг: {{contractorAddress}}\nУтас: {{contractorPhone}}\nБанкны данс: {{contractorBankAccount}}\n\nЗахиалагч:\nХаяг: {{clientAddress}}\nУтас: {{clientPhone}}\nБанкны данс: {{clientBankAccount}}",
+  "variables":[
+    {"key":"contractNumber","label":"Гэрээний дугаар","type":"text","required":true},
+    {"key":"contractDate","label":"Гэрээ байгуулсан огноо","type":"date","required":true},
+    {"key":"city","label":"Байршил","type":"text","required":true},
+
+    {"key":"contractorCompanyName","label":"Гүйцэтгэгч байгууллага","type":"text","required":true},
+    {"key":"contractorRepresentativeName","label":"Гүйцэтгэгчийг төлөөлсөн хүн","type":"text","required":true},
+    {"key":"contractorRepresentativePosition","label":"Гүйцэтгэгчийн албан тушаал","type":"text","required":true},
+
+    {"key":"clientCompanyName","label":"Захиалагч байгууллага","type":"text","required":true},
+    {"key":"clientRepresentativeName","label":"Захиалагчийг төлөөлсөн хүн","type":"text","required":true},
+    {"key":"clientRepresentativePosition","label":"Захиалагчийн албан тушаал","type":"text","required":true},
+
+    {"key":"mineLocation","label":"Ордын байршил","type":"textarea","required":true},
+    {"key":"totalDrillingMeters","label":"Нийт өрөмдлөгийн урт","type":"number","required":true},
+    {"key":"holeDepth","label":"Цооногийн гүн","type":"number","required":true},
+    {"key":"holeAngle","label":"Цооногийн өнцөг","type":"text","required":false},
+    {"key":"azimuth","label":"Азимут","type":"text","required":false},
+    {"key":"drillDiameter","label":"Өрөмдлөгийн диаметр","type":"text","required":true},
+
+    {"key":"sampleRequirements","label":"Дээжийн шаардлага","type":"textarea","required":false},
+
+    {"key":"mobilizationDays","label":"Техник байрлуулах хоног","type":"number","required":true},
+    {"key":"workStartDate","label":"Ажил эхлэх огноо","type":"date","required":true},
+    {"key":"workEndDate","label":"Ажил дуусах огноо","type":"date","required":true},
+    {"key":"workDurationDays","label":"Нийт ажлын хоног","type":"number","required":true},
+
+    {"key":"drillingPricePerMeter","label":"Нэг метрийн үнэ","type":"number","required":true},
+    {"key":"totalContractAmount","label":"Нийт гэрээний үнэ","type":"number","required":true},
+    {"key":"currency","label":"Валют","type":"select","required":true},
+    {"key":"advancePercent","label":"Урьдчилгаа хувь","type":"number","required":false},
+    {"key":"transportCost","label":"Тээврийн зардал","type":"number","required":false},
+    {"key":"vatIncluded","label":"НӨАТ оруулсан эсэх","type":"boolean","required":false},
+    {"key":"paymentTerms","label":"Төлбөрийн нөхцөл","type":"textarea","required":true},
+
+    {"key":"clientResponsibilities","label":"Захиалагчийн нэмэлт үүрэг","type":"textarea","required":false},
+    {"key":"contractorResponsibilities","label":"Гүйцэтгэгчийн нэмэлт үүрэг","type":"textarea","required":false},
+
+    {"key":"initialCoreRecoveryPercent","label":"Эхний дээжийн гарц","type":"number","required":false},
+    {"key":"oreCoreRecoveryPercent","label":"Хүдрийн дээжийн гарц","type":"number","required":false},
+    {"key":"rockCoreRecoveryPercent","label":"Чулуулаг дээжийн гарц","type":"number","required":false},
+
+    {"key":"dailyPenaltyPercent","label":"Өдрийн алдангийн хувь","type":"number","required":false},
+    {"key":"maximumPenaltyPercent","label":"Алдангийн дээд хувь","type":"number","required":false},
+
+    {"key":"disputeResolutionMethod","label":"Маргаан шийдвэрлэх журам","type":"text","required":true},
+
+    {"key":"agreementLanguage","label":"Гэрээний хэл","type":"text","required":false},
+    {"key":"contractCopies","label":"Гэрээний хувь","type":"number","required":false},
+    {"key":"additionalTerms","label":"Нэмэлт нөхцөл","type":"textarea","required":false},
+
+    {"key":"contractorAddress","label":"Гүйцэтгэгчийн хаяг","type":"textarea","required":true},
+    {"key":"contractorPhone","label":"Гүйцэтгэгчийн утас","type":"text","required":true},
+    {"key":"contractorBankAccount","label":"Гүйцэтгэгчийн банкны данс","type":"text","required":true},
+
+    {"key":"clientAddress","label":"Захиалагчийн хаяг","type":"textarea","required":true},
+    {"key":"clientPhone","label":"Захиалагчийн утас","type":"text","required":true},
+    {"key":"clientBankAccount","label":"Захиалагчийн банкны данс","type":"text","required":true}
+  ]
+}
+]

@@ -370,7 +370,9 @@ export const LawArticleScalarFieldEnum = {
   lawId: 'lawId',
   articleNumber: 'articleNumber',
   title: 'title',
-  content: 'content'
+  content: 'content',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type LawArticleScalarFieldEnum = (typeof LawArticleScalarFieldEnum)[keyof typeof LawArticleScalarFieldEnum]

@@ -20,24 +20,38 @@ export type LawArticleModel = runtime.Types.Result.DefaultSelection<Prisma.$LawA
 
 export type AggregateLawArticle = {
   _count: LawArticleCountAggregateOutputType | null
+  _avg: LawArticleAvgAggregateOutputType | null
+  _sum: LawArticleSumAggregateOutputType | null
   _min: LawArticleMinAggregateOutputType | null
   _max: LawArticleMaxAggregateOutputType | null
+}
+
+export type LawArticleAvgAggregateOutputType = {
+  articleNumber: number | null
+}
+
+export type LawArticleSumAggregateOutputType = {
+  articleNumber: number | null
 }
 
 export type LawArticleMinAggregateOutputType = {
   id: string | null
   lawId: string | null
-  articleNumber: string | null
+  articleNumber: number | null
   title: string | null
   content: string | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type LawArticleMaxAggregateOutputType = {
   id: string | null
   lawId: string | null
-  articleNumber: string | null
+  articleNumber: number | null
   title: string | null
   content: string | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type LawArticleCountAggregateOutputType = {
@@ -46,9 +60,19 @@ export type LawArticleCountAggregateOutputType = {
   articleNumber: number
   title: number
   content: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
+
+export type LawArticleAvgAggregateInputType = {
+  articleNumber?: true
+}
+
+export type LawArticleSumAggregateInputType = {
+  articleNumber?: true
+}
 
 export type LawArticleMinAggregateInputType = {
   id?: true
@@ -56,6 +80,8 @@ export type LawArticleMinAggregateInputType = {
   articleNumber?: true
   title?: true
   content?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type LawArticleMaxAggregateInputType = {
@@ -64,6 +90,8 @@ export type LawArticleMaxAggregateInputType = {
   articleNumber?: true
   title?: true
   content?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type LawArticleCountAggregateInputType = {
@@ -72,6 +100,8 @@ export type LawArticleCountAggregateInputType = {
   articleNumber?: true
   title?: true
   content?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -113,6 +143,18 @@ export type LawArticleAggregateArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: LawArticleAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: LawArticleSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: LawArticleMinAggregateInputType
@@ -143,6 +185,8 @@ export type LawArticleGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   _count?: LawArticleCountAggregateInputType | true
+  _avg?: LawArticleAvgAggregateInputType
+  _sum?: LawArticleSumAggregateInputType
   _min?: LawArticleMinAggregateInputType
   _max?: LawArticleMaxAggregateInputType
 }
@@ -150,10 +194,14 @@ export type LawArticleGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 export type LawArticleGroupByOutputType = {
   id: string
   lawId: string
-  articleNumber: string | null
-  title: string | null
+  articleNumber: number
+  title: string
   content: string
+  createdAt: Date
+  updatedAt: Date
   _count: LawArticleCountAggregateOutputType | null
+  _avg: LawArticleAvgAggregateOutputType | null
+  _sum: LawArticleSumAggregateOutputType | null
   _min: LawArticleMinAggregateOutputType | null
   _max: LawArticleMaxAggregateOutputType | null
 }
@@ -179,42 +227,53 @@ export type LawArticleWhereInput = {
   NOT?: Prisma.LawArticleWhereInput | Prisma.LawArticleWhereInput[]
   id?: Prisma.StringFilter<"LawArticle"> | string
   lawId?: Prisma.StringFilter<"LawArticle"> | string
-  articleNumber?: Prisma.StringNullableFilter<"LawArticle"> | string | null
-  title?: Prisma.StringNullableFilter<"LawArticle"> | string | null
+  articleNumber?: Prisma.IntFilter<"LawArticle"> | number
+  title?: Prisma.StringFilter<"LawArticle"> | string
   content?: Prisma.StringFilter<"LawArticle"> | string
+  createdAt?: Prisma.DateTimeFilter<"LawArticle"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"LawArticle"> | Date | string
   law?: Prisma.XOR<Prisma.LawScalarRelationFilter, Prisma.LawWhereInput>
 }
 
 export type LawArticleOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   lawId?: Prisma.SortOrder
-  articleNumber?: Prisma.SortOrderInput | Prisma.SortOrder
-  title?: Prisma.SortOrderInput | Prisma.SortOrder
+  articleNumber?: Prisma.SortOrder
+  title?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   law?: Prisma.LawOrderByWithRelationInput
 }
 
 export type LawArticleWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  lawId_articleNumber?: Prisma.LawArticleLawIdArticleNumberCompoundUniqueInput
   AND?: Prisma.LawArticleWhereInput | Prisma.LawArticleWhereInput[]
   OR?: Prisma.LawArticleWhereInput[]
   NOT?: Prisma.LawArticleWhereInput | Prisma.LawArticleWhereInput[]
   lawId?: Prisma.StringFilter<"LawArticle"> | string
-  articleNumber?: Prisma.StringNullableFilter<"LawArticle"> | string | null
-  title?: Prisma.StringNullableFilter<"LawArticle"> | string | null
+  articleNumber?: Prisma.IntFilter<"LawArticle"> | number
+  title?: Prisma.StringFilter<"LawArticle"> | string
   content?: Prisma.StringFilter<"LawArticle"> | string
+  createdAt?: Prisma.DateTimeFilter<"LawArticle"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"LawArticle"> | Date | string
   law?: Prisma.XOR<Prisma.LawScalarRelationFilter, Prisma.LawWhereInput>
-}, "id">
+}, "id" | "lawId_articleNumber">
 
 export type LawArticleOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   lawId?: Prisma.SortOrder
-  articleNumber?: Prisma.SortOrderInput | Prisma.SortOrder
-  title?: Prisma.SortOrderInput | Prisma.SortOrder
+  articleNumber?: Prisma.SortOrder
+  title?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.LawArticleCountOrderByAggregateInput
+  _avg?: Prisma.LawArticleAvgOrderByAggregateInput
   _max?: Prisma.LawArticleMaxOrderByAggregateInput
   _min?: Prisma.LawArticleMinOrderByAggregateInput
+  _sum?: Prisma.LawArticleSumOrderByAggregateInput
 }
 
 export type LawArticleScalarWhereWithAggregatesInput = {
@@ -223,64 +282,80 @@ export type LawArticleScalarWhereWithAggregatesInput = {
   NOT?: Prisma.LawArticleScalarWhereWithAggregatesInput | Prisma.LawArticleScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"LawArticle"> | string
   lawId?: Prisma.StringWithAggregatesFilter<"LawArticle"> | string
-  articleNumber?: Prisma.StringNullableWithAggregatesFilter<"LawArticle"> | string | null
-  title?: Prisma.StringNullableWithAggregatesFilter<"LawArticle"> | string | null
+  articleNumber?: Prisma.IntWithAggregatesFilter<"LawArticle"> | number
+  title?: Prisma.StringWithAggregatesFilter<"LawArticle"> | string
   content?: Prisma.StringWithAggregatesFilter<"LawArticle"> | string
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"LawArticle"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"LawArticle"> | Date | string
 }
 
 export type LawArticleCreateInput = {
   id?: string
-  articleNumber?: string | null
-  title?: string | null
+  articleNumber: number
+  title: string
   content: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
   law: Prisma.LawCreateNestedOneWithoutArticlesInput
 }
 
 export type LawArticleUncheckedCreateInput = {
   id?: string
   lawId: string
-  articleNumber?: string | null
-  title?: string | null
+  articleNumber: number
+  title: string
   content: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type LawArticleUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  articleNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  articleNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   law?: Prisma.LawUpdateOneRequiredWithoutArticlesNestedInput
 }
 
 export type LawArticleUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   lawId?: Prisma.StringFieldUpdateOperationsInput | string
-  articleNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  articleNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LawArticleCreateManyInput = {
   id?: string
   lawId: string
-  articleNumber?: string | null
-  title?: string | null
+  articleNumber: number
+  title: string
   content: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type LawArticleUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  articleNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  articleNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LawArticleUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   lawId?: Prisma.StringFieldUpdateOperationsInput | string
-  articleNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  articleNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LawArticleListRelationFilter = {
@@ -293,12 +368,23 @@ export type LawArticleOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type LawArticleLawIdArticleNumberCompoundUniqueInput = {
+  lawId: string
+  articleNumber: number
+}
+
 export type LawArticleCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   lawId?: Prisma.SortOrder
   articleNumber?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+}
+
+export type LawArticleAvgOrderByAggregateInput = {
+  articleNumber?: Prisma.SortOrder
 }
 
 export type LawArticleMaxOrderByAggregateInput = {
@@ -307,6 +393,8 @@ export type LawArticleMaxOrderByAggregateInput = {
   articleNumber?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type LawArticleMinOrderByAggregateInput = {
@@ -315,6 +403,12 @@ export type LawArticleMinOrderByAggregateInput = {
   articleNumber?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+}
+
+export type LawArticleSumOrderByAggregateInput = {
+  articleNumber?: Prisma.SortOrder
 }
 
 export type LawArticleCreateNestedManyWithoutLawInput = {
@@ -361,16 +455,20 @@ export type LawArticleUncheckedUpdateManyWithoutLawNestedInput = {
 
 export type LawArticleCreateWithoutLawInput = {
   id?: string
-  articleNumber?: string | null
-  title?: string | null
+  articleNumber: number
+  title: string
   content: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type LawArticleUncheckedCreateWithoutLawInput = {
   id?: string
-  articleNumber?: string | null
-  title?: string | null
+  articleNumber: number
+  title: string
   content: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type LawArticleCreateOrConnectWithoutLawInput = {
@@ -405,37 +503,47 @@ export type LawArticleScalarWhereInput = {
   NOT?: Prisma.LawArticleScalarWhereInput | Prisma.LawArticleScalarWhereInput[]
   id?: Prisma.StringFilter<"LawArticle"> | string
   lawId?: Prisma.StringFilter<"LawArticle"> | string
-  articleNumber?: Prisma.StringNullableFilter<"LawArticle"> | string | null
-  title?: Prisma.StringNullableFilter<"LawArticle"> | string | null
+  articleNumber?: Prisma.IntFilter<"LawArticle"> | number
+  title?: Prisma.StringFilter<"LawArticle"> | string
   content?: Prisma.StringFilter<"LawArticle"> | string
+  createdAt?: Prisma.DateTimeFilter<"LawArticle"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"LawArticle"> | Date | string
 }
 
 export type LawArticleCreateManyLawInput = {
   id?: string
-  articleNumber?: string | null
-  title?: string | null
+  articleNumber: number
+  title: string
   content: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type LawArticleUpdateWithoutLawInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  articleNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  articleNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LawArticleUncheckedUpdateWithoutLawInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  articleNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  articleNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LawArticleUncheckedUpdateManyWithoutLawInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  articleNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  articleNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -446,6 +554,8 @@ export type LawArticleSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   articleNumber?: boolean
   title?: boolean
   content?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   law?: boolean | Prisma.LawDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lawArticle"]>
 
@@ -455,6 +565,8 @@ export type LawArticleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   articleNumber?: boolean
   title?: boolean
   content?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   law?: boolean | Prisma.LawDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lawArticle"]>
 
@@ -464,6 +576,8 @@ export type LawArticleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   articleNumber?: boolean
   title?: boolean
   content?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   law?: boolean | Prisma.LawDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lawArticle"]>
 
@@ -473,9 +587,11 @@ export type LawArticleSelectScalar = {
   articleNumber?: boolean
   title?: boolean
   content?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type LawArticleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "lawId" | "articleNumber" | "title" | "content", ExtArgs["result"]["lawArticle"]>
+export type LawArticleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "lawId" | "articleNumber" | "title" | "content" | "createdAt" | "updatedAt", ExtArgs["result"]["lawArticle"]>
 export type LawArticleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   law?: boolean | Prisma.LawDefaultArgs<ExtArgs>
 }
@@ -494,9 +610,11 @@ export type $LawArticlePayload<ExtArgs extends runtime.Types.Extensions.Internal
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     lawId: string
-    articleNumber: string | null
-    title: string | null
+    articleNumber: number
+    title: string
     content: string
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["lawArticle"]>
   composites: {}
 }
@@ -923,9 +1041,11 @@ export interface Prisma__LawArticleClient<T, Null = never, ExtArgs extends runti
 export interface LawArticleFieldRefs {
   readonly id: Prisma.FieldRef<"LawArticle", 'String'>
   readonly lawId: Prisma.FieldRef<"LawArticle", 'String'>
-  readonly articleNumber: Prisma.FieldRef<"LawArticle", 'String'>
+  readonly articleNumber: Prisma.FieldRef<"LawArticle", 'Int'>
   readonly title: Prisma.FieldRef<"LawArticle", 'String'>
   readonly content: Prisma.FieldRef<"LawArticle", 'String'>
+  readonly createdAt: Prisma.FieldRef<"LawArticle", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"LawArticle", 'DateTime'>
 }
     
 

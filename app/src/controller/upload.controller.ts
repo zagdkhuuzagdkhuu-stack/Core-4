@@ -1,25 +1,33 @@
 import { Request, Response } from "express";
+import fs from "fs/promises";
 import database from "../database";
 import { AuthenticatedRequest } from "../middleware/auth.middleware";
 import { extractText } from "../utils/textExtractor";
-import { analyzeContract } from "../services/aiService";
+import { analyzeContract, GeminiQuotaError } from "../services/aiService";
 import { getLegalContext } from "../services/lawService";
 
+const MAX_TEXT_LENGTH = 15000;
+
 export async function uploadAndAnalyze(req: Request, res: Response) {
+  const file = req.file;
+
   try {
     const userId = (req as AuthenticatedRequest).userId;
-    const file = req.file;
 
     if (!file) {
       return res.status(400).json({ message: "No file uploaded. Upload a PDF or DOCX file." });
     }
 
-    const analysisMode = req.body.mode === "single" ? "single" : "crew";
+    const analysisMode = req.body.mode === "crew" ? "crew" : "single";
 
-    const text = await extractText(file.path, file.mimetype);
+    let text = await extractText(file.path, file.mimetype);
 
     if (!text.trim()) {
       return res.status(422).json({ message: "Could not extract any text from the file." });
+    }
+
+    if (text.length > MAX_TEXT_LENGTH) {
+      text = text.slice(0, MAX_TEXT_LENGTH);
     }
 
     const legalCtx = await getLegalContext(text);
@@ -71,7 +79,7 @@ export async function uploadAndAnalyze(req: Request, res: Response) {
           inconsistentWording: result.inconsistentWording,
           complianceWarnings: result.complianceWarnings,
           estimatedCost: result.estimatedCost,
-          legalReferences: result.legalReferences,
+          legalReferences: result.legalReferences as any,
         },
       });
 
@@ -116,18 +124,28 @@ export async function uploadAndAnalyze(req: Request, res: Response) {
         complianceWarnings: analysis.complianceWarnings,
         estimatedCost: analysis.estimatedCost,
         inconsistentWording: analysis.inconsistentWording,
-        legalReferences: result.legalReferences,
+        legalReferences: result.legalReferences as any,
         costEstimate: result.costEstimate,
       },
       clauses: result.clauses,
       mode: analysisMode,
     });
   } catch (error) {
+    if (error instanceof GeminiQuotaError) {
+      return res.status(429).json({
+        message: error.message,
+        code: "GEMINI_QUOTA_EXCEEDED",
+      });
+    }
     const message = error instanceof Error ? error.message : String(error);
     return res.status(500).json({
       message: "Failed to upload and analyze file.",
       error: message,
     });
+  } finally {
+    if (file) {
+      fs.unlink(file.path).catch(() => {});
+    }
   }
 }
 
@@ -135,7 +153,7 @@ export async function analyzeDocumentText(req: Request, res: Response) {
   try {
     const userId = (req as AuthenticatedRequest).userId;
     const documentId = String(req.params.documentId || "");
-    const analysisMode = req.body.mode === "single" ? "single" : "crew";
+    const analysisMode = req.body.mode === "crew" ? "crew" : "single";
 
     const document = await database.document.findFirst({
       where: { id: documentId, ownerId: userId },
@@ -168,7 +186,7 @@ export async function analyzeDocumentText(req: Request, res: Response) {
         inconsistentWording: result.inconsistentWording,
         complianceWarnings: result.complianceWarnings,
         estimatedCost: result.estimatedCost,
-        legalReferences: result.legalReferences,
+        legalReferences: result.legalReferences as any,
       },
       update: {
         summary: result.summary,
@@ -179,7 +197,7 @@ export async function analyzeDocumentText(req: Request, res: Response) {
         inconsistentWording: result.inconsistentWording,
         complianceWarnings: result.complianceWarnings,
         estimatedCost: result.estimatedCost,
-        legalReferences: result.legalReferences,
+        legalReferences: result.legalReferences as any,
       },
     });
 
@@ -208,6 +226,12 @@ export async function analyzeDocumentText(req: Request, res: Response) {
       mode: analysisMode,
     });
   } catch (error) {
+    if (error instanceof GeminiQuotaError) {
+      return res.status(429).json({
+        message: error.message,
+        code: "GEMINI_QUOTA_EXCEEDED",
+      });
+    }
     const message = error instanceof Error ? error.message : String(error);
     return res.status(500).json({
       message: "Failed to analyze document.",

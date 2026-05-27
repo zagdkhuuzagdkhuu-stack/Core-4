@@ -72,6 +72,116 @@
     "description": "PDF, DOCX, TXT up to 10MB",
     "cta": "Browse Files"
   },
+  "ui": {
+    "nav": {
+      "home": "Home",
+      "template": "Template",
+      "analysis": "Analysis",
+      "contact": "Contact us"
+    },
+    "actions": {
+      "back": "Back",
+      "continue": "Continue",
+      "archive": "Archive",
+      "delete": "Delete",
+      "download": "Download",
+      "save": "Save"
+    },
+    "steps": {
+      "upload": "Upload",
+      "processing": "Analysing",
+      "result": "Result",
+      "template": "Template",
+      "details": "Details",
+      "verification": "Verification",
+      "payment": "Payment"
+    },
+    "template": {
+      "chooseTitle": "Choose your contract type.",
+      "chooseSubtitle": "choose and continue...",
+      "searchPlaceholder": "Search template...",
+      "loadErrorPrefix": "Backend template load failed:",
+      "fieldsCount": "fields",
+      "fallbackDescription": "contract template",
+      "groups": {
+        "commerce": {
+          "name": "Commerce & Finance",
+          "desc": "Sales, payments, loans, securities, and investment contracts."
+        },
+        "service": {
+          "name": "Service & Work",
+          "desc": "Service, work performance, freelance, and industry-specific contracts."
+        },
+        "property": {
+          "name": "Lease & Property",
+          "desc": "Leases, real estate, equipment, and property use contracts."
+        },
+        "business": {
+          "name": "Business & Partnership",
+          "desc": "Franchise, joint venture, partnership, sales and distribution contracts."
+        },
+        "special": {
+          "name": "Special Contracts",
+          "desc": "Transport, confidentiality, intellectual property, insurance, and other contracts."
+        }
+      },
+      "editor": {
+        "eyebrow": "Template editor",
+        "helper": "The contract draft is on the left, and fields for the selected template are on the right.",
+        "preview": "Preview",
+        "fields": "Fields",
+        "fieldUnit": "fields",
+        "emptyFields": "No fields were found for this template.",
+        "fallbackContent": "Template content will appear here after selecting a contract type."
+      },
+      "fieldGroups": {
+        "parties": "Party information",
+        "main": "Main contract terms",
+        "payment": "Payment and price",
+        "additional": "Additional terms"
+      },
+      "verification": {
+        "eyebrow": "Verification",
+        "title": "Entered information preview"
+      },
+      "payment": {
+        "check": "Check Payment"
+      },
+      "result": {
+        "previewTitle": "Generated Document Preview",
+        "riskTitle": "Risk Score 7.5/10",
+        "riskText": "Moderate risk profile with several clauses requiring review.",
+        "missingTitle": "Missing Clauses",
+        "missingText": "Termination, liability, and payment delay condition missing.",
+        "analysisTitle": "AI Analysis Result",
+        "analysisText": "AI found moderate risks and several missing clauses.",
+        "create": "Create"
+      }
+    },
+    "analysis": {
+      "title": "Analysis section",
+      "processingTitle": "Analysing",
+      "processingSubtitle": "AI is reviewing your contract",
+      "processingDescription": "Risks and missing terms are being processed",
+      "uploadEyebrow": "Upload & organize document",
+      "dropTitle": "Drop your documents here",
+      "dropDescription": "PDF DOCX TXT up to 15MB",
+      "browse": "Browse Files",
+      "finishTitle": "Analysis complete",
+      "finishDescription": "Do you want to save the analyzed document?",
+      "fallbackSummary": "Analysis result will appear here after the backend finishes processing your document.",
+      "riskScore": "Risk Score",
+      "missingClauses": "Missing Clauses",
+      "analysisResult": "AI Analysis Result",
+      "noClauses": "No clauses extracted",
+      "noMissing": "No missing clauses reported",
+      "documentPreview": "Document Preview",
+      "emptyPreview": "Upload a document to see extracted text, clause analysis, and backend risk scoring."
+    },
+    "confirm": {
+      "title": "Are you sure?"
+    }
+  },
   "footer": {
     "tagline": "Developed by Core 4",
     "copyright": "©2026 Core 4",

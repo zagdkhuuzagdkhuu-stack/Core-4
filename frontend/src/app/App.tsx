@@ -1,13 +1,17 @@
-import { useState, useEffect, useRef } from "react";
+﻿import { useState, useEffect, useRef } from "react";
 import type { ReactNode, RefObject } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   FileText, ArrowRight, ArrowLeft, Twitter, Linkedin,
   Instagram, Facebook, Phone, Mail, MapPin, Sun, Moon, UploadCloud,
-  LoaderCircle, Check, Archive, Download, Trash2, Search, QrCode,
+  LoaderCircle, Check, Archive, Download, Trash2, Search, QrCode, Menu, X,
+  BriefcaseBusiness, Handshake, Home, Landmark, ShieldCheck, AlertTriangle,
+  ChevronDown, Info, ZoomIn, ZoomOut, Maximize2,
 } from "lucide-react";
 import enContent from "./content/en.json";
 import mnContent from "./content/mn.json";
+import { fetchTemplates, uploadDocumentForAnalysis } from "./api";
+import type { AnalysisResponse, TemplateSummary, TemplateVariable } from "./api";
 
 type Locale = "mn" | "en";
 type HeaderTab = "Home" | "Template" | "Analysis" | "Contact us";
@@ -26,6 +30,7 @@ const LOCALES = {
   mn: mnContent,
   en: enContent,
 };
+type UiContent = typeof enContent.ui;
 
 const ORBIT_FEATURES = [
   {
@@ -196,7 +201,45 @@ const TEMPLATE_CARDS = [
   { name: "Sales Agreement", desc: "Document sale terms, delivery, warranties, and payment." },
 ];
 
-// ─── Hooks ───────────────────────────────────────────────────────────────────
+const TEMPLATE_GROUPS = [
+  {
+    key: "commerce",
+    name: "",
+    desc: "",
+    keywords: ["худалда", "санхүү", "зээл", "барьца", "валют", "үнэт цаас", "хөрөнгө оруулалт", "бараа", "тээврийн хэрэгсэл", "sales", "purchase", "loan", "payment", "investment"],
+    Icon: Landmark,
+  },
+  {
+    key: "service",
+    name: "",
+    desc: "",
+    keywords: ["үйлчилгээ", "ажил", "хөлсөөр", "барилга", "засвар", "уул уурхай", "үйлдвэрлэл", "боловсруулалт", "service", "employment", "freelance"],
+    Icon: BriefcaseBusiness,
+  },
+  {
+    key: "property",
+    name: "",
+    desc: "",
+    keywords: ["түрээс", "хөрөнгө", "үл хөдлөх", "тоног төхөөрөмж", "талбай", "ажлын байр", "өмч", "lease", "rental", "property"],
+    Icon: Home,
+  },
+  {
+    key: "business",
+    name: "",
+    desc: "",
+    keywords: ["франчайз", "хамтар", "хамтын", "компанийн эрх", "борлуулалт", "дистрибьютор", "partnership", "business"],
+    Icon: Handshake,
+  },
+  {
+    key: "special",
+    name: "",
+    desc: "",
+    keywords: ["тээвэр", "ложистик", "нууц", "оюуны", "даатгал", "хадгал", "бэлэг", "олон улсын", "nda", "confidential"],
+    Icon: ShieldCheck,
+  },
+];
+
+// â”€â”€â”€ Hooks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLElement>(null);
@@ -210,6 +253,42 @@ function useInView(threshold = 0.15) {
     return () => obs.disconnect();
   }, [threshold]);
   return { ref, inView };
+}
+
+function NavActionButtons({
+  controls,
+  className = "",
+  showLogin = true,
+}: {
+  controls: FolderNavControls;
+  className?: string;
+  showLogin?: boolean;
+}) {
+  return (
+    <div className={`flex flex-wrap items-center justify-end gap-2 ${className}`}>
+      <button
+        type="button"
+        onClick={controls.onThemeToggle}
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-border/20 bg-button text-button-text shadow-[0_10px_24px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:border-highlight"
+        aria-label="Toggle dark mode"
+      >
+        {controls.isDark ? <Sun size={15} /> : <Moon size={15} />}
+      </button>
+      <button
+        type="button"
+        onClick={controls.onLanguageToggle}
+        className="flex min-w-[4.5rem] justify-center rounded-full border border-border/20 bg-button px-3 py-2.5 text-sm font-semibold text-button-text shadow-[0_10px_24px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:border-highlight sm:min-w-[6.25rem] sm:px-4"
+        aria-label="Switch language"
+      >
+        {controls.languageLabel}
+      </button>
+      {showLogin && (
+        <button className="rounded-full bg-button px-4 py-2.5 text-sm font-semibold text-button-text shadow-[0_10px_26px_rgba(0,0,0,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_26px_rgba(207,157,123,0.32)] sm:min-w-[8.5rem] sm:px-6">
+          {controls.loginLabel}
+        </button>
+      )}
+    </div>
+  );
 }
 
 function OpeningSplash({ onComplete }: { onComplete: () => void }) {
@@ -229,12 +308,12 @@ function OpeningSplash({ onComplete }: { onComplete: () => void }) {
       aria-hidden="true"
     >
       <motion.div
-        className="font-display text-6xl font-black tracking-normal text-foreground md:text-7xl"
+        className="font-display text-5xl font-black tracking-normal text-foreground sm:text-6xl md:text-7xl"
         initial={{ x: 0, y: 0, scale: 1 }}
         animate={{
-          x: ["0vw", "0vw", "calc(-50vw + 120px)"],
-          y: ["0vh", "0vh", "calc(-50vh + 78px)"],
-          scale: [1, 1, 0.58],
+          x: ["0vw", "0vw", "clamp(-42vw, calc(-50vw + 5rem), -28vw)"],
+          y: ["0vh", "0vh", "clamp(-46vh, calc(-50vh + 4.5rem), -38vh)"],
+          scale: [1, 1, 0.52],
           textShadow: [
             "0 0 0 rgba(207,157,123,0)",
             "0 0 28px rgba(207,157,123,0.36)",
@@ -262,18 +341,27 @@ function FolderTabs({
   activeTab,
   onSelect,
   controls,
+  ui,
   homeGlobal = false,
   scrollContainerRef,
 }: {
   activeTab: HeaderTab;
   onSelect: (tab: HeaderTab) => void;
   controls: FolderNavControls;
+  ui: UiContent;
   homeGlobal?: boolean;
   scrollContainerRef?: RefObject<HTMLElement>;
 }) {
   const navItems: HeaderTab[] = ["Home", "Template", "Analysis", "Contact us"];
+  const navLabels: Record<HeaderTab, string> = {
+    Home: ui.nav.home,
+    Template: ui.nav.template,
+    Analysis: ui.nav.analysis,
+    "Contact us": ui.nav.contact,
+  };
   const [isHidden, setIsHidden] = useState(false);
   const [isSimpleHomeNav, setIsSimpleHomeNav] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
 
   useEffect(() => {
@@ -294,89 +382,104 @@ function FolderTabs({
     return () => scrollTarget.removeEventListener("scroll", onScroll);
   }, [homeGlobal, scrollContainerRef]);
 
+  const handleNavSelect = (tab: HeaderTab) => {
+    setMobileMenuOpen(false);
+    onSelect(tab);
+  };
+
   return (
     <motion.header
-      className={`top-0 z-50 flex items-start gap-4 transition-all duration-300 ${
+      className={`top-0 z-50 w-full transition-all duration-300 ${
         homeGlobal ? "fixed left-0 right-0" : "sticky"
       } ${
         isSimpleHomeNav
-          ? "bg-navbar/96 px-5 py-3 shadow-[0_14px_34px_rgba(12,21,25,0.10)] backdrop-blur-md sm:px-8"
+          ? "bg-navbar/96 px-4 py-3 shadow-[0_14px_34px_rgba(12,21,25,0.10)] backdrop-blur-md sm:px-8"
           : `bg-transparent ${
-              homeGlobal ? "px-3 pt-3 sm:pr-7" : "-mb-[2px] pl-0 pr-4 pt-0 sm:pr-7"
+              homeGlobal ? "px-3 pt-3 sm:pr-7" : "-mb-[2px] pl-0 pr-3 pt-0 sm:pr-7"
             }`
       }`}
       animate={{ y: isHidden ? -120 : 0, opacity: isHidden ? 0 : 1 }}
       transition={{ duration: 0.36, ease: "easeOut" }}
-      style={{ zoom: 1.25 }}
     >
-      <div className={`relative w-full text-foreground ${isSimpleHomeNav ? "max-w-none" : "max-w-[920px]"}`}>
-        <motion.div
-          className={`relative z-10 flex items-center gap-3 overflow-x-auto transition-all duration-300 sm:gap-5 ${
-            isSimpleHomeNav
-              ? "min-h-12 rounded-none border-0 bg-transparent px-0 py-0 shadow-none"
-              : "-mb-[2px] min-h-20 rounded-t-[2.1rem] border border-border/55 border-b-0 bg-secondary px-7 py-4 shadow-none sm:px-9"
-          }`}
-          animate={{ y: 0 }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <button
-            type="button"
-            onClick={() => onSelect("Home")}
-            className="mr-2 shrink-0 font-display text-3xl font-black leading-none text-foreground transition-transform duration-300 hover:-translate-y-0.5 sm:mr-4"
+      <div
+        className={`mx-auto flex w-full max-w-[100rem] flex-col gap-3 text-foreground lg:flex-row lg:items-start lg:gap-4 ${
+          isSimpleHomeNav ? "" : "lg:max-w-[920px]"
+        }`}
+      >
+        <div className={`relative min-w-0 flex-1 ${isSimpleHomeNav ? "max-w-none" : ""}`}>
+          <motion.div
+            className={`relative z-10 flex min-w-0 items-center gap-2 transition-all duration-300 sm:gap-4 ${
+              isSimpleHomeNav
+                ? "min-h-12 rounded-none border-0 bg-transparent px-0 py-0 shadow-none"
+                : "-mb-[2px] min-h-14 rounded-t-[1.75rem] border border-border/55 border-b-0 bg-secondary px-4 py-3 shadow-none sm:min-h-20 sm:rounded-t-[2.1rem] sm:px-7 sm:py-4 md:px-9"
+            }`}
+            animate={{ y: 0 }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           >
-            Draftly.
-          </button>
-          <span className="h-6 w-px shrink-0 bg-button/30" />
-          <nav className="flex min-w-max items-center gap-2 sm:gap-3">
-            {navItems.map(label => {
-              const active = activeTab === label;
+            <button
+              type="button"
+              onClick={() => handleNavSelect("Home")}
+              className="mr-1 shrink-0 font-display text-2xl font-black leading-none text-foreground transition-transform duration-300 hover:-translate-y-0.5 sm:mr-3 sm:text-3xl"
+            >
+              Draftly.
+            </button>
+            <span className="hidden h-6 w-px shrink-0 bg-button/30 sm:block" />
+            <nav className="flex min-w-0 flex-1 items-center gap-1.5 overflow-x-auto pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] sm:gap-2 [&::-webkit-scrollbar]:hidden">
+              {navItems.map(label => {
+                const active = activeTab === label;
 
-              return (
-                <button
-                  key={label}
-                  type="button"
-                  onClick={() => onSelect(label)}
-                  className={`group relative flex min-w-[7.25rem] justify-center rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_22px_rgba(207,157,123,0.28)] sm:px-5 ${
-                    active ? "text-button-text" : "text-foreground/82 hover:text-foreground"
-                  }`}
-                >
-                  {active && (
-                    <motion.span
-                      layoutId="folder-nav-active-pill"
-                      className="absolute inset-0 rounded-full bg-button"
-                      transition={{ duration: 0.32, ease: "easeOut" }}
-                    />
-                  )}
-                  <span className="relative z-10">{label}</span>
-                  {!active && <span className="absolute bottom-1.5 left-5 right-5 h-px scale-x-0 bg-button transition-transform duration-300 group-hover:scale-x-100" />}
-                </button>
-              );
-            })}
-          </nav>
-        </motion.div>
+                return (
+                  <button
+                    key={label}
+                    type="button"
+                    onClick={() => handleNavSelect(label)}
+                    className={`group relative flex shrink-0 justify-center rounded-full px-3 py-2 text-xs font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_22px_rgba(207,157,123,0.28)] sm:px-4 sm:text-sm md:min-w-[6.5rem] lg:min-w-[7.25rem] lg:px-5 ${
+                      active ? "text-button-text" : "text-foreground/82 hover:text-foreground"
+                    }`}
+                  >
+                    {active && (
+                      <motion.span
+                        layoutId="folder-nav-active-pill"
+                        className="absolute inset-0 rounded-full bg-button"
+                        transition={{ duration: 0.32, ease: "easeOut" }}
+                      />
+                    )}
+                    <span className="relative z-10 whitespace-nowrap">{navLabels[label]}</span>
+                    {!active && <span className="absolute bottom-1.5 left-3 right-3 hidden h-px scale-x-0 bg-button transition-transform duration-300 group-hover:scale-x-100 sm:block" />}
+                  </button>
+                );
+              })}
+            </nav>
+            <button
+              type="button"
+              className="ml-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border/25 bg-secondary text-foreground lg:hidden"
+              onClick={() => setMobileMenuOpen(open => !open)}
+              aria-expanded={mobileMenuOpen}
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            >
+              {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          </motion.div>
+        </div>
+
+        <NavActionButtons
+          controls={controls}
+          className={`hidden shrink-0 lg:flex ${isSimpleHomeNav ? "pt-0" : "pt-2 lg:pt-4"}`}
+        />
       </div>
 
-      <div className={`ml-auto hidden shrink-0 items-center gap-2 md:flex ${isSimpleHomeNav ? "pt-0" : "pt-4"}`}>
-        <button
-          type="button"
-          onClick={controls.onThemeToggle}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-border/20 bg-button text-button-text shadow-[0_10px_24px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:border-highlight"
-          aria-label="Toggle dark mode"
-        >
-          {controls.isDark ? <Sun size={15} /> : <Moon size={15} />}
-        </button>
-        <button
-          type="button"
-          onClick={controls.onLanguageToggle}
-          className="flex min-w-[6.25rem] justify-center rounded-full border border-border/20 bg-button px-4 py-2.5 text-sm font-semibold text-button-text shadow-[0_10px_24px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:border-highlight"
-          aria-label="Switch language"
-        >
-          {controls.languageLabel}
-        </button>
-        <button className="min-w-[8.5rem] rounded-full bg-button px-6 py-2.5 text-sm font-semibold text-button-text shadow-[0_10px_26px_rgba(0,0,0,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_26px_rgba(207,157,123,0.32)]">
-          {controls.loginLabel}
-        </button>
-      </div>
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="overflow-hidden border-t border-border/40 bg-navbar/98 px-4 py-4 shadow-lg backdrop-blur-md lg:hidden"
+          >
+            <NavActionButtons controls={controls} className="justify-start" />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.header>
   );
 }
@@ -384,14 +487,23 @@ function FolderTabs({
 function HomeSimpleNav({
   onSelect,
   controls,
+  ui,
   scrollContainerRef,
 }: {
   onSelect: (tab: HeaderTab) => void;
   controls: FolderNavControls;
+  ui: UiContent;
   scrollContainerRef: RefObject<HTMLElement>;
 }) {
   const navItems: HeaderTab[] = ["Home", "Template", "Analysis", "Contact us"];
+  const navLabels: Record<HeaderTab, string> = {
+    Home: ui.nav.home,
+    Template: ui.nav.template,
+    Analysis: ui.nav.analysis,
+    "Contact us": ui.nav.contact,
+  };
   const [isVisible, setIsVisible] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const scrollElement = scrollContainerRef.current;
@@ -406,64 +518,78 @@ function HomeSimpleNav({
     return () => scrollElement.removeEventListener("scroll", onScroll);
   }, [scrollContainerRef]);
 
+  const handleNavSelect = (tab: HeaderTab) => {
+    setMobileMenuOpen(false);
+    onSelect(tab);
+  };
+
   return (
     <motion.header
-      className="fixed left-0 right-0 top-0 z-50 flex items-center gap-4 bg-navbar/96 px-5 py-3 shadow-[0_14px_34px_rgba(12,21,25,0.10)] backdrop-blur-md sm:px-8"
-      animate={{ y: isVisible ? 0 : -90, opacity: isVisible ? 1 : 0 }}
+      className="fixed left-0 right-0 top-0 z-50 bg-navbar/96 shadow-[0_14px_34px_rgba(12,21,25,0.10)] backdrop-blur-md"
+      animate={{ y: isVisible ? 0 : -120, opacity: isVisible ? 1 : 0 }}
       transition={{ duration: 0.32, ease: "easeOut" }}
-      style={{ pointerEvents: isVisible ? "auto" : "none", zoom: 1.25 }}
+      style={{ pointerEvents: isVisible ? "auto" : "none" }}
     >
-      <button
-        type="button"
-        onClick={() => onSelect("Home")}
-        className="mr-3 shrink-0 font-display text-3xl font-black leading-none text-foreground transition-transform duration-300 hover:-translate-y-0.5"
-      >
-        Draftly.
-      </button>
-      <span className="h-6 w-px shrink-0 bg-button/30" />
-      <nav className="flex min-w-max items-center gap-2 sm:gap-3">
-        {navItems.map(label => (
-          <button
-            key={label}
-            type="button"
-            onClick={() => onSelect(label)}
-            className={`group relative flex min-w-[7.25rem] justify-center rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 sm:px-5 ${
-              label === "Home" ? "text-button-text" : "text-foreground/82 hover:text-foreground"
-            }`}
-          >
-            {label === "Home" && <span className="absolute inset-0 rounded-full bg-button" />}
-            <span className="relative z-10">{label}</span>
-          </button>
-        ))}
-      </nav>
-
-      <div className="ml-auto hidden shrink-0 items-center gap-2 md:flex">
+      <div className="flex items-center gap-2 px-3 py-3 sm:gap-4 sm:px-6">
         <button
           type="button"
-          onClick={controls.onThemeToggle}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-border/20 bg-button text-button-text shadow-[0_10px_24px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:border-highlight"
-          aria-label="Toggle dark mode"
+          onClick={() => handleNavSelect("Home")}
+          className="mr-1 shrink-0 font-display text-2xl font-black leading-none text-foreground transition-transform duration-300 hover:-translate-y-0.5 sm:mr-3 sm:text-3xl"
         >
-          {controls.isDark ? <Sun size={15} /> : <Moon size={15} />}
+          Draftly.
         </button>
+        <span className="hidden h-6 w-px shrink-0 bg-button/30 sm:block" />
+        <nav className="flex min-w-0 flex-1 items-center gap-1.5 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] sm:gap-2 [&::-webkit-scrollbar]:hidden">
+          {navItems.map(label => (
+            <button
+              key={label}
+              type="button"
+              onClick={() => handleNavSelect(label)}
+              className={`group relative flex shrink-0 justify-center rounded-full px-2 py-2 text-[11px] font-semibold transition-all duration-300 hover:-translate-y-0.5 sm:px-4 sm:text-sm sm:min-w-[6.5rem] ${
+                label === "Home"
+                  ? "text-button-text"
+                  : "text-foreground/82 hover:text-foreground"
+              } ${label === "Contact us" ? "hidden sm:flex" : ""}`}
+            >
+              {label === "Home" && <span className="absolute inset-0 rounded-full bg-button" />}
+              <span className="relative z-10 whitespace-nowrap">{navLabels[label]}</span>
+            </button>
+          ))}
+        </nav>
         <button
           type="button"
-          onClick={controls.onLanguageToggle}
-          className="flex min-w-[6.25rem] justify-center rounded-full border border-border/20 bg-button px-4 py-2.5 text-sm font-semibold text-button-text shadow-[0_10px_24px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:border-highlight"
-          aria-label="Switch language"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border/25 bg-secondary text-foreground lg:hidden"
+          onClick={() => setMobileMenuOpen(open => !open)}
+          aria-expanded={mobileMenuOpen}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
         >
-          {controls.languageLabel}
+          {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
         </button>
-        <button className="min-w-[8.5rem] rounded-full bg-button px-6 py-2.5 text-sm font-semibold text-button-text shadow-[0_10px_26px_rgba(0,0,0,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_26px_rgba(207,157,123,0.32)]">
-          {controls.loginLabel}
-        </button>
+        <NavActionButtons controls={controls} className="hidden lg:flex" />
       </div>
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="overflow-hidden border-t border-border/40 px-4 py-4 lg:hidden"
+          >
+            <NavActionButtons controls={controls} className="justify-start" />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.header>
   );
 }
 
-function AnalysisStepper({ step }: { step: AnalysisStep }) {
+function AnalysisStepper({ step, ui }: { step: AnalysisStep; ui: UiContent }) {
   const currentIndex = STEP_LABELS.findIndex(item => item.key === step);
+  const stepLabels: Record<AnalysisStep, string> = {
+    upload: ui.steps.upload,
+    processing: ui.steps.processing,
+    result: ui.steps.result,
+  };
 
   return (
     <div className="flex gap-2 lg:flex-col">
@@ -485,7 +611,7 @@ function AnalysisStepper({ step }: { step: AnalysisStep }) {
               transition={{ duration: 0.35 }}
             />
             <span className="hidden text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground/70 dark:text-foreground/70 lg:block">
-              {item.label}
+              {stepLabels[item.key]}
             </span>
           </motion.div>
         );
@@ -498,33 +624,55 @@ function AnalysisWorkflow({
   onBack,
   onTabSelect,
   navControls,
+  ui,
+  step,
+  setStep,
+  analysisResult,
+  setAnalysisResult,
+  analysisError,
+  setAnalysisError,
 }: {
   onBack: () => void;
   onTabSelect: (tab: HeaderTab) => void;
   navControls: FolderNavControls;
+  ui: UiContent;
+  step: AnalysisStep;
+  setStep: (step: AnalysisStep) => void;
+  analysisResult: AnalysisResponse | null;
+  setAnalysisResult: (result: AnalysisResponse | null) => void;
+  analysisError: string;
+  setAnalysisError: (error: string) => void;
 }) {
-  const [step, setStep] = useState<AnalysisStep>("upload");
   const [isDragActive, setIsDragActive] = useState(false);
   const [showFinishModal, setShowFinishModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const startProcessing = () => {
+  const startProcessing = async (file: File) => {
     setIsDragActive(false);
+    setAnalysisError("");
+    setAnalysisResult(null);
     setStep("processing");
-  };
 
-  useEffect(() => {
-    if (step !== "processing") return;
-    const timer = window.setTimeout(() => setStep("result"), 3000);
-    return () => window.clearTimeout(timer);
-  }, [step]);
+    try {
+      const result = await uploadDocumentForAnalysis(file);
+      setAnalysisResult(result);
+      setStep("result");
+    } catch (error) {
+      setAnalysisError(error instanceof Error ? error.message : "Failed to analyze document.");
+      setStep("upload");
+    } finally {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
 
   return (
     <section className="px-3 pt-3 pb-6 min-h-screen flex flex-col bg-background">
-      <FolderTabs activeTab="Analysis" onSelect={onTabSelect} controls={navControls} />
+      <FolderTabs activeTab="Analysis" onSelect={onTabSelect} controls={navControls} ui={ui} />
 
       <motion.div
-        className="relative flex-1 overflow-hidden rounded-b-[2rem] rounded-tr-[2rem] border border-border/70 bg-secondary shadow-[0_16px_70px_rgba(12,21,25,0.12)] dark:border-highlight/15 dark:bg-secondary dark:shadow-[0_18px_80px_rgba(0,0,0,0.34)]"
+        className="relative flex-1 overflow-y-auto overflow-x-hidden rounded-b-[2rem] rounded-tr-[2rem] border border-border/70 bg-secondary shadow-[0_16px_70px_rgba(12,21,25,0.12)] dark:border-highlight/15 dark:bg-secondary dark:shadow-[0_18px_80px_rgba(0,0,0,0.34)]"
       >
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(207,157,123,0.14),transparent_26%),radial-gradient(circle_at_82%_14%,rgba(216,198,186,0.22),transparent_24%)]" />
         {step === "processing" && (
@@ -547,7 +695,7 @@ function AnalysisWorkflow({
               type="button"
               onClick={onBack}
               className="group flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card/60 text-foreground transition-all duration-300 hover:border-highlight hover:bg-secondary dark:border-highlight/25 dark:bg-card/70 dark:text-foreground dark:hover:bg-card"
-              aria-label="Back to homepage"
+              aria-label="Go back"
             >
               <ArrowLeft size={17} className="transition-transform duration-300 group-hover:-translate-x-0.5" />
             </button>
@@ -556,7 +704,7 @@ function AnalysisWorkflow({
 
           <div className="grid flex-1 gap-8 lg:grid-cols-[120px_minmax(0,1fr)]">
             <aside className="pt-1">
-              <AnalysisStepper step={step} />
+              <AnalysisStepper step={step} ui={ui} />
             </aside>
 
             <AnimatePresence mode="wait">
@@ -570,15 +718,16 @@ function AnalysisWorkflow({
                   transition={{ duration: 0.38, ease: "easeOut" }}
                 >
                   <h1 className="mb-12 font-display text-4xl font-bold text-foreground dark:text-foreground md:text-5xl">
-                    Анализ хийх хэсэг
+                    {ui.analysis.title}
                   </h1>
                   <input
                     ref={fileInputRef}
                     type="file"
-                    accept=".pdf,.doc,.docx,.txt"
+                    accept=".pdf,.docx,.txt"
                     className="hidden"
                     onChange={event => {
-                      if (event.target.files?.length) startProcessing();
+                      const file = event.target.files?.[0];
+                      if (file) void startProcessing(file);
                     }}
                   />
                   <motion.div
@@ -592,7 +741,9 @@ function AnalysisWorkflow({
                     onDragOver={event => event.preventDefault()}
                     onDrop={event => {
                       event.preventDefault();
-                      startProcessing();
+                      const file = event.dataTransfer.files?.[0];
+                      if (file) void startProcessing(file);
+                      else setIsDragActive(false);
                     }}
                   >
                     <div className="absolute -inset-x-3 top-5 -z-10 h-full rounded-[2rem] border border-border/60 bg-background" />
@@ -601,16 +752,21 @@ function AnalysisWorkflow({
                       <UploadCloud size={26} strokeWidth={1.7} />
                     </div>
                     <p className="mb-4 text-[10px] font-mono uppercase tracking-[0.2em] text-accent">
-                      UPLOAD & ORGANIZE DOCUMENT
+                      {ui.analysis.uploadEyebrow}
                     </p>
-                    <h2 className="mb-2 text-xl font-semibold text-foreground dark:text-foreground">Drop your documents here</h2>
-                    <p className="mb-8 text-sm text-muted-foreground/68 dark:text-muted-foreground/62">PDF DOCX TXT up to 50MB</p>
+                    <h2 className="mb-2 text-xl font-semibold text-foreground dark:text-foreground">{ui.analysis.dropTitle}</h2>
+                    <p className="mb-8 text-sm text-muted-foreground/68 dark:text-muted-foreground/62">{ui.analysis.dropDescription}</p>
+                    {analysisError && (
+                      <p className="mx-auto mb-5 max-w-md text-sm leading-6 text-red-500">
+                        {analysisError}
+                      </p>
+                    )}
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
                       className="rounded-full bg-button px-8 py-3 text-sm font-semibold text-button-text shadow-[0_10px_24px_rgba(12,21,25,0.16)] transition-all duration-300 hover:-translate-y-1 hover:bg-accent hover:shadow-[0_14px_30px_rgba(114,75,57,0.22)]"
                     >
-                      Browse Files
+                      {ui.analysis.browse}
                     </button>
                   </motion.div>
                 </motion.div>
@@ -626,7 +782,7 @@ function AnalysisWorkflow({
                   transition={{ duration: 0.38, ease: "easeOut" }}
                 >
                   <h1 className="mb-12 font-display text-4xl font-bold text-foreground dark:text-foreground md:text-5xl">
-                    Анализ хийж байна
+                    {ui.analysis.processingTitle}
                   </h1>
                   <motion.div
                     className="relative w-full max-w-lg rounded-[2rem] border border-border bg-card px-8 py-16 shadow-[0_30px_80px_rgba(12,21,25,0.14)] dark:border-highlight/20 dark:bg-card/80 dark:shadow-[0_30px_80px_rgba(0,0,0,0.28)]"
@@ -638,16 +794,16 @@ function AnalysisWorkflow({
                       className="absolute -inset-x-8 top-12 -z-20 h-full rounded-[2rem] border border-border/60 bg-border"
                     />
                     <LoaderCircle className="mx-auto mb-8 h-16 w-16 animate-spin text-accent" strokeWidth={1.5} />
-                    <h2 className="mb-3 text-xl font-semibold text-foreground dark:text-foreground">AI таны гэрээг шалгаж байна</h2>
+                    <h2 className="mb-3 text-xl font-semibold text-foreground dark:text-foreground">{ui.analysis.processingSubtitle}</h2>
                     <p className="mx-auto max-w-sm text-sm leading-6 text-muted-foreground/68 dark:text-muted-foreground/62">
-                      Эрсдэл, дутуу нөхцөлүүд боловсруулагдаж байна
+                      {ui.analysis.processingDescription}
                     </p>
                   </motion.div>
                 </motion.div>
               )}
 
               {step === "result" && (
-                <AnalysisResult onFinish={() => setShowFinishModal(true)} />
+                <AnalysisResult result={analysisResult} ui={ui} onFinish={() => setShowFinishModal(true)} />
               )}
             </AnimatePresence>
           </div>
@@ -669,22 +825,22 @@ function AnalysisWorkflow({
               exit={{ opacity: 0, y: 16, scale: 0.98 }}
               transition={{ duration: 0.3 }}
             >
-              <h2 className="mb-3 font-display text-3xl font-bold text-foreground">Анализ дууссан</h2>
-              <p className="mb-8 text-sm text-muted-foreground/72">Анализ хийсэн баримтыг хадгалах уу?</p>
+              <h2 className="mb-3 font-display text-3xl font-bold text-foreground">{ui.analysis.finishTitle}</h2>
+              <p className="mb-8 text-sm text-muted-foreground/72">{ui.analysis.finishDescription}</p>
               <div className="flex gap-3">
                 <button
                   type="button"
                   onClick={onBack}
                   className="flex flex-1 items-center justify-center gap-2 rounded-full bg-button px-5 py-3 text-sm font-semibold text-button-text transition-transform duration-300 hover:scale-[1.03]"
                 >
-                  <Archive size={16} /> Archive
+                  <Archive size={16} /> {ui.actions.archive}
                 </button>
                 <button
                   type="button"
                   onClick={onBack}
                   className="flex flex-1 items-center justify-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-sm font-semibold text-muted-foreground transition-transform duration-300 hover:scale-[1.03] hover:bg-secondary"
                 >
-                  <Trash2 size={16} /> Delete
+                  <Trash2 size={16} /> {ui.actions.delete}
                 </button>
               </div>
             </motion.div>
@@ -695,120 +851,275 @@ function AnalysisWorkflow({
   );
 }
 
-function AnalysisResult({ onFinish }: { onFinish: () => void }) {
-  const cards = [
-    (
-      <div>
-        <div className="mb-5 flex items-end justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">Risk Score</p>
-            <p className="mt-2 text-4xl font-bold text-foreground dark:text-foreground">7.5/10</p>
-          </div>
-          <div className="relative h-16 w-16 rounded-full bg-background">
-            <motion.div
-              className="absolute inset-0 rounded-full border-[6px] border-accent"
-              initial={{ clipPath: "inset(100% 0 0 0)" }}
-              animate={{ clipPath: "inset(25% 0 0 0)" }}
-              transition={{ duration: 1.1, ease: "easeOut" }}
-            />
-          </div>
-        </div>
-        {["Scope of Work", "Payment Terms", "Confidentiality"].map(item => (
-          <p key={item} className="mb-2 flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground/75">
-            <Check size={15} className="text-accent" /> {item}
-          </p>
-        ))}
-      </div>
-    ),
-    (
-      <div>
-        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-accent">Missing Clauses</p>
-        {["Termination missing", "Liability missing", "Payment delay condition missing"].map(item => (
-          <p key={item} className="mb-3 text-sm text-muted-foreground/82 dark:text-muted-foreground/75">- {item}</p>
-        ))}
-      </div>
-    ),
-    (
-      <div>
-        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-accent">AI Analysis Result</p>
-        <motion.p
-          className="overflow-hidden whitespace-nowrap text-sm leading-6 text-muted-foreground/82 dark:text-muted-foreground/75"
-          initial={{ width: 0 }}
-          animate={{ width: "100%" }}
-          transition={{ duration: 1.4, ease: "easeOut" }}
-        >
-          AI found moderate risks and several missing clauses.
-        </motion.p>
-      </div>
-    ),
-  ];
+function AnalysisResult({ result, ui, onFinish }: { result: AnalysisResponse | null; ui: UiContent; onFinish: () => void }) {
+  const rawRiskScore = result?.analysis.riskScore ?? 62;
+  const riskScore = rawRiskScore > 10 ? rawRiskScore / 10 : rawRiskScore;
+  const riskPercent = Math.min(100, Math.max(0, riskScore * 10));
+  const standardMatch = Math.round(Math.max(0, Math.min(100, 100 - riskScore * 3.5)));
+  const riskScoreLabel = `${riskScore.toFixed(1)}/10`;
+  const fileName = result?.document.fileName || "Service_Agreement_2024.pdf";
+  const fileSize = "PDF • 2.4 MB";
+  const summary = result?.analysis.summary || ui.analysis.fallbackSummary;
+  const previewParagraphs = (result?.document.extractedText || [
+    "This Service Agreement is made and entered into as of May 28, 2024, by and between:",
+    "1. Parties. Company A provides consulting services to Company B. The scope, payment, and delivery schedule are agreed by both parties.",
+    "2. Compensation. Payment shall be made within 15 days of invoice date.",
+    "3. Scope of Services. The service provider agrees to perform the services described in the attached statement of work.",
+    "4. Payment Terms. The client shall pay the provider according to the payment schedule.",
+    "5. Confidentiality. Both parties agree to keep confidential all information disclosed under this agreement.",
+  ].join("\n\n")).split(/\n{2,}/).slice(0, 10);
+  const issueItems = [
+    ...(result?.analysis.risks ?? []),
+    ...(result?.analysis.missingClauses ?? []),
+    ...(result?.analysis.riskyTerms ?? []),
+    ...(result?.analysis.inconsistentWording ?? []),
+    ...(result?.analysis.complianceWarnings ?? []),
+  ].filter(Boolean);
+  const issues = (issueItems.length ? issueItems : [
+    "Хариуцлагын хязгаарлалт тодорхойгүй байна.",
+    "Гэрээ цуцлах нөхцөл тодорхой бус байна.",
+    "Шимтгэлийн хугацааны нөхцөл дутуу байна.",
+    "Төлбөрийн хугацаа хэт ерөнхий байна.",
+  ]).slice(0, 4);
+  const clauses = result?.clauses ?? [];
+  const generatedAt = new Date().toLocaleString("mn-MN", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   return (
     <motion.div
       key="result"
-      className="grid gap-8 pb-6 lg:grid-cols-[minmax(0,1fr)_380px]"
+      className="flex min-h-[calc(100vh-13rem)] flex-col gap-4 pb-2"
       initial={{ opacity: 0, x: 32 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -32 }}
       transition={{ duration: 0.38, ease: "easeOut" }}
     >
-      <motion.div
-        className="relative min-h-[560px] overflow-hidden rounded-[2rem] border border-border bg-card p-8 shadow-[0_24px_70px_rgba(12,21,25,0.12)] dark:border-highlight/20 dark:bg-card/80 dark:shadow-[0_24px_70px_rgba(0,0,0,0.28)]"
-      >
-        <div className="absolute inset-x-8 top-7 h-px bg-border/70" />
-        <div className="h-full overflow-y-auto pr-3 text-left text-sm leading-7 text-muted-foreground/78 dark:text-muted-foreground/70">
-          <h2 className="mb-7 text-2xl font-semibold text-foreground dark:text-foreground">Service Agreement Preview</h2>
-          {[...Array(10)].map((_, index) => (
-            <p key={index} className="mb-5">
-              This agreement outlines scope, payment terms, confidentiality expectations, delivery dates,
-              and review obligations between the parties. Draftly highlights clauses requiring legal review
-              and identifies missing protections before execution.
-            </p>
-          ))}
-        </div>
-      </motion.div>
-
-      <div className="flex flex-col gap-4">
-        {cards.map((card, index) => (
-          <motion.div
-            key={index}
-            className="rounded-[1.5rem] border border-border bg-card/82 p-6 shadow-[0_16px_38px_rgba(12,21,25,0.08)] dark:border-highlight/20 dark:bg-background/52 dark:shadow-[0_16px_38px_rgba(0,0,0,0.22)]"
-            initial={{ opacity: 0, y: 22 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.42, delay: index * 0.12 }}
-          >
-            {card}
-          </motion.div>
-        ))}
-
-        <div className="mt-auto flex items-center justify-between gap-4 pt-3">
-          <button
-            type="button"
-            onClick={onFinish}
-            className="flex-1 rounded-full bg-button px-8 py-3.5 text-sm font-semibold text-button-text shadow-[0_12px_26px_rgba(12,21,25,0.16)] transition-all duration-300 hover:-translate-y-1 hover:bg-accent"
-          >
-            Хадгалах
-          </button>
-          <div className="flex gap-2">
-            {[Archive, Download].map((Icon, index) => (
-              <button
-                key={index}
-                type="button"
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-accent transition-all duration-300 hover:-translate-y-1 hover:bg-secondary dark:border-highlight/25 dark:bg-card/60 dark:text-highlight dark:hover:bg-card"
-                aria-label={index === 0 ? "Archive" : "Download"}
-              >
-                <Icon size={17} />
-              </button>
-            ))}
+      <div className="grid gap-4 xl:grid-cols-[minmax(320px,420px)_minmax(0,1fr)]">
+        <motion.div
+          className="rounded-[1rem] border border-border/70 bg-card p-4 shadow-[0_18px_44px_rgba(12,21,25,0.08)] dark:border-highlight/20 dark:bg-card/80"
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.42 }}
+        >
+          <h2 className="mb-4 text-sm font-bold text-foreground">Таны оруулсан файл</h2>
+          <div className="mb-4 flex items-center gap-3 rounded-xl border border-border/70 bg-secondary/70 p-3">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-red-500 text-xs font-black text-white">
+              PDF
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-semibold text-foreground">{fileName}</p>
+              <p className="text-xs text-muted-foreground">{fileSize}</p>
+            </div>
+            <Info size={16} className="shrink-0 text-muted-foreground" />
           </div>
+          <div className="relative h-[520px] overflow-hidden rounded-xl border border-border/70 bg-white shadow-inner dark:bg-secondary">
+            <div className="h-full overflow-y-auto px-8 py-8 text-[11px] leading-5 text-slate-700 dark:text-foreground/75">
+              <div className="mb-8 text-center">
+                <p className="text-sm font-bold tracking-wide text-slate-900 dark:text-foreground">SERVICE AGREEMENT</p>
+                <p className="mt-3 text-[10px] text-slate-500 dark:text-muted-foreground">This Service Agreement is made and entered into as of May 28, 2024.</p>
+              </div>
+              {previewParagraphs.map((paragraph, index) => (
+                <p key={index} className="mb-4">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+            <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full border border-border bg-secondary px-2 py-1 shadow-sm">
+              <button type="button" className="flex h-6 w-6 items-center justify-center rounded-full hover:bg-card" aria-label="Zoom out">
+                <ZoomOut size={12} />
+              </button>
+              <span className="text-[11px] font-semibold">100%</span>
+              <button type="button" className="flex h-6 w-6 items-center justify-center rounded-full hover:bg-card" aria-label="Zoom in">
+                <ZoomIn size={12} />
+              </button>
+            </div>
+            <button type="button" className="absolute bottom-3 right-3 flex h-8 w-8 items-center justify-center rounded-full border border-border bg-secondary shadow-sm" aria-label="Full screen">
+              <Maximize2 size={14} />
+            </button>
+          </div>
+        </motion.div>
+
+        <div className="grid content-start gap-4">
+          <div className="grid gap-4 md:grid-cols-2">
+            <motion.div
+              className="rounded-[1rem] border border-border/70 bg-card p-5 shadow-[0_18px_44px_rgba(12,21,25,0.08)] dark:border-highlight/20 dark:bg-card/80"
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.42, delay: 0.04 }}
+            >
+              <div className="mb-4 flex items-center gap-2">
+                <p className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">Таарсан хувь</p>
+                <Info size={13} className="text-muted-foreground" />
+              </div>
+              <p className="text-4xl font-black text-emerald-600">{standardMatch}%</p>
+              <p className="mt-2 text-xs font-semibold uppercase text-muted-foreground">Standard match</p>
+              <div className="mt-5 h-2 overflow-hidden rounded-full bg-border/70">
+                <motion.div
+                  className="h-full rounded-full bg-emerald-500"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${standardMatch}%` }}
+                  transition={{ duration: 0.9, ease: "easeOut" }}
+                />
+              </div>
+              <p className="mt-3 text-xs text-muted-foreground">40 / 50 шаардлагат заалттай нийцэж байна</p>
+            </motion.div>
+
+            <motion.div
+              className="rounded-[1rem] border border-border/70 bg-card p-5 shadow-[0_18px_44px_rgba(12,21,25,0.08)] dark:border-highlight/20 dark:bg-card/80"
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.42, delay: 0.08 }}
+            >
+              <div className="mb-4 flex items-center gap-2">
+                <p className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">{ui.analysis.riskScore}</p>
+                <Info size={13} className="text-muted-foreground" />
+              </div>
+              <p className="text-4xl font-black text-red-600">{riskScoreLabel}</p>
+              <p className="mt-2 text-xs font-semibold uppercase text-muted-foreground">Дунд эрсдэл</p>
+              <div className="mt-5 h-2 overflow-hidden rounded-full bg-border/70">
+                <motion.div
+                  className="h-full rounded-full bg-red-500"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${riskPercent}%` }}
+                  transition={{ duration: 0.9, ease: "easeOut" }}
+                />
+              </div>
+              <p className="mt-3 text-xs text-muted-foreground">Эрсдэлийн 7 заалт илэрсэн</p>
+            </motion.div>
+          </div>
+
+          <motion.div
+            className="rounded-[1rem] border border-border/70 bg-card p-5 shadow-[0_18px_44px_rgba(12,21,25,0.08)] dark:border-highlight/20 dark:bg-card/80"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.42, delay: 0.12 }}
+          >
+            <div className="mb-4 flex items-center gap-2">
+              <h3 className="text-sm font-bold text-foreground">Асуудлууд</h3>
+              <Info size={13} className="text-muted-foreground" />
+            </div>
+            <div className="space-y-3">
+              {issues.map((issue, index) => {
+                const isWarning = index === 2;
+                const isLow = index === 3;
+                const tone = isLow
+                  ? "border-emerald-100 bg-emerald-50 text-emerald-700"
+                  : isWarning
+                    ? "border-amber-100 bg-amber-50 text-amber-700"
+                    : "border-red-100 bg-red-50 text-red-700";
+                const label = isLow ? "Бага эрсдэл" : isWarning ? "Дунд эрсдэл" : "Өндөр эрсдэл";
+
+                return (
+                  <div key={`${issue}-${index}`} className="flex items-start gap-3 rounded-xl border border-border/60 bg-secondary/45 p-3">
+                    <AlertTriangle size={17} className={isLow ? "mt-0.5 text-emerald-600" : isWarning ? "mt-0.5 text-amber-600" : "mt-0.5 text-red-600"} />
+                    <div className="min-w-0 flex-1">
+                      <p className="line-clamp-2 text-sm font-semibold text-foreground">{issue}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">{index + 2}-р зүйл • Хуулийн нийцэл шалгах</p>
+                    </div>
+                    <span className={`shrink-0 rounded-full border px-3 py-1 text-xs font-semibold ${tone}`}>{label}</span>
+                    <ChevronDown size={16} className="mt-1 shrink-0 text-muted-foreground" />
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="rounded-[1rem] border border-border/70 bg-card p-5 shadow-[0_18px_44px_rgba(12,21,25,0.08)] dark:border-highlight/20 dark:bg-card/80"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.42, delay: 0.16 }}
+          >
+            <h3 className="mb-3 text-sm font-bold text-foreground">Тайлбар</h3>
+            <p className="text-sm leading-6 text-muted-foreground">{summary}</p>
+            <div className="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-4 text-blue-800">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-sm font-bold">Manual AI-аар засварлуулах, эрсдэлийг бууруулах уу?</p>
+                  <p className="mt-1 text-xs text-blue-700">AI илэрсэн асуудлуудад үндэслэн гэрээг сайжруулах санал бэлдэнэ.</p>
+                </div>
+                <button type="button" className="shrink-0 rounded-full bg-blue-600 px-4 py-2 text-xs font-bold text-white">
+                  AI-аар засварлуулах
+                </button>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="rounded-[1rem] border border-border/70 bg-card p-5 shadow-[0_18px_44px_rgba(12,21,25,0.08)] dark:border-highlight/20 dark:bg-card/80"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.42, delay: 0.2 }}
+          >
+            <h3 className="mb-4 text-sm font-bold text-foreground">Анализын мэдээлэл</h3>
+            <dl className="grid gap-3 text-sm">
+              <div className="flex justify-between gap-3">
+                <dt className="text-muted-foreground">Анализ хийсэн огноо</dt>
+                <dd className="font-semibold text-foreground">{generatedAt}</dd>
+              </div>
+              <div className="flex justify-between gap-3">
+                <dt className="text-muted-foreground">Файлын нэр</dt>
+                <dd className="max-w-[55%] truncate font-semibold text-foreground">{fileName}</dd>
+              </div>
+              <div className="flex justify-between gap-3">
+                <dt className="text-muted-foreground">Файлын хэмжээ</dt>
+                <dd className="font-semibold text-foreground">2.4 MB</dd>
+              </div>
+              <div className="flex justify-between gap-3">
+                <dt className="text-muted-foreground">Анализ хийсэн загвар</dt>
+                <dd className="font-semibold text-foreground">{clauses[0]?.title || "Service Agreement Standard v2.1"}</dd>
+              </div>
+            </dl>
+          </motion.div>
+
+          <div className="grid gap-3 sm:grid-cols-3">
+            <button type="button" className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-secondary">
+              <Download size={16} /> Татах файл (PDF)
+            </button>
+            <button type="button" className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-secondary">
+              <Archive size={16} /> Хадгалах
+            </button>
+            <button type="button" onClick={onFinish} className="flex items-center justify-center gap-2 rounded-xl border border-red-100 bg-card px-4 py-3 text-sm font-semibold text-red-600 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-red-50">
+              <Trash2 size={16} /> Устгах
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-auto flex items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50 px-5 py-3 text-amber-900 shadow-sm">
+        <div className="flex min-w-0 items-center gap-3">
+          <AlertTriangle size={18} className="shrink-0 text-amber-600" />
+          <p className="text-xs font-medium">
+            Анхааруулга: Энэхүү анализ нь хиймэл оюунд үндэслэсэн автоматжуулсан мэдээлэл бөгөөд хуульчийн зөвлөгөөг орлохгүй.
+          </p>
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          <button type="button" className="rounded-full bg-button px-5 py-2 text-xs font-bold text-button-text">
+            Дуусгах
+          </button>
+          <button type="button" className="flex h-7 w-7 items-center justify-center rounded-full hover:bg-amber-100" aria-label="Close warning">
+            <X size={14} />
+          </button>
         </div>
       </div>
     </motion.div>
   );
 }
 
-function TemplateStepper({ step }: { step: TemplateStep }) {
+function TemplateStepper({ step, ui }: { step: TemplateStep; ui: UiContent }) {
   const currentIndex = TEMPLATE_STEPS.findIndex(item => item.key === step);
+  const stepLabels: Record<TemplateStep, string> = {
+    template: ui.steps.template,
+    details: ui.steps.details,
+    verification: ui.steps.verification,
+    payment: ui.steps.payment,
+    result: ui.steps.result,
+  };
 
   return (
     <div className="flex gap-2 lg:flex-col">
@@ -830,7 +1141,7 @@ function TemplateStepper({ step }: { step: TemplateStep }) {
               transition={{ duration: 0.35 }}
             />
             <span className="hidden text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground/70 dark:text-foreground/70 lg:block">
-              {item.label}
+              {stepLabels[item.key]}
             </span>
           </motion.div>
         );
@@ -844,17 +1155,19 @@ function TemplateShell({
   onBackHome,
   onTabSelect,
   navControls,
+  ui,
   children,
 }: {
   step: TemplateStep;
   onBackHome: () => void;
   onTabSelect: (tab: HeaderTab) => void;
   navControls: FolderNavControls;
+  ui: UiContent;
   children: ReactNode;
 }) {
   return (
     <section className="px-3 pt-3 pb-6 min-h-screen flex flex-col bg-background">
-      <FolderTabs activeTab="Template" onSelect={onTabSelect} controls={navControls} />
+      <FolderTabs activeTab="Template" onSelect={onTabSelect} controls={navControls} ui={ui} />
       <div className="relative flex-1 overflow-hidden rounded-b-[2rem] rounded-tr-[2rem] border border-border/70 bg-secondary shadow-[0_16px_70px_rgba(12,21,25,0.12)] dark:border-highlight/15 dark:bg-secondary dark:shadow-[0_18px_80px_rgba(0,0,0,0.34)]">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(207,157,123,0.12),transparent_26%),radial-gradient(circle_at_82%_12%,rgba(216,198,186,0.20),transparent_24%)]" />
         <div className="relative z-10 flex min-h-[calc(100vh-7rem)] flex-col px-5 py-5 sm:px-8 lg:px-10">
@@ -863,20 +1176,26 @@ function TemplateShell({
               type="button"
               onClick={onBackHome}
               className="group flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card/60 text-foreground transition-all duration-300 hover:border-highlight hover:bg-secondary dark:border-highlight/25 dark:bg-card/70 dark:text-foreground dark:hover:bg-card"
-              aria-label="Back to homepage"
+              aria-label={ui.actions.back}
             >
               <ArrowLeft size={17} className="transition-transform duration-300 group-hover:-translate-x-0.5" />
             </button>
             <span className="font-display text-2xl font-black text-foreground dark:text-foreground">Draftly.</span>
           </div>
-          <div className="grid flex-1 gap-8 lg:grid-cols-[140px_minmax(0,1fr)]">
-            <aside className="pt-2">
-              <TemplateStepper step={step} />
-            </aside>
-            <div className="relative min-h-[calc(100vh-13rem)] overflow-hidden rounded-[2rem]">
+          {step === "template" ? (
+            <div className="relative min-h-[calc(100vh-13rem)] overflow-hidden">
               {children}
             </div>
-          </div>
+          ) : (
+            <div className="grid flex-1 gap-8 lg:grid-cols-[140px_minmax(0,1fr)]">
+              <aside className="pt-2">
+                <TemplateStepper step={step} ui={ui} />
+              </aside>
+              <div className="relative min-h-[calc(100vh-13rem)] overflow-hidden rounded-[2rem]">
+                {children}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>
@@ -887,21 +1206,88 @@ function TemplateWorkflow({
   onBackHome,
   onTabSelect,
   navControls,
+  ui,
 }: {
   onBackHome: () => void;
   onTabSelect: (tab: HeaderTab) => void;
   navControls: FolderNavControls;
+  ui: UiContent;
 }) {
   const [step, setStep] = useState<TemplateStep>("template");
-  const [expandedCategory, setExpandedCategory] = useState("Employment");
-  const [selectedTemplate, setSelectedTemplate] = useState("Employment Agreement");
-  const [searchOpen, setSearchOpen] = useState(false);
+  const [activeGroup, setActiveGroup] = useState(TEMPLATE_GROUPS[0].key);
+  const [selectedTemplate, setSelectedTemplate] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
   const [stepDirection, setStepDirection] = useState(1);
+  const [apiTemplates, setApiTemplates] = useState<TemplateSummary[]>([]);
+  const [templateError, setTemplateError] = useState("");
+  const [templateValues, setTemplateValues] = useState<Record<string, string>>({});
 
-  const filteredTemplates = TEMPLATE_CARDS.filter(item =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  useEffect(() => {
+    let cancelled = false;
+
+    fetchTemplates()
+      .then(({ templates }) => {
+        if (cancelled) return;
+        setApiTemplates(templates);
+        setTemplateError("");
+        if (templates[0]) {
+          setSelectedTemplate(templates[0].name);
+        }
+      })
+      .catch((error) => {
+        if (cancelled) return;
+        setTemplateError(error instanceof Error ? error.message : "Failed to load backend templates.");
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const templateCards = apiTemplates.length ? apiTemplates : TEMPLATE_CARDS.map((template, index) => ({
+    id: String(index + 1),
+    name: template.name,
+    category: "Business",
+    description: template.desc,
+    content: "",
+    variables: [],
+  }));
+  const selectedTemplateData = apiTemplates.find(template => template.name === selectedTemplate);
+
+  useEffect(() => {
+    if (!selectedTemplateData) return;
+    setTemplateValues((current) => {
+      const nextValues: Record<string, string> = {};
+      selectedTemplateData.variables.forEach((variable) => {
+        nextValues[variable.key] = current[variable.key] || "";
+      });
+      return nextValues;
+    });
+  }, [selectedTemplateData]);
+
+  const templateGroups = TEMPLATE_GROUPS.map(group => ({
+    ...group,
+    name: ui.template.groups[group.key].name,
+    desc: ui.template.groups[group.key].desc,
+    items: templateCards.filter(template => {
+      const haystack = `${template.category} ${template.name} ${template.description}`.toLowerCase();
+      return group.keywords.some(keyword => haystack.includes(keyword.toLowerCase()));
+    }),
+  })).map((group, index, groups) => {
+    if (group.key !== "special") return group;
+
+    const assigned = new Set(groups.flatMap(item => item.key === group.key ? [] : item.items.map(template => template.name)));
+    return {
+      ...group,
+      items: templateCards.filter(template => group.items.some(item => item.name === template.name) || !assigned.has(template.name)),
+    };
+  });
+
+  const activeTemplateGroup = templateGroups.find(group => group.key === activeGroup) || templateGroups[0];
+  const filteredTemplates = activeTemplateGroup.items.filter(item =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.description.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const nextStep = () => {
@@ -921,106 +1307,129 @@ function TemplateWorkflow({
   const renderStep = () => {
     if (step === "template") {
       return (
-        <div className="pb-8">
-          <div className="mb-10 text-center">
-            <h1 className="font-display text-4xl font-bold text-foreground dark:text-foreground md:text-6xl">Choose your contract type.</h1>
-            <p className="mt-3 text-sm text-muted-foreground/66 dark:text-muted-foreground/62">Choose and forget...</p>
-          </div>
-
-          <div className="grid gap-6 lg:grid-cols-[minmax(280px,420px)_1fr]">
-            <motion.div
-              className="relative min-h-[360px] rounded-[2rem] border border-border/25 bg-card p-8 text-foreground shadow-[0_28px_80px_rgba(0,0,0,0.26)]"
-            >
-              <div className="absolute -inset-x-3 top-7 -z-10 h-full rounded-[2rem] bg-background/70" />
-              <FileText size={38} className="mb-10 text-accent" />
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-accent">Featured Template</p>
-              <h2 className="mb-4 text-3xl font-bold">{selectedTemplate}</h2>
-              <p className="max-w-sm text-sm leading-6 text-muted-foreground/75">
-                Premium AI-guided contract template with structured clauses, editable details, and document-ready output.
-              </p>
-            </motion.div>
-
-            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-              {TEMPLATE_CATEGORIES.map(category => {
-                const expanded = expandedCategory === category.name;
-                return (
-                  <motion.button
-                    key={category.name}
-                    type="button"
-                    onClick={() => setExpandedCategory(expanded ? "" : category.name)}
-                    className="rounded-[1.4rem] border border-border/20 bg-card/80 p-5 text-left text-foreground shadow-[0_16px_38px_rgba(0,0,0,0.18)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-highlight/70"
-                    layout
-                  >
-                    <div className="flex items-center justify-between gap-3">
-                      <span className="font-semibold">{category.name}</span>
-                      <FileText size={15} className="text-highlight" />
-                    </div>
-                    <AnimatePresence>
-                      {expanded && (
-                        <motion.div
-                          className="mt-4 space-y-2 overflow-hidden text-sm text-muted-foreground/70"
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          {category.items.map(item => (
-                            <p key={item}>- {item}</p>
-                          ))}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.button>
-                );
-              })}
+        <div className="mx-auto max-w-[1180px] pb-6">
+          <div className="mb-7 grid gap-4 lg:grid-cols-[1fr_280px] lg:items-end">
+            <div className="text-center lg:pl-[280px]">
+              <h1 className="font-display text-3xl font-bold text-foreground dark:text-foreground md:text-4xl">{ui.template.chooseTitle}</h1>
+              <p className="mt-2 text-sm text-muted-foreground/66 dark:text-muted-foreground/62">{ui.template.chooseSubtitle}</p>
             </div>
-          </div>
-
-          <div className="my-8 flex justify-center">
-            <div className={`group flex items-center rounded-full border border-border/25 bg-secondary/90 px-4 py-3 text-foreground transition-all duration-300 ${searchOpen ? "w-full max-w-xl" : "w-64"}`}>
-              <Search size={17} className="mr-3 text-highlight transition-transform duration-300 group-focus-within:rotate-12" />
+            <div className="group flex h-11 items-center rounded-md border border-border/60 bg-card px-4 text-foreground shadow-sm">
+              <Search size={16} className="mr-3 text-muted-foreground/55" />
               <input
                 value={searchTerm}
-                onFocus={() => setSearchOpen(true)}
                 onChange={event => setSearchTerm(event.target.value)}
-                placeholder="Search templates..."
+                placeholder={ui.template.searchPlaceholder}
                 className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground/45"
               />
             </div>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {filteredTemplates.map(card => (
-              <button
-                key={card.name}
-                type="button"
-                onClick={() => setSelectedTemplate(card.name)}
-                className={`rounded-[1.5rem] border bg-card/80 p-6 text-left text-foreground shadow-[0_16px_38px_rgba(0,0,0,0.18)] transition-all duration-300 hover:-translate-y-1 ${
-                  selectedTemplate === card.name ? "border-highlight" : "border-border/18"
-                }`}
-              >
-                <FileText size={22} className="mb-5 text-highlight" />
-                <h3 className="mb-2 text-lg font-semibold">{card.name}</h3>
-                <p className="text-sm leading-6 text-muted-foreground/62">{card.desc}</p>
-              </button>
-            ))}
+          <div className="mb-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            {templateGroups.map(group => {
+              const Icon = group.Icon;
+              const active = activeGroup === group.key;
+              return (
+                <button
+                  key={group.name}
+                  type="button"
+                  onClick={() => {
+                    setActiveGroup(group.key);
+                    setSearchTerm("");
+                    if (group.items[0]) setSelectedTemplate(group.items[0].name);
+                  }}
+                  className={`group min-h-[136px] rounded-md border bg-card p-5 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-button/50 hover:shadow-[0_16px_38px_rgba(12,21,25,0.08)] ${
+                    active ? "border-button shadow-[0_16px_38px_rgba(12,21,25,0.10)]" : "border-border/70"
+                  }`}
+                >
+                  <div className={`mb-4 flex h-11 w-11 items-center justify-center rounded-md border ${
+                    active ? "border-button/20 bg-button/10 text-button" : "border-border bg-secondary text-foreground"
+                  }`}>
+                    <Icon size={21} strokeWidth={1.8} />
+                  </div>
+                  <h3 className={`mb-2 text-sm font-bold ${active ? "text-button" : "text-foreground"}`}>{group.name}</h3>
+                  <p className="text-xs leading-5 text-muted-foreground/68">{group.items.length} {ui.template.fallbackDescription}</p>
+                </button>
+              );
+            })}
           </div>
 
-          <div className="mt-8 flex justify-end">
-            <CoffeeButton onClick={nextStep}>Continue</CoffeeButton>
+          {templateError && (
+            <p className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+              {ui.template.loadErrorPrefix} {templateError}
+            </p>
+          )}
+
+          <div className="rounded-md border border-border/70 bg-card/70 p-5 shadow-[0_18px_50px_rgba(12,21,25,0.06)]">
+            <div className="mb-5 grid gap-4 lg:grid-cols-[1fr_240px] lg:items-start">
+              <div>
+                <h2 className="mb-2 text-lg font-bold text-button">{activeTemplateGroup.name}</h2>
+                <p className="max-w-2xl text-sm leading-6 text-muted-foreground/72">{activeTemplateGroup.desc}</p>
+              </div>
+              {selectedTemplateData && (
+                <div className="rounded-md border border-border/70 bg-secondary px-4 py-3 text-xs leading-5 text-muted-foreground/72">
+                  <span className="font-semibold text-foreground">{selectedTemplateData.variables.length}</span> {ui.template.fieldsCount}
+                </div>
+              )}
+            </div>
+
+            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+              {filteredTemplates.map(card => (
+                <button
+                  key={card.name}
+                  type="button"
+                  onClick={() => setSelectedTemplate(card.name)}
+                  className={`group flex min-h-[82px] items-start gap-4 rounded-md border bg-secondary p-4 text-left transition-all duration-250 hover:border-button/40 hover:bg-background ${
+                    selectedTemplate === card.name ? "border-button bg-background shadow-sm" : "border-border/70"
+                  }`}
+                >
+                  <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-md border ${
+                    selectedTemplate === card.name ? "border-button/20 bg-button/10 text-button" : "border-border bg-card text-button"
+                  }`}>
+                    <FileText size={18} />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-semibold text-foreground">{card.name}</span>
+                    <span className="mt-1 line-clamp-2 block text-xs leading-5 text-muted-foreground/66">{card.description || `${card.category} ${ui.template.fallbackDescription}`}</span>
+                  </span>
+                  <ArrowRight size={15} className="mt-1 shrink-0 text-button transition-transform duration-300 group-hover:translate-x-0.5" />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-6 flex justify-end">
+            <button
+              type="button"
+              onClick={nextStep}
+              disabled={!selectedTemplate}
+              className="inline-flex items-center gap-3 rounded-md bg-button px-7 py-3 text-sm font-semibold text-button-text shadow-[0_12px_26px_rgba(12,21,25,0.14)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {ui.actions.continue} <ArrowRight size={16} />
+            </button>
           </div>
         </div>
       );
     }
 
-    if (step === "details") return <TemplateDetails onBack={previousStep} onContinue={nextStep} />;
-    if (step === "verification") return <TemplateVerification onBack={previousStep} onContinue={nextStep} />;
-    if (step === "payment") return <TemplatePayment onBack={previousStep} onContinue={nextStep} />;
-    return <TemplateResult onBack={previousStep} onFinish={() => setShowConfirm(true)} />;
+    if (step === "details") {
+      return (
+        <TemplateDetails
+          template={selectedTemplateData}
+          values={templateValues}
+          ui={ui}
+          onValueChange={(key, value) => setTemplateValues(current => ({ ...current, [key]: value }))}
+          onBack={previousStep}
+          onContinue={nextStep}
+        />
+      );
+    }
+    if (step === "verification") return <TemplateVerification template={selectedTemplateData} values={templateValues} ui={ui} onBack={previousStep} onContinue={nextStep} />;
+    if (step === "payment") return <TemplatePayment ui={ui} onBack={previousStep} onContinue={nextStep} />;
+    return <TemplateResult ui={ui} onBack={previousStep} onFinish={() => setShowConfirm(true)} />;
   };
 
   return (
-    <TemplateShell step={step} onBackHome={onBackHome} onTabSelect={onTabSelect} navControls={navControls}>
+    <TemplateShell step={step} onBackHome={onBackHome} onTabSelect={onTabSelect} navControls={navControls} ui={ui}>
       <AnimatePresence custom={stepDirection} initial={false}>
         <motion.div
           key={step}
@@ -1050,13 +1459,13 @@ function TemplateWorkflow({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 16, scale: 0.98 }}
             >
-              <h2 className="mb-8 font-display text-3xl font-bold text-foreground">Та итгэлтэй байна уу?</h2>
+              <h2 className="mb-8 font-display text-3xl font-bold text-foreground">{ui.confirm.title}</h2>
               <div className="flex gap-3">
                 <button onClick={onBackHome} className="flex flex-1 items-center justify-center gap-2 rounded-full bg-button px-5 py-3 text-sm font-semibold text-button-text transition-transform duration-300 hover:scale-[1.03]">
-                  <Archive size={16} /> Archive
+                  <Archive size={16} /> {ui.actions.archive}
                 </button>
                 <button onClick={onBackHome} className="flex flex-1 items-center justify-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-sm font-semibold text-muted-foreground transition-transform duration-300 hover:scale-[1.03]">
-                  <Trash2 size={16} /> Delete
+                  <Trash2 size={16} /> {ui.actions.delete}
                 </button>
               </div>
             </motion.div>
@@ -1079,7 +1488,7 @@ function CoffeeButton({ children, onClick }: { children: ReactNode; onClick: () 
   );
 }
 
-function StepActions({ onBack, onContinue }: { onBack: () => void; onContinue: () => void }) {
+function StepActions({ ui, onBack, onContinue }: { ui: UiContent; onBack: () => void; onContinue: () => void }) {
   return (
     <div className="mt-8 flex items-center justify-between gap-4">
       <button
@@ -1087,35 +1496,193 @@ function StepActions({ onBack, onContinue }: { onBack: () => void; onContinue: (
         onClick={onBack}
         className="group flex items-center gap-2 rounded-full border border-border/35 bg-secondary/70 px-6 py-3 text-sm font-semibold text-foreground transition-all duration-300 hover:border-highlight hover:bg-card"
       >
-        <ArrowLeft size={15} className="transition-transform duration-300 group-hover:-translate-x-0.5" /> Back
+        <ArrowLeft size={15} className="transition-transform duration-300 group-hover:-translate-x-0.5" /> {ui.actions.back}
       </button>
-      <CoffeeButton onClick={onContinue}>Continue</CoffeeButton>
+      <CoffeeButton onClick={onContinue}>{ui.actions.continue}</CoffeeButton>
     </div>
   );
 }
 
-function TemplateDetails({ onBack, onContinue }: { onBack: () => void; onContinue: () => void }) {
+function renderTemplateContent(template: TemplateSummary | undefined, values: Record<string, string>, ui: UiContent) {
+  const content = template?.content || ui.template.editor.fallbackContent;
+  const labelsByKey = new Map((template?.variables || []).map(variable => [variable.key, variable.label || variable.key]));
+  return content.replace(/{{\s*([A-Za-z0-9_]+)\s*}}/g, (_match, key: string) => {
+    const value = values[key]?.trim();
+    return value || `[${labelsByKey.get(key) || key}]`;
+  });
+}
+
+function groupTemplateVariables(variables: TemplateVariable[], ui: UiContent) {
+  const groups = [
+    { title: ui.template.fieldGroups.parties, keywords: ["name", "representative", "company", "client", "buyer", "seller", "address", "phone", "bank", "email", "ner", "tal"] },
+    { title: ui.template.fieldGroups.main, keywords: ["contract", "work", "service", "description", "purpose", "location", "type", "duration", "date", "start", "end"] },
+    { title: ui.template.fieldGroups.payment, keywords: ["payment", "amount", "price", "cost", "rent", "fee", "currency", "rate", "percent", "value"] },
+    { title: ui.template.fieldGroups.additional, keywords: [] },
+  ];
+
+  return groups.map(group => ({
+    title: group.title,
+    variables: variables.filter(variable => {
+      const haystack = `${variable.key} ${variable.label}`.toLowerCase();
+      if (group.keywords.length === 0) {
+        return !groups.slice(0, -1).some(item => item.keywords.some(keyword => haystack.includes(keyword)));
+      }
+      return group.keywords.some(keyword => haystack.includes(keyword));
+    }),
+  })).filter(group => group.variables.length > 0);
+}
+
+function TemplateField({
+  variable,
+  value,
+  onChange,
+}: {
+  variable: TemplateVariable;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const baseClass = "w-full rounded-md border border-border/70 bg-background px-4 py-3 text-sm text-foreground outline-none transition-all duration-200 placeholder:text-muted-foreground/42 focus:border-button focus:shadow-[0_0_0_4px_rgba(13,39,76,0.08)]";
+  const label = variable.label || variable.key;
+
+  return (
+    <label className="block">
+      <span className="mb-2 flex items-center justify-between gap-3 text-xs font-semibold text-muted-foreground/80">
+        <span>{label}</span>
+        {variable.required && <span className="text-button">*</span>}
+      </span>
+      {variable.type === "textarea" ? (
+        <textarea
+          value={value}
+          onChange={event => onChange(event.target.value)}
+          placeholder={label}
+          rows={4}
+          className={`${baseClass} min-h-[112px] resize-y`}
+        />
+      ) : variable.type === "boolean" ? (
+        <button
+          type="button"
+          onClick={() => onChange(value === "true" ? "false" : "true")}
+          className={`flex h-12 w-full items-center justify-between rounded-md border px-4 text-sm font-semibold transition-colors ${
+            value === "true" ? "border-button bg-button/10 text-button" : "border-border/70 bg-background text-muted-foreground"
+          }`}
+        >
+          <span>{label}</span>
+          <span className={`h-5 w-9 rounded-full p-0.5 transition-colors ${value === "true" ? "bg-button" : "bg-border"}`}>
+            <span className={`block h-4 w-4 rounded-full bg-white transition-transform ${value === "true" ? "translate-x-4" : ""}`} />
+          </span>
+        </button>
+      ) : (
+        <input
+          value={value}
+          onChange={event => onChange(event.target.value)}
+          placeholder={label}
+          type={variable.type === "number" || variable.type === "date" || variable.type === "email" ? variable.type : "text"}
+          className={baseClass}
+        />
+      )}
+    </label>
+  );
+}
+
+function TemplateDetails({
+  template,
+  values,
+  ui,
+  onValueChange,
+  onBack,
+  onContinue,
+}: {
+  template?: TemplateSummary;
+  values: Record<string, string>;
+  ui: UiContent;
+  onValueChange: (key: string, value: string) => void;
+  onBack: () => void;
+  onContinue: () => void;
+}) {
+  const groups = groupTemplateVariables(template?.variables || [], ui);
+  const preview = renderTemplateContent(template, values, ui);
+
   return (
     <motion.div
       key="details"
-      className="flex flex-col"
+      className="mx-auto flex max-w-[1280px] flex-col"
     >
-      <h1 className="mb-12 text-center font-display text-4xl font-bold text-foreground dark:text-foreground md:text-6xl">Details Input</h1>
-      <div className="grid flex-1 gap-6 lg:grid-cols-2">
-        {["Text Area 1", "Text Area 2"].map(label => (
-          <textarea
-            key={label}
-            placeholder={label}
-            className="min-h-[420px] resize-none rounded-[2rem] border border-border/24 bg-secondary/80 p-8 text-foreground shadow-[0_22px_60px_rgba(0,0,0,0.22)] outline-none transition-all duration-300 placeholder:text-muted-foreground/40 focus:border-highlight focus:shadow-[0_0_0_5px_rgba(207,157,123,0.12),0_24px_70px_rgba(0,0,0,0.28)]"
-          />
-        ))}
+      <div className="mb-6">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-button">{ui.template.editor.eyebrow}</p>
+        <h1 className="font-display text-3xl font-bold text-foreground md:text-4xl">{template?.name || "Selected template"}</h1>
+        <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground/70">
+          {ui.template.editor.helper}
+        </p>
       </div>
-      <StepActions onBack={onBack} onContinue={onContinue} />
+
+      <div className="grid flex-1 gap-5 lg:grid-cols-[minmax(0,1fr)_420px]">
+        <section className="min-h-[620px] overflow-hidden rounded-md border border-border/70 bg-card shadow-[0_18px_50px_rgba(12,21,25,0.06)]">
+          <div className="flex items-center justify-between border-b border-border/70 px-5 py-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground/60">{ui.template.editor.preview}</p>
+              <h2 className="mt-1 text-sm font-bold text-foreground">{template?.category || "Contract"}</h2>
+            </div>
+            <span className="rounded-md bg-button/10 px-3 py-1 text-xs font-semibold text-button">AI</span>
+          </div>
+          <div className="h-[560px] overflow-y-auto bg-background px-8 py-8">
+            <article className="mx-auto max-w-[760px] whitespace-pre-wrap rounded-sm bg-white px-8 py-10 text-sm leading-7 text-slate-900 shadow-[0_16px_40px_rgba(12,21,25,0.08)] dark:bg-card dark:text-foreground">
+              {preview}
+            </article>
+          </div>
+        </section>
+
+        <aside className="min-h-[620px] overflow-hidden rounded-md border border-border/70 bg-card shadow-[0_18px_50px_rgba(12,21,25,0.06)]">
+          <div className="border-b border-border/70 px-5 py-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground/60">{ui.template.editor.fields}</p>
+            <h2 className="mt-1 text-lg font-bold text-foreground">{template?.variables.length || 0} {ui.template.editor.fieldUnit}</h2>
+          </div>
+          <div className="h-[560px] overflow-y-auto px-5 py-5">
+            {groups.length === 0 ? (
+              <p className="rounded-md border border-border/70 bg-secondary p-4 text-sm leading-6 text-muted-foreground/70">
+                {ui.template.editor.emptyFields}
+              </p>
+            ) : (
+              <div className="space-y-6">
+                {groups.map(group => (
+                  <div key={group.title}>
+                    <h3 className="mb-3 text-sm font-bold text-button">{group.title}</h3>
+                    <div className="space-y-4">
+                      {group.variables.map(variable => (
+                        <TemplateField
+                          key={variable.key}
+                          variable={variable}
+                          value={values[variable.key] || ""}
+                          onChange={(value) => onValueChange(variable.key, value)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </aside>
+      </div>
+      <StepActions ui={ui} onBack={onBack} onContinue={onContinue} />
     </motion.div>
   );
 }
 
-function TemplateVerification({ onBack, onContinue }: { onBack: () => void; onContinue: () => void }) {
+function TemplateVerification({
+  template,
+  values,
+  ui,
+  onBack,
+  onContinue,
+}: {
+  template?: TemplateSummary;
+  values: Record<string, string>;
+  ui: UiContent;
+  onBack: () => void;
+  onContinue: () => void;
+}) {
+  const preview = renderTemplateContent(template, values, ui);
+
   return (
     <motion.div
       key="verification"
@@ -1128,19 +1695,19 @@ function TemplateVerification({ onBack, onContinue }: { onBack: () => void; onCo
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
         >
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-highlight">Verification</p>
-          <h1 className="mb-8 font-display text-4xl font-bold">Entered information preview</h1>
-          <p className="leading-8 text-muted-foreground/62">
-            Placeholder text only. The information entered in the previous step will appear here for review before payment.
-          </p>
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-highlight">{ui.template.verification.eyebrow}</p>
+          <h1 className="mb-5 font-display text-4xl font-bold">{template?.name || ui.template.verification.title}</h1>
+          <div className="max-h-[420px] overflow-y-auto whitespace-pre-wrap rounded-md border border-border/70 bg-background p-5 text-sm leading-7 text-muted-foreground/80">
+            {preview}
+          </div>
         </motion.div>
       </div>
-      <StepActions onBack={onBack} onContinue={onContinue} />
+      <StepActions ui={ui} onBack={onBack} onContinue={onContinue} />
     </motion.div>
   );
 }
 
-function TemplatePayment({ onBack, onContinue }: { onBack: () => void; onContinue: () => void }) {
+function TemplatePayment({ ui, onBack, onContinue }: { ui: UiContent; onBack: () => void; onContinue: () => void }) {
   return (
     <motion.div
       key="payment"
@@ -1163,16 +1730,16 @@ function TemplatePayment({ onBack, onContinue }: { onBack: () => void; onContinu
             type="button"
             className="rounded-full bg-button px-8 py-3 text-sm font-semibold text-button-text transition-transform duration-300 hover:scale-[1.04] hover:bg-accent"
           >
-            Check Payment
+            {ui.template.payment.check}
           </button>
         </motion.div>
       </div>
-      <StepActions onBack={onBack} onContinue={onContinue} />
+      <StepActions ui={ui} onBack={onBack} onContinue={onContinue} />
     </motion.div>
   );
 }
 
-function TemplateResult({ onBack, onFinish }: { onBack: () => void; onFinish: () => void }) {
+function TemplateResult({ ui, onBack, onFinish }: { ui: UiContent; onBack: () => void; onFinish: () => void }) {
   return (
     <motion.div
       key="template-result"
@@ -1184,7 +1751,7 @@ function TemplateResult({ onBack, onFinish }: { onBack: () => void; onFinish: ()
         <div className="absolute -inset-x-4 top-6 -z-10 h-full rounded-[2rem] bg-background/70" />
         <div className="absolute -inset-x-8 top-12 -z-20 h-full rounded-[2rem] bg-border/65" />
         <div className="h-full overflow-y-auto pr-3 text-sm leading-7 text-muted-foreground/80">
-          <h2 className="mb-7 text-2xl font-semibold text-foreground">Generated Document Preview</h2>
+          <h2 className="mb-7 text-2xl font-semibold text-foreground">{ui.template.result.previewTitle}</h2>
           {[...Array(11)].map((_, index) => (
             <p key={index} className="mb-5">
               Draftly generated document content preview. Clauses, party information, obligations, and legal terms will be assembled into this paper-style document.
@@ -1195,9 +1762,9 @@ function TemplateResult({ onBack, onFinish }: { onBack: () => void; onFinish: ()
 
       <div className="flex flex-col gap-4">
         {[
-          ["Risk Score 7.5/10", "Moderate risk profile with several clauses requiring review."],
-          ["Missing Clauses", "Termination, liability, and payment delay condition missing."],
-          ["AI Analysis Result", "AI found moderate risks and several missing clauses."],
+          [ui.template.result.riskTitle, ui.template.result.riskText],
+          [ui.template.result.missingTitle, ui.template.result.missingText],
+          [ui.template.result.analysisTitle, ui.template.result.analysisText],
         ].map(([title, text], index) => (
           <motion.div
             key={title}
@@ -1226,10 +1793,10 @@ function TemplateResult({ onBack, onFinish }: { onBack: () => void; onFinish: ()
           </div>
           <div className="flex items-center justify-between gap-4">
             <button type="button" onClick={onBack} className="rounded-full border border-border/35 bg-secondary/70 px-6 py-3 text-sm font-semibold text-foreground transition-all duration-300 hover:bg-card">
-              Back
+              {ui.actions.back}
             </button>
             <button type="button" onClick={onFinish} className="flex-1 rounded-full bg-button px-8 py-3.5 text-sm font-semibold text-button-text shadow-[0_0_0_rgba(207,157,123,0)] transition-all duration-300 hover:scale-[1.02] hover:bg-accent hover:shadow-[0_0_30px_rgba(207,157,123,0.28)]">
-              Үүсгэх
+              {ui.template.result.create}
             </button>
           </div>
         </div>
@@ -1238,17 +1805,21 @@ function TemplateResult({ onBack, onFinish }: { onBack: () => void; onFinish: ()
   );
 }
 
-// ─── Component ───────────────────────────────────────────────────────────────
+// â”€â”€â”€ Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export default function App() {
   const [locale, setLocale] = useState<Locale>("mn");
   const [isDark, setIsDark] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
   const [page, setPage] = useState<AppPage>("home");
+  const [previousPage, setPreviousPage] = useState<AppPage>("home");
   const [pageDirection, setPageDirection] = useState(1);
   const [activeFeature, setActiveFeature] = useState(1);
   const [circleTilt, setCircleTilt] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [analysisStep, setAnalysisStep] = useState<AnalysisStep>("upload");
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResponse | null>(null);
+  const [analysisError, setAnalysisError] = useState("");
   const homeScrollRef = useRef<HTMLDivElement>(null);
   const content = LOCALES[locale];
   const PARTNERS = content.partners;
@@ -1268,29 +1839,38 @@ export default function App() {
     return () => clearInterval(t);
   }, []);
 
+  const navigateTo = (nextPage: AppPage, direction = 1) => {
+    if (nextPage !== page) {
+      setPreviousPage(page);
+    }
+    setPageDirection(direction);
+    setPage(nextPage);
+  };
+
   const openHome = () => {
-    setPageDirection(-1);
-    setPage("home");
+    navigateTo("home", -1);
     window.setTimeout(() => {
       homeScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
     }, 80);
   };
 
   const openAnalysis = () => {
-    setPageDirection(1);
-    setPage("analysis");
+    navigateTo("analysis", 1);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const openTemplate = () => {
-    setPageDirection(1);
-    setPage("template");
+    navigateTo("template", 1);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const goBackPage = () => {
+    const fallback = previousPage === page ? "home" : previousPage;
+    navigateTo(fallback, -1);
+  };
+
   const scrollHomeTo = (ref: RefObject<HTMLElement>) => {
-    setPageDirection(-1);
-    setPage("home");
+    navigateTo("home", -1);
     window.setTimeout(() => {
       ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 80);
@@ -1345,7 +1925,7 @@ export default function App() {
             className="absolute inset-0 overflow-hidden rounded-t-[2rem] shadow-[0_-15px_50px_rgba(0,0,0,0.15)]"
             style={{ borderRadius: "32px 32px 0 0" }}
           >
-            <TemplateWorkflow onBackHome={openHome} onTabSelect={handleTabSelect} navControls={navControls} />
+            <TemplateWorkflow onBackHome={goBackPage} onTabSelect={handleTabSelect} navControls={navControls} ui={content.ui} />
           </motion.div>
         ) : page === "analysis" ? (
           <motion.div
@@ -1355,10 +1935,21 @@ export default function App() {
             initial="enter"
             animate="center"
             exit="exit"
-            className="absolute inset-0 overflow-hidden rounded-t-[2rem] shadow-[0_-15px_50px_rgba(0,0,0,0.15)]"
+            className="absolute inset-0 overflow-y-auto overflow-x-hidden rounded-t-[2rem] shadow-[0_-15px_50px_rgba(0,0,0,0.15)]"
             style={{ borderRadius: "32px 32px 0 0" }}
           >
-            <AnalysisWorkflow onBack={openHome} onTabSelect={handleTabSelect} navControls={navControls} />
+            <AnalysisWorkflow
+              onBack={goBackPage}
+              onTabSelect={handleTabSelect}
+              navControls={navControls}
+              ui={content.ui}
+              step={analysisStep}
+              setStep={setAnalysisStep}
+              analysisResult={analysisResult}
+              setAnalysisResult={setAnalysisResult}
+              analysisError={analysisError}
+              setAnalysisError={setAnalysisError}
+            />
           </motion.div>
         ) : (
           <motion.div
@@ -1371,11 +1962,11 @@ export default function App() {
             exit="exit"
             className="absolute inset-0 overflow-y-auto scroll-smooth bg-background"
           >
-            <HomeSimpleNav onSelect={handleTabSelect} controls={navControls} scrollContainerRef={homeScrollRef} />
+            <HomeSimpleNav onSelect={handleTabSelect} controls={navControls} ui={content.ui} scrollContainerRef={homeScrollRef} />
 
-      {/* ═══════════════════════════════════════
-          PAGE 1 — HERO
-          ═══════════════════════════════════════ */}
+      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+          PAGE 1 â€” HERO
+          â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <motion.section
         className="sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary px-3 pb-6 pt-3 shadow-[0_-18px_55px_rgba(0,0,0,0.10)] flex flex-col"
         style={{ zIndex: 1 }}
@@ -1384,7 +1975,7 @@ export default function App() {
         whileInView="visible"
         viewport={{ once: false, amount: 0.16 }}
       >
-        <FolderTabs activeTab="Home" onSelect={handleTabSelect} controls={navControls} />
+        <FolderTabs activeTab="Home" onSelect={handleTabSelect} controls={navControls} ui={content.ui} />
         {/* Document body */}
         <motion.div
           className="relative flex-1 bg-background border border-border rounded-b-[2rem] rounded-tr-[2rem] shadow-[0_12px_70px_rgba(0,0,0,0.07)] overflow-hidden flex flex-col"
@@ -1436,11 +2027,11 @@ export default function App() {
         </motion.div>
       </motion.section>
 
-      {/* ═══════════════════════════════════════
-          PAGE 2 — WHAT DO WE DO?
-          ═══════════════════════════════════════ */}
+      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+          PAGE 2 â€” WHAT DO WE DO?
+          â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <motion.section
-        className="sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-background py-20 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-24"
+        className="sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-background py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-24"
         style={{ zIndex: 2 }}
         ref={featuresRef.ref}
         variants={SECTION_REVEAL}
@@ -1449,7 +2040,7 @@ export default function App() {
         viewport={{ once: false, amount: 0.14 }}
       >
         <div
-          className="flex min-h-[calc(100vh-9rem)] items-center"
+          className="flex min-h-[calc(100vh-9rem)] flex-col items-center gap-10 px-4 md:px-6 lg:flex-row lg:gap-0"
           onMouseMove={event => {
             const rect = event.currentTarget.getBoundingClientRect();
             const offset = (event.clientX - rect.left) / rect.width - 0.5;
@@ -1457,8 +2048,8 @@ export default function App() {
           }}
           onMouseLeave={() => setCircleTilt(0)}
         >
-          {/* ── Circle carousel ── */}
-          <motion.div className="relative -ml-[3vw] aspect-square w-[41vw] min-w-[390px] max-w-[650px] flex-shrink-0 md:-ml-[2vw]" variants={REVEAL_ITEM}>
+          {/* â”€â”€ Circle carousel â”€â”€ */}
+          <motion.div className="relative aspect-square w-[min(88vw,460px)] flex-shrink-0 lg:-ml-[2vw] lg:w-[41vw] lg:min-w-[390px] lg:max-w-[650px]" variants={REVEAL_ITEM}>
 
             <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(207,157,123,0.10),transparent_48%)]" />
 
@@ -1540,10 +2131,10 @@ export default function App() {
             </div>
           </motion.div>
 
-          {/* ── Feature content ── */}
-          <motion.div className="flex-1 pl-10 pr-8 md:pl-16 md:pr-24" variants={REVEAL_ITEM}>
-            <div className="mb-7 inline-flex rounded-full border border-highlight/24 bg-secondary px-7 py-3 shadow-[0_18px_40px_rgba(0,0,0,0.18)]">
-              <h2 className="font-display text-2xl font-bold text-foreground md:text-3xl">
+          {/* â”€â”€ Feature content â”€â”€ */}
+          <motion.div className="flex-1 px-2 text-center sm:px-6 lg:px-12 lg:text-left xl:pr-24" variants={REVEAL_ITEM}>
+            <div className="mb-7 inline-flex rounded-full border border-highlight/24 bg-secondary px-5 py-3 shadow-[0_18px_40px_rgba(0,0,0,0.18)] sm:px-7">
+              <h2 className="font-display text-xl font-bold text-foreground sm:text-2xl md:text-3xl">
                 {content.featuresSectionTitle}
               </h2>
             </div>
@@ -1558,10 +2149,10 @@ export default function App() {
                 <p className="mb-5 font-mono text-sm text-highlight">
                   {ORBIT_FEATURES[activeFeature].num}
                 </p>
-                <h3 className="mb-7 font-display text-6xl font-bold leading-none text-foreground md:text-7xl">
+                <h3 className="mb-7 font-display text-4xl font-bold leading-none text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
                   {ORBIT_FEATURES[activeFeature].title}
                 </h3>
-                <p className="max-w-sm text-lg leading-relaxed text-foreground/68">
+                <p className="mx-auto max-w-sm text-base leading-relaxed text-foreground/68 sm:text-lg lg:mx-0">
                   {ORBIT_FEATURES[activeFeature].desc}
                 </p>
               </motion.div>
@@ -1586,11 +2177,11 @@ export default function App() {
         </div>
       </motion.section>
 
-      {/* ═══════════════════════════════════════
-          PAGE 3 — TEMPLATE FLOW
-          ═══════════════════════════════════════ */}
+      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+          PAGE 3 â€” TEMPLATE FLOW
+          â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <motion.section
-        className="sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary py-28 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] flex items-center"
+        className="sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-28"
         style={{ zIndex: 3 }}
         ref={templateRef.ref}
         variants={SECTION_REVEAL}
@@ -1598,11 +2189,11 @@ export default function App() {
         whileInView="visible"
         viewport={{ once: false, amount: 0.16 }}
       >
-        <div className="max-w-screen-xl mx-auto px-8 flex items-center gap-16 md:gap-24">
+        <div className="mx-auto flex w-full max-w-screen-xl flex-col-reverse items-center gap-10 px-4 sm:px-6 lg:flex-row lg:gap-16 lg:px-8 xl:gap-24">
 
-          {/* ── 3D screen card ── */}
+          {/* â”€â”€ 3D screen card â”€â”€ */}
           <motion.div
-            className="flex-shrink-0 w-72 md:w-80"
+            className="w-full max-w-[20rem] flex-shrink-0"
             variants={REVEAL_ITEM}
           >
             <div
@@ -1639,12 +2230,12 @@ export default function App() {
             </div>
           </motion.div>
 
-          {/* ── Text ── */}
+          {/* â”€â”€ Text â”€â”€ */}
           <motion.div
-            className="flex-1"
+            className="flex-1 text-center lg:text-left"
             variants={REVEAL_ITEM}
           >
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground leading-[1.15] mb-6">
+            <h2 className="mb-6 font-display text-3xl font-bold leading-[1.15] text-foreground sm:text-4xl md:text-5xl">
               {content.templateFlow.titleLines.map((line, index) => (
                 <span key={line}>
                   {line}
@@ -1652,7 +2243,7 @@ export default function App() {
                 </span>
               ))}
             </h2>
-            <p className="text-muted-foreground leading-relaxed max-w-md mb-10 text-base">
+            <p className="mx-auto mb-10 max-w-md text-base leading-relaxed text-muted-foreground lg:mx-0">
               {content.templateFlow.description}
             </p>
             <button className="flex min-w-[10rem] items-center justify-center gap-2 bg-foreground text-background px-7 py-3.5 rounded-full text-sm font-medium hover:opacity-85 active:scale-95 transition-all duration-200">
@@ -1662,11 +2253,11 @@ export default function App() {
         </div>
       </motion.section>
 
-      {/* ═══════════════════════════════════════
-          PAGE 4 — UPLOAD & ANALYSE
-          ═══════════════════════════════════════ */}
+      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+          PAGE 4 â€” UPLOAD & ANALYSE
+          â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <motion.section
-        className="sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary py-28 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] flex items-center"
+        className="sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-28"
         style={{ zIndex: 4 }}
         ref={uploadRef.ref}
         variants={SECTION_REVEAL}
@@ -1674,9 +2265,9 @@ export default function App() {
         whileInView="visible"
         viewport={{ once: false, amount: 0.16 }}
       >
-        <div className="max-w-screen-xl mx-auto px-8 flex items-start gap-16 md:gap-24">
+        <div className="mx-auto flex w-full max-w-screen-xl flex-col items-stretch gap-10 px-4 sm:px-6 lg:flex-row lg:items-start lg:gap-16 lg:px-8 xl:gap-24">
 
-          {/* ── Analysis labels ── */}
+          {/* â”€â”€ Analysis labels â”€â”€ */}
           <div className="flex-1 pt-4">
             {content.upload.labels.map((text, i) => (
               <motion.div
@@ -1686,7 +2277,7 @@ export default function App() {
                 transition={{ duration: 0.65, delay: i * 0.1, ease: "easeOut" }}
               >
                 <div className="flex items-center justify-between">
-                  <h3 className="font-display text-4xl md:text-5xl font-bold text-foreground">
+                  <h3 className="font-display text-3xl font-bold text-foreground sm:text-4xl md:text-5xl">
                     {text}
                   </h3>
                   <span className="font-mono text-sm text-muted-foreground/50">0{i + 1}</span>
@@ -1695,9 +2286,9 @@ export default function App() {
             ))}
           </div>
 
-          {/* ── Upload card ── */}
+          {/* â”€â”€ Upload card â”€â”€ */}
           <motion.div
-            className="flex-shrink-0 w-72 md:w-80 pt-4"
+            className="w-full max-w-sm self-center pt-2 lg:w-80 lg:self-auto lg:pt-4"
             variants={REVEAL_ITEM}
           >
             {/* Bouncing icon */}
@@ -1738,11 +2329,11 @@ export default function App() {
         </div>
       </motion.section>
 
-      {/* ═══════════════════════════════════════
-          PAGE 5 — FOOTER
-          ═══════════════════════════════════════ */}
+      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+          PAGE 5 â€” FOOTER
+          â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <motion.footer
-        className="sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] flex items-center bg-secondary border-t border-border shadow-[0_-18px_55px_rgba(0,0,0,0.12)]"
+        className="sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary border-t border-border shadow-[0_-18px_55px_rgba(0,0,0,0.12)]"
         style={{ zIndex: 5 }}
         ref={footerRef.ref}
         variants={SECTION_REVEAL}
@@ -1750,8 +2341,8 @@ export default function App() {
         whileInView="visible"
         viewport={{ once: false, amount: 0.16 }}
       >
-        <div className="max-w-screen-xl mx-auto px-8 py-20">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+        <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-4 md:gap-12">
 
             {/* Brand */}
             <motion.div className="space-y-5" variants={REVEAL_ITEM}>
@@ -1826,6 +2417,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 

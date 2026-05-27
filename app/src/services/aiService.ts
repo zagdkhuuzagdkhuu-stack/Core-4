@@ -1,18 +1,70 @@
-import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { LegalContext } from "./lawService";
 
-let openaiClient: OpenAI | null = null;
+let genAI: GoogleGenerativeAI | null = null;
 
-function getOpenAIClient() {
-  if (!process.env.OPENAI_API_KEY) {
-    throw new Error("OPENAI_API_KEY is not set in environment variables.");
+/** Override via GEMINI_MODEL in .env (e.g. gemini-2.5-flash). */
+const DEFAULT_GEMINI_MODEL =
+  process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
+
+const GEMINI_MODEL_FALLBACKS = [
+  DEFAULT_GEMINI_MODEL,
+  "gemini-2.0-flash",
+  "gemini-1.5-flash",
+  "gemini-2.5-flash",
+].filter((model, index, list) => list.indexOf(model) === index);
+
+const GEMINI_RETRY_DELAYS_MS = [800, 1800, 3500];
+
+export class GeminiQuotaError extends Error {
+  readonly statusCode = 429;
+
+  constructor(message?: string) {
+    super(message ?? geminiQuotaHelpMessage());
+    this.name = "GeminiQuotaError";
   }
+}
 
-  openaiClient ??= new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
+export function geminiQuotaHelpMessage(): string {
+  return (
+    "Gemini API quota exceeded. Add or refresh GEMINI_API_KEY from https://aistudio.google.com/apikey. " +
+    "Set GEMINI_MODEL=gemini-2.5-flash in .env if needed. " +
+    'If the error shows "limit: 0", link billing in Google AI Studio (Settings → Billing) — free-tier limits still apply — or wait until daily quota resets.'
+  );
+}
 
-  return openaiClient;
+function isGeminiQuotaError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error);
+  return (
+    message.includes("429") ||
+    message.includes("Too Many Requests") ||
+    message.includes("Quota exceeded") ||
+    message.includes("quota")
+  );
+}
+
+function isGeminiTransientError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error);
+  return (
+    message.includes("503") ||
+    message.includes("500") ||
+    message.includes("Service Unavailable") ||
+    message.includes("high demand") ||
+    message.includes("overloaded") ||
+    message.includes("UNAVAILABLE")
+  );
+}
+
+function sleep(ms: number) {
+  return new Promise<void>((resolve) => setTimeout(resolve, ms));
+}
+
+function getGeminiClient() {
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error("GEMINI_API_KEY is not set in environment variables.");
+  }
+  genAI ??= new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  return genAI;
 }
 
 export interface ClauseResult {
@@ -53,7 +105,7 @@ export interface AnalysisResult {
   costEstimate: CostEstimate;
 }
 
-const CHARS_LIMIT = 45000;
+const CHARS_LIMIT = 15000;
 
 function buildUserMessage(text: string, legalCtx: LegalContext): string {
   const parts = [`=== CONTRACT TEXT ===\n${text}`];
@@ -136,18 +188,97 @@ Return a JSON object with:
 
 Use any clause templates provided as reference benchmarks for typical costs in similar contracts.`;
 
-async function callGPT(systemPrompt: string, userContent: string): Promise<any> {
-  const openai = getOpenAIClient();
-  const res = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      { role: "system", content: systemPrompt },
-      { role: "user", content: userContent },
-    ],
-    response_format: { type: "json_object" },
-    temperature: 0.1,
+async function callGeminiWithModel(
+  modelName: string,
+  systemPrompt: string,
+  userContent: string
+): Promise<any> {
+  const client = getGeminiClient();
+  const model = client.getGenerativeModel({
+    model: modelName,
+    systemInstruction: systemPrompt,
+    generationConfig: {
+      temperature: 0.1,
+      responseMimeType: "application/json",
+    },
   });
-  return JSON.parse(res.choices[0]?.message?.content || "{}");
+  const result = await model.generateContent(userContent);
+  const text = result.response.text();
+  return JSON.parse(text);
+}
+
+async function callGemini(systemPrompt: string, userContent: string): Promise<any> {
+  let lastError: unknown;
+
+  for (const modelName of GEMINI_MODEL_FALLBACKS) {
+    for (let attempt = 0; attempt <= GEMINI_RETRY_DELAYS_MS.length; attempt += 1) {
+      try {
+        return await callGeminiWithModel(modelName, systemPrompt, userContent);
+      } catch (error) {
+        lastError = error;
+
+        if (isGeminiQuotaError(error)) {
+          break;
+        }
+
+        if (!isGeminiTransientError(error)) {
+          throw error;
+        }
+
+        const delay = GEMINI_RETRY_DELAYS_MS[attempt];
+        if (delay !== undefined) {
+          await sleep(delay);
+        }
+      }
+    }
+  }
+
+  if (isGeminiQuotaError(lastError)) {
+    throw new GeminiQuotaError();
+  }
+
+  throw lastError;
+}
+
+function analyzeLocally(text: string): AnalysisResult {
+  const normalized = text.toLowerCase();
+  const clauseChecks = [
+    { label: "Payment terms", keywords: ["payment", "fee", "amount", "төлбөр", "үнэ"] },
+    { label: "Termination", keywords: ["terminate", "termination", "цуцлах", "дуусгавар"] },
+    { label: "Confidentiality", keywords: ["confidential", "нууц"] },
+    { label: "Liability", keywords: ["liability", "хариуцлага", "алданги", "торгууль"] },
+    { label: "Dispute resolution", keywords: ["dispute", "маргаан", "арбитр", "шүүх"] },
+    { label: "Force majeure", keywords: ["force majeure", "давагдашгүй"] },
+  ];
+  const missingClauses = clauseChecks
+    .filter((check) => !check.keywords.some((keyword) => normalized.includes(keyword)))
+    .map((check) => check.label);
+  const riskyTerms = [
+    { label: "Unlimited liability", matched: normalized.includes("unlimited liability") },
+    { label: "No notice termination", matched: normalized.includes("without notice") },
+    { label: "Undefined payment date", matched: normalized.includes("төлбөр") && !/\d{4}-\d{2}-\d{2}|\d+\s*(хоног|өдөр|day)/i.test(text) },
+  ].filter((term) => term.matched).map((term) => term.label);
+  const riskScore = Math.min(100, 30 + missingClauses.length * 8 + riskyTerms.length * 12 + (text.length < 700 ? 12 : 0));
+
+  return {
+    summary:
+      "Gemini API is temporarily unavailable, so Draftly generated a basic local risk check. Retry analysis later for full AI clause extraction and legal references.",
+    riskScore,
+    risks: [...missingClauses.map((clause) => `Missing ${clause} clause`), ...riskyTerms],
+    missingClauses,
+    riskyTerms,
+    complianceWarnings: ["Full AI legal reference analysis was skipped because Gemini returned a temporary service error."],
+    estimatedCost: null,
+    inconsistentWording: [],
+    clauses: [],
+    legalReferences: [],
+    costEstimate: {
+      estimatedCost: null,
+      currency: "MNT",
+      breakdown: [],
+      confidence: "LOW",
+    },
+  };
 }
 
 export async function analyzeWithCrewAI(
@@ -157,10 +288,10 @@ export async function analyzeWithCrewAI(
   const userMsg = buildUserMessage(text, legalCtx);
 
   const [clauseRes, riskRes, legalRefRes, costRes] = await Promise.all([
-    callGPT(CLAUSE_SYSTEM_PROMPT, userMsg),
-    callGPT(RISK_SYSTEM_PROMPT, userMsg),
-    callGPT(LEGAL_REFERENCE_SYSTEM_PROMPT, userMsg),
-    callGPT(COST_SYSTEM_PROMPT, userMsg),
+    callGemini(CLAUSE_SYSTEM_PROMPT, userMsg),
+    callGemini(RISK_SYSTEM_PROMPT, userMsg),
+    callGemini(LEGAL_REFERENCE_SYSTEM_PROMPT, userMsg),
+    callGemini(COST_SYSTEM_PROMPT, userMsg),
   ]);
 
   const clauses: ClauseResult[] = (clauseRes.clauses || []).map(
@@ -246,7 +377,7 @@ Then provide the overall analysis:
 
 Use the provided legal context (laws, articles, clause templates) to ground your analysis.`;
 
-  const raw = await callGPT(ANALYSIS_SYSTEM_PROMPT, userMsg);
+  const raw = await callGemini(ANALYSIS_SYSTEM_PROMPT, userMsg);
 
   const clauses: ClauseResult[] = (raw.clauses || []).map(
     (c: any, i: number) => ({
@@ -306,12 +437,19 @@ Use the provided legal context (laws, articles, clause templates) to ground your
 export async function analyzeContract(
   text: string,
   legalCtx: LegalContext,
-  mode: "crew" | "single" = "crew"
+  mode: "crew" | "single" = "single"
 ): Promise<AnalysisResult> {
-  if (!process.env.OPENAI_API_KEY) {
-    throw new Error("OPENAI_API_KEY is not set in environment variables.");
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error("GEMINI_API_KEY is not set in environment variables.");
   }
-  return mode === "crew"
-    ? analyzeWithCrewAI(text, legalCtx)
-    : analyzeWithSingleCall(text, legalCtx);
+  try {
+    return await (mode === "crew"
+      ? analyzeWithCrewAI(text, legalCtx)
+      : analyzeWithSingleCall(text, legalCtx));
+  } catch (error) {
+    if (isGeminiTransientError(error)) {
+      return analyzeLocally(text);
+    }
+    throw error;
+  }
 }

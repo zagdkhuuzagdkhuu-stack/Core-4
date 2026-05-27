@@ -84,7 +84,7 @@ export async function getLegalContext(text: string): Promise<LegalContext> {
     relevantArticles: articles.map((a) => ({
       id: a.id,
       lawTitle: a.law.title,
-      articleNumber: a.articleNumber,
+      articleNumber: String(a.articleNumber),
       title: a.title,
       content: a.content,
     })),

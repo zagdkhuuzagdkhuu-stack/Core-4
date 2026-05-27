@@ -1,9 +1,12 @@
 import multer from "multer";
 import path from "path";
 import crypto from "crypto";
+import fs from "fs";
 const storage = multer.diskStorage({
     destination: (_req, _file, cb) => {
-        cb(null, path.resolve("app/uploads"));
+        const uploadDir = path.resolve("app/uploads");
+        fs.mkdirSync(uploadDir, { recursive: true });
+        cb(null, uploadDir);
     },
     filename: (_req, file, cb) => {
         const ext = path.extname(file.originalname);
@@ -11,7 +14,7 @@ const storage = multer.diskStorage({
     },
 });
 const fileFilter = (_req, file, cb) => {
-    const allowed = [".pdf", ".docx"];
+    const allowed = [".pdf", ".docx", ".txt"];
     const ext = path.extname(file.originalname).toLowerCase();
     if (allowed.includes(ext)) {
         cb(null, true);
@@ -23,5 +26,5 @@ const fileFilter = (_req, file, cb) => {
 export const upload = multer({
     storage,
     fileFilter,
-    limits: { fileSize: 15 * 1024 * 1024 },
+    limits: { fileSize: 50 * 1024 * 1024 },
 });
