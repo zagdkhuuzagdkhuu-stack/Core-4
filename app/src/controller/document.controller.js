@@ -1,18 +1,47 @@
 import database from "../database";
 const documentStatuses = new Set(["DRAFT", "FINAL", "ARCHIVED"]);
+const documentInclude = {
+    contract: true,
+    riskAnalysis: {
+        select: {
+            id: true,
+            contractId: true,
+            documentId: true,
+            summary: true,
+            riskScore: true,
+            risks: true,
+            missingClauses: true,
+            riskyTerms: true,
+            inconsistentWording: true,
+            complianceWarnings: true,
+            estimatedCost: true,
+            createdAt: true,
+            updatedAt: true,
+        },
+    },
+    fileUploads: true,
+};
+function serializeBigInt(value) {
+    if (typeof value === "bigint") {
+        return value.toString();
+    }
+    if (Array.isArray(value)) {
+        return value.map(serializeBigInt);
+    }
+    if (value && typeof value === "object") {
+        return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, serializeBigInt(item)]));
+    }
+    return value;
+}
 export async function listDocuments(req, res) {
     try {
         const userId = req.userId;
         const documents = await database.document.findMany({
             where: { ownerId: userId },
             orderBy: { createdAt: "desc" },
-            include: {
-                contract: true,
-                riskAnalysis: true,
-                fileUploads: true,
-            },
+            include: documentInclude,
         });
-        return res.json({ documents });
+        return res.json({ documents: serializeBigInt(documents) });
     }
     catch (error) {
         return res.status(500).json({ message: "Failed to list documents." });
@@ -27,16 +56,12 @@ export async function getDocument(req, res) {
                 id: documentId,
                 ownerId: userId,
             },
-            include: {
-                contract: true,
-                riskAnalysis: true,
-                fileUploads: true,
-            },
+            include: documentInclude,
         });
         if (!document) {
             return res.status(404).json({ message: "Document not found." });
         }
-        return res.json({ document });
+        return res.json({ document: serializeBigInt(document) });
     }
     catch (error) {
         return res.status(500).json({ message: "Failed to load document." });

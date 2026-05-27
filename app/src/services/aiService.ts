@@ -106,6 +106,8 @@ export interface AnalysisResult {
 }
 
 const CHARS_LIMIT = 15000;
+const MONGOLIAN_OUTPUT_RULE =
+  "IMPORTANT: All human-readable text values in the JSON response MUST be written in Mongolian Cyrillic. Keep only enum/code values such as LOW, MEDIUM, HIGH, DIRECT, RELATED, and MNT in English exactly as specified. Do not return English summaries, risks, clause titles, missing clause names, warnings, explanations, or breakdown items.";
 
 function buildUserMessage(text: string, legalCtx: LegalContext): string {
   const parts = [`=== CONTRACT TEXT ===\n${text}`];
@@ -143,7 +145,7 @@ function buildUserMessage(text: string, legalCtx: LegalContext): string {
   return parts.join("\n\n").slice(0, CHARS_LIMIT);
 }
 
-const CLAUSE_SYSTEM_PROMPT = `You are a contract clause extraction specialist. Extract every individual clause from the contract. For each clause return:
+const CLAUSE_SYSTEM_PROMPT = `You are a Mongolian contract clause extraction specialist. Extract every individual clause from the contract. For each clause return:
 - title: clause name
 - content: the full clause text
 - clauseType: category (e.g. "Payment", "Termination", "Confidentiality", "Liability", "Governing Law", "Delivery", "Warranty", "Indemnification", "General")
@@ -152,10 +154,11 @@ const CLAUSE_SYSTEM_PROMPT = `You are a contract clause extraction specialist. E
 - orderNo: sequential number
 
 Consider the provided legal context (laws, articles, clause templates) when determining risk levels and clause types.
+${MONGOLIAN_OUTPUT_RULE}
 
 Return ONLY a JSON object with a "clauses" array.`;
 
-const RISK_SYSTEM_PROMPT = `You are a contract risk analyst. Analyze the contract text and return a JSON object with:
+const RISK_SYSTEM_PROMPT = `You are a Mongolian contract risk analyst. Analyze the contract text and return a JSON object with:
 - summary: 2-3 sentence executive summary
 - riskScore: integer 0-100
 - risks: array of identified risk descriptions
@@ -165,9 +168,10 @@ const RISK_SYSTEM_PROMPT = `You are a contract risk analyst. Analyze the contrac
 - estimatedCost: estimated contract value in MNT (number or null)
 - inconsistentWording: array of inconsistent or contradictory terms found
 
-Use the provided legal context (laws, articles, clause templates) to ground your analysis in actual legal requirements.`;
+Use the provided legal context (laws, articles, clause templates) to ground your analysis in actual legal requirements.
+${MONGOLIAN_OUTPUT_RULE}`;
 
-const LEGAL_REFERENCE_SYSTEM_PROMPT = `You are a legal reference specialist. Given a contract text and relevant legal resources (laws, articles, clause templates), identify which specific legal provisions apply to each clause in the contract.
+const LEGAL_REFERENCE_SYSTEM_PROMPT = `You are a Mongolian legal reference specialist. Given a contract text and relevant legal resources (laws, articles, clause templates), identify which specific legal provisions apply to each clause in the contract.
 
 For each clause in the contract, find matching legal references. Return a JSON object with a "legalReferences" array where each item has:
 - clauseTitle: the name of the clause in the contract
@@ -176,9 +180,10 @@ For each clause in the contract, find matching legal references. Return a JSON o
 - relevance: "DIRECT" if the article directly governs this clause, "RELATED" if tangentially related
 - reasoning: brief explanation of why this legal provision applies
 
-If no law articles match a clause, still note it as missing legal coverage.`;
+If no law articles match a clause, still note it as missing legal coverage.
+${MONGOLIAN_OUTPUT_RULE}`;
 
-const COST_SYSTEM_PROMPT = `You are a contract cost estimation specialist. Analyze the contract text along with relevant clause templates to estimate the contract's financial value.
+const COST_SYSTEM_PROMPT = `You are a Mongolian contract cost estimation specialist. Analyze the contract text along with relevant clause templates to estimate the contract's financial value.
 
 Return a JSON object with:
 - estimatedCost: estimated total contract value in MNT (number or null if not determinable)
@@ -186,7 +191,8 @@ Return a JSON object with:
 - breakdown: array of cost factors or components considered (e.g. "Base contract value", "Penalty clauses", "Service fees", "Inflation adjustment")
 - confidence: "LOW", "MEDIUM", or "HIGH" based on how clearly the contract states financial terms
 
-Use any clause templates provided as reference benchmarks for typical costs in similar contracts.`;
+Use any clause templates provided as reference benchmarks for typical costs in similar contracts.
+${MONGOLIAN_OUTPUT_RULE}`;
 
 async function callGeminiWithModel(
   modelName: string,
@@ -353,7 +359,7 @@ export async function analyzeWithSingleCall(
 ): Promise<AnalysisResult> {
   const userMsg = buildUserMessage(text, legalCtx);
 
-  const ANALYSIS_SYSTEM_PROMPT = `You are a senior contract analysis AI. Analyze the contract text and return a JSON object.
+  const ANALYSIS_SYSTEM_PROMPT = `You are a senior Mongolian contract analysis AI. Analyze the contract text and return a JSON object.
 
 Extract all individual clauses from the contract. For each clause determine:
 - title: clause name
@@ -375,7 +381,8 @@ Then provide the overall analysis:
 - legalReferences: array of { clauseTitle, lawTitle, articleNumber, relevance, reasoning }
 - costEstimate: { estimatedCost, currency: "MNT", breakdown: string[], confidence: "LOW"|"MEDIUM"|"HIGH" }
 
-Use the provided legal context (laws, articles, clause templates) to ground your analysis.`;
+Use the provided legal context (laws, articles, clause templates) to ground your analysis.
+${MONGOLIAN_OUTPUT_RULE}`;
 
   const raw = await callGemini(ANALYSIS_SYSTEM_PROMPT, userMsg);
 

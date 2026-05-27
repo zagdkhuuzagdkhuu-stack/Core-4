@@ -6,6 +6,57 @@ function toSafeUser(user) {
     const { passwordHash, ...safeUser } = user;
     return safeUser;
 }
+function isDatabaseConnectionError(error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return (message.includes("Can't reach database server") ||
+        message.includes("ECONNREFUSED") ||
+        message.includes("Connection terminated") ||
+        message.includes("Timed out fetching a new connection"));
+}
+function handleAuthError(res, fallbackMessage, error) {
+    if (isDatabaseConnectionError(error)) {
+        return res.status(503).json({
+            message: "Database is unavailable. Please check the PostgreSQL connection and try again.",
+        });
+    }
+    return res.status(500).json({ message: fallbackMessage });
+}
+async function getUserAccessStatus(userId) {
+    const now = new Date();
+    const [activeSubscription, paidPaymentsCount] = await Promise.all([
+        database.subscription.findFirst({
+            where: {
+                userId,
+                status: "ACTIVE",
+                OR: [{ endDate: null }, { endDate: { gte: now } }],
+            },
+            orderBy: { createdAt: "desc" },
+        }),
+        database.payment.count({
+            where: {
+                userId,
+                status: "PAID",
+            },
+        }),
+    ]);
+    return {
+        isPaid: Boolean(activeSubscription) || paidPaymentsCount > 0,
+        activeSubscription,
+    };
+}
+function getProfileCompleteness(user) {
+    const missingFields = [];
+    if (!user.firstName?.trim())
+        missingFields.push("firstName");
+    if (!user.lastName?.trim())
+        missingFields.push("lastName");
+    if (!user.email?.trim())
+        missingFields.push("email");
+    return {
+        isComplete: missingFields.length === 0,
+        missingFields,
+    };
+}
 export async function register(req, res) {
     try {
         const { fullName, email, password } = req.body;
@@ -39,7 +90,7 @@ export async function register(req, res) {
         return res.status(201).json({ token, user: toSafeUser(user) });
     }
     catch (err) {
-        return res.status(500).json({ message: "Registration failed" });
+        return handleAuthError(res, "Registration failed", err);
     }
 }
 export async function login(req, res) {
@@ -69,7 +120,7 @@ export async function login(req, res) {
         return res.json({ token, user: toSafeUser(user) });
     }
     catch (err) {
-        return res.status(500).json({ message: "Login failed" });
+        return handleAuthError(res, "Login failed", err);
     }
 }
 export async function googleLogin(req, res) {
@@ -115,9 +166,97 @@ export async function googleLogin(req, res) {
     }
     catch (err) {
         console.error("Google auth error:", err);
+        if (isDatabaseConnectionError(err)) {
+            return res.status(503).json({
+                message: "Database is unavailable. Please check the PostgreSQL connection and try again.",
+            });
+        }
         return res.status(401).json({
             message: "Google auth failed",
-            error: err instanceof Error ? err.message : String(err),
         });
+    }
+}
+export async function getMe(req, res) {
+    try {
+        const userId = req.userId;
+        const user = await database.user.findUnique({
+            where: { id: userId },
+            select: {
+                id: true,
+                email: true,
+                firstName: true,
+                lastName: true,
+                fullName: true,
+                avatarUrl: true,
+                role: true,
+                createdAt: true,
+                updatedAt: true,
+            },
+        });
+        if (!user) {
+            return res.status(404).json({ message: "User not found." });
+        }
+        const profile = getProfileCompleteness(user);
+        const access = await getUserAccessStatus(userId);
+        return res.json({
+            user,
+            profile,
+            access: {
+                isPaid: access.isPaid,
+                subscription: access.activeSubscription
+                    ? {
+                        id: access.activeSubscription.id,
+                        plan: access.activeSubscription.plan,
+                        status: access.activeSubscription.status,
+                        startDate: access.activeSubscription.startDate,
+                        endDate: access.activeSubscription.endDate,
+                    }
+                    : null,
+            },
+        });
+    }
+    catch (error) {
+        return handleAuthError(res, "Failed to load current user.", error);
+    }
+}
+export async function updateProfile(req, res) {
+    try {
+        const userId = req.userId;
+        const firstName = req.body.firstName !== undefined ? String(req.body.firstName).trim() : undefined;
+        const lastName = req.body.lastName !== undefined ? String(req.body.lastName).trim() : undefined;
+        const fullName = req.body.fullName !== undefined ? String(req.body.fullName).trim() : undefined;
+        const avatarUrl = req.body.avatarUrl !== undefined ? String(req.body.avatarUrl).trim() : undefined;
+        const user = await database.user.update({
+            where: { id: userId },
+            data: {
+                firstName,
+                lastName,
+                fullName,
+                avatarUrl,
+            },
+            select: {
+                id: true,
+                email: true,
+                firstName: true,
+                lastName: true,
+                fullName: true,
+                avatarUrl: true,
+                role: true,
+                createdAt: true,
+                updatedAt: true,
+            },
+        });
+        const profile = getProfileCompleteness(user);
+        const access = await getUserAccessStatus(userId);
+        return res.json({
+            user,
+            profile,
+            access: {
+                isPaid: access.isPaid,
+            },
+        });
+    }
+    catch (error) {
+        return handleAuthError(res, "Failed to update profile.", error);
     }
 }

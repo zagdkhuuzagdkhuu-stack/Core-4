@@ -6,12 +6,33 @@ import {
   Instagram, Facebook, Phone, Mail, MapPin, Sun, Moon, UploadCloud,
   LoaderCircle, Check, Archive, Download, Trash2, Search, QrCode, Menu, X,
   BriefcaseBusiness, Handshake, Home, Landmark, ShieldCheck, AlertTriangle,
-  ChevronDown, Info, ZoomIn, ZoomOut, Maximize2,
+  ChevronDown, Info, ZoomIn, ZoomOut, Maximize2, CircleUserRound, LogOut, CreditCard, Settings,
 } from "lucide-react";
 import enContent from "./content/en.json";
 import mnContent from "./content/mn.json";
-import { fetchTemplates, uploadDocumentForAnalysis } from "./api";
-import type { AnalysisResponse, TemplateSummary, TemplateVariable } from "./api";
+import {
+  activatePaidAccess,
+  checkQPayInvoice,
+  createPublicQPayInvoice,
+  fetchMe,
+  fetchMyPaymentStatus,
+  fetchTemplates,
+  listMyContracts,
+  listMyDocuments,
+  loginWithGoogle,
+  saveAnalyzedDocument,
+  saveGeneratedContract,
+  updateMyProfile,
+  uploadDocumentForAnalysis,
+} from "./api";
+import type {
+  AnalysisResponse,
+  AuthMeResponse,
+  AuthUser,
+  QPayInvoiceResponse,
+  TemplateSummary,
+  TemplateVariable,
+} from "./api";
 
 type Locale = "mn" | "en";
 type HeaderTab = "Home" | "Template" | "Analysis" | "Contact us";
@@ -22,8 +43,12 @@ type FolderNavControls = {
   isDark: boolean;
   languageLabel: string;
   loginLabel: string;
+  isAuthenticated: boolean;
+  userAvatarUrl?: string | null;
   onThemeToggle: () => void;
   onLanguageToggle: () => void;
+  onLoginClick: () => void;
+  onProfileClick: () => void;
 };
 
 const LOCALES = {
@@ -31,6 +56,30 @@ const LOCALES = {
   en: enContent,
 };
 type UiContent = typeof enContent.ui;
+
+type AccessState = {
+  isPaid: boolean;
+  profileComplete: boolean;
+  missingFields: string[];
+};
+
+declare global {
+  interface Window {
+    google?: {
+      accounts: {
+        id: {
+          initialize: (options: {
+            client_id: string;
+            callback: (resp: { credential?: string }) => void;
+            auto_select?: boolean;
+            ux_mode?: "popup" | "redirect";
+          }) => void;
+          prompt: () => void;
+        };
+      };
+    };
+  }
+}
 
 const ORBIT_FEATURES = [
   {
@@ -255,14 +304,215 @@ function useInView(threshold = 0.15) {
   return { ref, inView };
 }
 
+function loadGoogleIdentityScript() {
+  return new Promise<void>((resolve, reject) => {
+    if (window.google?.accounts?.id) {
+      resolve();
+      return;
+    }
+
+    const existing = document.querySelector<HTMLScriptElement>('script[data-google-identity="true"]');
+    if (existing) {
+      existing.addEventListener("load", () => resolve(), { once: true });
+      existing.addEventListener("error", () => reject(new Error("Google Identity script failed to load.")), { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.dataset.googleIdentity = "true";
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error("Google Identity script failed to load."));
+    document.head.appendChild(script);
+  });
+}
+
+async function requestGoogleIdToken(clientId: string) {
+  await loadGoogleIdentityScript();
+
+  return new Promise<string>((resolve, reject) => {
+    let done = false;
+    const finish = (value?: string, error?: Error) => {
+      if (done) return;
+      done = true;
+      if (error) reject(error);
+      else if (value) resolve(value);
+      else reject(new Error("Google login cancelled."));
+    };
+
+    try {
+      window.google?.accounts.id.initialize({
+        client_id: clientId,
+        ux_mode: "popup",
+        callback: (response) => {
+          if (response.credential) {
+            finish(response.credential);
+            return;
+          }
+          finish(undefined, new Error("Google login failed."));
+        },
+      });
+      window.google?.accounts.id.prompt();
+      window.setTimeout(() => finish(undefined, new Error("Google login timed out. Please try again.")), 20000);
+    } catch (error) {
+      finish(undefined, error instanceof Error ? error : new Error(String(error)));
+    }
+  });
+}
+
+function ProfilePanel({
+  isOpen,
+  user,
+  locale,
+  ui,
+  access,
+  documents,
+  contracts,
+  onClose,
+  onLogout,
+  onLanguageToggle,
+  onProfileSave,
+}: {
+  isOpen: boolean;
+  user: AuthUser | null;
+  locale: Locale;
+  ui: UiContent;
+  access: AccessState;
+  documents: Array<any>;
+  contracts: Array<any>;
+  onClose: () => void;
+  onLogout: () => void;
+  onLanguageToggle: () => void;
+  onProfileSave: (payload: { firstName: string; lastName: string }) => Promise<void>;
+}) {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!isOpen) return;
+    setFirstName(user?.firstName || "");
+    setLastName(user?.lastName || "");
+    setError("");
+  }, [isOpen, user]);
+
+  const handleSave = async () => {
+    setSaving(true);
+    setError("");
+    try {
+      await onProfileSave({ firstName, lastName });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className="fixed inset-0 z-[120] flex items-end justify-center bg-background/40 backdrop-blur-sm"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="max-h-[86vh] w-full overflow-y-auto rounded-t-[1.8rem] border border-border bg-card p-5 shadow-[0_-24px_70px_rgba(0,0,0,0.24)] sm:max-w-2xl sm:p-6"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="mb-5 flex items-center justify-between">
+              <h3 className="font-display text-2xl font-bold text-foreground">Profile</h3>
+              <button type="button" onClick={onClose} className="rounded-full border border-border bg-secondary p-2">
+                <X size={16} />
+              </button>
+            </div>
+            <div className="mb-6 rounded-xl border border-border/70 bg-secondary/60 p-4">
+              <p className="text-sm font-semibold text-foreground">{user?.email || "-"}</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {access.isPaid ? ui.profile.paidAccessActive : ui.profile.paymentRequired}
+              </p>
+              {!access.profileComplete && (
+                <p className="mt-2 text-xs text-red-600">{ui.profile.incompletePrefix} {access.missingFields.join(", ")}</p>
+              )}
+            </div>
+
+            <div className="mb-6 grid gap-3 sm:grid-cols-2">
+              <label className="text-xs font-semibold text-muted-foreground">
+                First name
+                <input
+                  value={firstName}
+                  onChange={(event) => setFirstName(event.target.value)}
+                  className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground"
+                />
+              </label>
+              <label className="text-xs font-semibold text-muted-foreground">
+                Last name
+                <input
+                  value={lastName}
+                  onChange={(event) => setLastName(event.target.value)}
+                  className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground"
+                />
+              </label>
+            </div>
+            {error && <p className="mb-3 text-sm text-red-600">{error}</p>}
+            <div className="mb-6 flex flex-wrap gap-2">
+              <button type="button" onClick={handleSave} disabled={saving} className="rounded-full bg-button px-5 py-2 text-sm font-semibold text-button-text disabled:opacity-60">
+                {saving ? "Saving..." : ui.profile.saveSettings}
+              </button>
+              <button type="button" onClick={onLanguageToggle} className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-4 py-2 text-sm font-semibold text-foreground">
+                <Settings size={14} /> {locale === "mn" ? "Switch to ENG" : "MN руу шилжих"}
+              </button>
+              <button type="button" onClick={onLogout} className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-4 py-2 text-sm font-semibold text-foreground">
+                <LogOut size={14} /> Logout
+              </button>
+            </div>
+
+            <div className="grid gap-4 lg:grid-cols-2">
+              <div className="rounded-xl border border-border/70 bg-secondary/50 p-4">
+                <p className="mb-3 text-sm font-bold text-foreground">{ui.profile.savedDocuments}</p>
+                <div className="space-y-2">
+                  {documents.slice(0, 6).map((doc) => (
+                    <div key={doc.id} className="rounded-md border border-border bg-background px-3 py-2">
+                      <p className="truncate text-xs font-semibold text-foreground">{doc.title}</p>
+                    </div>
+                  ))}
+                  {documents.length === 0 && <p className="text-xs text-muted-foreground">{ui.profile.emptyDocuments}</p>}
+                </div>
+              </div>
+              <div className="rounded-xl border border-border/70 bg-secondary/50 p-4">
+                <p className="mb-3 text-sm font-bold text-foreground">{ui.profile.savedContracts}</p>
+                <div className="space-y-2">
+                  {contracts.slice(0, 6).map((contract) => (
+                    <div key={contract.id} className="rounded-md border border-border bg-background px-3 py-2">
+                      <p className="truncate text-xs font-semibold text-foreground">{contract.title}</p>
+                    </div>
+                  ))}
+                  {contracts.length === 0 && <p className="text-xs text-muted-foreground">{ui.profile.emptyContracts}</p>}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 function NavActionButtons({
   controls,
   className = "",
-  showLogin = true,
 }: {
   controls: FolderNavControls;
   className?: string;
-  showLogin?: boolean;
 }) {
   return (
     <div className={`flex flex-wrap items-center justify-end gap-2 ${className}`}>
@@ -282,8 +532,25 @@ function NavActionButtons({
       >
         {controls.languageLabel}
       </button>
-      {showLogin && (
-        <button className="rounded-full bg-button px-4 py-2.5 text-sm font-semibold text-button-text shadow-[0_10px_26px_rgba(0,0,0,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_26px_rgba(207,157,123,0.32)] sm:min-w-[8.5rem] sm:px-6">
+      {controls.isAuthenticated ? (
+        <button
+          type="button"
+          onClick={controls.onProfileClick}
+          className="inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-border/20 bg-button text-button-text shadow-[0_10px_26px_rgba(0,0,0,0.22)]"
+          aria-label="Open profile"
+        >
+          {controls.userAvatarUrl ? (
+            <img src={controls.userAvatarUrl} alt="Profile avatar" className="h-full w-full object-cover" />
+          ) : (
+            <CircleUserRound size={18} />
+          )}
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={controls.onLoginClick}
+          className="rounded-full bg-button px-4 py-2.5 text-sm font-semibold text-button-text shadow-[0_10px_26px_rgba(0,0,0,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_26px_rgba(207,157,123,0.32)] sm:min-w-[8.5rem] sm:px-6"
+        >
           {controls.loginLabel}
         </button>
       )}
@@ -631,6 +898,8 @@ function AnalysisWorkflow({
   setAnalysisResult,
   analysisError,
   setAnalysisError,
+  onSaveAnalysis,
+  onExportAnalysis,
 }: {
   onBack: () => void;
   onTabSelect: (tab: HeaderTab) => void;
@@ -642,6 +911,8 @@ function AnalysisWorkflow({
   setAnalysisResult: (result: AnalysisResponse | null) => void;
   analysisError: string;
   setAnalysisError: (error: string) => void;
+  onSaveAnalysis: (result: AnalysisResponse | null) => Promise<void>;
+  onExportAnalysis: (result: AnalysisResponse | null) => Promise<void>;
 }) {
   const [isDragActive, setIsDragActive] = useState(false);
   const [showFinishModal, setShowFinishModal] = useState(false);
@@ -803,7 +1074,13 @@ function AnalysisWorkflow({
               )}
 
               {step === "result" && (
-                <AnalysisResult result={analysisResult} ui={ui} onFinish={() => setShowFinishModal(true)} />
+                <AnalysisResult
+                  result={analysisResult}
+                  ui={ui}
+                  onSave={() => void onSaveAnalysis(analysisResult)}
+                  onExport={() => void onExportAnalysis(analysisResult)}
+                  onFinish={() => setShowFinishModal(true)}
+                />
               )}
             </AnimatePresence>
           </div>
@@ -830,7 +1107,7 @@ function AnalysisWorkflow({
               <div className="flex gap-3">
                 <button
                   type="button"
-                  onClick={onBack}
+                  onClick={() => void onSaveAnalysis(analysisResult)}
                   className="flex flex-1 items-center justify-center gap-2 rounded-full bg-button px-5 py-3 text-sm font-semibold text-button-text transition-transform duration-300 hover:scale-[1.03]"
                 >
                   <Archive size={16} /> {ui.actions.archive}
@@ -851,22 +1128,56 @@ function AnalysisWorkflow({
   );
 }
 
-function AnalysisResult({ result, ui, onFinish }: { result: AnalysisResponse | null; ui: UiContent; onFinish: () => void }) {
+function translateAnalysisText(text: string) {
+  const normalized = text.toLowerCase();
+  const translations: Array<[RegExp, string]> = [
+    [/lack of defined job duties|job duties|responsibilities/, "Ажилтны гүйцэтгэх ажил, үүрэг хариуцлага тодорхой тусгагдаагүй байна."],
+    [/undefined basic salary|basic salary|payment frequency|compensation terms/, "Үндсэн цалин болон цалин олгох давтамж тодорхойгүй тул цалин хөлсний нөхцөл хэрэгжихэд эрсдэлтэй байна."],
+    [/undefined working days|working days and hours|work schedule/, "Ажлын өдөр, цагийн хуваарь тодорхойгүй тул ажлын цагийн талаар маргаан үүсэх эрсдэлтэй байна."],
+    [/incomplete list of employee and employer rights|rights\/duties|non-compliance/, "Ажилтан болон ажил олгогчийн эрх, үүргийн жагсаалт бүрэн бус тул үл ойлголцол болон хуульд нийцэхгүй байх эрсдэлтэй байна."],
+    [/payment terms|undefined payment date|payment/, "Төлбөрийн нөхцөл эсвэл төлбөр төлөх хугацаа тодорхойгүй байна."],
+    [/termination|without notice|no notice/, "Гэрээ цуцлах нөхцөл тодорхойгүй эсвэл урьдчилан мэдэгдэх журам дутуу байна."],
+    [/confidentiality/, "Нууцлалын заалт дутуу эсвэл хангалтгүй байна."],
+    [/liability|unlimited liability/, "Хариуцлагын нөхцөл болон хариуцлагын дээд хэмжээ тодорхойгүй байна."],
+    [/dispute resolution|dispute/, "Маргаан шийдвэрлэх журам тодорхойгүй байна."],
+    [/force majeure/, "Давагдашгүй хүчин зүйлийн заалт дутуу байна."],
+    [/legal review recommended/, "Гарын үсэг зурахаас өмнө хуульчийн хяналт хийх шаардлагатай."],
+    [/high risk contract/, "Өндөр эрсдэлтэй гэрээ байна. Чухал заалтуудыг дахин хянах шаардлагатай."],
+    [/medium risk contract/, "Дунд эрсдэлтэй гэрээ байна. Гарын үсэг зурахаас өмнө онцолсон заалтуудыг шалгана уу."],
+    [/low risk contract/, "Бага эрсдэлтэй гэрээ байна. Зөвхөн жижиг хяналт хийхэд хангалттай."],
+    [/gemini api|temporarily unavailable|local risk check/, "AI үйлчилгээ түр хугацаанд боломжгүй байсан тул Draftly үндсэн эрсдэлийн шалгалт хийлээ."],
+  ];
+  return translations.find(([pattern]) => pattern.test(normalized))?.[1] || text;
+}
+
+function AnalysisResult({
+  result,
+  ui,
+  onSave,
+  onExport,
+  onFinish,
+}: {
+  result: AnalysisResponse | null;
+  ui: UiContent;
+  onSave: () => void;
+  onExport: () => void;
+  onFinish: () => void;
+}) {
   const rawRiskScore = result?.analysis.riskScore ?? 62;
   const riskScore = rawRiskScore > 10 ? rawRiskScore / 10 : rawRiskScore;
   const riskPercent = Math.min(100, Math.max(0, riskScore * 10));
   const standardMatch = Math.round(Math.max(0, Math.min(100, 100 - riskScore * 3.5)));
   const riskScoreLabel = `${riskScore.toFixed(1)}/10`;
-  const fileName = result?.document.fileName || "Service_Agreement_2024.pdf";
+  const fileName = result?.document.fileName || "Uilchilgeenii_geree_2024.pdf";
   const fileSize = "PDF • 2.4 MB";
-  const summary = result?.analysis.summary || ui.analysis.fallbackSummary;
+  const summary = translateAnalysisText(result?.analysis.summary || ui.analysis.fallbackSummary);
   const previewParagraphs = (result?.document.extractedText || [
-    "This Service Agreement is made and entered into as of May 28, 2024, by and between:",
-    "1. Parties. Company A provides consulting services to Company B. The scope, payment, and delivery schedule are agreed by both parties.",
-    "2. Compensation. Payment shall be made within 15 days of invoice date.",
-    "3. Scope of Services. The service provider agrees to perform the services described in the attached statement of work.",
-    "4. Payment Terms. The client shall pay the provider according to the payment schedule.",
-    "5. Confidentiality. Both parties agree to keep confidential all information disclosed under this agreement.",
+    "Энэхүү үйлчилгээ үзүүлэх гэрээг 2024 оны 5 дугаар сарын 28-ны өдөр дараах талууд байгуулав.",
+    "1. Талууд. А тал нь Б талд зөвлөх үйлчилгээ үзүүлэх бөгөөд ажлын хүрээ, төлбөр, гүйцэтгэх хугацааг харилцан тохиролцов.",
+    "2. Төлбөр. Нэхэмжлэх гарснаас хойш 15 хоногийн дотор төлбөрийг шилжүүлнэ.",
+    "3. Үйлчилгээний хүрээ. Үйлчилгээ үзүүлэгч нь хавсралтад заасан ажлыг гүйцэтгэнэ.",
+    "4. Төлбөрийн нөхцөл. Захиалагч нь тохирсон хуваарийн дагуу төлбөр төлнө.",
+    "5. Нууцлал. Талууд гэрээний хүрээнд авсан мэдээллийг нууцална.",
   ].join("\n\n")).split(/\n{2,}/).slice(0, 10);
   const issueItems = [
     ...(result?.analysis.risks ?? []),
@@ -880,7 +1191,7 @@ function AnalysisResult({ result, ui, onFinish }: { result: AnalysisResponse | n
     "Гэрээ цуцлах нөхцөл тодорхой бус байна.",
     "Шимтгэлийн хугацааны нөхцөл дутуу байна.",
     "Төлбөрийн хугацаа хэт ерөнхий байна.",
-  ]).slice(0, 4);
+  ]).slice(0, 4).map(translateAnalysisText);
   const clauses = result?.clauses ?? [];
   const generatedAt = new Date().toLocaleString("mn-MN", {
     year: "numeric",
@@ -920,8 +1231,8 @@ function AnalysisResult({ result, ui, onFinish }: { result: AnalysisResponse | n
           <div className="relative h-[520px] overflow-hidden rounded-xl border border-border/70 bg-white shadow-inner dark:bg-secondary">
             <div className="h-full overflow-y-auto px-8 py-8 text-[11px] leading-5 text-slate-700 dark:text-foreground/75">
               <div className="mb-8 text-center">
-                <p className="text-sm font-bold tracking-wide text-slate-900 dark:text-foreground">SERVICE AGREEMENT</p>
-                <p className="mt-3 text-[10px] text-slate-500 dark:text-muted-foreground">This Service Agreement is made and entered into as of May 28, 2024.</p>
+                <p className="text-sm font-bold tracking-wide text-slate-900 dark:text-foreground">ҮЙЛЧИЛГЭЭ ҮЗҮҮЛЭХ ГЭРЭЭ</p>
+                <p className="mt-3 text-[10px] text-slate-500 dark:text-muted-foreground">Энэхүү гэрээг 2024 оны 5 дугаар сарын 28-ны өдөр байгуулав.</p>
               </div>
               {previewParagraphs.map((paragraph, index) => (
                 <p key={index} className="mb-4">
@@ -957,7 +1268,7 @@ function AnalysisResult({ result, ui, onFinish }: { result: AnalysisResponse | n
                 <Info size={13} className="text-muted-foreground" />
               </div>
               <p className="text-4xl font-black text-emerald-600">{standardMatch}%</p>
-              <p className="mt-2 text-xs font-semibold uppercase text-muted-foreground">Standard match</p>
+              <p className="mt-2 text-xs font-semibold uppercase text-muted-foreground">Стандарт нийцэл</p>
               <div className="mt-5 h-2 overflow-hidden rounded-full bg-border/70">
                 <motion.div
                   className="h-full rounded-full bg-emerald-500"
@@ -1040,7 +1351,7 @@ function AnalysisResult({ result, ui, onFinish }: { result: AnalysisResponse | n
             <div className="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-4 text-blue-800">
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-sm font-bold">Manual AI-аар засварлуулах, эрсдэлийг бууруулах уу?</p>
+                  <p className="text-sm font-bold">AI тусламжаар засварлуулж, эрсдэлийг бууруулах уу?</p>
                   <p className="mt-1 text-xs text-blue-700">AI илэрсэн асуудлуудад үндэслэн гэрээг сайжруулах санал бэлдэнэ.</p>
                 </div>
                 <button type="button" className="shrink-0 rounded-full bg-blue-600 px-4 py-2 text-xs font-bold text-white">
@@ -1072,16 +1383,16 @@ function AnalysisResult({ result, ui, onFinish }: { result: AnalysisResponse | n
               </div>
               <div className="flex justify-between gap-3">
                 <dt className="text-muted-foreground">Анализ хийсэн загвар</dt>
-                <dd className="font-semibold text-foreground">{clauses[0]?.title || "Service Agreement Standard v2.1"}</dd>
+                <dd className="font-semibold text-foreground">{clauses[0]?.title || "Үйлчилгээний гэрээний стандарт v2.1"}</dd>
               </div>
             </dl>
           </motion.div>
 
           <div className="grid gap-3 sm:grid-cols-3">
-            <button type="button" className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-secondary">
+            <button type="button" onClick={onExport} className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-secondary">
               <Download size={16} /> Татах файл (PDF)
             </button>
-            <button type="button" className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-secondary">
+            <button type="button" onClick={onSave} className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-secondary">
               <Archive size={16} /> Хадгалах
             </button>
             <button type="button" onClick={onFinish} className="flex items-center justify-center gap-2 rounded-xl border border-red-100 bg-card px-4 py-3 text-sm font-semibold text-red-600 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-red-50">
@@ -1207,11 +1518,15 @@ function TemplateWorkflow({
   onTabSelect,
   navControls,
   ui,
+  onSaveTemplate,
+  onExportTemplate,
 }: {
   onBackHome: () => void;
   onTabSelect: (tab: HeaderTab) => void;
   navControls: FolderNavControls;
   ui: UiContent;
+  onSaveTemplate: (payload: { title: string; content: string; template?: TemplateSummary }) => Promise<void>;
+  onExportTemplate: (payload: { title: string; content: string; template?: TemplateSummary }) => Promise<void>;
 }) {
   const [step, setStep] = useState<TemplateStep>("template");
   const [activeGroup, setActiveGroup] = useState(TEMPLATE_GROUPS[0].key);
@@ -1425,25 +1740,37 @@ function TemplateWorkflow({
     }
     if (step === "verification") return <TemplateVerification template={selectedTemplateData} values={templateValues} ui={ui} onBack={previousStep} onContinue={nextStep} />;
     if (step === "payment") return <TemplatePayment ui={ui} onBack={previousStep} onContinue={nextStep} />;
-    return <TemplateResult ui={ui} onBack={previousStep} onFinish={() => setShowConfirm(true)} />;
+    const previewContent = renderTemplateContent(selectedTemplateData, templateValues, ui);
+    return (
+      <TemplateResult
+        template={selectedTemplateData}
+        values={templateValues}
+        ui={ui}
+        onBack={previousStep}
+        onSave={() => void onSaveTemplate({
+          title: selectedTemplateData?.name || "Generated Contract",
+          content: previewContent,
+          template: selectedTemplateData,
+        })}
+        onExport={() => void onExportTemplate({
+          title: selectedTemplateData?.name || "Generated Contract",
+          content: previewContent,
+          template: selectedTemplateData,
+        })}
+        onFinish={() => setShowConfirm(true)}
+      />
+    );
   };
 
   return (
     <TemplateShell step={step} onBackHome={onBackHome} onTabSelect={onTabSelect} navControls={navControls} ui={ui}>
-      <AnimatePresence custom={stepDirection} initial={false}>
-        <motion.div
-          key={step}
-          custom={stepDirection}
-          variants={stackedStepVariants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          className="absolute inset-0 overflow-y-auto rounded-t-[2rem] bg-secondary p-1 shadow-[0_-15px_50px_rgba(0,0,0,0.15)]"
-          style={{ borderRadius: "32px 32px 0 0" }}
-        >
-          {renderStep()}
-        </motion.div>
-      </AnimatePresence>
+      <div
+        key={step}
+        className="absolute inset-0 overflow-y-auto rounded-t-[2rem] bg-secondary p-1 shadow-[0_-15px_50px_rgba(0,0,0,0.15)]"
+        style={{ borderRadius: "32px 32px 0 0" }}
+      >
+        {renderStep()}
+      </div>
 
       <AnimatePresence>
         {showConfirm && (
@@ -1461,10 +1788,21 @@ function TemplateWorkflow({
             >
               <h2 className="mb-8 font-display text-3xl font-bold text-foreground">{ui.confirm.title}</h2>
               <div className="flex gap-3">
-                <button onClick={onBackHome} className="flex flex-1 items-center justify-center gap-2 rounded-full bg-button px-5 py-3 text-sm font-semibold text-button-text transition-transform duration-300 hover:scale-[1.03]">
+                <button
+                  onClick={() => {
+                    const previewContent = renderTemplateContent(selectedTemplateData, templateValues, ui);
+                    void onSaveTemplate({
+                      title: selectedTemplateData?.name || "Generated Contract",
+                      content: previewContent,
+                      template: selectedTemplateData,
+                    });
+                    setShowConfirm(false);
+                  }}
+                  className="flex flex-1 items-center justify-center gap-2 rounded-full bg-button px-5 py-3 text-sm font-semibold text-button-text transition-transform duration-300 hover:scale-[1.03]"
+                >
                   <Archive size={16} /> {ui.actions.archive}
                 </button>
-                <button onClick={onBackHome} className="flex flex-1 items-center justify-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-sm font-semibold text-muted-foreground transition-transform duration-300 hover:scale-[1.03]">
+                <button onClick={() => setShowConfirm(false)} className="flex flex-1 items-center justify-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-sm font-semibold text-muted-foreground transition-transform duration-300 hover:scale-[1.03]">
                   <Trash2 size={16} /> {ui.actions.delete}
                 </button>
               </div>
@@ -1708,6 +2046,57 @@ function TemplateVerification({
 }
 
 function TemplatePayment({ ui, onBack, onContinue }: { ui: UiContent; onBack: () => void; onContinue: () => void }) {
+  const amount = 5000;
+  const [invoice, setInvoice] = useState<QPayInvoiceResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isChecking, setIsChecking] = useState(false);
+  const [isPaid, setIsPaid] = useState(false);
+  const [paymentError, setPaymentError] = useState("");
+  const qrImage = invoice?.qr_image
+    ? invoice.qr_image.startsWith("data:") ? invoice.qr_image : `data:image/png;base64,${invoice.qr_image}`
+    : "";
+
+  const createInvoice = async () => {
+    setIsLoading(true);
+    setPaymentError("");
+
+    try {
+      const createdInvoice = await createPublicQPayInvoice({
+        amount,
+        description: "Draftly гэрээний загвар үүсгэх төлбөр",
+      });
+      setInvoice(createdInvoice);
+    } catch (error) {
+      setPaymentError(error instanceof Error ? error.message : "QPay invoice үүсгэж чадсангүй.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const checkPayment = async () => {
+    if (!invoice?.invoice_id) return;
+    setIsChecking(true);
+    setPaymentError("");
+
+    try {
+      const status = await checkQPayInvoice(invoice.invoice_id);
+      setIsPaid(status.paid);
+      if (status.paid) {
+        onContinue();
+      } else {
+        setPaymentError("Төлбөр хараахан баталгаажаагүй байна.");
+      }
+    } catch (error) {
+      setPaymentError(error instanceof Error ? error.message : "Төлбөр шалгаж чадсангүй.");
+    } finally {
+      setIsChecking(false);
+    }
+  };
+
+  useEffect(() => {
+    void createInvoice();
+  }, []);
+
   return (
     <motion.div
       key="payment"
@@ -1715,31 +2104,117 @@ function TemplatePayment({ ui, onBack, onContinue }: { ui: UiContent; onBack: ()
     >
       <div className="flex flex-1 items-center justify-center">
         <motion.div
-          className="w-full max-w-md rounded-[2rem] border border-border/25 bg-secondary p-10 text-center text-foreground shadow-[0_28px_80px_rgba(0,0,0,0.28)]"
+          className="w-full max-w-lg rounded-[2rem] border border-border/25 bg-secondary p-8 text-center text-foreground shadow-[0_28px_80px_rgba(0,0,0,0.28)]"
           animate={{ scale: [1, 1.015, 1] }}
           transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
         >
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-highlight">QPay</p>
+          <h1 className="mb-2 font-display text-3xl font-bold">Төлбөр төлөх</h1>
+          <p className="mb-6 text-sm text-muted-foreground/75">
+            Гэрээний загвар үүсгэх төлбөр: {amount.toLocaleString("mn-MN")} MNT
+          </p>
           <motion.div
-            className="mx-auto mb-8 flex h-56 w-56 items-center justify-center rounded-[1.5rem] border border-border bg-card shadow-inner"
+            className="mx-auto mb-6 flex h-64 w-64 items-center justify-center rounded-[1.5rem] border border-border bg-card p-4 shadow-inner"
             animate={{ boxShadow: ["0 0 0 rgba(207,157,123,0)", "0 0 34px rgba(207,157,123,0.28)", "0 0 0 rgba(207,157,123,0)"] }}
             transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
           >
-            <QrCode size={132} strokeWidth={1.25} className="text-foreground" />
+            {isLoading ? (
+              <LoaderCircle className="h-14 w-14 animate-spin text-foreground" strokeWidth={1.5} />
+            ) : qrImage ? (
+              <img src={qrImage} alt="QPay QR" className="h-full w-full object-contain" />
+            ) : (
+              <QrCode size={132} strokeWidth={1.25} className="text-foreground" />
+            )}
           </motion.div>
-          <button
-            type="button"
-            className="rounded-full bg-button px-8 py-3 text-sm font-semibold text-button-text transition-transform duration-300 hover:scale-[1.04] hover:bg-accent"
-          >
-            {ui.template.payment.check}
-          </button>
+          {invoice?.urls?.length ? (
+            <div className="mb-5 grid grid-cols-2 gap-2 sm:grid-cols-3">
+              {invoice.urls.filter(item => item.link).slice(0, 6).map(item => (
+                <a
+                  key={`${item.name}-${item.link}`}
+                  href={item.link}
+                  className="rounded-md border border-border bg-card px-3 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-background"
+                >
+                  {item.name || item.description || "Bank"}
+                </a>
+              ))}
+            </div>
+          ) : null}
+          {paymentError && (
+            <p className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              {paymentError}
+            </p>
+          )}
+          {isPaid && (
+            <p className="mb-4 rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+              Төлбөр амжилттай баталгаажлаа.
+            </p>
+          )}
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <button
+              type="button"
+              onClick={createInvoice}
+              disabled={isLoading}
+              className="flex-1 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground transition-transform duration-300 hover:scale-[1.03] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              Дахин үүсгэх
+            </button>
+            <button
+              type="button"
+              onClick={checkPayment}
+              disabled={!invoice || isChecking}
+              className="flex-1 rounded-full bg-button px-6 py-3 text-sm font-semibold text-button-text transition-transform duration-300 hover:scale-[1.03] hover:bg-accent disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isChecking ? "Шалгаж байна..." : ui.template.payment.check}
+            </button>
+          </div>
         </motion.div>
       </div>
-      <StepActions ui={ui} onBack={onBack} onContinue={onContinue} />
+      <div className="mt-8 flex items-center justify-between gap-4">
+        <button
+          type="button"
+          onClick={onBack}
+          className="group flex items-center gap-2 rounded-full border border-border/35 bg-secondary/70 px-6 py-3 text-sm font-semibold text-foreground transition-all duration-300 hover:border-highlight hover:bg-card"
+        >
+          <ArrowLeft size={15} className="transition-transform duration-300 group-hover:-translate-x-0.5" /> {ui.actions.back}
+        </button>
+        <button
+          type="button"
+          onClick={onContinue}
+          className="rounded-full bg-button px-9 py-3.5 text-sm font-semibold text-button-text shadow-[0_0_0_rgba(207,157,123,0)] transition-all duration-300 hover:scale-[1.02] hover:bg-accent hover:shadow-[0_0_30px_rgba(207,157,123,0.28)]"
+        >
+          {isPaid ? ui.actions.continue : "Дараа төлөөд үргэлжлүүлэх"}
+        </button>
+      </div>
     </motion.div>
   );
 }
 
-function TemplateResult({ ui, onBack, onFinish }: { ui: UiContent; onBack: () => void; onFinish: () => void }) {
+function TemplateResult({
+  template,
+  values,
+  ui,
+  onBack,
+  onSave,
+  onExport,
+  onFinish,
+}: {
+  template?: TemplateSummary;
+  values: Record<string, string>;
+  ui: UiContent;
+  onBack: () => void;
+  onSave: () => void;
+  onExport: () => void;
+  onFinish: () => void;
+}) {
+  const preview = renderTemplateContent(template, values, ui);
+  const completedFields = (template?.variables || []).filter(variable => values[variable.key]?.trim()).length;
+  const totalFields = template?.variables.length || 0;
+  const completionRate = totalFields ? Math.round((completedFields / totalFields) * 100) : 100;
+  const missingFields = (template?.variables || [])
+    .filter(variable => variable.required && !values[variable.key]?.trim())
+    .map(variable => variable.label || variable.key);
+  const previewLines = preview.split(/\n{2,}/).filter(Boolean);
+
   return (
     <motion.div
       key="template-result"
@@ -1751,19 +2226,24 @@ function TemplateResult({ ui, onBack, onFinish }: { ui: UiContent; onBack: () =>
         <div className="absolute -inset-x-4 top-6 -z-10 h-full rounded-[2rem] bg-background/70" />
         <div className="absolute -inset-x-8 top-12 -z-20 h-full rounded-[2rem] bg-border/65" />
         <div className="h-full overflow-y-auto pr-3 text-sm leading-7 text-muted-foreground/80">
-          <h2 className="mb-7 text-2xl font-semibold text-foreground">{ui.template.result.previewTitle}</h2>
-          {[...Array(11)].map((_, index) => (
-            <p key={index} className="mb-5">
-              Draftly generated document content preview. Clauses, party information, obligations, and legal terms will be assembled into this paper-style document.
-            </p>
-          ))}
+          <div className="mb-7">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-highlight">{template?.category || "Contract"}</p>
+            <h2 className="text-2xl font-semibold text-foreground">{template?.name || ui.template.result.previewTitle}</h2>
+          </div>
+          <article className="whitespace-pre-wrap rounded-md bg-white px-8 py-9 text-sm leading-7 text-slate-900 shadow-[0_16px_40px_rgba(12,21,25,0.08)] dark:bg-card dark:text-foreground">
+            {previewLines.length ? previewLines.map((paragraph, index) => (
+              <p key={index} className="mb-5 last:mb-0">
+                {paragraph}
+              </p>
+            )) : preview}
+          </article>
         </div>
       </motion.div>
 
       <div className="flex flex-col gap-4">
         {[
-          [ui.template.result.riskTitle, ui.template.result.riskText],
-          [ui.template.result.missingTitle, ui.template.result.missingText],
+          [`${completionRate}% бөглөгдсөн`, `${completedFields}/${totalFields || completedFields} талбар бөглөгдсөн байна.`],
+          [ui.template.result.missingTitle, missingFields.length ? missingFields.join(", ") : ui.template.result.missingText],
           [ui.template.result.analysisTitle, ui.template.result.analysisText],
         ].map(([title, text], index) => (
           <motion.div
@@ -1781,15 +2261,16 @@ function TemplateResult({ ui, onBack, onFinish }: { ui: UiContent; onBack: () =>
         <div className="mt-auto space-y-4 pt-3">
           <div className="flex flex-wrap gap-2">
             {["PPT", "Word", "Docs"].map(label => (
-              <button key={label} type="button" className="flex h-11 min-w-16 items-center justify-center rounded-full border border-border/25 bg-secondary/80 px-4 text-xs font-semibold text-foreground transition-all duration-300 hover:-translate-y-1 hover:border-highlight">
+              <button key={label} type="button" onClick={onExport} className="flex h-11 min-w-16 items-center justify-center rounded-full border border-border/25 bg-secondary/80 px-4 text-xs font-semibold text-foreground transition-all duration-300 hover:-translate-y-1 hover:border-highlight">
                 {label}
               </button>
             ))}
-            {[Archive, Trash2].map((Icon, index) => (
-              <button key={index} type="button" className="flex h-11 w-11 items-center justify-center rounded-full border border-border/25 bg-secondary/80 text-highlight transition-all duration-300 hover:-translate-y-1 hover:border-highlight">
-                <Icon size={16} />
-              </button>
-            ))}
+            <button type="button" onClick={onSave} className="flex h-11 w-11 items-center justify-center rounded-full border border-border/25 bg-secondary/80 text-highlight transition-all duration-300 hover:-translate-y-1 hover:border-highlight">
+              <Archive size={16} />
+            </button>
+            <button type="button" onClick={onFinish} className="flex h-11 w-11 items-center justify-center rounded-full border border-border/25 bg-secondary/80 text-highlight transition-all duration-300 hover:-translate-y-1 hover:border-highlight">
+              <Trash2 size={16} />
+            </button>
           </div>
           <div className="flex items-center justify-between gap-4">
             <button type="button" onClick={onBack} className="rounded-full border border-border/35 bg-secondary/70 px-6 py-3 text-sm font-semibold text-foreground transition-all duration-300 hover:bg-card">
@@ -1808,6 +2289,7 @@ function TemplateResult({ ui, onBack, onFinish }: { ui: UiContent; onBack: () =>
 // â”€â”€â”€ Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export default function App() {
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
   const [locale, setLocale] = useState<Locale>("mn");
   const [isDark, setIsDark] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
@@ -1820,6 +2302,22 @@ export default function App() {
   const [analysisStep, setAnalysisStep] = useState<AnalysisStep>("upload");
   const [analysisResult, setAnalysisResult] = useState<AnalysisResponse | null>(null);
   const [analysisError, setAnalysisError] = useState("");
+  const [authToken, setAuthToken] = useState<string>("");
+  const [authUser, setAuthUser] = useState<AuthUser | null>(null);
+  const [accessState, setAccessState] = useState<AccessState>({
+    isPaid: false,
+    profileComplete: false,
+    missingFields: ["firstName", "lastName"],
+  });
+  const [savedDocuments, setSavedDocuments] = useState<Array<any>>([]);
+  const [savedContracts, setSavedContracts] = useState<Array<any>>([]);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [authBusy, setAuthBusy] = useState(false);
+  const [globalNotice, setGlobalNotice] = useState("");
+  const [paywallOpen, setPaywallOpen] = useState(false);
+  const [paywallInvoice, setPaywallInvoice] = useState<QPayInvoiceResponse | null>(null);
+  const [paywallBusy, setPaywallBusy] = useState(false);
+  const [paywallError, setPaywallError] = useState("");
   const homeScrollRef = useRef<HTMLDivElement>(null);
   const content = LOCALES[locale];
   const PARTNERS = content.partners;
@@ -1839,6 +2337,178 @@ export default function App() {
     return () => clearInterval(t);
   }, []);
 
+  const hydrateAuthState = async (token: string) => {
+    const [me, documents, contracts, payment] = await Promise.all([
+      fetchMe(token),
+      listMyDocuments(token),
+      listMyContracts(token),
+      fetchMyPaymentStatus(token),
+    ]);
+
+    setAuthUser(me.user);
+    setAccessState({
+      isPaid: payment.isPaid || me.access.isPaid,
+      profileComplete: me.profile.isComplete,
+      missingFields: me.profile.missingFields,
+    });
+    setSavedDocuments(documents.documents || []);
+    setSavedContracts(contracts.contracts || []);
+  };
+
+  useEffect(() => {
+    const existingToken = localStorage.getItem("draftly_auth_token");
+    if (!existingToken) return;
+    setAuthToken(existingToken);
+    hydrateAuthState(existingToken).catch(() => {
+      localStorage.removeItem("draftly_auth_token");
+      setAuthToken("");
+      setAuthUser(null);
+    });
+  }, []);
+
+  const handleGoogleLogin = async () => {
+    if (!googleClientId) {
+      setGlobalNotice(content.ui.auth.googleClientMissing);
+      return;
+    }
+    setAuthBusy(true);
+    setGlobalNotice("");
+    try {
+      const idToken = await requestGoogleIdToken(googleClientId);
+      const auth = await loginWithGoogle(idToken);
+      setAuthToken(auth.token);
+      localStorage.setItem("draftly_auth_token", auth.token);
+      await hydrateAuthState(auth.token);
+      setGlobalNotice(content.ui.auth.loginSuccess);
+    } catch (error) {
+      setGlobalNotice(error instanceof Error ? error.message : String(error));
+    } finally {
+      setAuthBusy(false);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("draftly_auth_token");
+    setAuthToken("");
+    setAuthUser(null);
+    setSavedDocuments([]);
+    setSavedContracts([]);
+    setAccessState({
+      isPaid: false,
+      profileComplete: false,
+      missingFields: ["firstName", "lastName"],
+    });
+    setProfileOpen(false);
+    setGlobalNotice(content.ui.auth.logoutSuccess);
+  };
+
+  const handleProfileSave = async (payload: { firstName: string; lastName: string }) => {
+    if (!authToken) return;
+    const updated = await updateMyProfile(authToken, payload);
+    setAuthUser(updated.user);
+    setAccessState((current) => ({
+      ...current,
+      profileComplete: updated.profile.isComplete,
+      missingFields: updated.profile.missingFields,
+    }));
+    setGlobalNotice(content.ui.profile.updated);
+  };
+
+  const ensureAccessForSave = async () => {
+    if (!authToken || !authUser) {
+      setGlobalNotice(content.ui.auth.loginRequired);
+      await handleGoogleLogin();
+      return false;
+    }
+    if (!accessState.profileComplete) {
+      setGlobalNotice(content.ui.profile.incompletePrefix);
+      setProfileOpen(true);
+      return false;
+    }
+    if (!accessState.isPaid) {
+      setGlobalNotice(content.ui.paywall.title);
+      setPaywallOpen(true);
+      return false;
+    }
+    return true;
+  };
+
+  const createPaywallInvoice = async () => {
+    setPaywallBusy(true);
+    setPaywallError("");
+    try {
+      const invoice = await createPublicQPayInvoice({
+        amount: 5000,
+        description: "Draftly save/export access",
+      });
+      setPaywallInvoice(invoice);
+    } catch (error) {
+      setPaywallError(error instanceof Error ? error.message : String(error));
+    } finally {
+      setPaywallBusy(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!paywallOpen) return;
+    if (!paywallInvoice) {
+      void createPaywallInvoice();
+    }
+  }, [paywallOpen, paywallInvoice]);
+
+  const confirmPaywallPayment = async () => {
+    if (!paywallInvoice?.invoice_id || !authToken) return;
+    setPaywallBusy(true);
+    setPaywallError("");
+    try {
+      const status = await checkQPayInvoice(paywallInvoice.invoice_id);
+      if (!status.paid) {
+        setPaywallError(content.ui.paywall.pending);
+        return;
+      }
+      await activatePaidAccess(authToken, paywallInvoice.invoice_id);
+      setAccessState((current) => ({ ...current, isPaid: true }));
+      setPaywallOpen(false);
+      setPaywallInvoice(null);
+      setGlobalNotice(content.ui.paywall.success);
+    } catch (error) {
+      setPaywallError(error instanceof Error ? error.message : String(error));
+    } finally {
+      setPaywallBusy(false);
+    }
+  };
+
+  const handleSaveAnalysis = async (result: AnalysisResponse | null) => {
+    const allowed = await ensureAccessForSave();
+    if (!allowed || !authToken || !result) return;
+    const saved = await saveAnalyzedDocument(authToken, {
+      title: result.document.title || "Analyzed document",
+      content: result.document.extractedText || "",
+      fileName: result.document.fileName,
+      fileUrl: result.document.fileUrl,
+    });
+    setSavedDocuments((current) => [saved.document, ...current]);
+    setGlobalNotice("Анализын баримт хадгалагдлаа.");
+  };
+
+  const handleSaveTemplate = async (payload: { title: string; content: string; template?: TemplateSummary }) => {
+    const allowed = await ensureAccessForSave();
+    if (!allowed || !authToken) return;
+    const saved = await saveGeneratedContract(authToken, {
+      title: payload.title,
+      content: payload.content,
+      contractType: payload.template?.category,
+    });
+    setSavedContracts((current) => [saved.contract, ...current]);
+    setGlobalNotice("Гэрээ хадгалагдлаа.");
+  };
+
+  const handleExportAction = async (_payload?: unknown) => {
+    const allowed = await ensureAccessForSave();
+    if (!allowed) return;
+    setGlobalNotice("Export бэлэн. Дараагийн алхмаар PDF generation холбогдоно.");
+  };
+
   const navigateTo = (nextPage: AppPage, direction = 1) => {
     if (nextPage !== page) {
       setPreviousPage(page);
@@ -1850,18 +2520,18 @@ export default function App() {
   const openHome = () => {
     navigateTo("home", -1);
     window.setTimeout(() => {
-      homeScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+      homeScrollRef.current?.scrollTo({ top: 0, behavior: "auto" });
     }, 80);
   };
 
   const openAnalysis = () => {
     navigateTo("analysis", 1);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "auto" });
   };
 
   const openTemplate = () => {
     navigateTo("template", 1);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "auto" });
   };
 
   const goBackPage = () => {
@@ -1872,7 +2542,7 @@ export default function App() {
   const scrollHomeTo = (ref: RefObject<HTMLElement>) => {
     navigateTo("home", -1);
     window.setTimeout(() => {
-      ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      ref.current?.scrollIntoView({ behavior: "auto", block: "start" });
     }, 80);
   };
 
@@ -1903,9 +2573,13 @@ export default function App() {
   const navControls: FolderNavControls = {
     isDark,
     languageLabel: locale === "mn" ? "MN" : "ENG",
-    loginLabel: content.login,
+    loginLabel: authBusy ? "..." : content.login,
+    isAuthenticated: Boolean(authUser),
+    userAvatarUrl: authUser?.avatarUrl || null,
     onThemeToggle: () => setIsDark(d => !d),
     onLanguageToggle: () => setLocale(current => current === "mn" ? "en" : "mn"),
+    onLoginClick: () => void handleGoogleLogin(),
+    onProfileClick: () => setProfileOpen(true),
   };
 
   return (
@@ -1913,28 +2587,24 @@ export default function App() {
       <AnimatePresence>
         {showSplash && <OpeningSplash onComplete={() => setShowSplash(false)} />}
       </AnimatePresence>
-      <AnimatePresence custom={pageDirection} initial={false}>
-        {page === "template" ? (
-          <motion.div
+      {page === "template" ? (
+          <div
             key="template"
-            custom={pageDirection}
-            variants={stackedPageVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
             className="absolute inset-0 overflow-hidden rounded-t-[2rem] shadow-[0_-15px_50px_rgba(0,0,0,0.15)]"
             style={{ borderRadius: "32px 32px 0 0" }}
           >
-            <TemplateWorkflow onBackHome={goBackPage} onTabSelect={handleTabSelect} navControls={navControls} ui={content.ui} />
-          </motion.div>
+            <TemplateWorkflow
+              onBackHome={goBackPage}
+              onTabSelect={handleTabSelect}
+              navControls={navControls}
+              ui={content.ui}
+              onSaveTemplate={handleSaveTemplate}
+              onExportTemplate={handleExportAction}
+            />
+          </div>
         ) : page === "analysis" ? (
-          <motion.div
+          <div
             key="analysis"
-            custom={pageDirection}
-            variants={stackedPageVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
             className="absolute inset-0 overflow-y-auto overflow-x-hidden rounded-t-[2rem] shadow-[0_-15px_50px_rgba(0,0,0,0.15)]"
             style={{ borderRadius: "32px 32px 0 0" }}
           >
@@ -1949,18 +2619,15 @@ export default function App() {
               setAnalysisResult={setAnalysisResult}
               analysisError={analysisError}
               setAnalysisError={setAnalysisError}
+              onSaveAnalysis={handleSaveAnalysis}
+              onExportAnalysis={() => handleExportAction()}
             />
-          </motion.div>
+          </div>
         ) : (
-          <motion.div
+          <div
             key="home"
             ref={homeScrollRef}
-            custom={pageDirection}
-            variants={stackedPageVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            className="absolute inset-0 overflow-y-auto scroll-smooth bg-background"
+            className="absolute inset-0 overflow-y-auto bg-background"
           >
             <HomeSimpleNav onSelect={handleTabSelect} controls={navControls} ui={content.ui} scrollContainerRef={homeScrollRef} />
 
@@ -2411,6 +3078,80 @@ export default function App() {
           </div>
         </div>
       </motion.footer>
+          </div>
+        )}
+      {globalNotice && (
+        <div className="pointer-events-none fixed bottom-4 right-4 z-[130] max-w-sm rounded-lg border border-border bg-card px-4 py-3 text-sm text-foreground shadow-lg">
+          {globalNotice}
+        </div>
+      )}
+      <ProfilePanel
+        isOpen={profileOpen}
+        user={authUser}
+        locale={locale}
+        ui={content.ui}
+        access={accessState}
+        documents={savedDocuments}
+        contracts={savedContracts}
+        onClose={() => setProfileOpen(false)}
+        onLogout={handleLogout}
+        onLanguageToggle={() => setLocale(current => current === "mn" ? "en" : "mn")}
+        onProfileSave={handleProfileSave}
+      />
+      <AnimatePresence>
+        {paywallOpen && (
+          <motion.div
+            className="fixed inset-0 z-[125] flex items-center justify-center bg-background/45 p-4 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setPaywallOpen(false)}
+          >
+            <motion.div
+              className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-[0_24px_70px_rgba(0,0,0,0.25)]"
+              initial={{ y: 18, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 18, opacity: 0 }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="mb-4 flex items-center gap-2">
+                <CreditCard size={18} className="text-accent" />
+                <h4 className="text-lg font-bold text-foreground">{content.ui.paywall.title}</h4>
+              </div>
+              <p className="mb-5 text-sm text-muted-foreground">{content.ui.paywall.description}</p>
+              <div className="mb-5 flex items-center justify-center rounded-xl border border-border bg-secondary p-4">
+                {paywallBusy ? (
+                  <LoaderCircle className="h-10 w-10 animate-spin text-accent" />
+                ) : paywallInvoice?.qr_image ? (
+                  <img
+                    src={paywallInvoice.qr_image.startsWith("data:") ? paywallInvoice.qr_image : `data:image/png;base64,${paywallInvoice.qr_image}`}
+                    alt="Payment QR"
+                    className="h-56 w-56 object-contain"
+                  />
+                ) : (
+                  <QrCode size={128} />
+                )}
+              </div>
+              {paywallError && <p className="mb-3 text-sm text-red-600">{paywallError}</p>}
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => void createPaywallInvoice()}
+                  disabled={paywallBusy}
+                  className="flex-1 rounded-full border border-border bg-secondary px-4 py-2 text-sm font-semibold text-foreground disabled:opacity-60"
+                >
+                  {content.ui.paywall.createAgain}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => void confirmPaywallPayment()}
+                  disabled={paywallBusy || !paywallInvoice}
+                  className="flex-1 rounded-full bg-button px-4 py-2 text-sm font-semibold text-button-text disabled:opacity-60"
+                >
+                  {content.ui.paywall.check}
+                </button>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

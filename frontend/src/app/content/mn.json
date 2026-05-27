@@ -176,6 +176,32 @@
     },
     "confirm": {
       "title": "Та итгэлтэй байна уу?"
+    },
+    "auth": {
+      "loginRequired": "Хадгалахын тулд эхлээд нэвтэрнэ үү.",
+      "loginSuccess": "Амжилттай нэвтэрлээ.",
+      "logoutSuccess": "Системээс гарлаа.",
+      "googleClientMissing": "Google client ID тохируулаагүй байна."
+    },
+    "profile": {
+      "title": "Профайл",
+      "saveSettings": "Тохиргоо хадгалах",
+      "savedDocuments": "Хадгалсан баримтууд",
+      "savedContracts": "Хадгалсан гэрээнүүд",
+      "emptyDocuments": "Хадгалсан баримт алга.",
+      "emptyContracts": "Хадгалсан гэрээ алга.",
+      "paidAccessActive": "Төлбөртэй эрх идэвхтэй",
+      "paymentRequired": "Save/export хийхийн тулд төлбөр шаардлагатай",
+      "incompletePrefix": "Мэдээллээ бөглөнө үү:",
+      "updated": "Профайл амжилттай шинэчлэгдлээ."
+    },
+    "paywall": {
+      "title": "Төлбөрөө төлнө үү",
+      "description": "Save болон export хийхийн тулд төлбөр баталгаажуулна.",
+      "createAgain": "Дахин үүсгэх",
+      "check": "Төлбөр шалгах",
+      "pending": "Төлбөр хараахан баталгаажаагүй байна.",
+      "success": "Төлбөр амжилттай баталгаажлаа."
     }
   },
   "footer": {

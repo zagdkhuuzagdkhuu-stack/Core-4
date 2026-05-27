@@ -1,7 +1,10 @@
 import { Router } from "express";
-import { register, login, googleLogin, } from "../controller/auth.controller";
+import { getMe, register, login, googleLogin, updateProfile, } from "../controller/auth.controller";
+import { requireAuth } from "../middleware/auth.middleware";
 const router = Router();
 router.post("/register", register);
 router.post("/login", login);
 router.post("/google", googleLogin);
+router.get("/me", requireAuth, getMe);
+router.patch("/profile", requireAuth, updateProfile);
 export default router;

@@ -180,6 +180,32 @@
     },
     "confirm": {
       "title": "Are you sure?"
+    },
+    "auth": {
+      "loginRequired": "Please login before saving.",
+      "loginSuccess": "Login successful.",
+      "logoutSuccess": "You have been logged out.",
+      "googleClientMissing": "Google client ID is not configured."
+    },
+    "profile": {
+      "title": "Profile",
+      "saveSettings": "Save settings",
+      "savedDocuments": "Saved documents",
+      "savedContracts": "Saved contracts",
+      "emptyDocuments": "No saved documents yet.",
+      "emptyContracts": "No saved contracts yet.",
+      "paidAccessActive": "Paid access active",
+      "paymentRequired": "Payment is required for save/export actions",
+      "incompletePrefix": "Please complete your profile:",
+      "updated": "Profile updated successfully."
+    },
+    "paywall": {
+      "title": "Complete payment",
+      "description": "Payment is required to use save and export actions.",
+      "createAgain": "Create again",
+      "check": "Check payment",
+      "pending": "Payment is not confirmed yet.",
+      "success": "Payment confirmed successfully."
     }
   },
   "footer": {
