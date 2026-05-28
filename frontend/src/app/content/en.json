@@ -72,12 +72,96 @@
     "description": "PDF, DOCX, TXT up to 10MB",
     "cta": "Browse Files"
   },
+  "information": {
+    "navLabel": "Information",
+    "hero": {
+      "title": "Constitution of Mongolia",
+      "subtitle": "Historical development, adoption years, and related information about the Constitution of Mongolia."
+    },
+    "constitutions": [
+      {
+        "year": "1924",
+        "title": "The First Constitution of Mongolia",
+        "description": "The first constitutional document that proclaimed the republic and established the foundation of state structure.",
+        "whenLabel": "When",
+        "whenValue": "November 26, 1924",
+        "sizeLabel": "Size",
+        "sizeValue": "6 chapters, 50 articles",
+        "governanceLabel": "Form of government",
+        "governanceValue": "Republican government"
+      },
+      {
+        "year": "1940",
+        "title": "The Second Constitution of Mongolia",
+        "description": "Updated the principles of state organization, citizen rights and duties, and the economic foundation.",
+        "whenLabel": "When",
+        "whenValue": "June 30, 1940",
+        "sizeLabel": "Size",
+        "sizeValue": "12 chapters, 95 articles",
+        "governanceLabel": "Form of government",
+        "governanceValue": "People's democratic government"
+      },
+      {
+        "year": "1960",
+        "title": "The Third Constitution of Mongolia",
+        "description": "Linked social structure, principles of state administration, and citizen rights with the development direction of the time.",
+        "whenLabel": "When",
+        "whenValue": "July 6, 1960",
+        "sizeLabel": "Size",
+        "sizeValue": "10 chapters, 94 articles",
+        "governanceLabel": "Form of government",
+        "governanceValue": "Socialist state system"
+      },
+      {
+        "year": "1992",
+        "title": "The New Constitution of Mongolia",
+        "description": "The current Constitution that guarantees democracy, human rights, and the separation of powers.",
+        "whenLabel": "When",
+        "whenValue": "January 13, 1992",
+        "sizeLabel": "Size",
+        "sizeValue": "6 chapters, 70 articles",
+        "governanceLabel": "Form of government",
+        "governanceValue": "Parliamentary republic"
+      }
+    ],
+    "sources": {
+      "title": "Sources",
+      "subtitle": "This information was prepared based on the following sources.",
+      "items": [
+        {
+          "name": "legalinfo.mn",
+          "description": "Constitution of Mongolia",
+          "url": "https://legalinfo.mn"
+        },
+        {
+          "name": "parliament.mn",
+          "description": "State Great Khural of Mongolia",
+          "url": "https://parliament.mn"
+        },
+        {
+          "name": "constitution.gov.mn",
+          "description": "Constitutional information",
+          "url": "https://constitution.gov.mn"
+        },
+        {
+          "name": "nda.gov.mn",
+          "description": "National archive information",
+          "url": "https://nda.gov.mn"
+        }
+      ]
+    },
+    "footer": {
+      "copyright": "© 2026 Draftly. All rights reserved.",
+      "links": ["Privacy policy", "Terms of service", "Help center"]
+    }
+  },
   "ui": {
     "nav": {
       "home": "Home",
       "template": "Template",
       "analysis": "Analysis",
-      "contact": "Contact us"
+      "contact": "Contact us",
+      "information": "Information"
     },
     "actions": {
       "back": "Back",
