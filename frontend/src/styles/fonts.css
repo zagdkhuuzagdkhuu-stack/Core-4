@@ -1,38 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 body {
-  font-family: 'DM Sans', sans-serif;
-}
-
-.font-display {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 @keyframes marquee {
   from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  to { transform: translateX(-50%); }
 }
 
 .animate-marquee {
-  animation: marquee 34s linear infinite;
+  animation: marquee 40s linear infinite;
   display: flex;
   width: max-content;
-}
-
-@keyframes scrollup {
-  from { transform: translateY(0); }
-  to   { transform: translateY(-50%); }
-}
-
-.animate-scrollup {
-  animation: scrollup 22s linear infinite;
-}
-
-@keyframes floatscreen {
-  0%, 100% { transform: perspective(900px) rotateY(-14deg) rotateX(5deg) translateY(0px); }
-  50%       { transform: perspective(900px) rotateY(-14deg) rotateX(5deg) translateY(-10px); }
-}
-
-.animate-floatscreen {
-  animation: floatscreen 5.5s ease-in-out infinite;
 }

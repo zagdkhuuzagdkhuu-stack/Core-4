@@ -1,16 +1,7 @@
 import type { Dispatch, RefObject, SetStateAction } from "react";
-import { AnimatePresence, motion } from "motion/react";
-import { ArrowRight, Facebook, FileText, Instagram, Linkedin, Mail, MapPin, Phone, Twitter } from "lucide-react";
-import {
-  ORBIT_ANGLES,
-  ORBIT_FEATURES,
-  ORBIT_PARTICLES,
-  ORBIT_RADII,
-  REVEAL_ITEM,
-  SECTION_REVEAL,
-} from "../shared/constants";
+import { motion } from "motion/react";
+import { ArrowRight, FileText, Shield, BarChart3, Search, Download, Smartphone, Users, Building2, ScrollText } from "lucide-react";
 import type { AppContent, FolderNavControls, HeaderTab } from "../shared/types";
-import { HomeSimpleNav } from "./Navbar";
 
 type InViewRef = {
   ref: RefObject<HTMLElement>;
@@ -36,459 +27,301 @@ type HomePageProps = {
   homeScrollRef: RefObject<HTMLDivElement>;
 };
 
+const FEATURES = [
+  { icon: Search, title: "Contract Analysis", desc: "AI-powered review that identifies risks, missing clauses, and compliance issues in seconds." },
+  { icon: FileText, title: "Template Generation", desc: "Generate professional legal documents from smart templates tailored to your needs." },
+  { icon: Shield, title: "Risk Detection", desc: "Advanced algorithms detect risky terms, inconsistent wording, and potential liabilities." },
+  { icon: BarChart3, title: "Smart Analytics", desc: "Get detailed insights with risk scores, compliance metrics, and actionable recommendations." },
+  { icon: Download, title: "Export & Share", desc: "Download contracts as PDF, DOCX, or share securely with your team." },
+  { icon: Smartphone, title: "Mobile Ready", desc: "Access and review your documents from anywhere, on any device." },
+];
+
+const STATS = [
+  { value: "50K+", label: "Documents Analyzed" },
+  { value: "10K+", label: "Active Users" },
+  { value: "98%", label: "Accuracy Rate" },
+  { value: "150+", label: "Countries" },
+];
+
+const CUSTOMER_LOGOS = [
+  "Vinson & Elkins", "Reed Smith", "CMS", "Dentons", "BakerHostetler",
+  "Macfarlanes", "Gleiss Lutz", "Cuatrecasas", "A&O Shearman", "PwC UK",
+];
+
 export function HomePage({
   content,
-  partners: PARTNERS,
-  templates: TEMPLATES,
-  featuresRef,
-  templateRef,
-  uploadRef,
-  footerRef,
-  activeFeature,
-  setActiveFeature,
-  circleTilt,
-  setCircleTilt,
-  isDragging,
-  setIsDragging,
+  partners: _PARTNERS,
+  templates: _TEMPLATES,
+  featuresRef: _featuresRef,
+  templateRef: _templateRef,
+  uploadRef: _uploadRef,
+  footerRef: _footerRef,
+  activeFeature: _activeFeature,
+  setActiveFeature: _setActiveFeature,
+  circleTilt: _circleTilt,
+  setCircleTilt: _setCircleTilt,
+  isDragging: _isDragging,
+  setIsDragging: _setIsDragging,
   onTabSelect: handleTabSelect,
-  navControls,
-  homeScrollRef,
+  navControls: _navControls,
+  homeScrollRef: _homeScrollRef,
 }: HomePageProps) {
   return (
     <>
-      <HomeSimpleNav onSelect={handleTabSelect} controls={navControls} ui={content.ui} scrollContainerRef={homeScrollRef} />
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#0A0A0A]">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(124,58,237,0.15),transparent_50%),radial-gradient(ellipse_at_bottom,rgba(124,58,237,0.05),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(124,58,237,0.08),transparent_40%)]" />
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }} />
 
-      {/* Page 1: Hero */}
-      <motion.section
-        className="draftly-hero-section relative min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary px-3 pb-6 pt-3 shadow-[0_-18px_55px_rgba(0,0,0,0.10)] flex flex-col"
-        variants={SECTION_REVEAL}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.16 }}
-      >
-        {/* Document body */}
-        <motion.div
-          className="draftly-hero-surface relative flex-1 bg-background border border-border rounded-[2rem] shadow-[0_12px_70px_rgba(0,0,0,0.07)] overflow-hidden flex flex-col"
-        >
-          <div className="pointer-events-none absolute left-0 top-0 z-10 h-px w-[920px] max-w-[calc(100vw-1.5rem)] bg-background" />
-          {/* Hero content */}
-          <motion.div className="flex-1 flex flex-col items-center justify-center text-center px-6 py-12 md:py-14">
-            <motion.h1
-              className="font-display text-4xl md:text-[3.55rem] lg:text-[3.9rem] font-bold leading-[1.08] max-w-3xl text-foreground mb-7"
-              variants={REVEAL_ITEM}
-            >
-              {content.hero.title}
-            </motion.h1>
-
-            <motion.div
-              className="flex gap-3 mb-11"
-              variants={REVEAL_ITEM}
-            >
-              <button className="flex min-w-[10rem] items-center justify-center gap-2 bg-button text-button-text px-8 py-3.5 rounded-full text-sm font-medium hover:opacity-85 active:scale-95 transition-all duration-200">
-                {content.hero.primaryCta} <ArrowRight size={14} />
-              </button>
-              <button className="min-w-[10rem] px-8 py-3.5 rounded-full text-sm font-medium border border-border hover:bg-secondary active:scale-95 transition-all duration-200 text-foreground">
-                {content.hero.secondaryCta}
-              </button>
-            </motion.div>
-
-            {/* Partner logos */}
-            <motion.div
-              className="space-y-3 w-full max-w-lg"
-              variants={REVEAL_ITEM}
-            >
-              <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                {content.hero.partnerLabel}
-              </p>
-              <div className="overflow-hidden">
-                <div className="animate-marquee gap-10">
-                  {[...PARTNERS, ...PARTNERS].map((p, i) => (
-                    <span
-                      key={i}
-                      className="shrink-0 text-sm font-medium text-muted-foreground/55 hover:text-muted-foreground transition-colors"
-                    >
-                      {p}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        </motion.div>
-      </motion.section>
-
-      {/* Page 2: What do we do? */}
-      <motion.section
-        className="draftly-solar-section relative min-h-screen overflow-hidden rounded-t-[2rem] bg-background py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-24"
-        ref={featuresRef.ref}
-        variants={SECTION_REVEAL}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.14 }}
-      >
-        <div
-          className="flex min-h-[calc(100vh-9rem)] flex-col items-center gap-10 px-4 md:px-6 lg:flex-row lg:gap-0"
-          onMouseMove={event => {
-            const rect = event.currentTarget.getBoundingClientRect();
-            const offset = (event.clientX - rect.left) / rect.width - 0.5;
-            setCircleTilt(offset * 10);
-          }}
-          onMouseLeave={() => setCircleTilt(0)}
-        >
-          {/* Circle carousel */}
-          <motion.div className="relative aspect-square w-[min(88vw,460px)] flex-shrink-0 lg:-ml-[2vw] lg:w-[41vw] lg:min-w-[390px] lg:max-w-[650px]" variants={REVEAL_ITEM}>
-
-            <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(207,157,123,0.10),transparent_48%)]" />
-
-            {/* Subtle orbital field */}
-            <motion.div
-              className="absolute inset-0 rounded-full"
-              animate={{ rotate: 360 + circleTilt }}
-              transition={{ duration: 96, repeat: Infinity, ease: "linear" }}
-            >
-              {ORBIT_RADII.map((radius, index) => (
-                <div
-                  key={radius}
-                  className={`absolute rounded-full border ${
-                    index === activeFeature
-                      ? "border-highlight/42 shadow-[0_0_28px_rgba(207,157,123,0.16)]"
-                      : "border-accent/18"
-                  }`}
-                  style={{
-                    inset: `${(100 - radius) / 2}%`,
-                  }}
-                />
-              ))}
-              <div className="absolute inset-[5%] rounded-full border border-highlight/12 shadow-[0_0_80px_rgba(207,157,123,0.12)]" />
-              {ORBIT_PARTICLES.map((particle, index) => (
-                <span
-                  key={`${particle.left}-${particle.top}`}
-                  className="absolute h-1 w-1 rounded-full bg-button/55 shadow-[0_0_12px_rgba(207,157,123,0.22)]"
-                  style={{
-                    left: particle.left,
-                    top: particle.top,
-                    opacity: 0.26 + (index % 4) * 0.08,
-                  }}
-                />
-              ))}
-            </motion.div>
-
-            {/* Nodes */}
-            <motion.div
-              className="absolute inset-0 rounded-full"
-              animate={{ rotate: 360 + circleTilt * 1.35 }}
-              transition={{ duration: 118, repeat: Infinity, ease: "linear" }}
-            >
-              {ORBIT_FEATURES.map((feature, index) => {
-                const isActive = index === activeFeature;
-                const rad = (ORBIT_ANGLES[index] * Math.PI) / 180;
-                const radius = ORBIT_RADII[index] / 2;
-                const x = 50 + radius * Math.sin(rad);
-                const y = 50 - radius * Math.cos(rad);
-
-                return (
-                  <motion.button
-                    key={feature.num}
-                    type="button"
-                    className={`absolute flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border font-mono leading-none backdrop-blur-md transition-colors duration-500 ${
-                      isActive
-                        ? "h-16 w-16 border-highlight bg-secondary/88 text-2xl font-bold text-foreground shadow-[0_0_34px_rgba(207,157,123,0.42),inset_0_0_24px_rgba(207,157,123,0.08)]"
-                        : "h-11 w-11 border-border/20 bg-card/26 text-sm font-semibold text-foreground/50 shadow-[0_12px_30px_rgba(0,0,0,0.22)] hover:border-accent/70 hover:text-foreground/80"
-                    }`}
-                    style={{ left: `${x}%`, top: `${y}%` }}
-                    animate={{ scale: isActive ? 1.08 : 1, opacity: isActive ? 1 : 0.58 }}
-                    transition={{ duration: 0.48, ease: "easeOut" }}
-                    onClick={() => setActiveFeature(index)}
-                    aria-label={`Show ${feature.title}`}
-                  >
-                    <motion.span
-                      animate={{ rotate: -360 - circleTilt * 1.35 }}
-                      transition={{ duration: 118, repeat: Infinity, ease: "linear" }}
-                    >
-                      {feature.num}
-                    </motion.span>
-                  </motion.button>
-                );
-              })}
-            </motion.div>
-
-            {/* Quiet center field */}
-            <div className="pointer-events-none absolute inset-[30%] rounded-full border border-accent/22 bg-background/24 shadow-[inset_0_0_54px_rgba(0,0,0,0.22)]">
-              <div className="absolute inset-[22%] rounded-full border border-border/20 bg-background/18" />
-            </div>
-          </motion.div>
-
-          {/* Feature content */}
-          <motion.div className="flex-1 px-2 text-center sm:px-6 lg:px-12 lg:text-left xl:pr-24" variants={REVEAL_ITEM}>
-            <div className="mb-7 inline-flex rounded-full border border-highlight/24 bg-secondary px-5 py-3 shadow-[0_18px_40px_rgba(0,0,0,0.18)] sm:px-7">
-              <h2 className="font-display text-xl font-bold text-foreground sm:text-2xl md:text-3xl">
-                {content.featuresSectionTitle}
-              </h2>
-            </div>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeFeature}
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.45 }}
-              >
-                <p className="mb-5 font-mono text-sm text-highlight">
-                  {ORBIT_FEATURES[activeFeature].num}
-                </p>
-                <h3 className="mb-7 font-display text-4xl font-bold leading-none text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
-                  {ORBIT_FEATURES[activeFeature].title}
-                </h3>
-                <p className="mx-auto max-w-sm text-base leading-relaxed text-foreground/68 sm:text-lg lg:mx-0">
-                  {ORBIT_FEATURES[activeFeature].desc}
-                </p>
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Progress indicators */}
-            <div className="mt-9 flex gap-2">
-              {ORBIT_FEATURES.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActiveFeature(i)}
-                  className={`h-0.5 rounded-full transition-all duration-500 ${
-                    i === activeFeature
-                      ? "w-10 bg-highlight"
-                      : "w-2 bg-secondary/18 hover:bg-highlight/48"
-                  }`}
-                  aria-label={`Go to feature ${i + 1}`}
-                />
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* Page 3: Template flow */}
-      <motion.section
-        className="draftly-template-section relative min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-28"
-        ref={templateRef.ref}
-        variants={SECTION_REVEAL}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.16 }}
-      >
-        <div className="mx-auto flex w-full max-w-screen-xl flex-col-reverse items-center gap-10 px-4 sm:px-6 lg:flex-row lg:gap-16 lg:px-8 xl:gap-24">
-
-          {/* 3D screen card */}
+        <div className="relative z-10 mx-auto max-w-5xl px-4 text-center">
           <motion.div
-            className="w-full max-w-[20rem] flex-shrink-0"
-            variants={REVEAL_ITEM}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <div
-              className="bg-secondary dark:bg-secondary rounded-3xl overflow-hidden shadow-[0_40px_80px_rgba(0,0,0,0.13)] border border-border"
-            >
-              {/* Title bar */}
-              <div className="bg-muted/50 dark:bg-card/50 px-5 py-3.5 flex items-center gap-2 border-b border-border/50">
-                <div className="w-2.5 h-2.5 rounded-full bg-highlight" />
-                <div className="w-2.5 h-2.5 rounded-full bg-border" />
-                <div className="w-2.5 h-2.5 rounded-full bg-border/50" />
-                <span className="ml-3 text-[11px] text-muted-foreground">{content.templateFlow.windowTitle}</span>
-              </div>
-
-              {/* Scrolling list */}
-              <div className="h-[340px] overflow-hidden relative p-3">
-                <div className="animate-scrollup space-y-2">
-                  {[...TEMPLATES, ...TEMPLATES].map((t, i) => (
-                    <div
-                      key={i}
-                      className="bg-background rounded-2xl px-4 py-3.5 flex items-center gap-3 border border-border/60"
-                    >
-                      <div className="w-8 h-8 rounded-xl bg-secondary dark:bg-background flex items-center justify-center flex-shrink-0">
-                        <FileText size={13} className="text-muted-foreground" />
-                      </div>
-                      <div>
-                        <p className="text-xs font-medium text-foreground">{t}</p>
-                        <p className="text-[10px] text-muted-foreground mt-0.5">{content.templateFlow.itemSubtitle}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-secondary to-transparent pointer-events-none" />
-              </div>
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#2A2A2A] bg-[#141414] px-4 py-1.5">
+              <span className="h-2 w-2 rounded-full bg-[#7C3AED]" />
+              <span className="text-xs font-medium text-gray-400">AI-Powered Legal Intelligence</span>
             </div>
           </motion.div>
 
-          {/* Text */}
-          <motion.div
-            className="flex-1 text-center lg:text-left"
-            variants={REVEAL_ITEM}
+          <motion.h1
+            className="mb-6 text-5xl font-bold leading-tight tracking-tight text-white sm:text-6xl md:text-7xl lg:text-8xl"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
           >
-            <h2 className="mb-6 font-display text-3xl font-bold leading-[1.15] text-foreground sm:text-4xl md:text-5xl">
-              {content.templateFlow.titleLines.map((line, index) => (
-                <span key={line}>
-                  {line}
-                  {index < content.templateFlow.titleLines.length - 1 && <br />}
-                </span>
-              ))}
-            </h2>
-            <p className="mx-auto mb-10 max-w-md text-base leading-relaxed text-muted-foreground lg:mx-0">
-              {content.templateFlow.description}
-            </p>
-            <button className="flex min-w-[10rem] items-center justify-center gap-2 bg-foreground text-background px-7 py-3.5 rounded-full text-sm font-medium hover:opacity-85 active:scale-95 transition-all duration-200">
-              {content.templateFlow.cta} <ArrowRight size={14} />
+            Practice Made
+            <br />
+            <span className="bg-gradient-to-r from-[#7C3AED] to-[#A78BFA] bg-clip-text text-transparent">Perfect</span>
+          </motion.h1>
+
+          <motion.p
+            className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-gray-400"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          >
+            Today's law firms and in-house legal teams trust Draftly to elevate their craft,
+            <br className="hidden sm:block" />
+            streamline contract review, and navigate complexity with confidence.
+          </motion.p>
+
+          <motion.div
+            className="flex flex-col items-center justify-center gap-4 sm:flex-row"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+          >
+            <button
+              type="button"
+              onClick={() => handleTabSelect("Analysis")}
+              className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-3.5 text-sm font-semibold text-black transition-all duration-200 hover:bg-gray-200"
+            >
+              {content.hero.primaryCta} <ArrowRight size={16} />
+            </button>
+            <button
+              type="button"
+              onClick={() => handleTabSelect("Template")}
+              className="inline-flex items-center gap-2 rounded-lg border border-[#2A2A2A] px-8 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/5"
+            >
+              {content.hero.secondaryCta}
             </button>
           </motion.div>
         </div>
-      </motion.section>
 
-      {/* Page 4: Upload and analyse */}
-      <motion.section
-        className="draftly-analysis-section relative min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-28"
-        ref={uploadRef.ref}
-        variants={SECTION_REVEAL}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.16 }}
-      >
-        <div className="mx-auto flex w-full max-w-screen-xl flex-col items-stretch gap-10 px-4 sm:px-6 lg:flex-row lg:items-start lg:gap-16 lg:px-8 xl:gap-24">
-
-          {/* Analysis labels */}
-          <div className="flex-1 pt-4">
-            {content.upload.labels.map((text, i) => (
-              <motion.div
-                key={text}
-                className="py-9 border-b border-border"
-                variants={REVEAL_ITEM}
-                transition={{ duration: 0.65, delay: i * 0.1, ease: "easeOut" }}
-              >
-                <div className="flex items-center justify-between">
-                  <h3 className="font-display text-3xl font-bold text-foreground sm:text-4xl md:text-5xl">
-                    {text}
-                  </h3>
-                  <span className="font-mono text-sm text-muted-foreground/50">0{i + 1}</span>
-                </div>
-              </motion.div>
-            ))}
+        {/* Customer logos */}
+        <motion.div
+          className="absolute bottom-12 left-0 right-0 z-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.6 }}
+        >
+          <p className="mb-4 text-center text-xs font-medium uppercase tracking-[0.2em] text-gray-500">
+            {content.hero.partnerLabel}
+          </p>
+          <div className="overflow-hidden">
+            <div className="animate-marquee flex items-center gap-16 px-8">
+              {[...CUSTOMER_LOGOS, ...CUSTOMER_LOGOS].map((name, i) => (
+                <span
+                  key={i}
+                  className="shrink-0 text-sm font-medium text-gray-600"
+                >
+                  {name}
+                </span>
+              ))}
+            </div>
           </div>
+        </motion.div>
+      </section>
 
-          {/* Upload card */}
+      {/* Stats Section */}
+      <section className="border-b border-[#1F1F1F] bg-[#0A0A0A] py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
-            className="w-full max-w-sm self-center pt-2 lg:w-80 lg:self-auto lg:pt-4"
-            variants={REVEAL_ITEM}
+            className="grid grid-cols-2 gap-8 md:grid-cols-4"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6 }}
           >
-            {/* Bouncing icon */}
-            <motion.div
-              className="w-14 h-14 bg-background border border-border rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-sm"
-            >
-              <FileText size={24} className="text-muted-foreground" />
-            </motion.div>
+            {STATS.map((stat) => (
+              <div key={stat.label} className="text-center">
+                <p className="text-4xl font-bold text-white sm:text-5xl">{stat.value}</p>
+                <p className="mt-2 text-sm text-gray-400">{stat.label}</p>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
 
-            <div
-              className={`relative bg-background border-2 border-dashed rounded-3xl p-8 text-center transition-all duration-300 ${
-                isDragging
-                  ? "border-highlight bg-highlight/5 scale-[1.01]"
-                  : "border-border"
-              }`}
-              onDragEnter={() => setIsDragging(true)}
-              onDragLeave={() => setIsDragging(false)}
-              onDragOver={e => e.preventDefault()}
-              onDrop={() => setIsDragging(false)}
-            >
-              <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.16em] mb-4">
-                {content.upload.eyebrow}
-              </p>
-              <h4 className="text-base font-semibold text-foreground mb-2">
-                {content.upload.title}
-              </h4>
-              <p className="text-sm text-muted-foreground mb-7">
-                {content.upload.description}
-              </p>
-              <button className="w-full bg-foreground text-background py-3.5 rounded-full text-sm font-medium hover:opacity-85 transition-opacity">
-                {content.upload.cta}
-              </button>
+      {/* Features Section */}
+      <section className="bg-[#0A0A0A] py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            className="mb-16 text-center"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
+              Everything you need to
+              <br />
+              manage legal documents
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-gray-400">
+              AI-powered tools designed for legal professionals to work faster, smarter, and with greater precision.
+            </p>
+          </motion.div>
 
-              {/* Accent line at bottom */}
-              <div className="absolute bottom-0 left-6 right-6 h-px rounded-full bg-gradient-to-r from-transparent via-highlight to-transparent opacity-60" />
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {FEATURES.map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <motion.div
+                  key={feature.title}
+                  className="group rounded-xl border border-[#1F1F1F] bg-[#141414] p-6 transition-all duration-300 hover:border-[#7C3AED]/50 hover:bg-[#1A1A1A]"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-[#7C3AED]/10 text-[#7C3AED]">
+                    <Icon size={24} />
+                  </div>
+                  <h3 className="mb-2 text-lg font-semibold text-white">{feature.title}</h3>
+                  <p className="text-sm leading-relaxed text-gray-400">{feature.desc}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonial */}
+      <section className="border-t border-[#1F1F1F] bg-[#0A0A0A] py-24">
+        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-full bg-[#7C3AED]/10">
+              <Users size={28} className="text-[#7C3AED]" />
+            </div>
+            <blockquote className="mb-8 text-2xl leading-relaxed text-gray-300 sm:text-3xl">
+              "Draftly has transformed how we review contracts. The AI-powered analysis
+              catches issues we would have missed and saves our team hours of manual review."
+            </blockquote>
+            <div>
+              <p className="font-semibold text-white">Sarah Chen</p>
+              <p className="text-sm text-gray-400">General Counsel, TechCorp International</p>
             </div>
           </motion.div>
         </div>
-      </motion.section>
+      </section>
 
-      {/* Page 5: Footer */}
-      <motion.footer
-        className="draftly-footer-section relative z-10 mt-16 overflow-hidden rounded-t-[2rem] border-t border-border bg-secondary shadow-[0_-18px_55px_rgba(0,0,0,0.12)]"
-        ref={footerRef.ref}
-        variants={SECTION_REVEAL}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.16 }}
-      >
-        <div className="mx-auto max-w-screen-xl px-6 py-8 lg:px-8 lg:py-10">
-          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-4 md:gap-12">
-
-            {/* Brand */}
-            <motion.div className="space-y-5" variants={REVEAL_ITEM}>
-              <div className="font-display text-2xl font-bold text-foreground">{content.brand}</div>
-              <p className="text-sm text-muted-foreground">{content.footer.tagline}</p>
-              <div className="flex gap-2">
-                {[Twitter, Linkedin, Instagram, Facebook].map((Icon, i) => (
-                  <a
-                    key={i}
-                    href="#"
-                    className="w-8 h-8 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors"
-                  >
-                      <Icon size={12} className="text-muted-foreground" />
-                  </a>
-                ))}
+      {/* CTA Section */}
+      <section className="bg-[#0A0A0A] py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            className="relative overflow-hidden rounded-2xl border border-[#1F1F1F] bg-gradient-to-br from-[#141414] to-[#1A1A1A] p-12 text-center sm:p-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(124,58,237,0.08),transparent_60%)]" />
+            <div className="relative z-10">
+              <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-[#7C3AED]/10">
+                <ScrollText size={28} className="text-[#7C3AED]" />
               </div>
-              <p className="text-xs text-muted-foreground pt-2">{content.footer.copyright}</p>
-            </motion.div>
+              <h2 className="mb-4 text-3xl font-bold text-white sm:text-4xl">
+                {content.upload.title}
+              </h2>
+              <p className="mx-auto mb-8 max-w-xl text-gray-400">
+                {content.upload.description}
+              </p>
+              <button
+                type="button"
+                onClick={() => handleTabSelect("Analysis")}
+                className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-3.5 text-sm font-semibold text-black transition-all duration-200 hover:bg-gray-200"
+              >
+                {content.upload.cta} <ArrowRight size={16} />
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
-            {/* Company */}
-            <motion.div variants={REVEAL_ITEM}>
-              <h6 className="text-sm font-semibold text-foreground mb-5">{content.footer.companyTitle}</h6>
-              <ul className="space-y-3.5">
+      {/* Footer */}
+      <footer className="border-t border-[#1F1F1F] bg-[#0A0A0A] py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+            <div>
+              <div className="mb-4 text-xl font-bold text-white">Draftly.</div>
+              <p className="text-sm leading-relaxed text-gray-400">
+                {content.footer.tagline}
+              </p>
+            </div>
+            <div>
+              <h6 className="mb-4 text-sm font-semibold text-white">{content.footer.companyTitle}</h6>
+              <ul className="space-y-3">
                 {content.footer.companyLinks.map(l => (
                   <li key={l}>
-                    <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                      {l}
-                    </a>
+                    <a href="#" className="text-sm text-gray-400 transition-colors hover:text-white">{l}</a>
                   </li>
                 ))}
               </ul>
-            </motion.div>
-
-            {/* Contact */}
-            <motion.div variants={REVEAL_ITEM}>
-              <h6 className="text-sm font-semibold text-foreground mb-5">{content.footer.contactTitle}</h6>
-              <ul className="space-y-4">
-                <li className="flex items-start gap-2.5">
-                  <MapPin size={12} className="text-muted-foreground mt-0.5 shrink-0" />
-                  <span className="text-sm text-muted-foreground">{content.footer.address}</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <Phone size={12} className="text-muted-foreground shrink-0" />
-                  <span className="text-sm text-muted-foreground">{content.footer.phone}</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <Mail size={12} className="text-muted-foreground shrink-0" />
-                  <span className="text-sm text-muted-foreground">{content.footer.email}</span>
+            </div>
+            <div>
+              <h6 className="mb-4 text-sm font-semibold text-white">{content.footer.contactTitle}</h6>
+              <ul className="space-y-3">
+                <li className="flex items-center gap-2 text-sm text-gray-400">
+                  <Building2 size={14} />
+                  <span>{content.footer.address}</span>
                 </li>
               </ul>
-            </motion.div>
-
-            {/* Additional */}
-            <motion.div variants={REVEAL_ITEM}>
-              <h6 className="text-sm font-semibold text-foreground mb-5">{content.footer.additionalTitle}</h6>
-              <ul className="space-y-3.5">
+            </div>
+            <div>
+              <h6 className="mb-4 text-sm font-semibold text-white">{content.footer.additionalTitle}</h6>
+              <ul className="space-y-3">
                 {content.footer.additionalLinks.map(l => (
                   <li key={l}>
-                    <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                      {l}
-                    </a>
+                    <a href="#" className="text-sm text-gray-400 transition-colors hover:text-white">{l}</a>
                   </li>
                 ))}
               </ul>
-            </motion.div>
+            </div>
+          </div>
+          <div className="mt-12 border-t border-[#1F1F1F] pt-8 text-center text-sm text-gray-500">
+            {content.footer.copyright}
           </div>
         </div>
-      </motion.footer>
+      </footer>
     </>
   );
 }

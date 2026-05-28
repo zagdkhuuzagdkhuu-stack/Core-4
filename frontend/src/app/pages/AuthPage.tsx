@@ -1,94 +1,39 @@
 import { useState } from "react";
 import { motion } from "motion/react";
-import { ArrowLeft, ArrowRight, CheckCircle2, Facebook, FileCheck2, FileText, Gavel, Lock, Mail, PenLine, Scale, UserRound } from "lucide-react";
+import { ArrowLeft, ArrowRight, Lock, Mail, PenLine, UserRound } from "lucide-react";
 
 type AuthMode = "choice" | "login" | "signin";
 
 const PANEL_TRANSITION = {
-  duration: 0.72,
+  duration: 0.5,
   ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
 };
-
-function DocumentIllustration({ compact = false }: { compact?: boolean }) {
-  return (
-    <div className={`relative mx-auto aspect-square w-full max-w-[34rem] ${compact ? "max-w-[25rem]" : ""}`}>
-      <div className="absolute inset-[8%] rounded-full border border-border/55" />
-      <div className="absolute inset-[18%] rounded-full border border-border/45" />
-      <motion.div
-        className="absolute left-[24%] top-[12%] h-[66%] w-[46%] rotate-[-8deg] rounded-[1.4rem] border border-border bg-card shadow-[0_24px_60px_rgba(12,21,25,0.12)]"
-        animate={{ y: [0, -8, 0] }}
-        transition={{ duration: 5.6, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div className="mx-7 mt-8 h-2 rounded-full bg-border/70" />
-        <div className="mx-7 mt-5 h-1.5 rounded-full bg-border/55" />
-        <div className="mx-7 mt-3 h-1.5 w-2/3 rounded-full bg-border/45" />
-        <div className="absolute bottom-8 left-8 h-10 w-24 rounded-full border border-border/70" />
-      </motion.div>
-      <motion.div
-        className="absolute left-[36%] top-[20%] h-[66%] w-[48%] rotate-[5deg] rounded-[1.4rem] border border-border bg-secondary shadow-[0_28px_70px_rgba(12,21,25,0.16)]"
-        animate={{ y: [0, 8, 0] }}
-        transition={{ duration: 6.2, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div className="flex items-center gap-2 border-b border-border/65 px-7 py-5">
-          <FileText size={18} className="text-foreground/70" />
-          <div className="h-2 flex-1 rounded-full bg-border/65" />
-        </div>
-        <div className="space-y-3 px-8 py-8">
-          <div className="h-2 rounded-full bg-border/75" />
-          <div className="h-2 rounded-full bg-border/55" />
-          <div className="h-2 w-2/3 rounded-full bg-border/45" />
-          <div className="pt-8">
-            <PenLine size={70} className="-rotate-12 text-foreground/20" strokeWidth={1.1} />
-          </div>
-        </div>
-        <div className="absolute bottom-8 right-8 flex h-20 w-20 items-center justify-center rounded-full border-2 border-button/25 text-button/45">
-          <CheckCircle2 size={34} strokeWidth={1.35} />
-        </div>
-      </motion.div>
-      <div className="absolute left-[16%] bottom-[20%] flex h-14 w-14 items-center justify-center rounded-2xl border border-border bg-card text-foreground/55 shadow-sm">
-        <Scale size={24} strokeWidth={1.4} />
-      </div>
-      <div className="absolute right-[13%] top-[24%] flex h-14 w-14 items-center justify-center rounded-2xl border border-border bg-card text-foreground/55 shadow-sm">
-        <Gavel size={23} strokeWidth={1.4} />
-      </div>
-      <div className="absolute right-[18%] bottom-[16%] flex h-12 w-12 items-center justify-center rounded-full border border-border bg-card text-button/65 shadow-sm">
-        <FileCheck2 size={21} strokeWidth={1.5} />
-      </div>
-    </div>
-  );
-}
 
 function ChoiceCard({
   icon: Icon,
   title,
   subtitle,
-  active,
   onClick,
 }: {
   icon: typeof UserRound;
   title: string;
   subtitle: string;
-  active: boolean;
   onClick: () => void;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`group flex w-full items-center gap-4 rounded-[1.2rem] border px-5 py-4 text-left transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_18px_42px_rgba(12,21,25,0.12)] ${
-        active
-          ? "border-button bg-button text-button-text"
-          : "border-border bg-card text-foreground hover:border-highlight"
-      }`}
+      className="group flex w-full items-center gap-4 rounded-xl border border-[#2A2A2A] bg-[#141414] px-5 py-4 text-left transition-all hover:border-[#7C3AED]/50 hover:bg-[#1A1A1A]"
     >
-      <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full border ${active ? "border-button-text/25 bg-button-text/10" : "border-border bg-secondary"}`}>
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-[#2A2A2A] bg-[#1A1A1A] text-gray-400">
         <Icon size={18} />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-base font-bold">{title}</span>
-        <span className={`mt-1 block text-xs ${active ? "text-button-text/75" : "text-muted-foreground"}`}>{subtitle}</span>
+        <span className="block text-base font-semibold text-white">{title}</span>
+        <span className="mt-1 block text-xs text-gray-400">{subtitle}</span>
       </span>
-      <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
+      <ArrowRight size={18} className="text-gray-500 transition-transform group-hover:translate-x-1" />
     </button>
   );
 }
@@ -96,10 +41,10 @@ function ChoiceCard({
 function TextField({ icon: Icon, label, type = "text" }: { icon: typeof Mail; label: string; type?: string }) {
   return (
     <label className="block">
-      <span className="mb-2 block text-xs font-semibold text-muted-foreground">{label}</span>
-      <span className="flex h-12 items-center gap-3 rounded-xl border border-border bg-background px-4 text-foreground transition-all duration-300 focus-within:border-button focus-within:shadow-[0_0_0_4px_rgba(12,21,25,0.06)]">
-        <Icon size={16} className="text-muted-foreground" />
-        <input type={type} className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground/45" />
+      <span className="mb-2 block text-xs font-medium text-gray-400">{label}</span>
+      <span className="flex h-12 items-center gap-3 rounded-lg border border-[#2A2A2A] bg-[#0A0A0A] px-4 text-white transition-all focus-within:border-[#7C3AED]">
+        <Icon size={16} className="text-gray-500" />
+        <input type={type} className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-gray-500" />
       </span>
     </label>
   );
@@ -110,9 +55,9 @@ function SocialButton({ children, onClick, icon }: { children: string; onClick?:
     <button
       type="button"
       onClick={onClick}
-      className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 text-xs font-bold text-foreground transition-all duration-300 hover:-translate-y-0.5 hover:border-highlight hover:shadow-[0_10px_24px_rgba(12,21,25,0.08)]"
+      className="flex h-11 flex-1 items-center justify-center gap-2 rounded-lg border border-[#2A2A2A] bg-[#141414] px-3 text-xs font-bold text-gray-300 transition-all hover:border-[#7C3AED]/50"
     >
-      {icon === "google" ? <span className="font-black">G</span> : <Facebook size={15} />}
+      {icon === "google" ? <span className="font-black">G</span> : <span className="font-black">f</span>}
       {children}
     </button>
   );
@@ -124,14 +69,14 @@ function AuthForm({ mode, onSwitch, onGoogleLogin, authBusy }: { mode: Exclude<A
   return (
     <motion.div
       key={mode}
-      className="w-full max-w-[27rem]"
+      className="w-full max-w-md"
       initial={{ opacity: 0, x: 34 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -24 }}
       transition={PANEL_TRANSITION}
     >
-      <h1 className="font-display text-4xl font-black text-foreground">{isLogin ? "Login" : "Sign in"}</h1>
-      <p className="mt-2 text-sm text-muted-foreground">{isLogin ? "Бүртгэлтэй хэрэглэгч нэвтрэх" : "Шинэ хэрэглэгчийн бүртгэл"}</p>
+      <h1 className="text-3xl font-bold text-white">{isLogin ? "Login" : "Sign in"}</h1>
+      <p className="mt-2 text-sm text-gray-400">{isLogin ? "Бүртгэлтэй хэрэглэгч нэвтрэх" : "Шинэ хэрэглэгчийн бүртгэл"}</p>
 
       <div className="mt-8 space-y-4">
         {!isLogin && <TextField icon={UserRound} label="Full name" />}
@@ -140,13 +85,7 @@ function AuthForm({ mode, onSwitch, onGoogleLogin, authBusy }: { mode: Exclude<A
         {!isLogin && <TextField icon={Lock} label="Confirm password" type="password" />}
       </div>
 
-      {isLogin && (
-        <button type="button" className="mt-3 text-xs font-semibold text-foreground transition-colors duration-300 hover:text-button">
-          Нууц үг мартсан уу?
-        </button>
-      )}
-
-      <button type="button" className="mt-6 h-12 w-full rounded-full bg-button text-sm font-bold text-button-text shadow-[0_16px_34px_rgba(12,21,25,0.16)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_20px_44px_rgba(12,21,25,0.20)]">
+      <button type="button" className="mt-6 h-12 w-full rounded-lg bg-white text-sm font-bold text-black transition-all hover:bg-gray-200">
         {isLogin ? "Login" : "Sign in"}
       </button>
 
@@ -157,9 +96,9 @@ function AuthForm({ mode, onSwitch, onGoogleLogin, authBusy }: { mode: Exclude<A
         <SocialButton icon="facebook">Continue with Facebook</SocialButton>
       </div>
 
-      <p className="mt-7 text-center text-sm text-muted-foreground">
+      <p className="mt-7 text-center text-sm text-gray-400">
         {isLogin ? "Шинээр бүртгүүлэх үү? " : "Бүртгэлтэй юу? "}
-        <button type="button" onClick={() => onSwitch(isLogin ? "signin" : "login")} className="font-bold text-foreground transition-colors duration-300 hover:text-button">
+        <button type="button" onClick={() => onSwitch(isLogin ? "signin" : "login")} className="font-semibold text-white transition-colors hover:text-[#7C3AED]">
           {isLogin ? "Sign in" : "Login"}
         </button>
       </p>
@@ -172,64 +111,47 @@ export function AuthPage({ onBackHome, onGoogleLogin, authBusy }: { onBackHome: 
   const formVisible = mode !== "choice";
 
   return (
-    <main className="relative h-screen min-h-screen w-screen overflow-hidden bg-background text-foreground">
-      <div className="pointer-events-none absolute inset-0 opacity-[0.18] [background-image:radial-gradient(circle_at_1px_1px,var(--border)_1px,transparent_0)] [background-size:18px_18px]" />
-      <div className="pointer-events-none absolute -left-20 top-24 h-72 w-72 rounded-full border border-border/35" />
-      <div className="pointer-events-none absolute -right-24 bottom-12 h-80 w-80 rounded-full border border-border/35" />
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-28 bg-[radial-gradient(ellipse_at_bottom,var(--highlight),transparent_60%)] opacity-20" />
+    <main className="relative min-h-screen bg-[#0A0A0A]">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(124,58,237,0.08),transparent_50%),radial-gradient(ellipse_at_bottom,rgba(124,58,237,0.03),transparent_50%)]" />
+      <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }} />
 
       <button
         type="button"
         onClick={onBackHome}
-        className="absolute left-5 top-5 z-20 group flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card/70 text-foreground shadow-[0_10px_24px_rgba(12,21,25,0.08)] transition-all duration-300 hover:border-highlight hover:bg-secondary dark:border-highlight/25 dark:bg-card/70 dark:hover:bg-card"
+        className="absolute left-4 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-lg border border-[#2A2A2A] text-gray-400 transition-all hover:border-[#7C3AED]/50 hover:text-white"
         aria-label="Go back"
       >
-        <ArrowLeft size={17} className="transition-transform duration-300 group-hover:-translate-x-0.5" />
+        <ArrowLeft size={17} />
       </button>
 
-      <section className="relative z-10 grid h-full min-h-screen grid-cols-1 lg:grid-cols-2">
-        <motion.div
-          className={`flex h-full min-h-0 items-center justify-center overflow-hidden bg-background p-8 lg:p-12 ${formVisible ? "lg:order-1" : "lg:order-2"}`}
-          layout
-          transition={PANEL_TRANSITION}
-        >
-          <DocumentIllustration compact={formVisible} />
-        </motion.div>
+      <section className="relative z-10 flex min-h-screen items-center justify-center p-4">
+        <div className="w-full max-w-md">
+          <div className="mb-8 text-center">
+            <p className="text-3xl font-bold text-white">Draftly.</p>
+            <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-gray-500">AI-POWERED LEGAL DOCUMENTS</p>
+          </div>
 
-        <motion.div
-          className={`flex h-full min-h-0 items-center justify-center overflow-hidden bg-secondary p-8 lg:p-12 ${formVisible ? "lg:order-2" : "lg:order-1"}`}
-          layout
-          transition={PANEL_TRANSITION}
-        >
           {mode === "choice" ? (
             <motion.div
               key="choice"
-              className="w-full max-w-[34rem]"
               initial={{ opacity: 0, x: -34 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 24 }}
               transition={PANEL_TRANSITION}
             >
-              <div className="mb-10">
-                <p className="font-display text-4xl font-black text-foreground">Draftly.</p>
-                <p className="mt-8 text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground">AI-POWERED LEGAL DOCUMENTS</p>
-                <h1 className="mt-5 font-display text-4xl font-black leading-tight text-foreground md:text-5xl">
-                  Хуулийн баримт бичгийг AI-аар хялбархан үүсгээрэй.
-                </h1>
-                <p className="mt-5 max-w-xl text-sm leading-7 text-muted-foreground">
-                  Draftly нь танд баримт бичиг үүсгэх, дүн шинжилгээ хийх, хянах, баталгаажуулах бүх үйл явцыг автоматжуулж, хуулийн ажлыг хялбар болгоно.
-                </p>
-              </div>
-
-              <div className="grid gap-3">
-                <ChoiceCard icon={UserRound} title="Login" subtitle="Бүртгэлтэй хэрэглэгч" active={mode === "login"} onClick={() => setMode("login")} />
-                <ChoiceCard icon={PenLine} title="Sign in" subtitle="Шинэ хэрэглэгч бүртгүүлэх" active={mode === "signin"} onClick={() => setMode("signin")} />
+              <h1 className="mb-4 text-center text-2xl font-bold text-white">Хуулийн баримт бичгийг AI-аар хялбархан үүсгээрэй.</h1>
+              <p className="mb-8 text-center text-sm text-gray-400">
+                Draftly нь танд баримт бичиг үүсгэх, дүн шинжилгээ хийх, хянах, баталгаажуулах бүх үйл явцыг автоматжуулж, хуулийн ажлыг хялбар болгоно.
+              </p>
+              <div className="space-y-3">
+                <ChoiceCard icon={UserRound} title="Login" subtitle="Бүртгэлтэй хэрэглэгч" onClick={() => setMode("login")} />
+                <ChoiceCard icon={PenLine} title="Sign in" subtitle="Шинэ хэрэглэгч бүртгүүлэх" onClick={() => setMode("signin")} />
               </div>
             </motion.div>
           ) : (
             <AuthForm mode={mode} onSwitch={setMode} onGoogleLogin={onGoogleLogin} authBusy={authBusy} />
           )}
-        </motion.div>
+        </div>
       </section>
     </main>
   );
