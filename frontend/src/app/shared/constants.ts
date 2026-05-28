@@ -1,4 +1,5 @@
 ﻿import { BriefcaseBusiness, Handshake, Home, Landmark, ShieldCheck } from "lucide-react";
+import type { Variants } from "motion/react";
 import type { AnalysisStep, TemplateStep } from "./types";
 export const ORBIT_FEATURES = [
   {
@@ -58,7 +59,7 @@ export const ORBIT_PARTICLES = [
   { left: "79%", top: "8%" },
 ];
 
-export const SECTION_REVEAL = {
+export const SECTION_REVEAL: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -71,7 +72,7 @@ export const SECTION_REVEAL = {
   },
 };
 
-export const REVEAL_ITEM = {
+export const REVEAL_ITEM: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
