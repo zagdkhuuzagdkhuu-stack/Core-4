@@ -138,6 +138,219 @@
 
   body {
     @apply bg-background text-foreground;
+    background-image:
+      radial-gradient(ellipse at 10% 10%, rgba(232, 251, 255, 0.72), transparent 34rem),
+      radial-gradient(ellipse at 88% 34%, rgba(127, 221, 229, 0.38), transparent 40rem),
+      radial-gradient(ellipse at 50% 112%, rgba(185, 242, 240, 0.44), transparent 46rem),
+      linear-gradient(135deg, #e8fbff 0%, #ffffff 46%, #dff7fb 100%);
+    background-attachment: fixed;
+  }
+
+  body::before,
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  body::before {
+    z-index: 0;
+    opacity: 0.46;
+    background:
+      radial-gradient(ellipse at 8% 20%, rgba(232, 251, 255, 0.70), transparent 30rem),
+      radial-gradient(ellipse at 80% 34%, rgba(127, 221, 229, 0.36), transparent 38rem),
+      radial-gradient(ellipse at 46% 96%, rgba(185, 242, 240, 0.42), transparent 42rem),
+      linear-gradient(118deg, transparent 12%, rgba(223, 247, 251, 0.34) 34%, transparent 58%);
+    filter: blur(60px);
+    animation: draftly-liquid-flow 36s ease-in-out infinite alternate;
+  }
+
+  body::after {
+    z-index: 999998;
+    opacity: 0.04;
+    background-image:
+      radial-gradient(ellipse at center, transparent 60%, rgba(62, 99, 116, 0.10) 100%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.64' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+  }
+
+  .draftly-hero-section,
+  .draftly-hero-surface,
+  .draftly-solar-section,
+  .draftly-template-section,
+  .draftly-analysis-section,
+  .draftly-footer-section {
+    isolation: isolate;
+  }
+
+  .draftly-hero-surface {
+    background-color: rgba(204, 222, 228, 0.72);
+  }
+
+  .draftly-solar-section {
+    background-color: rgba(204, 222, 228, 0.82);
+  }
+
+  .draftly-template-section,
+  .draftly-analysis-section {
+    background-color: rgba(242, 247, 248, 0.82);
+  }
+
+  .draftly-footer-section {
+    background-color: #f2f7f8;
+  }
+
+  .draftly-hero-surface > *,
+  .draftly-solar-section > *,
+  .draftly-template-section > *,
+  .draftly-analysis-section > *,
+  .draftly-footer-section > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .draftly-hero-surface::before,
+  .draftly-hero-surface::after,
+  .draftly-solar-section::before,
+  .draftly-solar-section::after,
+  .draftly-template-section::before,
+  .draftly-template-section::after,
+  .draftly-analysis-section::before,
+  .draftly-analysis-section::after,
+  .draftly-footer-section::before,
+  .draftly-footer-section::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .draftly-hero-surface::before,
+  .draftly-solar-section::before,
+  .draftly-template-section::before,
+  .draftly-analysis-section::before,
+  .draftly-footer-section::before {
+    animation: draftly-cloud-drift 58s ease-in-out infinite alternate;
+  }
+
+  .draftly-hero-surface::after,
+  .draftly-solar-section::after,
+  .draftly-template-section::after,
+  .draftly-analysis-section::after {
+    opacity: 0.045;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.62' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+  }
+
+  .draftly-hero-surface::before {
+    opacity: 0.88;
+    background:
+      radial-gradient(ellipse at 12% 16%, rgba(232, 251, 255, 0.66), transparent 32rem),
+      radial-gradient(ellipse at 82% 36%, rgba(127, 221, 229, 0.32), transparent 38rem),
+      radial-gradient(ellipse at 50% 108%, rgba(185, 242, 240, 0.42), transparent 44rem),
+      linear-gradient(112deg, transparent 8%, rgba(223, 247, 251, 0.36) 30%, rgba(255, 255, 255, 0.24) 48%, transparent 68%),
+      linear-gradient(155deg, transparent 22%, rgba(127, 221, 229, 0.16) 46%, transparent 72%);
+    filter: blur(70px);
+    transform: scale(1.08);
+    background-blend-mode: screen, screen, normal, screen, normal;
+    animation: draftly-liquid-flow 34s ease-in-out infinite alternate;
+  }
+
+  .draftly-solar-section::before {
+    opacity: 0.74;
+    background:
+      radial-gradient(ellipse at 28% 52%, rgba(127, 221, 229, 0.36), transparent 32rem),
+      radial-gradient(ellipse at 76% 28%, rgba(185, 242, 240, 0.44), transparent 40rem),
+      radial-gradient(ellipse at 18% 12%, rgba(232, 251, 255, 0.54), transparent 34rem),
+      linear-gradient(118deg, transparent 18%, rgba(223, 247, 251, 0.34) 42%, transparent 70%);
+    filter: blur(78px);
+    transform: scale(1.08);
+    background-blend-mode: screen, screen, normal, screen;
+    animation: draftly-liquid-flow 40s ease-in-out infinite alternate;
+  }
+
+  .draftly-template-section::before {
+    opacity: 0.58;
+    background:
+      radial-gradient(ellipse at 18% 24%, rgba(232, 251, 255, 0.50), transparent 34rem),
+      radial-gradient(ellipse at 80% 72%, rgba(127, 221, 229, 0.22), transparent 40rem),
+      radial-gradient(ellipse at 84% 20%, rgba(185, 242, 240, 0.32), transparent 36rem),
+      linear-gradient(130deg, transparent 16%, rgba(223, 247, 251, 0.24) 44%, transparent 74%);
+    filter: blur(76px);
+    transform: scale(1.08);
+    background-blend-mode: screen, normal, normal, screen;
+    animation: draftly-liquid-flow 44s ease-in-out infinite alternate;
+  }
+
+  .draftly-analysis-section::before {
+    opacity: 0.70;
+    background:
+      radial-gradient(ellipse at 16% 42%, rgba(232, 251, 255, 0.50), transparent 34rem),
+      radial-gradient(ellipse at 84% 34%, rgba(127, 221, 229, 0.34), transparent 40rem),
+      radial-gradient(ellipse at 52% 98%, rgba(185, 242, 240, 0.40), transparent 44rem),
+      linear-gradient(118deg, transparent 16%, rgba(223, 247, 251, 0.34) 42%, transparent 70%);
+    filter: blur(82px);
+    transform: scale(1.08);
+    background-blend-mode: screen, normal, normal, screen;
+    animation: draftly-liquid-flow 38s ease-in-out infinite alternate;
+  }
+
+  .draftly-footer-section::before {
+    opacity: 0.12;
+    background:
+      linear-gradient(135deg, rgba(247, 251, 252, 0.24), rgba(238, 245, 247, 0.16) 58%, rgba(215, 230, 236, 0.12));
+  }
+
+  .dark .draftly-hero-surface,
+  .dark .draftly-solar-section,
+  .dark .draftly-template-section,
+  .dark .draftly-analysis-section,
+  .dark .draftly-footer-section {
+    background-image: none;
+  }
+
+  .dark .draftly-hero-surface::before,
+  .dark .draftly-solar-section::before,
+  .dark .draftly-template-section::before,
+  .dark .draftly-analysis-section::before,
+  .dark .draftly-footer-section::before {
+    display: none;
+  }
+
+  @keyframes draftly-cloud-drift {
+    from {
+      transform: translate3d(-0.9%, -0.55%, 0) scale(1);
+    }
+    to {
+      transform: translate3d(0.9%, 0.55%, 0) scale(1.018);
+    }
+  }
+
+  @keyframes draftly-liquid-flow {
+    0% {
+      transform: translate3d(-1.2%, -0.8%, 0) scale(1.08) rotate(0deg);
+      background-position: 0% 0%, 100% 20%, 50% 100%, 0% 50%, 100% 50%;
+    }
+    50% {
+      transform: translate3d(1.1%, 0.7%, 0) scale(1.11) rotate(0.001deg);
+      background-position: 8% 4%, 92% 28%, 54% 92%, 6% 54%, 94% 46%;
+    }
+    100% {
+      transform: translate3d(-0.4%, 1%, 0) scale(1.09) rotate(0deg);
+      background-position: 3% 8%, 96% 16%, 46% 96%, 10% 44%, 88% 58%;
+    }
+  }
+
+  @keyframes draftly-bg-float {
+    from {
+      background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+    }
+    to {
+      background-position: 18px -14px, 2% 1%, -1% 2%, 1% -1%, 0 0, 0 0;
+    }
   }
 
   /**

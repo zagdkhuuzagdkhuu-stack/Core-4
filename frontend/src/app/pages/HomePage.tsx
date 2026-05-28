@@ -61,7 +61,7 @@ export function HomePage({
           PAGE 1 â€” HERO
           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <motion.section
-        className="sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary px-3 pb-6 pt-3 shadow-[0_-18px_55px_rgba(0,0,0,0.10)] flex flex-col"
+        className="draftly-hero-section sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary px-3 pb-6 pt-3 shadow-[0_-18px_55px_rgba(0,0,0,0.10)] flex flex-col"
         style={{ zIndex: 1 }}
         variants={SECTION_REVEAL}
         initial="hidden"
@@ -70,7 +70,7 @@ export function HomePage({
       >
         {/* Document body */}
         <motion.div
-          className="relative flex-1 bg-background border border-border rounded-[2rem] shadow-[0_12px_70px_rgba(0,0,0,0.07)] overflow-hidden flex flex-col"
+          className="draftly-hero-surface relative flex-1 bg-background border border-border rounded-[2rem] shadow-[0_12px_70px_rgba(0,0,0,0.07)] overflow-hidden flex flex-col"
         >
           <div className="pointer-events-none absolute left-0 top-0 z-10 h-px w-[920px] max-w-[calc(100vw-1.5rem)] bg-background" />
           {/* Hero content */}
@@ -123,7 +123,7 @@ export function HomePage({
           PAGE 2 â€” WHAT DO WE DO?
           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <motion.section
-        className="sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-background py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-24"
+        className="draftly-solar-section sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-background py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-24"
         style={{ zIndex: 2 }}
         ref={featuresRef.ref}
         variants={SECTION_REVEAL}
@@ -273,7 +273,7 @@ export function HomePage({
           PAGE 3 â€” TEMPLATE FLOW
           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <motion.section
-        className="sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-28"
+        className="draftly-template-section sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-28"
         style={{ zIndex: 3 }}
         ref={templateRef.ref}
         variants={SECTION_REVEAL}
@@ -349,7 +349,7 @@ export function HomePage({
           PAGE 4 â€” UPLOAD & ANALYSE
           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <motion.section
-        className="sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-28"
+        className="draftly-analysis-section sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-28"
         style={{ zIndex: 4 }}
         ref={uploadRef.ref}
         variants={SECTION_REVEAL}
@@ -425,7 +425,7 @@ export function HomePage({
           PAGE 5 â€” FOOTER
           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <motion.footer
-        className="relative z-10 mt-16 overflow-hidden rounded-t-[2rem] border-t border-border bg-secondary shadow-[0_-18px_55px_rgba(0,0,0,0.12)]"
+        className="draftly-footer-section relative z-10 mt-16 overflow-hidden rounded-t-[2rem] border-t border-border bg-secondary shadow-[0_-18px_55px_rgba(0,0,0,0.12)]"
         ref={footerRef.ref}
         variants={SECTION_REVEAL}
         initial="hidden"
@@ -446,7 +446,7 @@ export function HomePage({
                     href="#"
                     className="w-8 h-8 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors"
                   >
-                    <Icon size={12} className="text-muted-foreground" />
+                      <Icon size={12} className="text-muted-foreground" />
                   </a>
                 ))}
               </div>
