@@ -55,14 +55,14 @@ export function HomePage({
   homeScrollRef,
 }: HomePageProps) {
   return (
-    <>            <HomeSimpleNav onSelect={handleTabSelect} controls={navControls} ui={content.ui} scrollContainerRef={homeScrollRef} />
+    <>
+      <HomeSimpleNav onSelect={handleTabSelect} controls={navControls} ui={content.ui} scrollContainerRef={homeScrollRef} />
 
       {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
           PAGE 1 â€” HERO
           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <motion.section
-        className="draftly-hero-section sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary px-3 pb-6 pt-3 shadow-[0_-18px_55px_rgba(0,0,0,0.10)] flex flex-col"
-        style={{ zIndex: 1 }}
+        className="draftly-hero-section relative min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary px-3 pb-6 pt-3 shadow-[0_-18px_55px_rgba(0,0,0,0.10)] flex flex-col"
         variants={SECTION_REVEAL}
         initial="hidden"
         whileInView="visible"
@@ -123,8 +123,7 @@ export function HomePage({
           PAGE 2 â€” WHAT DO WE DO?
           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <motion.section
-        className="draftly-solar-section sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-background py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-24"
-        style={{ zIndex: 2 }}
+        className="draftly-solar-section relative min-h-screen overflow-hidden rounded-t-[2rem] bg-background py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-24"
         ref={featuresRef.ref}
         variants={SECTION_REVEAL}
         initial="hidden"
@@ -273,8 +272,7 @@ export function HomePage({
           PAGE 3 â€” TEMPLATE FLOW
           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <motion.section
-        className="draftly-template-section sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-28"
-        style={{ zIndex: 3 }}
+        className="draftly-template-section relative min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-28"
         ref={templateRef.ref}
         variants={SECTION_REVEAL}
         initial="hidden"
@@ -349,8 +347,7 @@ export function HomePage({
           PAGE 4 â€” UPLOAD & ANALYSE
           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <motion.section
-        className="draftly-analysis-section sticky top-0 min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-28"
-        style={{ zIndex: 4 }}
+        className="draftly-analysis-section relative min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-28"
         ref={uploadRef.ref}
         variants={SECTION_REVEAL}
         initial="hidden"
@@ -501,6 +498,7 @@ export function HomePage({
             </motion.div>
           </div>
         </div>
-      </motion.footer>    </>
+      </motion.footer>
+    </>
   );
 }

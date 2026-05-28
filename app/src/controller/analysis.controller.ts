@@ -1,49 +1,43 @@
 import { Request, Response } from "express";
 import database from "../database";
 import { AuthenticatedRequest } from "../middleware/auth.middleware";
+import { analyzeContract as analyzeContractWithAI, GeminiQuotaError } from "../services/aiService";
+import { getLegalContext } from "../services/lawService";
 
-function analyzeContractText(text: string, value?: unknown) {
-  const normalized = text.toLowerCase();
-  const missingClauses = [
-    { label: "payment terms", keywords: ["payment", "fee", "amount", "төлбөр"] },
-    { label: "termination", keywords: ["terminate", "termination", "цуцлах"] },
-    { label: "confidentiality", keywords: ["confidential", "нууц"] },
-    { label: "liability", keywords: ["liability", "хариуцлага"] },
-  ].filter((clause) => !clause.keywords.some((keyword) => normalized.includes(keyword)));
+function getAnalysisMode(req: Request): "crew" | "single" {
+  return req.body.mode === "single" ? "single" : "crew";
+}
 
-  const riskyTerms = [
-    { label: "Unlimited liability", matched: normalized.includes("unlimited liability") },
-    { label: "No termination notice", matched: normalized.includes("without notice") },
-    { label: "Undefined payment date", matched: normalized.includes("payment") && !/\b\d{1,2}\s*(day|хоног)|\b\d{4}-\d{2}-\d{2}/i.test(text) },
-  ].filter((item) => item.matched);
-
-  const numericValue = Number(value || 0);
-  const valueRisk = Number.isFinite(numericValue) && numericValue > 10_000_000 ? 12 : 0;
-  const lengthRisk = text.length < 600 ? 18 : 0;
-  const riskScore = Math.min(100, 25 + missingClauses.length * 10 + riskyTerms.length * 12 + valueRisk + lengthRisk);
-
+function formatAnalysisResponse(analysis: any, result: Awaited<ReturnType<typeof analyzeContractWithAI>>) {
   return {
-    riskScore,
-    summary: riskScore >= 70
-      ? "High risk contract. Several important clauses need review."
-      : riskScore >= 45
-        ? "Medium risk contract. Review the highlighted clauses before signing."
-        : "Low risk contract. Only minor checks are suggested.",
-    risks: [
-      ...missingClauses.map((item) => `Missing ${item.label} clause`),
-      ...riskyTerms.map((item) => item.label),
-    ],
-    missingClauses: missingClauses.map((item) => item.label),
-    riskyTerms: riskyTerms.map((item) => item.label),
-    complianceWarnings: riskScore >= 70 ? ["Legal review recommended before signing"] : [],
-    estimatedCost: Number.isFinite(numericValue) && numericValue > 0 ? numericValue : null,
+    ...analysis,
+    legalReferences: result.legalReferences,
+    costEstimate: result.costEstimate,
   };
+}
+
+async function replaceContractClauses(contractId: string, result: Awaited<ReturnType<typeof analyzeContractWithAI>>) {
+  if (result.clauses.length === 0) return;
+
+  await database.clause.deleteMany({ where: { contractId } });
+  await database.clause.createMany({
+    data: result.clauses.map((clause) => ({
+      contractId,
+      title: clause.title,
+      content: clause.content,
+      clauseType: clause.clauseType,
+      riskLevel: clause.riskLevel,
+      explanation: clause.explanation,
+      orderNo: clause.orderNo,
+    })),
+  });
 }
 
 export async function analyzeContract(req: Request, res: Response) {
   try {
     const userId = (req as AuthenticatedRequest).userId;
     const contractId = String(req.params.contractId || "");
+    const analysisMode = getAnalysisMode(req);
     const contract = await database.contract.findFirst({
       where: {
         id: contractId,
@@ -58,9 +52,13 @@ export async function analyzeContract(req: Request, res: Response) {
       return res.status(404).json({ message: "Contract not found." });
     }
 
-    const contractDocument = (contract as any).document;
-    const text = [contract.title, contract.contractType, contractDocument?.content].filter(Boolean).join("\n");
-    const result = analyzeContractText(text, contract.value);
+    const text = [contract.title, contract.contractType, contract.document?.content].filter(Boolean).join("\n");
+    if (!text.trim()) {
+      return res.status(422).json({ message: "Contract has no text content to analyze." });
+    }
+
+    const legalCtx = await getLegalContext(text);
+    const result = await analyzeContractWithAI(text, legalCtx, analysisMode);
 
     const analysis = await database.riskAnalysis.upsert({
       where: { contractId: contract.id },
@@ -72,8 +70,10 @@ export async function analyzeContract(req: Request, res: Response) {
         risks: result.risks,
         missingClauses: result.missingClauses,
         riskyTerms: result.riskyTerms,
+        inconsistentWording: result.inconsistentWording,
         complianceWarnings: result.complianceWarnings,
         estimatedCost: result.estimatedCost,
+        legalReferences: result.legalReferences as any,
       },
       update: {
         summary: result.summary,
@@ -81,13 +81,27 @@ export async function analyzeContract(req: Request, res: Response) {
         risks: result.risks,
         missingClauses: result.missingClauses,
         riskyTerms: result.riskyTerms,
+        inconsistentWording: result.inconsistentWording,
         complianceWarnings: result.complianceWarnings,
         estimatedCost: result.estimatedCost,
+        legalReferences: result.legalReferences as any,
       },
     });
 
-    return res.json({ analysis });
+    await replaceContractClauses(contract.id, result);
+
+    return res.json({
+      analysis: formatAnalysisResponse(analysis, result),
+      clauses: result.clauses,
+      mode: analysisMode,
+    });
   } catch (error) {
+    if (error instanceof GeminiQuotaError) {
+      return res.status(429).json({
+        message: error.message,
+        code: "GEMINI_QUOTA_EXCEEDED",
+      });
+    }
     return res.status(500).json({
       message: "Failed to analyze contract.",
       error: error instanceof Error ? error.message : String(error),
@@ -99,10 +113,14 @@ export async function analyzeDocument(req: Request, res: Response) {
   try {
     const userId = (req as AuthenticatedRequest).userId;
     const documentId = String(req.params.documentId || "");
+    const analysisMode = getAnalysisMode(req);
     const document = await database.document.findFirst({
       where: {
         id: documentId,
         ownerId: userId,
+      },
+      include: {
+        contract: true,
       },
     });
 
@@ -110,19 +128,29 @@ export async function analyzeDocument(req: Request, res: Response) {
       return res.status(404).json({ message: "Document not found." });
     }
 
-    const result = analyzeContractText([document.title, document.content].filter(Boolean).join("\n"));
+    const text = [document.title, document.content].filter(Boolean).join("\n");
+    if (!text.trim()) {
+      return res.status(422).json({ message: "Document has no text content to analyze." });
+    }
+
+    const legalCtx = await getLegalContext(text);
+    const result = await analyzeContractWithAI(text, legalCtx, analysisMode);
+    const contractId = document.contract?.id;
 
     const analysis = await database.riskAnalysis.upsert({
       where: { documentId: document.id },
       create: {
         documentId: document.id,
+        contractId,
         summary: result.summary,
         riskScore: result.riskScore,
         risks: result.risks,
         missingClauses: result.missingClauses,
         riskyTerms: result.riskyTerms,
+        inconsistentWording: result.inconsistentWording,
         complianceWarnings: result.complianceWarnings,
         estimatedCost: result.estimatedCost,
+        legalReferences: result.legalReferences as any,
       },
       update: {
         summary: result.summary,
@@ -130,13 +158,29 @@ export async function analyzeDocument(req: Request, res: Response) {
         risks: result.risks,
         missingClauses: result.missingClauses,
         riskyTerms: result.riskyTerms,
+        inconsistentWording: result.inconsistentWording,
         complianceWarnings: result.complianceWarnings,
         estimatedCost: result.estimatedCost,
+        legalReferences: result.legalReferences as any,
       },
     });
 
-    return res.json({ analysis });
+    if (contractId) {
+      await replaceContractClauses(contractId, result);
+    }
+
+    return res.json({
+      analysis: formatAnalysisResponse(analysis, result),
+      clauses: result.clauses,
+      mode: analysisMode,
+    });
   } catch (error) {
+    if (error instanceof GeminiQuotaError) {
+      return res.status(429).json({
+        message: error.message,
+        code: "GEMINI_QUOTA_EXCEEDED",
+      });
+    }
     return res.status(500).json({
       message: "Failed to analyze document.",
       error: error instanceof Error ? error.message : String(error),

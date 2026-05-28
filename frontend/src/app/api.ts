@@ -136,10 +136,10 @@ export async function fetchTemplates() {
   return parseJsonResponse<{ categories: TemplateCategory[]; templates: TemplateSummary[] }>(response);
 }
 
-export async function uploadDocumentForAnalysis(file: File) {
+export async function uploadDocumentForAnalysis(file: File, mode: AnalysisResponse["mode"] = "crew") {
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("mode", "single");
+  formData.append("mode", mode);
 
   const response = await fetch(`${API_BASE_URL}/api/public/upload-analysis`, {
     method: "POST",

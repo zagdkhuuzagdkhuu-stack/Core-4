@@ -1,6 +1,6 @@
 ﻿import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { AlertTriangle, Archive, ArrowLeft, Check, Download, Info, LoaderCircle, Maximize2, Trash2, UploadCloud, ZoomIn, ZoomOut } from "lucide-react";
+import { AlertTriangle, Archive, ArrowLeft, ChevronDown, Download, Info, LoaderCircle, Maximize2, Trash2, UploadCloud, X, ZoomIn, ZoomOut } from "lucide-react";
 import { uploadDocumentForAnalysis } from "../api";
 import type { AnalysisResponse } from "../api";
 import { STEP_LABELS } from "../shared/constants";

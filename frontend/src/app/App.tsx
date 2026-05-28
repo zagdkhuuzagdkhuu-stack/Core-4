@@ -55,7 +55,7 @@ function PageTransition({
 }) {
   return (
     <motion.div
-      className={`z-0 box-border pt-32 ${className}`}
+      className={`relative z-0 box-border min-h-screen pt-32 ${className}`}
       style={style}
       initial={{ opacity: 0, x: direction === "right" ? 40 : -40 }}
       animate={{ opacity: 1, x: 0 }}
@@ -401,9 +401,9 @@ export default function App() {
     <PageTransition
       key="home"
       direction={pageDirection}
-      className="absolute inset-0 overflow-y-auto bg-background"
+      className="bg-background"
     >
-      <div ref={homeScrollRef} className="h-full overflow-y-auto bg-background">
+      <div ref={homeScrollRef} className="min-h-screen bg-background">
         <HomePage
           content={content}
           partners={PARTNERS}
@@ -427,7 +427,7 @@ export default function App() {
   );
 
   return (
-    <div className="relative z-0 h-screen overflow-hidden bg-background transition-colors duration-700">
+    <div className="relative z-0 min-h-screen overflow-x-hidden bg-background transition-colors duration-700">
       <AnimatePresence>
         {showSplash && <OpeningSplash onComplete={() => setShowSplash(false)} />}
       </AnimatePresence>
@@ -454,7 +454,7 @@ export default function App() {
           <PageTransition
             key="template"
             direction={pageDirection}
-            className="absolute inset-0 overflow-hidden rounded-t-[2rem] shadow-[0_-15px_50px_rgba(0,0,0,0.15)]"
+            className="overflow-hidden rounded-t-[2rem] shadow-[0_-15px_50px_rgba(0,0,0,0.15)]"
             style={{ borderRadius: "32px 32px 0 0" }}
           >
             <TemplateWorkflow
@@ -471,7 +471,7 @@ export default function App() {
           <PageTransition
             key="analysis"
             direction={pageDirection}
-            className="absolute inset-0 overflow-y-auto overflow-x-hidden rounded-t-[2rem] shadow-[0_-15px_50px_rgba(0,0,0,0.15)]"
+            className="overflow-x-hidden rounded-t-[2rem] shadow-[0_-15px_50px_rgba(0,0,0,0.15)]"
             style={{ borderRadius: "32px 32px 0 0" }}
           >
             <AnalysisWorkflow
@@ -494,7 +494,7 @@ export default function App() {
           <PageTransition
             key="information"
             direction={pageDirection}
-            className="absolute inset-0 overflow-y-auto overflow-x-hidden rounded-t-[2rem] shadow-[0_-15px_50px_rgba(0,0,0,0.15)]"
+            className="overflow-x-hidden rounded-t-[2rem] shadow-[0_-15px_50px_rgba(0,0,0,0.15)]"
             style={{ borderRadius: "32px 32px 0 0" }}
           >
             <InformationPage

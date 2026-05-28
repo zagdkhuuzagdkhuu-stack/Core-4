@@ -5,6 +5,7 @@
     "target": "ES2023",
     "strict": true,
     "esModuleInterop": true,
+    "noEmit": true,
     "skipLibCheck": true
   },
   "include": ["app/src/**/*.ts"],

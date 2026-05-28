@@ -91,6 +91,39 @@ export interface CostEstimate {
   confidence: "LOW" | "MEDIUM" | "HIGH";
 }
 
+interface ExtractionAgentResult {
+  contractType: string;
+  parties: string[];
+  effectiveDate: string | null;
+  contractValue: string | null;
+  signatures: string[];
+  obligations: string[];
+  missingSections: string[];
+  clauses: ClauseResult[];
+}
+
+interface AnalysisAgentResult {
+  summary: string;
+  risks: string[];
+  missingClauses: string[];
+  riskyTerms: string[];
+  inconsistentWording: string[];
+}
+
+interface LegalComplianceAgentResult {
+  complianceWarnings: string[];
+  mandatoryMissingClauses: string[];
+  legalReferences: LegalReference[];
+}
+
+interface RiskScoringAgentResult {
+  riskScore: number;
+  risks: string[];
+  riskyTerms: string[];
+  missingClauses: string[];
+  explanation: string;
+}
+
 export interface AnalysisResult {
   summary: string;
   riskScore: number;
@@ -194,6 +227,55 @@ Return a JSON object with:
 Use any clause templates provided as reference benchmarks for typical costs in similar contracts.
 ${MONGOLIAN_OUTPUT_RULE}`;
 
+const EXTRACTION_AGENT_PROMPT = `You are Draftly's Extraction Agent. Your job is to read the uploaded contract and extract structured facts before any other agent reasons about the document.
+
+Return ONLY a JSON object with:
+- contractType: likely contract type
+- parties: array of party names or roles
+- effectiveDate: date string or null
+- contractValue: detected financial value as text or null
+- signatures: array of signature blocks or signatory names
+- obligations: array of key obligations
+- missingSections: array of obvious missing contract sections
+- clauses: array of extracted clauses. Each clause must have title, content, clauseType, riskLevel, explanation, orderNo
+
+Do not make legal conclusions beyond extraction and obvious missing sections.
+${MONGOLIAN_OUTPUT_RULE}`;
+
+const ANALYSIS_AGENT_PROMPT = `You are Draftly's Contract Analysis Agent. Use the original contract and the Extraction Agent output to analyze structure, clause quality, ambiguity, and missing sections.
+
+Return ONLY a JSON object with:
+- summary: 2-3 sentence executive summary
+- risks: array of concrete contract risks
+- missingClauses: array of missing or weak clauses
+- riskyTerms: array of risky words, terms, or phrases
+- inconsistentWording: array of contradictions or unclear wording
+
+Focus on contract analysis, not statutory compliance. The Legal Compliance Agent handles law/RAG checks.
+${MONGOLIAN_OUTPUT_RULE}`;
+
+const LEGAL_COMPLIANCE_AGENT_PROMPT = `You are Draftly's Legal Compliance Agent. Use the provided RAG legal context, law articles, and clause templates to compare the contract against Mongolian legal and compliance requirements.
+
+Return ONLY a JSON object with:
+- complianceWarnings: array of legal/compliance warnings grounded in the provided legal context
+- mandatoryMissingClauses: array of legally or operationally important missing clauses
+- legalReferences: array where each item has clauseTitle, lawTitle, articleNumber, relevance, reasoning
+
+If the RAG context is sparse, say what cannot be verified instead of inventing legal citations.
+${MONGOLIAN_OUTPUT_RULE}`;
+
+const RISK_SCORING_AGENT_PROMPT = `You are Draftly's Risk Scoring Agent. Use the original contract plus outputs from the Extraction, Analysis, and Legal Compliance agents to calculate the final risk profile.
+
+Return ONLY a JSON object with:
+- riskScore: integer 0-100
+- risks: array of the most important final risk reasons
+- riskyTerms: array of risky terms that influenced the score
+- missingClauses: array of missing clauses that influenced the score
+- explanation: one concise explanation of why this score was assigned
+
+Scoring guide: 0-30 low risk, 31-65 medium risk, 66-100 high risk. Increase score for missing mandatory clauses, unclear payment/termination/liability, conflicting wording, and legal compliance gaps.
+${MONGOLIAN_OUTPUT_RULE}`;
+
 async function callGeminiWithModel(
   modelName: string,
   systemPrompt: string,
@@ -287,41 +369,147 @@ function analyzeLocally(text: string): AnalysisResult {
   };
 }
 
+function hasLegalContext(legalCtx: LegalContext): boolean {
+  return (
+    legalCtx.relevantLaws.length > 0 ||
+    legalCtx.relevantArticles.length > 0 ||
+    legalCtx.relevantTemplates.length > 0
+  );
+}
+
+function shouldEstimateCost(text: string): boolean {
+  return /(\d[\d\s,.'’]*\s*(₮|mnt|төгрөг|төг|сая|million|billion)|₮|үнэ|төлбөр|fee|amount|price|salary|цалин)/i.test(text);
+}
+
+function emptyCostEstimate(): CostEstimate {
+  return {
+    estimatedCost: null,
+    currency: "MNT",
+    breakdown: [],
+    confidence: "LOW",
+  };
+}
+
+function asStringArray(value: unknown): string[] {
+  return Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === "string" && item.trim().length > 0)
+    : [];
+}
+
+function uniqueStrings(items: string[]): string[] {
+  return [...new Set(items.map((item) => item.trim()).filter(Boolean))];
+}
+
+function buildCrewAgentMessage(
+  text: string,
+  legalCtx: LegalContext,
+  memory?: Record<string, unknown>
+): string {
+  const parts = [buildUserMessage(text, legalCtx)];
+
+  if (memory && Object.keys(memory).length > 0) {
+    parts.push(`\n=== CREW MEMORY ===\n${JSON.stringify(memory, null, 2)}`);
+  }
+
+  return parts.join("\n\n").slice(0, CHARS_LIMIT);
+}
+
+function normalizeClauses(value: unknown): ClauseResult[] {
+  return Array.isArray(value)
+    ? value.map((c: any, i: number) => ({
+      title: typeof c.title === "string" && c.title.trim() ? c.title : "Unknown Clause",
+      content: typeof c.content === "string" ? c.content : "",
+      clauseType: typeof c.clauseType === "string" && c.clauseType.trim() ? c.clauseType : "General",
+      riskLevel: ["LOW", "MEDIUM", "HIGH"].includes(c.riskLevel) ? c.riskLevel : "MEDIUM",
+      explanation: typeof c.explanation === "string" ? c.explanation : "",
+      orderNo: Number.isFinite(Number(c.orderNo)) ? Number(c.orderNo) : i + 1,
+    }))
+    : [];
+}
+
+function normalizeLegalReferences(value: unknown): LegalReference[] {
+  return Array.isArray(value)
+    ? value.map((r: any) => ({
+      clauseTitle: typeof r.clauseTitle === "string" ? r.clauseTitle : "",
+      lawTitle: typeof r.lawTitle === "string" ? r.lawTitle : "",
+      articleNumber: r.articleNumber ? String(r.articleNumber) : null,
+      relevance: typeof r.relevance === "string" && r.relevance.trim() ? r.relevance : "RELATED",
+      reasoning: typeof r.reasoning === "string" ? r.reasoning : "",
+    }))
+    : [];
+}
+
+function normalizeExtractionAgentResult(raw: any): ExtractionAgentResult {
+  return {
+    contractType: typeof raw?.contractType === "string" ? raw.contractType : "Unknown",
+    parties: asStringArray(raw?.parties),
+    effectiveDate: raw?.effectiveDate ? String(raw.effectiveDate) : null,
+    contractValue: raw?.contractValue ? String(raw.contractValue) : null,
+    signatures: asStringArray(raw?.signatures),
+    obligations: asStringArray(raw?.obligations),
+    missingSections: asStringArray(raw?.missingSections),
+    clauses: normalizeClauses(raw?.clauses),
+  };
+}
+
+function normalizeAnalysisAgentResult(raw: any): AnalysisAgentResult {
+  return {
+    summary: typeof raw?.summary === "string" ? raw.summary : "",
+    risks: asStringArray(raw?.risks),
+    missingClauses: asStringArray(raw?.missingClauses),
+    riskyTerms: asStringArray(raw?.riskyTerms),
+    inconsistentWording: asStringArray(raw?.inconsistentWording),
+  };
+}
+
+function normalizeLegalComplianceAgentResult(raw: any): LegalComplianceAgentResult {
+  return {
+    complianceWarnings: asStringArray(raw?.complianceWarnings),
+    mandatoryMissingClauses: asStringArray(raw?.mandatoryMissingClauses),
+    legalReferences: normalizeLegalReferences(raw?.legalReferences),
+  };
+}
+
+function normalizeRiskScoringAgentResult(raw: any): RiskScoringAgentResult {
+  return {
+    riskScore: Math.min(100, Math.max(0, Number(raw?.riskScore) || 0)),
+    risks: asStringArray(raw?.risks),
+    riskyTerms: asStringArray(raw?.riskyTerms),
+    missingClauses: asStringArray(raw?.missingClauses),
+    explanation: typeof raw?.explanation === "string" ? raw.explanation : "",
+  };
+}
+
 export async function analyzeWithCrewAI(
   text: string,
   legalCtx: LegalContext
 ): Promise<AnalysisResult> {
-  const userMsg = buildUserMessage(text, legalCtx);
-
-  const [clauseRes, riskRes, legalRefRes, costRes] = await Promise.all([
-    callGemini(CLAUSE_SYSTEM_PROMPT, userMsg),
-    callGemini(RISK_SYSTEM_PROMPT, userMsg),
-    callGemini(LEGAL_REFERENCE_SYSTEM_PROMPT, userMsg),
-    callGemini(COST_SYSTEM_PROMPT, userMsg),
-  ]);
-
-  const clauses: ClauseResult[] = (clauseRes.clauses || []).map(
-    (c: any, i: number) => ({
-      title: c.title || "Unknown Clause",
-      content: c.content || "",
-      clauseType: c.clauseType || "General",
-      riskLevel: ["LOW", "MEDIUM", "HIGH"].includes(c.riskLevel)
-        ? c.riskLevel
-        : "MEDIUM",
-      explanation: c.explanation || "",
-      orderNo: c.orderNo ?? i + 1,
-    })
+  const extraction = normalizeExtractionAgentResult(
+    await callGemini(EXTRACTION_AGENT_PROMPT, buildCrewAgentMessage(text, legalCtx))
   );
-
-  const legalReferences: LegalReference[] = (
-    legalRefRes.legalReferences || []
-  ).map((r: any) => ({
-    clauseTitle: r.clauseTitle || "",
-    lawTitle: r.lawTitle || "",
-    articleNumber: r.articleNumber || null,
-    relevance: r.relevance || "RELATED",
-    reasoning: r.reasoning || "",
-  }));
+  const analysis = normalizeAnalysisAgentResult(
+    await callGemini(ANALYSIS_AGENT_PROMPT, buildCrewAgentMessage(text, legalCtx, { extraction }))
+  );
+  const legalCompliance = hasLegalContext(legalCtx)
+    ? normalizeLegalComplianceAgentResult(
+      await callGemini(LEGAL_COMPLIANCE_AGENT_PROMPT, buildCrewAgentMessage(text, legalCtx, { extraction, analysis }))
+    )
+    : {
+      complianceWarnings: ["RAG knowledge base-ээс тохирох хууль, заалт олдоогүй тул хууль зүйн нийцлийг бүрэн баталгаажуулах боломжгүй."],
+      mandatoryMissingClauses: [],
+      legalReferences: [],
+    };
+  const riskScoring = normalizeRiskScoringAgentResult(
+    await callGemini(RISK_SCORING_AGENT_PROMPT, buildCrewAgentMessage(text, legalCtx, {
+      extraction,
+      analysis,
+      legalCompliance,
+    }))
+  );
+  const shouldRunCostAgent = shouldEstimateCost(text) || Boolean(extraction.contractValue);
+  const costRes = shouldRunCostAgent
+    ? await callGemini(COST_SYSTEM_PROMPT, buildCrewAgentMessage(text, legalCtx, { extraction }))
+    : emptyCostEstimate();
 
   const costEstimate: CostEstimate = {
     estimatedCost: costRes.estimatedCost ? Number(costRes.estimatedCost) : null,
@@ -332,23 +520,31 @@ export async function analyzeWithCrewAI(
       : "LOW",
   };
 
+  const missingClauses = uniqueStrings([
+    ...extraction.missingSections,
+    ...analysis.missingClauses,
+    ...legalCompliance.mandatoryMissingClauses,
+    ...riskScoring.missingClauses,
+  ]);
+  const risks = uniqueStrings([
+    ...analysis.risks,
+    ...riskScoring.risks,
+    ...legalCompliance.complianceWarnings,
+  ]);
+  const riskyTerms = uniqueStrings([...analysis.riskyTerms, ...riskScoring.riskyTerms]);
+  const summary = analysis.summary || riskScoring.explanation || "CrewAI workflow completed the contract review.";
+
   return {
-    summary: riskRes.summary || "",
-    riskScore: Math.min(100, Math.max(0, Number(riskRes.riskScore) || 0)),
-    risks: Array.isArray(riskRes.risks) ? riskRes.risks : [],
-    missingClauses: Array.isArray(riskRes.missingClauses)
-      ? riskRes.missingClauses
-      : [],
-    riskyTerms: Array.isArray(riskRes.riskyTerms) ? riskRes.riskyTerms : [],
-    complianceWarnings: Array.isArray(riskRes.complianceWarnings)
-      ? riskRes.complianceWarnings
-      : [],
+    summary,
+    riskScore: riskScoring.riskScore,
+    risks,
+    missingClauses,
+    riskyTerms,
+    complianceWarnings: legalCompliance.complianceWarnings,
     estimatedCost: costEstimate.estimatedCost,
-    inconsistentWording: Array.isArray(riskRes.inconsistentWording)
-      ? riskRes.inconsistentWording
-      : [],
-    clauses,
-    legalReferences,
+    inconsistentWording: analysis.inconsistentWording,
+    clauses: extraction.clauses,
+    legalReferences: legalCompliance.legalReferences,
     costEstimate,
   };
 }
