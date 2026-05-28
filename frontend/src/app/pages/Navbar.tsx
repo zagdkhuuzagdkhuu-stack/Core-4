@@ -1,10 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import type { RefObject } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { CircleUserRound, LogOut, Menu, Moon, Settings, Sun, X } from "lucide-react";
+import { CircleUserRound, House, LogOut, Menu, Moon, Settings, Sun, X } from "lucide-react";
+import { NavLink } from "react-router-dom";
 import type { AuthUser } from "../api";
 import type { AccessState, FolderNavControls, HeaderTab, Locale, UiContent } from "../shared/types";
 
+const NAV_PATHS: Record<HeaderTab, string> = {
+  Home: "/",
+  Template: "/template",
+  Analysis: "/analysis",
+  Information: "/information",
+};
 export function ProfilePanel({
   isOpen,
   user,
@@ -58,7 +65,7 @@ export function ProfilePanel({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-[120] flex items-end justify-center bg-black/40 backdrop-blur-sm"
+          className="fixed inset-0 z-[120] flex items-end justify-center bg-background/40 backdrop-blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -69,77 +76,77 @@ export function ProfilePanel({
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="max-h-[86vh] w-full overflow-y-auto rounded-t-2xl border border-[#1F1F1F] bg-[#141414] p-5 shadow-[0_-24px_70px_rgba(0,0,0,0.4)] sm:max-w-2xl sm:p-6"
+            className="max-h-[86vh] w-full overflow-y-auto rounded-t-[1.8rem] border border-border bg-card p-5 shadow-[0_-24px_70px_rgba(0,0,0,0.24)] sm:max-w-2xl sm:p-6"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="mb-5 flex items-center justify-between">
-              <h3 className="text-xl font-bold text-white">Profile</h3>
-              <button type="button" onClick={onClose} className="rounded-full border border-[#2A2A2A] bg-[#1A1A1A] p-2">
-                <X size={16} className="text-gray-400" />
+              <h3 className="font-display text-2xl font-bold text-foreground">Profile</h3>
+              <button type="button" onClick={onClose} className="rounded-full border border-border bg-secondary p-2">
+                <X size={16} />
               </button>
             </div>
-            <div className="mb-6 rounded-xl border border-[#2A2A2A] bg-[#1A1A1A]/60 p-4">
-              <p className="text-sm font-semibold text-white">{user?.email || "-"}</p>
-              <p className="mt-1 text-xs text-gray-400">
+            <div className="mb-6 rounded-xl border border-border/70 bg-secondary/60 p-4">
+              <p className="text-sm font-semibold text-foreground">{user?.email || "-"}</p>
+              <p className="mt-1 text-xs text-muted-foreground">
                 {access.isPaid ? ui.profile.paidAccessActive : ui.profile.paymentRequired}
               </p>
               {!access.profileComplete && (
-                <p className="mt-2 text-xs text-red-400">{ui.profile.incompletePrefix} {access.missingFields.join(", ")}</p>
+                <p className="mt-2 text-xs text-red-600">{ui.profile.incompletePrefix} {access.missingFields.join(", ")}</p>
               )}
             </div>
 
             <div className="mb-6 grid gap-3 sm:grid-cols-2">
-              <label className="text-xs font-semibold text-gray-400">
+              <label className="text-xs font-semibold text-muted-foreground">
                 First name
                 <input
                   value={firstName}
                   onChange={(event) => setFirstName(event.target.value)}
-                  className="mt-1 w-full rounded-md border border-[#2A2A2A] bg-[#0A0A0A] px-3 py-2 text-sm text-white"
+                  className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground"
                 />
               </label>
-              <label className="text-xs font-semibold text-gray-400">
+              <label className="text-xs font-semibold text-muted-foreground">
                 Last name
                 <input
                   value={lastName}
                   onChange={(event) => setLastName(event.target.value)}
-                  className="mt-1 w-full rounded-md border border-[#2A2A2A] bg-[#0A0A0A] px-3 py-2 text-sm text-white"
+                  className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground"
                 />
               </label>
             </div>
-            {error && <p className="mb-3 text-sm text-red-400">{error}</p>}
+            {error && <p className="mb-3 text-sm text-red-600">{error}</p>}
             <div className="mb-6 flex flex-wrap gap-2">
-              <button type="button" onClick={handleSave} disabled={saving} className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-black disabled:opacity-60">
+              <button type="button" onClick={handleSave} disabled={saving} className="rounded-full bg-button px-5 py-2 text-sm font-semibold text-button-text disabled:opacity-60">
                 {saving ? "Saving..." : ui.profile.saveSettings}
               </button>
-              <button type="button" onClick={onLanguageToggle} className="inline-flex items-center gap-2 rounded-full border border-[#2A2A2A] bg-[#1A1A1A] px-4 py-2 text-sm font-semibold text-white">
+              <button type="button" onClick={onLanguageToggle} className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-4 py-2 text-sm font-semibold text-foreground">
                 <Settings size={14} /> {locale === "mn" ? "Switch to ENG" : "MN руу шилжих"}
               </button>
-              <button type="button" onClick={onLogout} className="inline-flex items-center gap-2 rounded-full border border-[#2A2A2A] bg-[#1A1A1A] px-4 py-2 text-sm font-semibold text-white">
+              <button type="button" onClick={onLogout} className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-4 py-2 text-sm font-semibold text-foreground">
                 <LogOut size={14} /> Logout
               </button>
             </div>
 
             <div className="grid gap-4 lg:grid-cols-2">
-              <div className="rounded-xl border border-[#2A2A2A] bg-[#1A1A1A]/50 p-4">
-                <p className="mb-3 text-sm font-bold text-white">{ui.profile.savedDocuments}</p>
+              <div className="rounded-xl border border-border/70 bg-secondary/50 p-4">
+                <p className="mb-3 text-sm font-bold text-foreground">{ui.profile.savedDocuments}</p>
                 <div className="space-y-2">
                   {documents.slice(0, 6).map((doc) => (
-                    <div key={doc.id} className="rounded-md border border-[#2A2A2A] bg-[#0A0A0A] px-3 py-2">
-                      <p className="truncate text-xs font-semibold text-gray-300">{doc.title}</p>
+                    <div key={doc.id} className="rounded-md border border-border bg-background px-3 py-2">
+                      <p className="truncate text-xs font-semibold text-foreground">{doc.title}</p>
                     </div>
                   ))}
-                  {documents.length === 0 && <p className="text-xs text-gray-500">{ui.profile.emptyDocuments}</p>}
+                  {documents.length === 0 && <p className="text-xs text-muted-foreground">{ui.profile.emptyDocuments}</p>}
                 </div>
               </div>
-              <div className="rounded-xl border border-[#2A2A2A] bg-[#1A1A1A]/50 p-4">
-                <p className="mb-3 text-sm font-bold text-white">{ui.profile.savedContracts}</p>
+              <div className="rounded-xl border border-border/70 bg-secondary/50 p-4">
+                <p className="mb-3 text-sm font-bold text-foreground">{ui.profile.savedContracts}</p>
                 <div className="space-y-2">
                   {contracts.slice(0, 6).map((contract) => (
-                    <div key={contract.id} className="rounded-md border border-[#2A2A2A] bg-[#0A0A0A] px-3 py-2">
-                      <p className="truncate text-xs font-semibold text-gray-300">{contract.title}</p>
+                    <div key={contract.id} className="rounded-md border border-border bg-background px-3 py-2">
+                      <p className="truncate text-xs font-semibold text-foreground">{contract.title}</p>
                     </div>
                   ))}
-                  {contracts.length === 0 && <p className="text-xs text-gray-500">{ui.profile.emptyContracts}</p>}
+                  {contracts.length === 0 && <p className="text-xs text-muted-foreground">{ui.profile.emptyContracts}</p>}
                 </div>
               </div>
             </div>
@@ -150,27 +157,100 @@ export function ProfilePanel({
   );
 }
 
+function NavActionButtons({
+  controls,
+  className = "",
+  showAuth = true,
+}: {
+  controls: FolderNavControls;
+  className?: string;
+  showAuth?: boolean;
+}) {
+  return (
+    <div className={`flex items-center justify-end gap-2 ${className}`}>
+      <button
+        type="button"
+        onClick={controls.onThemeToggle}
+        className="flex h-11 w-11 items-center justify-center rounded-full bg-[#0C1519] text-white shadow-[0_12px_24px_rgba(12,21,25,0.18)] transition-all duration-300 hover:scale-105 dark:bg-[#CF9D7B] dark:text-[#0C1519]"
+        aria-label="Toggle dark mode"
+      >
+        {controls.isDark ? <Sun size={15} /> : <Moon size={15} />}
+      </button>
+      <button
+        type="button"
+        onClick={controls.onLanguageToggle}
+        className="flex h-11 min-w-14 items-center justify-center rounded-full bg-[#0C1519] px-4 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(12,21,25,0.18)] transition-all duration-300 hover:scale-105 dark:bg-[#CF9D7B] dark:text-[#0C1519] sm:min-w-[4.5rem]"
+        aria-label="Switch language"
+      >
+        {controls.languageLabel}
+      </button>
+      {showAuth && (controls.isAuthenticated ? (
+        <button
+          type="button"
+          onClick={controls.onProfileClick}
+          className="inline-flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-[#0C1519] text-white shadow-[0_12px_24px_rgba(12,21,25,0.18)] transition-transform duration-300 hover:scale-105 dark:bg-[#CF9D7B] dark:text-[#0C1519]"
+          aria-label="Open profile"
+        >
+          {controls.userAvatarUrl ? (
+            <img src={controls.userAvatarUrl} alt="Profile avatar" className="h-full w-full object-cover" />
+          ) : (
+            <CircleUserRound size={18} />
+          )}
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={controls.onLoginClick}
+          className="h-11 rounded-full bg-[#0C1519] px-6 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(12,21,25,0.18)] transition-all duration-300 hover:scale-105 dark:bg-[#CF9D7B] dark:text-[#0C1519] sm:min-w-[7.25rem]"
+        >
+          {controls.loginLabel}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export function OpeningSplash({ onComplete }: { onComplete: () => void }) {
+  const letters = "Draftly.".split("");
+
   useEffect(() => {
-    const timer = window.setTimeout(onComplete, 2000);
+    const timer = window.setTimeout(onComplete, 2850);
     return () => window.clearTimeout(timer);
   }, [onComplete]);
 
   return (
     <motion.div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0A0A0A]"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-background"
       initial={{ opacity: 1 }}
       animate={{ opacity: [1, 1, 0] }}
-      transition={{ duration: 2, times: [0, 0.8, 1], ease: "easeInOut" }}
+      transition={{ duration: 2.85, times: [0, 0.86, 1], ease: "easeInOut" }}
       aria-hidden="true"
     >
       <motion.div
-        className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="font-display text-5xl font-black tracking-normal text-foreground sm:text-6xl md:text-7xl"
+        initial={{ x: 0, y: 0, scale: 1 }}
+        animate={{
+          x: ["0vw", "0vw", "clamp(-42vw, calc(-50vw + 5rem), -28vw)"],
+          y: ["0vh", "0vh", "clamp(-46vh, calc(-50vh + 4.5rem), -38vh)"],
+          scale: [1, 1, 0.52],
+          textShadow: [
+            "0 0 0 rgba(207,157,123,0)",
+            "0 0 28px rgba(207,157,123,0.36)",
+            "0 0 12px rgba(207,157,123,0.18)",
+          ],
+        }}
+        transition={{ duration: 2.55, times: [0, 0.66, 1], ease: [0.22, 1, 0.36, 1] }}
       >
-        Draftly.
+        {letters.map((letter, index) => (
+          <motion.span
+            key={`${letter}-${index}`}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.16 + index * 0.085, duration: 0.28, ease: "easeOut" }}
+          >
+            {letter}
+          </motion.span>
+        ))}
       </motion.div>
     </motion.div>
   );
@@ -181,6 +261,8 @@ export function FolderTabs({
   onSelect,
   controls,
   ui,
+  homeGlobal = false,
+  scrollContainerRef,
 }: {
   activeTab: HeaderTab;
   onSelect: (tab: HeaderTab) => void;
@@ -196,159 +278,188 @@ export function FolderTabs({
     Analysis: ui.nav.analysis,
     Information: ui.nav.information,
   };
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
+  const [isSimpleHomeNav, setIsSimpleHomeNav] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
-    const onScroll = () => {
-      setIsScrolled(window.scrollY > 40);
+    const getScrollElement = () => {
+      const candidate = scrollContainerRef?.current;
+      if (!candidate) return null;
+      return candidate.scrollHeight > candidate.clientHeight ? candidate : null;
     };
+
+    const onScroll = () => {
+      const scrollElement = getScrollElement();
+      const currentScrollY = scrollElement ? scrollElement.scrollTop : window.scrollY;
+      const scrollingDown = currentScrollY > lastScrollY.current;
+      const simpleThreshold = (scrollElement?.clientHeight ?? window.innerHeight) * 0.55;
+
+      setIsHidden(scrollingDown && currentScrollY > 90);
+      setIsSimpleHomeNav(homeGlobal && currentScrollY > simpleThreshold);
+      lastScrollY.current = currentScrollY;
+    };
+
+    const scrollTarget = getScrollElement() ?? window;
     onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    scrollTarget.addEventListener("scroll", onScroll, { passive: true });
+    return () => scrollTarget.removeEventListener("scroll", onScroll);
+  }, [homeGlobal, scrollContainerRef]);
+
+  const handleNavSelect = (tab: HeaderTab) => {
+    setMobileMenuOpen(false);
+    onSelect(tab);
+  };
 
   useEffect(() => {
     if (!mobileMenuOpen) return;
+    const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
   }, [mobileMenuOpen]);
 
   return (
     <>
     <motion.header
-      className={`fixed top-0 z-[999] w-full transition-all duration-300 ${
-        isScrolled ? "bg-[#0A0A0A]/90 backdrop-blur-lg shadow-[0_1px_0_rgba(255,255,255,0.06)]" : "bg-transparent"
-      }`}
+      className="fixed left-1/2 top-4 z-[999999] isolate w-[95%] -translate-x-1/2"
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <button
-          type="button"
-          onClick={() => onSelect("Home")}
-          className="text-xl font-bold tracking-tight text-white"
-        >
-          Draftly.
-        </button>
-
-        <nav className="hidden items-center gap-1 md:flex">
-          {navItems.map(label => (
-            <button
-              key={label}
-              type="button"
-              onClick={() => onSelect(label)}
-              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                activeTab === label
-                  ? "text-white"
-                  : "text-gray-400 hover:text-white"
-              }`}
-            >
-              {navLabels[label]}
-            </button>
-          ))}
-        </nav>
-
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={controls.onThemeToggle}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:text-white transition-colors"
-            aria-label="Toggle dark mode"
-          >
-            {controls.isDark ? <Sun size={15} /> : <Moon size={15} />}
-          </button>
-          <button
-            type="button"
-            onClick={controls.onLanguageToggle}
-            className="hidden rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-400 hover:text-white transition-colors sm:block"
-          >
-            {controls.languageLabel}
-          </button>
-          {controls.isAuthenticated ? (
+      <div className="mx-auto flex h-[72px] w-full max-w-[100rem] items-center rounded-[2rem] border border-black/5 bg-white/92 px-4 text-[#0C1519] shadow-[0_18px_50px_rgba(12,21,25,0.12)] backdrop-blur-md transition-all duration-300 dark:border-white/10 dark:bg-[#162127]/92 dark:text-[#F7F1EC] sm:h-20 sm:px-6">
+        <div className="flex min-w-0 flex-1 items-center gap-4">
             <button
               type="button"
-              onClick={controls.onProfileClick}
-              className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg bg-white/10 text-white transition-colors hover:bg-white/20"
-              aria-label="Open profile"
+              onClick={() => handleNavSelect("Home")}
+              className="shrink-0 font-serif text-3xl font-bold leading-none text-[#0C1519] transition-transform duration-300 hover:scale-105 dark:text-[#F7F1EC]"
             >
-              {controls.userAvatarUrl ? (
-                <img src={controls.userAvatarUrl} alt="Profile" className="h-full w-full object-cover" />
-              ) : (
-                <CircleUserRound size={16} />
-              )}
+              Draftly.
             </button>
-          ) : (
-            <button
-              type="button"
-              onClick={controls.onLoginClick}
-              className="rounded-lg bg-white px-4 py-1.5 text-sm font-medium text-black transition-colors hover:bg-gray-200"
-            >
-              {controls.loginLabel}
-            </button>
-          )}
-          <button
-            type="button"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:text-white md:hidden"
-            onClick={() => setMobileMenuOpen(true)}
-            aria-label="Open menu"
-          >
-            <Menu size={18} />
-          </button>
-        </div>
-      </div>
-    </motion.header>
-
-    <AnimatePresence>
-      {mobileMenuOpen && (
-        <motion.div
-          className="fixed inset-0 z-[1000] bg-[#0A0A0A] md:hidden"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <div className="flex h-16 items-center justify-between px-4">
-            <span className="text-xl font-bold text-white">Draftly.</span>
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400"
-              aria-label="Close menu"
-            >
-              <X size={18} />
-            </button>
-          </div>
-          <nav className="flex flex-col gap-2 px-4 pt-4">
-            {navItems.map(label => (
+            <span className="hidden h-8 w-px shrink-0 bg-black/12 dark:bg-white/15 sm:block" />
+            <nav className="hidden min-w-0 items-center gap-2 rounded-full bg-white px-2 py-2 shadow-[0_10px_28px_rgba(12,21,25,0.10)] dark:bg-[#1E394B] lg:flex">
+              {navItems.map(label => (
+                <NavLink
+                  key={label}
+                  to={NAV_PATHS[label]}
+                  end={label === "Home"}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    handleNavSelect(label);
+                  }}
+                  className={({ isActive }) => `flex shrink-0 items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 ease-out hover:scale-105 ${
+                    isActive ? "bg-[#0C1519] text-white shadow-[0_10px_20px_rgba(12,21,25,0.18)] dark:bg-[#CF9D7B] dark:text-[#0C1519]" : "bg-transparent text-[#0C1519] hover:bg-[#F2F2F0] dark:text-[#F7F1EC] dark:hover:bg-[#2A4354]"
+                  }`}
+                >
+                  <span className="relative z-10 whitespace-nowrap">{navLabels[label]}</span>
+                </NavLink>
+              ))}
+            </nav>
+            <div className="ml-auto flex rounded-full bg-white px-2 py-2 shadow-[0_10px_24px_rgba(12,21,25,0.10)] dark:bg-[#1E394B] lg:hidden">
               <button
-                key={label}
                 type="button"
-                onClick={() => { onSelect(label); setMobileMenuOpen(false); }}
-                className={`rounded-lg px-4 py-4 text-left text-lg font-medium transition-colors ${
-                  activeTab === label ? "text-white bg-white/5" : "text-gray-400"
-                }`}
+                onClick={() => handleNavSelect("Home")}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0C1519] text-white transition-transform duration-300 hover:scale-105 dark:bg-[#CF9D7B] dark:text-[#0C1519]"
+                aria-label={navLabels.Home}
               >
-                {navLabels[label]}
+                <House size={17} />
               </button>
-            ))}
-            <button
-              type="button"
-              onClick={controls.onLanguageToggle}
-              className="rounded-lg px-4 py-4 text-left text-lg font-medium text-gray-400"
+              <button
+                type="button"
+                className="ml-1 flex h-10 w-10 items-center justify-center rounded-full text-[#0C1519] transition-all duration-300 hover:scale-105 hover:bg-[#F2F2F0] dark:text-[#F7F1EC] dark:hover:bg-[#2A4354]"
+                onClick={() => setMobileMenuOpen(open => !open)}
+                aria-expanded={mobileMenuOpen}
+                aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              >
+                {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+              </button>
+            </div>
+            <NavActionButtons controls={controls} showAuth={false} className="ml-2 flex shrink-0 lg:hidden" />
+          </div>
+        <NavActionButtons controls={controls} className="ml-auto hidden shrink-0 lg:flex lg:gap-3" />
+      </div>
+
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            className="fixed inset-0 z-[1000000] bg-[#FAFAF9] dark:bg-[#0C1519] lg:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <motion.nav
+              className="fixed right-0 top-0 z-[1000000] flex h-screen w-full flex-col overflow-y-auto bg-[#FAFAF9] px-6 pb-10 pt-8 text-[#0C1519] dark:bg-[#0C1519] dark:text-[#F7F1EC]"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              onClick={(event) => event.stopPropagation()}
             >
-              {controls.languageLabel}
-            </button>
-          </nav>
-        </motion.div>
-      )}
-    </AnimatePresence>
+              <div className="mb-12 flex items-center justify-between">
+                <span className="font-serif text-3xl font-bold">Draftly.</span>
+                <button
+                  type="button"
+                  className="flex h-11 w-11 items-center justify-center rounded-full bg-[#0C1519] text-white shadow-[0_12px_24px_rgba(12,21,25,0.16)] transition-transform duration-300 hover:scale-105 dark:bg-[#CF9D7B] dark:text-[#0C1519]"
+                  onClick={() => setMobileMenuOpen(false)}
+                  aria-label="Close menu"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+              <div className="grid gap-4">
+                {navItems.map(label => (
+                  <NavLink
+                    key={label}
+                    to={NAV_PATHS[label]}
+                    end={label === "Home"}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      handleNavSelect(label);
+                    }}
+                    className={({ isActive }) => `rounded-full px-6 py-5 text-xl font-semibold transition-all duration-300 ${
+                      isActive ? "bg-[#0C1519] text-white shadow-[0_14px_28px_rgba(12,21,25,0.14)] dark:bg-[#CF9D7B] dark:text-[#0C1519]" : "bg-white text-[#0C1519] shadow-[0_10px_24px_rgba(12,21,25,0.06)] hover:bg-[#F2F2F0] dark:bg-[#162127] dark:text-[#F7F1EC] dark:hover:bg-[#2A4354]"
+                    }`}
+                  >
+                    {navLabels[label]}
+                  </NavLink>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    controls.onLoginClick();
+                  }}
+                  className="rounded-full bg-white px-6 py-5 text-left text-xl font-semibold text-[#0C1519] shadow-[0_10px_24px_rgba(12,21,25,0.06)] transition-all duration-300 hover:bg-[#F2F2F0] dark:bg-[#162127] dark:text-[#F7F1EC] dark:hover:bg-[#2A4354]"
+                >
+                  {controls.loginLabel}
+                </button>
+              </div>
+            </motion.nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.header>
     </>
   );
 }
 
-export function HomeSimpleNav(_props: {
+export function HomeSimpleNav({
+  onSelect: _onSelect,
+  controls: _controls,
+  ui: _ui,
+  scrollContainerRef: _scrollContainerRef,
+}: {
   onSelect: (tab: HeaderTab) => void;
   controls: FolderNavControls;
   ui: UiContent;
   scrollContainerRef: RefObject<HTMLElement>;
 }) {
+  void _onSelect;
+  void _controls;
+  void _ui;
+  void _scrollContainerRef;
   return null;
 }

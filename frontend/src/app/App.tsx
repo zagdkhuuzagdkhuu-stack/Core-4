@@ -1,5 +1,5 @@
 ﻿import { useEffect, useRef, useState } from "react";
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties, ReactNode, RefObject } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { CreditCard, LoaderCircle, QrCode } from "lucide-react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
@@ -85,7 +85,11 @@ const NAV_PAGE_ORDER: Partial<Record<AppPage, number>> = {
 function getPageDirection(currentPage: AppPage, nextPage: AppPage): PageSlideDirection {
   const currentIndex = NAV_PAGE_ORDER[currentPage];
   const nextIndex = NAV_PAGE_ORDER[nextPage];
-  if (currentIndex === undefined || nextIndex === undefined) return "right";
+
+  if (currentIndex === undefined || nextIndex === undefined) {
+    return "right";
+  }
+
   return nextIndex >= currentIndex ? "right" : "left";
 }
 
@@ -102,7 +106,7 @@ export default function App() {
   const location = useLocation();
   const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
   const [locale, setLocale] = useState<Locale>("mn");
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
   const [previousPage, setPreviousPage] = useState<AppPage>("home");
   const [pageDirection, setPageDirection] = useState<PageSlideDirection>("right");
@@ -350,11 +354,34 @@ export default function App() {
     navigateTo(fallback);
   };
 
+  const scrollHomeTo = (ref: RefObject<HTMLElement>) => {
+    navigateTo("home");
+    window.setTimeout(() => {
+      ref.current?.scrollIntoView({ behavior: "auto", block: "start" });
+    }, 80);
+  };
+
   const handleTabSelect = (tab: HeaderTab) => {
-    if (tab === "Home") { openHome(); return; }
-    if (tab === "Template") { openTemplate(); return; }
-    if (tab === "Analysis") { openAnalysis(); return; }
-    if (tab === "Information") { navigateTo("information"); return; }
+    if (tab === "Home") {
+      openHome();
+      return;
+    }
+
+    if (tab === "Template") {
+      openTemplate();
+      return;
+    }
+
+    if (tab === "Analysis") {
+      openAnalysis();
+      return;
+    }
+
+    if (tab === "Information") {
+      navigateTo("information");
+      return;
+    }
+
     openHome();
   };
 
@@ -374,9 +401,9 @@ export default function App() {
     <PageTransition
       key="home"
       direction={pageDirection}
-      className="bg-[#0A0A0A]"
+      className="bg-background"
     >
-      <div ref={homeScrollRef} className="min-h-screen bg-[#0A0A0A]">
+      <div ref={homeScrollRef} className="min-h-screen bg-background">
         <HomePage
           content={content}
           partners={PARTNERS}
@@ -400,7 +427,7 @@ export default function App() {
   );
 
   return (
-    <div className="relative z-0 min-h-screen overflow-x-hidden bg-[#0A0A0A] transition-colors duration-700">
+    <div className="relative z-0 min-h-screen overflow-x-hidden bg-background transition-colors duration-700">
       <AnimatePresence>
         {showSplash && <OpeningSplash onComplete={() => setShowSplash(false)} />}
       </AnimatePresence>
@@ -410,6 +437,8 @@ export default function App() {
           onSelect={handleTabSelect}
           controls={navControls}
           ui={content.ui}
+          homeGlobal={page === "home"}
+          scrollContainerRef={homeScrollRef}
         />
       )}
       <AnimatePresence mode="wait">
@@ -422,7 +451,7 @@ export default function App() {
           />
         } />
         <Route path="/template" element={
-          <PageTransition key="template" direction={pageDirection} className="bg-[#0A0A0A]">
+          <PageTransition key="template" direction={pageDirection} className="bg-background">
             <TemplateWorkflow
               onBackHome={goBackPage}
               onTabSelect={handleTabSelect}
@@ -434,7 +463,7 @@ export default function App() {
           </PageTransition>
         } />
         <Route path="/analysis" element={
-          <PageTransition key="analysis" direction={pageDirection} className="bg-[#0A0A0A]">
+          <PageTransition key="analysis" direction={pageDirection} className="bg-background">
             <AnalysisWorkflow
               onBack={goBackPage}
               onTabSelect={handleTabSelect}
@@ -452,7 +481,7 @@ export default function App() {
           </PageTransition>
         } />
         <Route path="/information" element={
-          <PageTransition key="information" direction={pageDirection} className="bg-[#0A0A0A]">
+          <PageTransition key="information" direction={pageDirection} className="bg-background">
             <InformationPage
               onTabSelect={handleTabSelect}
               navControls={navControls}
@@ -466,7 +495,7 @@ export default function App() {
       </Routes>
       </AnimatePresence>
       {globalNotice && (
-        <div className="pointer-events-none fixed bottom-4 right-4 z-[130] max-w-sm rounded-lg border border-[#2A2A2A] bg-[#141414] px-4 py-3 text-sm text-white shadow-lg">
+        <div className="pointer-events-none fixed bottom-4 right-4 z-[130] max-w-sm rounded-lg border border-border bg-card px-4 py-3 text-sm text-foreground shadow-lg">
           {globalNotice}
         </div>
       )}
@@ -486,27 +515,27 @@ export default function App() {
       <AnimatePresence>
         {paywallOpen && (
           <motion.div
-            className="fixed inset-0 z-[125] flex items-center justify-center bg-black/45 p-4 backdrop-blur-sm"
+            className="fixed inset-0 z-[125] flex items-center justify-center bg-background/45 p-4 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setPaywallOpen(false)}
           >
             <motion.div
-              className="w-full max-w-md rounded-xl border border-[#2A2A2A] bg-[#141414] p-6 shadow-lg"
+              className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-[0_24px_70px_rgba(0,0,0,0.25)]"
               initial={{ y: 18, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 18, opacity: 0 }}
               onClick={(event) => event.stopPropagation()}
             >
               <div className="mb-4 flex items-center gap-2">
-                <CreditCard size={18} className="text-[#7C3AED]" />
-                <h4 className="text-lg font-bold text-white">{content.ui.paywall.title}</h4>
+                <CreditCard size={18} className="text-accent" />
+                <h4 className="text-lg font-bold text-foreground">{content.ui.paywall.title}</h4>
               </div>
-              <p className="mb-5 text-sm text-gray-400">{content.ui.paywall.description}</p>
-              <div className="mb-5 flex items-center justify-center rounded-lg border border-[#2A2A2A] bg-[#1A1A1A] p-4">
+              <p className="mb-5 text-sm text-muted-foreground">{content.ui.paywall.description}</p>
+              <div className="mb-5 flex items-center justify-center rounded-xl border border-border bg-secondary p-4">
                 {paywallBusy ? (
-                  <LoaderCircle className="h-10 w-10 animate-spin text-[#7C3AED]" />
+                  <LoaderCircle className="h-10 w-10 animate-spin text-accent" />
                 ) : paywallInvoice?.qr_image ? (
                   <img
                     src={paywallInvoice.qr_image.startsWith("data:") ? paywallInvoice.qr_image : `data:image/png;base64,${paywallInvoice.qr_image}`}
@@ -514,16 +543,16 @@ export default function App() {
                     className="h-56 w-56 object-contain"
                   />
                 ) : (
-                  <QrCode size={128} className="text-gray-500" />
+                  <QrCode size={128} />
                 )}
               </div>
-              {paywallError && <p className="mb-3 text-sm text-red-400">{paywallError}</p>}
+              {paywallError && <p className="mb-3 text-sm text-red-600">{paywallError}</p>}
               <div className="flex gap-2">
                 <button
                   type="button"
                   onClick={() => void createPaywallInvoice()}
                   disabled={paywallBusy}
-                  className="flex-1 rounded-lg border border-[#2A2A2A] bg-[#1A1A1A] px-4 py-2 text-sm font-semibold text-gray-300 disabled:opacity-60"
+                  className="flex-1 rounded-full border border-border bg-secondary px-4 py-2 text-sm font-semibold text-foreground disabled:opacity-60"
                 >
                   {content.ui.paywall.createAgain}
                 </button>
@@ -531,7 +560,7 @@ export default function App() {
                   type="button"
                   onClick={() => void confirmPaywallPayment()}
                   disabled={paywallBusy || !paywallInvoice}
-                  className="flex-1 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-black disabled:opacity-60"
+                  className="flex-1 rounded-full bg-button px-4 py-2 text-sm font-semibold text-button-text disabled:opacity-60"
                 >
                   {content.ui.paywall.check}
                 </button>
@@ -543,3 +572,7 @@ export default function App() {
     </div>
   );
 }
+
+
+
+
