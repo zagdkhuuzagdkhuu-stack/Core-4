@@ -99,7 +99,7 @@ export function AnalysisWorkflow({
   return (
     <section className="px-3 pt-3 pb-6 min-h-screen flex flex-col bg-background">
       <motion.div
-        className="relative flex-1 overflow-y-auto overflow-x-hidden rounded-b-[2rem] rounded-tr-[2rem] border border-border/70 bg-secondary shadow-[0_16px_70px_rgba(12,21,25,0.12)] dark:border-highlight/15 dark:bg-secondary dark:shadow-[0_18px_80px_rgba(0,0,0,0.34)]"
+        className="relative flex-1 overflow-x-hidden rounded-b-[2rem] rounded-tr-[2rem] border border-border/70 bg-secondary shadow-[0_16px_70px_rgba(12,21,25,0.12)] dark:border-highlight/15 dark:bg-secondary dark:shadow-[0_18px_80px_rgba(0,0,0,0.34)]"
       >
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(207,157,123,0.14),transparent_26%),radial-gradient(circle_at_82%_14%,rgba(216,198,186,0.22),transparent_24%)]" />
         {step === "processing" && (

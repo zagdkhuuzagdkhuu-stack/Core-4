@@ -59,25 +59,23 @@ export const ORBIT_PARTICLES = [
 ];
 
 export const SECTION_REVEAL = {
-  hidden: { opacity: 0, y: 60 },
+  hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    y: 0,
     transition: {
-      duration: 0.55,
+      duration: 0.28,
       ease: "easeOut",
-      staggerChildren: 0.08,
+      staggerChildren: 0.04,
       when: "beforeChildren",
     },
   },
 };
 
 export const REVEAL_ITEM = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    y: 0,
-    transition: { duration: 0.55, ease: "easeOut" },
+    transition: { duration: 0.28, ease: "easeOut" },
   },
 };
 

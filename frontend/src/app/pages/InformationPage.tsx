@@ -53,7 +53,7 @@ export function InformationPage({
 
   return (
     <section className="flex min-h-screen flex-col bg-background px-3 pb-6 pt-3">
-      <motion.main className="relative flex-1 overflow-y-auto overflow-x-hidden rounded-b-[2rem] rounded-tr-[2rem] border border-border/70 bg-secondary shadow-[0_16px_70px_rgba(12,21,25,0.12)] dark:border-highlight/15 dark:bg-secondary dark:shadow-[0_18px_80px_rgba(0,0,0,0.34)]">
+      <motion.main className="relative flex-1 overflow-x-hidden rounded-b-[2rem] rounded-tr-[2rem] border border-border/70 bg-secondary shadow-[0_16px_70px_rgba(12,21,25,0.12)] dark:border-highlight/15 dark:bg-secondary dark:shadow-[0_18px_80px_rgba(0,0,0,0.34)]">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(207,157,123,0.10),transparent_25%),radial-gradient(circle_at_82%_12%,rgba(216,198,186,0.16),transparent_24%)]" />
 
         <div className="relative z-10 mx-auto flex min-h-[calc(100vh-7rem)] max-w-[1280px] flex-col px-5 py-7 sm:px-8 lg:px-10">

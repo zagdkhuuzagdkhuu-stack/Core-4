@@ -25,12 +25,23 @@ export class GeminiQuotaError extends Error {
   }
 }
 
+class GeminiJsonParseError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "GeminiJsonParseError";
+  }
+}
+
 export function geminiQuotaHelpMessage(): string {
   return (
     "Gemini API quota exceeded. Add or refresh GEMINI_API_KEY from https://aistudio.google.com/apikey. " +
     "Set GEMINI_MODEL=gemini-2.5-flash in .env if needed. " +
     'If the error shows "limit: 0", link billing in Google AI Studio (Settings → Billing) — free-tier limits still apply — or wait until daily quota resets.'
   );
+}
+
+function isGeminiJsonParseError(error: unknown): boolean {
+  return error instanceof GeminiJsonParseError || error instanceof SyntaxError;
 }
 
 function isGeminiQuotaError(error: unknown): boolean {
@@ -46,6 +57,7 @@ function isGeminiQuotaError(error: unknown): boolean {
 function isGeminiTransientError(error: unknown): boolean {
   const message = error instanceof Error ? error.message : String(error);
   return (
+    isGeminiJsonParseError(error) ||
     message.includes("503") ||
     message.includes("500") ||
     message.includes("Service Unavailable") ||
@@ -292,7 +304,26 @@ async function callGeminiWithModel(
   });
   const result = await model.generateContent(userContent);
   const text = result.response.text();
-  return JSON.parse(text);
+  return parseGeminiJson(text);
+}
+
+function parseGeminiJson(text: string): any {
+  const candidates = [
+    text,
+    text.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, ""),
+    text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1),
+  ].filter((candidate) => candidate.trim().length > 0);
+
+  for (const candidate of candidates) {
+    try {
+      return JSON.parse(candidate);
+    } catch {
+      // Try the next candidate.
+    }
+  }
+
+  const preview = text.slice(0, 300).replace(/\s+/g, " ");
+  throw new GeminiJsonParseError(`Gemini returned malformed JSON. Preview: ${preview}`);
 }
 
 async function callGemini(systemPrompt: string, userContent: string): Promise<any> {
@@ -643,14 +674,14 @@ export async function analyzeContract(
   mode: "crew" | "single" = "single"
 ): Promise<AnalysisResult> {
   if (!process.env.GEMINI_API_KEY) {
-    throw new Error("GEMINI_API_KEY is not set in environment variables.");
+    return analyzeLocally(text);
   }
   try {
     return await (mode === "crew"
       ? analyzeWithCrewAI(text, legalCtx)
       : analyzeWithSingleCall(text, legalCtx));
   } catch (error) {
-    if (isGeminiTransientError(error)) {
+    if (isGeminiQuotaError(error) || isGeminiTransientError(error)) {
       return analyzeLocally(text);
     }
     throw error;

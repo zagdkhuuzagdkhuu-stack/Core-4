@@ -1,4 +1,4 @@
-﻿import type { Dispatch, RefObject, SetStateAction } from "react";
+import type { Dispatch, RefObject, SetStateAction } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowRight, Facebook, FileText, Instagram, Linkedin, Mail, MapPin, Phone, Twitter } from "lucide-react";
 import {
@@ -58,15 +58,13 @@ export function HomePage({
     <>
       <HomeSimpleNav onSelect={handleTabSelect} controls={navControls} ui={content.ui} scrollContainerRef={homeScrollRef} />
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-          PAGE 1 â€” HERO
-          â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/* Page 1: Hero */}
       <motion.section
         className="draftly-hero-section relative min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary px-3 pb-6 pt-3 shadow-[0_-18px_55px_rgba(0,0,0,0.10)] flex flex-col"
         variants={SECTION_REVEAL}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.16 }}
+        viewport={{ once: true, amount: 0.16 }}
       >
         {/* Document body */}
         <motion.div
@@ -119,16 +117,14 @@ export function HomePage({
         </motion.div>
       </motion.section>
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-          PAGE 2 â€” WHAT DO WE DO?
-          â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/* Page 2: What do we do? */}
       <motion.section
         className="draftly-solar-section relative min-h-screen overflow-hidden rounded-t-[2rem] bg-background py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-24"
         ref={featuresRef.ref}
         variants={SECTION_REVEAL}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.14 }}
+        viewport={{ once: true, amount: 0.14 }}
       >
         <div
           className="flex min-h-[calc(100vh-9rem)] flex-col items-center gap-10 px-4 md:px-6 lg:flex-row lg:gap-0"
@@ -139,7 +135,7 @@ export function HomePage({
           }}
           onMouseLeave={() => setCircleTilt(0)}
         >
-          {/* â”€â”€ Circle carousel â”€â”€ */}
+          {/* Circle carousel */}
           <motion.div className="relative aspect-square w-[min(88vw,460px)] flex-shrink-0 lg:-ml-[2vw] lg:w-[41vw] lg:min-w-[390px] lg:max-w-[650px]" variants={REVEAL_ITEM}>
 
             <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(207,157,123,0.10),transparent_48%)]" />
@@ -222,7 +218,7 @@ export function HomePage({
             </div>
           </motion.div>
 
-          {/* â”€â”€ Feature content â”€â”€ */}
+          {/* Feature content */}
           <motion.div className="flex-1 px-2 text-center sm:px-6 lg:px-12 lg:text-left xl:pr-24" variants={REVEAL_ITEM}>
             <div className="mb-7 inline-flex rounded-full border border-highlight/24 bg-secondary px-5 py-3 shadow-[0_18px_40px_rgba(0,0,0,0.18)] sm:px-7">
               <h2 className="font-display text-xl font-bold text-foreground sm:text-2xl md:text-3xl">
@@ -268,20 +264,18 @@ export function HomePage({
         </div>
       </motion.section>
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-          PAGE 3 â€” TEMPLATE FLOW
-          â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/* Page 3: Template flow */}
       <motion.section
         className="draftly-template-section relative min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-28"
         ref={templateRef.ref}
         variants={SECTION_REVEAL}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.16 }}
+        viewport={{ once: true, amount: 0.16 }}
       >
         <div className="mx-auto flex w-full max-w-screen-xl flex-col-reverse items-center gap-10 px-4 sm:px-6 lg:flex-row lg:gap-16 lg:px-8 xl:gap-24">
 
-          {/* â”€â”€ 3D screen card â”€â”€ */}
+          {/* 3D screen card */}
           <motion.div
             className="w-full max-w-[20rem] flex-shrink-0"
             variants={REVEAL_ITEM}
@@ -320,7 +314,7 @@ export function HomePage({
             </div>
           </motion.div>
 
-          {/* â”€â”€ Text â”€â”€ */}
+          {/* Text */}
           <motion.div
             className="flex-1 text-center lg:text-left"
             variants={REVEAL_ITEM}
@@ -343,20 +337,18 @@ export function HomePage({
         </div>
       </motion.section>
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-          PAGE 4 â€” UPLOAD & ANALYSE
-          â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/* Page 4: Upload and analyse */}
       <motion.section
         className="draftly-analysis-section relative min-h-screen overflow-hidden rounded-t-[2rem] bg-secondary py-16 shadow-[0_-18px_55px_rgba(0,0,0,0.12)] md:py-28"
         ref={uploadRef.ref}
         variants={SECTION_REVEAL}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.16 }}
+        viewport={{ once: true, amount: 0.16 }}
       >
         <div className="mx-auto flex w-full max-w-screen-xl flex-col items-stretch gap-10 px-4 sm:px-6 lg:flex-row lg:items-start lg:gap-16 lg:px-8 xl:gap-24">
 
-          {/* â”€â”€ Analysis labels â”€â”€ */}
+          {/* Analysis labels */}
           <div className="flex-1 pt-4">
             {content.upload.labels.map((text, i) => (
               <motion.div
@@ -375,7 +367,7 @@ export function HomePage({
             ))}
           </div>
 
-          {/* â”€â”€ Upload card â”€â”€ */}
+          {/* Upload card */}
           <motion.div
             className="w-full max-w-sm self-center pt-2 lg:w-80 lg:self-auto lg:pt-4"
             variants={REVEAL_ITEM}
@@ -418,16 +410,14 @@ export function HomePage({
         </div>
       </motion.section>
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-          PAGE 5 â€” FOOTER
-          â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/* Page 5: Footer */}
       <motion.footer
         className="draftly-footer-section relative z-10 mt-16 overflow-hidden rounded-t-[2rem] border-t border-border bg-secondary shadow-[0_-18px_55px_rgba(0,0,0,0.12)]"
         ref={footerRef.ref}
         variants={SECTION_REVEAL}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.16 }}
+        viewport={{ once: true, amount: 0.16 }}
       >
         <div className="mx-auto max-w-screen-xl px-6 py-8 lg:px-8 lg:py-10">
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-4 md:gap-12">

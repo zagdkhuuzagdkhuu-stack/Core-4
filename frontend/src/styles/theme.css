@@ -254,7 +254,7 @@
       linear-gradient(112deg, transparent 8%, rgba(223, 247, 251, 0.36) 30%, rgba(255, 255, 255, 0.24) 48%, transparent 68%),
       linear-gradient(155deg, transparent 22%, rgba(127, 221, 229, 0.16) 46%, transparent 72%);
     filter: blur(70px);
-    transform: scale(1.08);
+    transform: translate3d(0, 0, 0);
     background-blend-mode: screen, screen, normal, screen, normal;
     animation: draftly-liquid-flow 34s ease-in-out infinite alternate;
   }
@@ -267,7 +267,7 @@
       radial-gradient(ellipse at 18% 12%, rgba(232, 251, 255, 0.54), transparent 34rem),
       linear-gradient(118deg, transparent 18%, rgba(223, 247, 251, 0.34) 42%, transparent 70%);
     filter: blur(78px);
-    transform: scale(1.08);
+    transform: translate3d(0, 0, 0);
     background-blend-mode: screen, screen, normal, screen;
     animation: draftly-liquid-flow 40s ease-in-out infinite alternate;
   }
@@ -280,7 +280,7 @@
       radial-gradient(ellipse at 84% 20%, rgba(185, 242, 240, 0.32), transparent 36rem),
       linear-gradient(130deg, transparent 16%, rgba(223, 247, 251, 0.24) 44%, transparent 74%);
     filter: blur(76px);
-    transform: scale(1.08);
+    transform: translate3d(0, 0, 0);
     background-blend-mode: screen, normal, normal, screen;
     animation: draftly-liquid-flow 44s ease-in-out infinite alternate;
   }
@@ -293,7 +293,7 @@
       radial-gradient(ellipse at 52% 98%, rgba(185, 242, 240, 0.40), transparent 44rem),
       linear-gradient(118deg, transparent 16%, rgba(223, 247, 251, 0.34) 42%, transparent 70%);
     filter: blur(82px);
-    transform: scale(1.08);
+    transform: translate3d(0, 0, 0);
     background-blend-mode: screen, normal, normal, screen;
     animation: draftly-liquid-flow 38s ease-in-out infinite alternate;
   }
@@ -322,24 +322,24 @@
 
   @keyframes draftly-cloud-drift {
     from {
-      transform: translate3d(-0.9%, -0.55%, 0) scale(1);
+      transform: translate3d(-0.3%, -0.2%, 0);
     }
     to {
-      transform: translate3d(0.9%, 0.55%, 0) scale(1.018);
+      transform: translate3d(0.3%, 0.2%, 0);
     }
   }
 
   @keyframes draftly-liquid-flow {
     0% {
-      transform: translate3d(-1.2%, -0.8%, 0) scale(1.08) rotate(0deg);
+      transform: translate3d(-0.35%, -0.25%, 0);
       background-position: 0% 0%, 100% 20%, 50% 100%, 0% 50%, 100% 50%;
     }
     50% {
-      transform: translate3d(1.1%, 0.7%, 0) scale(1.11) rotate(0.001deg);
+      transform: translate3d(0.35%, 0.25%, 0);
       background-position: 8% 4%, 92% 28%, 54% 92%, 6% 54%, 94% 46%;
     }
     100% {
-      transform: translate3d(-0.4%, 1%, 0) scale(1.09) rotate(0deg);
+      transform: translate3d(-0.15%, 0.3%, 0);
       background-position: 3% 8%, 96% 16%, 46% 96%, 10% 44%, 88% 58%;
     }
   }

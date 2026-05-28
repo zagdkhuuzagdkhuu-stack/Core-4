@@ -284,8 +284,14 @@ export function FolderTabs({
   const lastScrollY = useRef(0);
 
   useEffect(() => {
+    const getScrollElement = () => {
+      const candidate = scrollContainerRef?.current;
+      if (!candidate) return null;
+      return candidate.scrollHeight > candidate.clientHeight ? candidate : null;
+    };
+
     const onScroll = () => {
-      const scrollElement = scrollContainerRef?.current;
+      const scrollElement = getScrollElement();
       const currentScrollY = scrollElement ? scrollElement.scrollTop : window.scrollY;
       const scrollingDown = currentScrollY > lastScrollY.current;
       const simpleThreshold = (scrollElement?.clientHeight ?? window.innerHeight) * 0.55;
@@ -295,7 +301,7 @@ export function FolderTabs({
       lastScrollY.current = currentScrollY;
     };
 
-    const scrollTarget = scrollContainerRef?.current ?? window;
+    const scrollTarget = getScrollElement() ?? window;
     onScroll();
     scrollTarget.addEventListener("scroll", onScroll, { passive: true });
     return () => scrollTarget.removeEventListener("scroll", onScroll);

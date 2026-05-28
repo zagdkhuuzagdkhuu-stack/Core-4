@@ -335,7 +335,7 @@ export default function App() {
   const openHome = () => {
     navigateTo("home");
     window.setTimeout(() => {
-      homeScrollRef.current?.scrollTo({ top: 0, behavior: "auto" });
+      window.scrollTo({ top: 0, behavior: "auto" });
     }, 80);
   };
 
