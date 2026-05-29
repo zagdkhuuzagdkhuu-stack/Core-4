@@ -492,7 +492,9 @@ export function FolderTabs({
   homeGlobal?: boolean;
   scrollContainerRef?: RefObject<HTMLElement>;
 }) {
-  const navItems: HeaderTab[] = ["Home", "Template", "Analysis", "Information"];
+  const navItems: HeaderTab[] = controls.isAuthenticated
+    ? ["Home", "Template", "Analysis", "Information"]
+    : ["Home", "Information"];
   const navLabels: Record<HeaderTab, string> = {
     Home: ui.nav.home,
     Template: ui.nav.template,

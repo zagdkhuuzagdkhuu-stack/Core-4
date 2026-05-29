@@ -62,7 +62,7 @@ export function HomePage({
   isDragging: _isDragging,
   setIsDragging: _setIsDragging,
   onTabSelect: handleTabSelect,
-  navControls: _navControls,
+  navControls,
   homeScrollRef: _homeScrollRef,
 }: HomePageProps) {
   const [docCount] = useState(() => Math.max(10, getStoredCount("draftly_docs_analyzed", 10)));
@@ -118,14 +118,14 @@ export function HomePage({
           >
             <button
               type="button"
-              onClick={() => handleTabSelect("Analysis")}
+              onClick={() => navControls.isAuthenticated ? handleTabSelect("Analysis") : navControls.onLoginClick()}
               className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-3.5 text-sm font-semibold text-black transition-all duration-200 hover:bg-gray-200"
             >
               {content.hero.primaryCta} <ArrowRight size={16} />
             </button>
             <button
               type="button"
-              onClick={() => handleTabSelect("Template")}
+              onClick={() => navControls.isAuthenticated ? handleTabSelect("Template") : navControls.onLoginClick()}
               className="inline-flex items-center gap-2 rounded-lg border border-[#1F1F1F] px-8 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/5"
             >
               {content.hero.secondaryCta}
@@ -274,7 +274,7 @@ export function HomePage({
               </p>
               <button
                 type="button"
-                onClick={() => handleTabSelect("Analysis")}
+                onClick={() => navControls.isAuthenticated ? handleTabSelect("Analysis") : navControls.onLoginClick()}
                 className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-3.5 text-sm font-semibold text-black transition-all duration-200 hover:bg-gray-200"
               >
                 {content.upload.cta} <ArrowRight size={16} />
