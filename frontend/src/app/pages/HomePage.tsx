@@ -300,7 +300,8 @@ export function HomePage({
                 {content.footer.companyLinks.map(l => (
                   <li key={l}>
                     <a href="#" className="text-sm text-muted-foreground transition-colors hover:text-foreground">{l}</a>
-                </li>
+                  </li>
+                ))}
               </ul>
             </div>
             <div>
