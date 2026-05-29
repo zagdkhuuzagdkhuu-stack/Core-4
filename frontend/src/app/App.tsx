@@ -165,6 +165,12 @@ export default function App() {
     return () => clearInterval(t);
   }, []);
 
+  useEffect(() => {
+    if (!globalNotice) return;
+    const t = setTimeout(() => setGlobalNotice(""), 2000);
+    return () => clearTimeout(t);
+  }, [globalNotice]);
+
   const hydrateAuthState = async (token: string) => {
     const [me, documents, contracts, payment] = await Promise.all([
       fetchMe(token),

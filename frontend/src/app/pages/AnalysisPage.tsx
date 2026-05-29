@@ -89,7 +89,7 @@ export function AnalysisWorkflow({
       setAnalysisResult(result);
       setStep("result");
     } catch (error) {
-      setAnalysisError(error instanceof Error ? error.message : "Failed to analyze document.");
+      setAnalysisError(error instanceof Error ? error.message : "Баримтыг анализ хийхэд алдаа гарлаа.");
       setStep("upload");
     } finally {
       if (fileInputRef.current) {
