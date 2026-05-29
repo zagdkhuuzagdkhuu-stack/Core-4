@@ -37,15 +37,15 @@ const FEATURES = [
 ];
 
 const STATS = [
-  { value: "50K+", label: "Анализ хийгдсэн баримт" },
-  { value: "10K+", label: "Идэвхтэй хэрэглэгч" },
-  { value: "98%", label: "Нарийвчлал" },
-  { value: "150+", label: "Улс" },
+  { value: "2,840+", label: "Анализ хийгдсэн баримт" },
+  { value: "1,250+", label: "Идэвхтэй хэрэглэгч" },
+  { value: "94%", label: "Нарийвчлал" },
+  { value: "Монгол", label: "Улс" },
 ];
 
 const CUSTOMER_LOGOS = [
-  "Vinson & Elkins", "Reed Smith", "CMS", "Dentons", "BakerHostetler",
-  "Macfarlanes", "Gleiss Lutz", "Cuatrecasas", "A&O Shearman", "PwC UK",
+  "legalinfo.mn", "nli.gov.mn", "lawforum.parliament.mn", "e-geree.mn",
+  "legalinfo.mn", "nli.gov.mn", "lawforum.parliament.mn", "e-geree.mn",
 ];
 
 const DEPLOY_MARKER = "purple-draftly-2026-05-28";

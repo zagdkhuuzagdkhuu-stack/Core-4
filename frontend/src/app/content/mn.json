@@ -12,18 +12,10 @@
     "partnerLabel": "Хамтрагч байгууллага"
   },
   "partners": [
-    "LexisNexis",
-    "DocuSign",
-    "Clio",
-    "Westlaw",
-    "Ironclad",
-    "ContractPod+",
-    "Luminance",
-    "Kira Systems",
-    "Litera",
-    "NetDocuments",
-    "Knowably",
-    "Juro"
+    "legalinfo.mn",
+    "nli.gov.mn",
+    "lawforum.parliament.mn",
+    "e-geree.mn"
   ],
   "featuresSectionTitle": "Бид юу хийдэг вэ?",
   "features": [
