@@ -500,7 +500,7 @@ export default function App() {
 
   const navControls: FolderNavControls = {
     isDark,
-    languageLabel: locale === "mn" ? "MN" : "ENG",
+    languageLabel: content.switchLabel,
     loginLabel: authBusy ? "..." : content.login,
     isAuthenticated: Boolean(authUser),
     userAvatarUrl: authUser?.avatarUrl || null,

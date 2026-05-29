@@ -208,7 +208,7 @@ export function ProfilePanel({
                 {saving ? "Хадгалж байна..." : ui.profile.saveSettings}
               </button>
               <button type="button" onClick={onLanguageToggle} className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-4 py-2 text-sm font-semibold text-foreground">
-                <Settings size={14} /> {locale === "mn" ? "ANG руу шилжих" : "MN руу шилжих"}
+                <Settings size={14} /> {locale === "mn" ? "ENG" : "MN"}
               </button>
               <button type="button" onClick={onLogout} className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-4 py-2 text-sm font-semibold text-foreground">
                 <LogOut size={14} /> Гарах
