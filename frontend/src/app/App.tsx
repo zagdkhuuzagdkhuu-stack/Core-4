@@ -214,6 +214,7 @@ export default function App() {
       localStorage.setItem("draftly_auth_token", auth.token);
       await hydrateAuthState(auth.token);
       setGlobalNotice(content.ui.auth.loginSuccess);
+      navigate("/");
     } catch (error) {
       setGlobalNotice(error instanceof Error ? error.message : String(error));
     } finally {
@@ -230,6 +231,7 @@ export default function App() {
       localStorage.setItem("draftly_auth_token", auth.token);
       await hydrateAuthState(auth.token);
       setGlobalNotice(content.ui.auth.loginSuccess);
+      navigate("/");
     } catch (error) {
       setAuthError(error instanceof Error ? error.message : String(error));
     } finally {
@@ -246,6 +248,7 @@ export default function App() {
       localStorage.setItem("draftly_auth_token", auth.token);
       await hydrateAuthState(auth.token);
       setGlobalNotice(content.ui.auth.loginSuccess);
+      navigate("/");
     } catch (error) {
       setAuthError(error instanceof Error ? error.message : String(error));
     } finally {
