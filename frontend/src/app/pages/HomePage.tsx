@@ -119,7 +119,7 @@ export function HomePage({
             <button
               type="button"
               onClick={() => navControls.isAuthenticated ? handleTabSelect("Analysis") : navControls.onLoginClick()}
-              className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-3.5 text-sm font-semibold text-black transition-all duration-200 hover:bg-gray-200"
+              className="inline-flex items-center gap-2 rounded-lg bg-foreground px-8 py-3.5 text-sm font-semibold text-background transition-all duration-200 hover:opacity-90"
             >
               {content.hero.primaryCta} <ArrowRight size={16} />
             </button>
@@ -295,7 +295,7 @@ export function HomePage({
               </p>
             </div>
             <div>
-              <h6 className="mb-4 text-sm font-semibold text-white">{content.footer.companyTitle}</h6>
+              <h6 className="mb-4 text-sm font-semibold text-foreground">{content.footer.companyTitle}</h6>
               <ul className="space-y-3">
                 {content.footer.companyLinks.map(l => (
                   <li key={l}>
