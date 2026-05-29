@@ -72,8 +72,8 @@ export function HomePage({
     <>
       {/* Hero Section */}
       <section data-deploy-marker={DEPLOY_MARKER} className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#0A0A0A]">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(124,58,237,0.15),transparent_50%),radial-gradient(ellipse_at_bottom,rgba(124,58,237,0.05),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(124,58,237,0.08),transparent_40%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.15),transparent_50%),radial-gradient(ellipse_at_bottom,rgba(59,130,246,0.05),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.08),transparent_40%)]" />
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }} />
 
         <div className="relative z-10 mx-auto max-w-5xl px-4 text-center">
@@ -82,8 +82,8 @@ export function HomePage({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#2A2A2A] bg-[#141414] px-4 py-1.5">
-              <span className="h-2 w-2 rounded-full bg-[#7C3AED]" />
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#1F1F1F] bg-[#141414] px-4 py-1.5">
+              <span className="h-2 w-2 rounded-full bg-accent" />
               <span className="text-xs font-medium text-gray-400">AI-Powered Legal Intelligence</span>
             </div>
           </motion.div>
@@ -96,7 +96,7 @@ export function HomePage({
           >
             Practice Made
             <br />
-            <span className="bg-gradient-to-r from-[#7C3AED] to-[#A78BFA] bg-clip-text text-transparent">Perfect</span>
+            <span className="bg-gradient-to-r from-accent to-[#60A5FA] bg-clip-text text-transparent">Perfect</span>
           </motion.h1>
 
           <motion.p
@@ -126,7 +126,7 @@ export function HomePage({
             <button
               type="button"
               onClick={() => handleTabSelect("Template")}
-              className="inline-flex items-center gap-2 rounded-lg border border-[#2A2A2A] px-8 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/5"
+              className="inline-flex items-center gap-2 rounded-lg border border-[#1F1F1F] px-8 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/5"
             >
               {content.hero.secondaryCta}
             </button>
@@ -140,7 +140,7 @@ export function HomePage({
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.6 }}
         >
-          <p className="mb-4 text-center text-xs font-medium uppercase tracking-[0.2em] text-gray-500">
+          <p className="mb-4 text-center text-xs font-medium uppercase tracking-[0.2em] text-gray-400">
             {content.hero.partnerLabel}
           </p>
           <div className="overflow-hidden">
@@ -148,7 +148,7 @@ export function HomePage({
               {[...CUSTOMER_LOGOS, ...CUSTOMER_LOGOS].map((name, i) => (
                 <span
                   key={i}
-                  className="shrink-0 text-sm font-medium text-gray-600"
+                  className="shrink-0 text-sm font-medium text-gray-400"
                 >
                   {name}
                 </span>
@@ -204,13 +204,13 @@ export function HomePage({
               return (
                 <motion.div
                   key={feature.title}
-                  className="group rounded-xl border border-[#1F1F1F] bg-[#141414] p-6 transition-all duration-300 hover:border-[#7C3AED]/50 hover:bg-[#1A1A1A]"
+                  className="group rounded-xl border border-[#1F1F1F] bg-[#141414] p-6 transition-all duration-300 hover:border-accent/50 hover:bg-[#1A1A1A]"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-[#7C3AED]/10 text-[#7C3AED]">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10 text-accent">
                     <Icon size={24} />
                   </div>
                   <h3 className="mb-2 text-lg font-semibold text-white">{feature.title}</h3>
@@ -231,8 +231,8 @@ export function HomePage({
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-full bg-[#7C3AED]/10">
-              <Users size={28} className="text-[#7C3AED]" />
+            <div className="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-full bg-accent/10">
+              <Users size={28} className="text-accent" />
             </div>
             <blockquote className="mb-8 text-2xl leading-relaxed text-gray-300 sm:text-3xl">
               "Draftly has transformed how we review contracts. The AI-powered analysis
@@ -256,10 +256,10 @@ export function HomePage({
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(124,58,237,0.08),transparent_60%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.08),transparent_60%)]" />
             <div className="relative z-10">
-              <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-[#7C3AED]/10">
-                <ScrollText size={28} className="text-[#7C3AED]" />
+              <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-accent/10">
+                <ScrollText size={28} className="text-accent" />
               </div>
               <h2 className="mb-4 text-3xl font-bold text-white sm:text-4xl">
                 {content.upload.title}
@@ -319,7 +319,7 @@ export function HomePage({
               </ul>
             </div>
           </div>
-          <div className="mt-12 border-t border-[#1F1F1F] pt-8 text-center text-sm text-gray-500">
+          <div className="mt-12 border-t border-[#1F1F1F] pt-8 text-center text-sm text-gray-400">
             {content.footer.copyright}
           </div>
         </div>

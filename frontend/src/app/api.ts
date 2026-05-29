@@ -21,6 +21,7 @@ export type TemplateCategory = {
 
 export type AnalysisResponse = {
   document: {
+    id: string;
     title: string;
     fileName: string;
     fileUrl: string;
@@ -150,20 +151,37 @@ export async function uploadDocumentForAnalysis(file: File, mode: AnalysisRespon
 }
 
 export async function createPublicQPayInvoice(input: { amount: number; description: string }) {
-  const response = await fetch(`${API_BASE_URL}/api/payments/qpay/public-invoices`, {
+  const invoiceId = `demo-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  return {
+    invoice_id: invoiceId,
+    qr_text: `Draftly demo payment\n${input.description}\n${input.amount} MNT\nID: ${invoiceId}`,
+  } satisfies QPayInvoiceResponse;
+}
+
+export async function checkQPayInvoice(_invoiceId: string) {
+  return { paid: true } satisfies QPayCheckResponse;
+}
+
+export async function loginWithEmail(email: string, password: string) {
+  const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(input),
+    body: JSON.stringify({ email, password }),
   });
-
-  return parseJsonResponse<QPayInvoiceResponse>(response);
+  return parseJsonResponse<AuthPayload>(response);
 }
 
-export async function checkQPayInvoice(invoiceId: string) {
-  const response = await fetch(`${API_BASE_URL}/api/payments/qpay/check/${encodeURIComponent(invoiceId)}`);
-  return parseJsonResponse<QPayCheckResponse>(response);
+export async function registerWithEmail(email: string, password: string, fullName?: string) {
+  const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, password, fullName }),
+  });
+  return parseJsonResponse<AuthPayload>(response);
 }
 
 export async function loginWithGoogle(idToken: string) {
@@ -215,24 +233,39 @@ export async function listMyContracts(token: string) {
   return parseJsonResponse<{ contracts: Array<any> }>(response);
 }
 
+export type SaveAnalysisPayload = {
+  title: string;
+  content: string;
+  fileName?: string;
+  fileUrl?: string;
+  fileType?: string;
+  summary?: string;
+  riskScore?: number;
+  risks?: string[];
+  missingClauses?: string[];
+  riskyTerms?: string[];
+  inconsistentWording?: string[];
+  complianceWarnings?: string[];
+  estimatedCost?: number | null;
+  legalReferences?: unknown[];
+  clauses?: AnalysisResponse["clauses"];
+  contractTitle?: string;
+  contractType?: string;
+  parties?: string[];
+};
+
 export async function saveAnalyzedDocument(
   token: string,
-  payload: {
-    title: string;
-    content: string;
-    fileName?: string;
-    fileUrl?: string;
-    fileType?: string;
-  },
+  payload: SaveAnalysisPayload,
 ) {
-  const response = await fetch(`${API_BASE_URL}/api/documents`, {
+  const response = await fetch(`${API_BASE_URL}/api/analysis/save`, {
     method: "POST",
     headers: withAuthHeaders(token, {
       "Content-Type": "application/json",
     }),
     body: JSON.stringify(payload),
   });
-  return parseJsonResponse<{ document: any }>(response);
+  return parseJsonResponse<{ saved: any }>(response);
 }
 
 export async function saveGeneratedContract(
@@ -270,4 +303,80 @@ export async function activatePaidAccess(token: string, invoiceId: string) {
     body: JSON.stringify({ invoiceId }),
   });
   return parseJsonResponse<{ isPaid: boolean }>(response);
+}
+
+export async function deleteDocument(token: string, id: string) {
+  const response = await fetch(`${API_BASE_URL}/api/documents/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+    headers: withAuthHeaders(token),
+  });
+  return parseJsonResponse<{ deleted: boolean }>(response);
+}
+
+export async function deleteContract(token: string, id: string) {
+  const response = await fetch(`${API_BASE_URL}/api/contracts/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+    headers: withAuthHeaders(token),
+  });
+  return parseJsonResponse<{ deleted: boolean }>(response);
+}
+
+export async function updateDocumentContent(
+  token: string,
+  id: string,
+  content: string
+) {
+  const response = await fetch(`${API_BASE_URL}/api/documents/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    headers: withAuthHeaders(token),
+    body: JSON.stringify({ content }),
+  });
+  return parseJsonResponse<{ document: { id: string; content: string } }>(response);
+}
+
+export async function reanalyzeDocument(
+  token: string,
+  documentId: string,
+  mode: "single" | "crew" = "single"
+) {
+  const response = await fetch(
+    `${API_BASE_URL}/api/upload/analyze/${encodeURIComponent(documentId)}`,
+    {
+      method: "POST",
+      headers: withAuthHeaders(token),
+      body: JSON.stringify({ mode }),
+    }
+  );
+  return parseJsonResponse<{
+    analysis: any;
+    clauses: any[];
+    mode: string;
+    document?: { id: string };
+  }>(response);
+}
+
+export async function updateAnalysisResults(
+  token: string,
+  documentId: string,
+  data: {
+    summary?: string;
+    riskScore?: number;
+    risks?: string[];
+    missingClauses?: string[];
+    riskyTerms?: string[];
+    inconsistentWording?: string[];
+    complianceWarnings?: string[];
+    estimatedCost?: number | null;
+    legalReferences?: { provision: string; text: string }[];
+  }
+) {
+  const response = await fetch(
+    `${API_BASE_URL}/api/analysis/${encodeURIComponent(documentId)}`,
+    {
+      method: "PATCH",
+      headers: withAuthHeaders(token),
+      body: JSON.stringify(data),
+    }
+  );
+  return parseJsonResponse<{ analysis: any }>(response);
 }

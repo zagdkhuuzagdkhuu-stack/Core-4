@@ -10,8 +10,7 @@ const DEFAULT_GEMINI_MODEL =
 const GEMINI_MODEL_FALLBACKS = [
   DEFAULT_GEMINI_MODEL,
   "gemini-2.0-flash",
-  "gemini-1.5-flash",
-  "gemini-2.5-flash",
+  "gemini-2.0-flash-lite",
 ].filter((model, index, list) => list.indexOf(model) === index);
 
 const GEMINI_RETRY_DELAYS_MS = [800, 1800, 3500];
@@ -303,7 +302,13 @@ async function callGeminiWithModel(
     },
   });
   const result = await model.generateContent(userContent);
-  const text = result.response.text();
+  if (!result?.response) {
+    throw new Error(`Gemini returned an empty response for model "${modelName}".`);
+  }
+  const text = result.response.text()?.trim();
+  if (!text) {
+    throw new Error(`Gemini returned empty text for model "${modelName}".`);
+  }
   return parseGeminiJson(text);
 }
 
@@ -541,13 +546,13 @@ export async function analyzeWithCrewAI(
   const costRes = shouldRunCostAgent
     ? await callGemini(COST_SYSTEM_PROMPT, buildCrewAgentMessage(text, legalCtx, { extraction }))
     : emptyCostEstimate();
-
+  const costData = costRes ?? emptyCostEstimate();
   const costEstimate: CostEstimate = {
-    estimatedCost: costRes.estimatedCost ? Number(costRes.estimatedCost) : null,
-    currency: costRes.currency || "MNT",
-    breakdown: Array.isArray(costRes.breakdown) ? costRes.breakdown : [],
-    confidence: ["LOW", "MEDIUM", "HIGH"].includes(costRes.confidence)
-      ? costRes.confidence
+    estimatedCost: costData.estimatedCost ? Number(costData.estimatedCost) : null,
+    currency: costData.currency || "MNT",
+    breakdown: Array.isArray(costData.breakdown) ? costData.breakdown : [],
+    confidence: ["LOW", "MEDIUM", "HIGH"].includes(costData.confidence)
+      ? costData.confidence
       : "LOW",
   };
 
@@ -612,6 +617,9 @@ Use the provided legal context (laws, articles, clause templates) to ground your
 ${MONGOLIAN_OUTPUT_RULE}`;
 
   const raw = await callGemini(ANALYSIS_SYSTEM_PROMPT, userMsg);
+  if (!raw) {
+    throw new Error("Gemini returned null response in single-call analysis.");
+  }
 
   const clauses: ClauseResult[] = (raw.clauses || []).map(
     (c: any, i: number) => ({

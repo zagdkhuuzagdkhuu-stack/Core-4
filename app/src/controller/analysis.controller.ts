@@ -187,3 +187,176 @@ export async function analyzeDocument(req: Request, res: Response) {
     });
   }
 }
+
+export async function saveAnalysisResults(req: Request, res: Response) {
+  try {
+    const userId = (req as AuthenticatedRequest).userId;
+    const {
+      title,
+      content,
+      fileName,
+      fileUrl,
+      fileType,
+      summary,
+      riskScore,
+      risks,
+      missingClauses,
+      riskyTerms,
+      inconsistentWording,
+      complianceWarnings,
+      estimatedCost,
+      legalReferences,
+      clauses,
+      contractTitle,
+      contractType,
+      parties,
+    } = req.body;
+
+    if (!title) {
+      return res.status(400).json({ message: "Document title is required." });
+    }
+
+    const result = await database.$transaction(async (tx) => {
+      const document = await tx.document.create({
+        data: {
+          title,
+          content: content || null,
+          ownerId: userId,
+          rawInput: content || undefined,
+        },
+      });
+
+      if (fileName && fileUrl) {
+        await tx.fileUpload.create({
+          data: {
+            userId,
+            documentId: document.id,
+            fileName,
+            fileUrl,
+            mimeType: fileType || undefined,
+          },
+        });
+      }
+
+      let contractId: string | null = null;
+
+      if (contractTitle || content) {
+        const contract = await tx.contract.create({
+          data: {
+            title: contractTitle || title,
+            contractType: contractType || undefined,
+            parties: parties || undefined,
+            value: 0,
+            currency: "MNT",
+            documentId: document.id,
+            createdById: userId,
+          },
+        });
+        contractId = contract.id;
+      }
+
+      if (summary || risks) {
+        const riskAnalysis = await tx.riskAnalysis.create({
+          data: {
+            contractId,
+            documentId: document.id,
+            summary: summary || "",
+            riskScore: riskScore != null ? riskScore : 0,
+            risks: risks || [],
+            missingClauses: missingClauses || [],
+            riskyTerms: riskyTerms || [],
+            inconsistentWording: inconsistentWording || [],
+            complianceWarnings: complianceWarnings || [],
+            estimatedCost: estimatedCost != null ? estimatedCost : null,
+            legalReferences: legalReferences || [],
+          },
+        });
+
+        if (Array.isArray(clauses) && clauses.length > 0 && contractId) {
+          await tx.clause.createMany({
+            data: clauses.map((cl: any) => ({
+              contractId,
+              title: cl.title,
+              content: cl.content,
+              clauseType: cl.clauseType,
+              riskLevel: cl.riskLevel,
+              explanation: cl.explanation,
+              orderNo: cl.orderNo,
+            })),
+          });
+        }
+
+        return {
+          document,
+          contractId,
+          riskAnalysisId: riskAnalysis.id,
+          clausesCount: clauses?.length || 0,
+        };
+      }
+
+      return {
+        document,
+        contractId,
+        riskAnalysisId: null,
+        clausesCount: 0,
+      };
+    });
+
+    return res.status(201).json({ saved: result });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to save analysis results.",
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+}
+
+export async function updateAnalysis(req: Request, res: Response) {
+  try {
+    const userId = (req as AuthenticatedRequest).userId;
+    const documentId = String(req.params.documentId || "");
+
+    const document = await database.document.findFirst({
+      where: { id: documentId, ownerId: userId },
+    });
+
+    if (!document) {
+      return res.status(404).json({ message: "Document not found." });
+    }
+
+    const updateData: any = {};
+    if (req.body.summary !== undefined) updateData.summary = String(req.body.summary);
+    if (req.body.riskScore !== undefined) updateData.riskScore = Number(req.body.riskScore);
+    if (req.body.risks !== undefined) updateData.risks = req.body.risks;
+    if (req.body.missingClauses !== undefined) updateData.missingClauses = req.body.missingClauses;
+    if (req.body.riskyTerms !== undefined) updateData.riskyTerms = req.body.riskyTerms;
+    if (req.body.inconsistentWording !== undefined) updateData.inconsistentWording = req.body.inconsistentWording;
+    if (req.body.complianceWarnings !== undefined) updateData.complianceWarnings = req.body.complianceWarnings;
+    if (req.body.estimatedCost !== undefined) updateData.estimatedCost = req.body.estimatedCost;
+    if (req.body.legalReferences !== undefined) updateData.legalReferences = req.body.legalReferences;
+
+    const analysis = await database.riskAnalysis.upsert({
+      where: { documentId: document.id },
+      create: {
+        documentId: document.id,
+        summary: updateData.summary || "",
+        riskScore: updateData.riskScore ?? 0,
+        risks: updateData.risks || [],
+        missingClauses: updateData.missingClauses || [],
+        riskyTerms: updateData.riskyTerms || [],
+        inconsistentWording: updateData.inconsistentWording || [],
+        complianceWarnings: updateData.complianceWarnings || [],
+        estimatedCost: updateData.estimatedCost ?? null,
+        legalReferences: updateData.legalReferences || [],
+      },
+      update: updateData,
+    });
+
+    return res.json({ analysis });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to update analysis.",
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+}

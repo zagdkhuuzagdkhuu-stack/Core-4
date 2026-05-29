@@ -20,12 +20,12 @@ const fileFilter = (
   file: Express.Multer.File,
   cb: multer.FileFilterCallback
 ) => {
-  const allowed = [".pdf", ".docx", ".txt"];
+  const allowed = [".pdf", ".docx", ".txt", ".doc", ".pptx", ".ppt"];
   const ext = path.extname(file.originalname).toLowerCase();
   if (allowed.includes(ext)) {
     cb(null, true);
   } else {
-    cb(new Error("Only PDF and DOCX files are allowed."));
+    cb(new Error("Only PDF, DOCX, DOC, PPTX, PPT, and TXT files are allowed."));
   }
 };
 

@@ -2,30 +2,30 @@
 
 :root {
   --background: #FFFFFF;
-  --foreground: #0A0A0A;
-  --card: #F5F5F5;
-  --card-foreground: #0A0A0A;
+  --foreground: #1F2937;
+  --card: #F9FAFB;
+  --card-foreground: #1F2937;
   --popover: #FFFFFF;
-  --popover-foreground: #0A0A0A;
-  --primary: #0A0A0A;
+  --popover-foreground: #1F2937;
+  --primary: #1F2937;
   --primary-foreground: #FFFFFF;
-  --secondary: #F5F5F5;
-  --secondary-foreground: #0A0A0A;
-  --muted: #F0F0F0;
-  --muted-foreground: #6B6B6B;
-  --accent: #7C3AED;
+  --secondary: #F3F4F6;
+  --secondary-foreground: #1F2937;
+  --muted: #F3F4F6;
+  --muted-foreground: #6B7280;
+  --accent: #3B82F6;
   --accent-foreground: #FFFFFF;
-  --highlight: #7C3AED;
+  --highlight: #3B82F6;
   --navbar: #FFFFFF;
-  --button: #0A0A0A;
+  --button: #1F2937;
   --button-text: #FFFFFF;
-  --destructive: #DC2626;
+  --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
-  --border: #E5E5E5;
+  --border: #E5E7EB;
   --input: transparent;
   --input-background: #FFFFFF;
-  --switch-background: #D4D4D4;
-  --ring: #7C3AED;
+  --switch-background: #D1D5DB;
+  --ring: #3B82F6;
   --radius: 0.75rem;
 }
 
@@ -103,7 +103,7 @@
   }
 
   ::selection {
-    background-color: rgba(124, 58, 237, 0.2);
+    background-color: rgba(59, 130, 246, 0.2);
     color: inherit;
   }
 }

@@ -217,6 +217,7 @@ export async function analyzeDocumentText(req: Request, res: Response) {
     }
 
     return res.json({
+      document: { id: document.id },
       analysis: {
         ...analysis,
         legalReferences: result.legalReferences,

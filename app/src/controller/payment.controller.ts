@@ -115,22 +115,13 @@ export async function createPublicQPayInvoice(req: Request, res: Response) {
       ...invoice,
     });
   } catch (error) {
-    if (canUseDemoQPay()) {
-      const amount = parseAmount(req.body.amount) || 5000;
-      const invoice = createDemoInvoice(
-        amount,
-        String(req.body.description || "Draftly document payment").slice(0, 255),
-      );
+    const errMsg = error instanceof Error ? error.message : String(error);
+    console.error("[QPay] createPublicQPayInvoice error:", errMsg);
 
-      return res.status(201).json({
-        invoice,
-        ...invoice,
-      });
-    }
-
-    return res.status(500).json({
-      message: "Failed to create QPay invoice.",
-      error: error instanceof Error ? error.message : String(error),
+    return res.status(502).json({
+      message: "QPay нэхэмжлэх үүсгэхэд алдаа гарлаа.",
+      error: errMsg,
+      code: "QPAY_API_ERROR",
     });
   }
 }
@@ -147,13 +138,13 @@ export async function checkQPayPayment(req: Request, res: Response) {
       return res.json({
         paid: true,
         count: 1,
-        paid_amount: 5000,
+        paid_amount: 10,
         rows: [
           {
             payment_id: invoiceId,
             payment_status: "PAID",
             payment_date: new Date().toISOString(),
-            payment_amount: 5000,
+            payment_amount: 10,
             payment_currency: "MNT",
           },
         ],

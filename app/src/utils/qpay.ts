@@ -49,8 +49,10 @@ async function parseQPayResponse<T>(response: Response): Promise<T> {
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
+    const code = typeof data?.code === "string" ? data.code : "";
     const message = typeof data?.message === "string" ? data.message : JSON.stringify(data) || "QPay request failed";
-    throw new Error(message);
+    const detail = code ? `${code}: ${message}` : message;
+    throw new Error(detail);
   }
 
   return data as T;
@@ -64,7 +66,9 @@ export async function fetchQPayToken() {
     method: "POST",
     headers: {
       Authorization: `Basic ${credentials}`,
+      "Content-Type": "application/json",
     },
+    body: JSON.stringify({}),
   });
 
   const data = await parseQPayResponse<{ access_token?: string }>(response);
@@ -95,6 +99,7 @@ export async function createQPayInvoice(input: CreateInvoiceInput) {
       invoice_description: input.description,
       amount: input.amount,
       callback_url: callbackUrl,
+      allow_partial: false,
     }),
   });
 

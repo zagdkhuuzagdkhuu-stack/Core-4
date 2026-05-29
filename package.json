@@ -16,7 +16,8 @@
     "start": "tsx app/src/server.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "seed:templates": "tsx app/src/scripts/seedTemplates.ts"
+    "seed:templates": "tsx app/src/scripts/seedTemplates.ts",
+    "import:legal": "tsx app/src/scripts/importLegalKnowledge.ts"
   },
   "prisma": {
     "seed": "tsx app/src/scripts/seedTemplates.ts"

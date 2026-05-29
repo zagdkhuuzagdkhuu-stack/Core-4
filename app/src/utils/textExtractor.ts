@@ -13,6 +13,9 @@ export async function extractText(filePath: string, mimeType: string): Promise<s
   if (ext === ".txt") {
     return fs.readFile(filePath, "utf8");
   }
+  if (ext === ".pptx" || ext === ".ppt") {
+    return extractFromPptx(filePath);
+  }
   throw new Error(`Unsupported file type: ${ext}`);
 }
 
@@ -29,4 +32,26 @@ async function extractFromDocx(filePath: string): Promise<string> {
   const buffer = await fs.readFile(filePath);
   const result = await mammoth.extractRawText({ buffer });
   return result.value;
+}
+
+async function extractFromPptx(filePath: string): Promise<string> {
+  const JSZip = (await import("jszip")).default;
+  const buffer = await fs.readFile(filePath);
+  const zip = await JSZip.loadAsync(buffer);
+  const texts: string[] = [];
+
+  const slideFiles = Object.keys(zip.files).filter(
+    (name) => name.startsWith("ppt/slides/slide") && name.endsWith(".xml"),
+  ).sort();
+
+  for (const slideFile of slideFiles) {
+    const content = await zip.files[slideFile].async("text");
+    const textMatches = content.match(/<a:t[^>]*>([^<]+)<\/a:t>/g) || [];
+    for (const match of textMatches) {
+      const inner = match.replace(/<[^>]+>/g, "");
+      if (inner.trim()) texts.push(inner.trim());
+    }
+  }
+
+  return texts.join("\n");
 }
