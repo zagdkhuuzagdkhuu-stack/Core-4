@@ -106,7 +106,7 @@ export function AnalysisWorkflow({
             type="button"
             onClick={onBack}
             className="flex h-10 w-10 items-center justify-center rounded-lg border border-border text-muted-foreground transition-all hover:border-accent/50 hover:text-foreground"
-            aria-label="Go back"
+            aria-label="Буцах"
           >
             <ArrowLeft size={17} />
           </button>
@@ -126,7 +126,7 @@ export function AnalysisWorkflow({
               <h1 className="mb-4 text-4xl font-bold text-foreground sm:text-5xl">
                 {ui.analysis.title}
               </h1>
-              <p className="mb-12 text-muted-foreground">Upload a PDF, DOCX, or PPTX to analyze for risks and issues</p>
+              <p className="mb-12 text-muted-foreground">Эрсдэл, асуудлыг шинжлэх PDF, DOCX, PPTX файл оруулах</p>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -541,10 +541,10 @@ function AnalysisResult({
                 <Trash2 size={16} /> Устгах
               </button>
               <button type="button" onClick={async () => { setReanalyzing(true); try { await onReanalyze?.(); } finally { setReanalyzing(false); } }} disabled={reanalyzing || !onReanalyze} className="flex items-center gap-2 rounded-lg border border-accent/30 px-6 py-3 text-sm font-medium text-accent transition-all hover:bg-accent/10 disabled:opacity-50">
-                <RefreshCw size={16} className={reanalyzing ? "animate-spin" : ""} /> {reanalyzing ? "Analyzing..." : "Re-analyze"}
+                <RefreshCw size={16} className={reanalyzing ? "animate-spin" : ""} /> {reanalyzing ? "Анализ хийж байна..." : "Дахин анализ"}
               </button>
               <button type="button" onClick={() => { setEditData({ summary: result?.analysis.summary || "", riskScore: result?.analysis.riskScore ?? 0, risks: result?.analysis.risks ? [...result.analysis.risks] : [], missingClauses: result?.analysis.missingClauses ? [...result.analysis.missingClauses] : [], riskyTerms: result?.analysis.riskyTerms ? [...result.analysis.riskyTerms] : [], inconsistentWording: result?.analysis.inconsistentWording ? [...result.analysis.inconsistentWording] : [], complianceWarnings: result?.analysis.complianceWarnings ? [...result.analysis.complianceWarnings] : [], legalReferences: result?.analysis.legalReferences ? [...result.analysis.legalReferences] : [], }); setManualEditOpen(true); }} className="flex items-center gap-2 rounded-lg border border-accent/30 px-6 py-3 text-sm font-medium text-accent transition-all hover:bg-accent/10">
-                <Pencil size={16} /> Manual edit
+                <Pencil size={16} /> Гараар засах
               </button>
             </div>
           </div>
@@ -568,50 +568,50 @@ function AnalysisResult({
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-sm font-bold text-foreground">Manual Edit Analysis</h3>
+              <h3 className="text-sm font-bold text-foreground">Анализыг гараар засах</h3>
               <button type="button" onClick={() => setManualEditOpen(false)} className="text-muted-foreground hover:text-foreground">
                 <X size={18} />
               </button>
             </div>
             <div className="space-y-3">
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground">Risk Score (0-100)</label>
+                <label className="text-[10px] font-semibold text-muted-foreground">Эрсдэлийн оноо (0-100)</label>
                 <input type="number" min={0} max={100} value={editData.riskScore ?? 0} onChange={(e) => setEditData({ ...editData, riskScore: Number(e.target.value) })} className="w-full rounded-lg border border-border bg-background p-2 text-xs text-foreground outline-none" />
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground">Summary</label>
+                <label className="text-[10px] font-semibold text-muted-foreground">Тайлбар</label>
                 <textarea rows={3} value={editData.summary || ""} onChange={(e) => setEditData({ ...editData, summary: e.target.value })} className="w-full resize-none rounded-lg border border-border bg-background p-2 text-xs text-foreground outline-none" />
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground">Risks (one per line)</label>
+                <label className="text-[10px] font-semibold text-muted-foreground">Эрсдэл (мөр тус бүр)</label>
                 <textarea rows={3} value={(editData.risks || []).join("\n")} onChange={(e) => setEditData({ ...editData, risks: e.target.value.split("\n").filter(Boolean) })} className="w-full resize-none rounded-lg border border-border bg-background p-2 text-xs text-foreground outline-none" />
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground">Missing Clauses (one per line)</label>
+                <label className="text-[10px] font-semibold text-muted-foreground">Дутуу заалт (мөр тус бүр)</label>
                 <textarea rows={3} value={(editData.missingClauses || []).join("\n")} onChange={(e) => setEditData({ ...editData, missingClauses: e.target.value.split("\n").filter(Boolean) })} className="w-full resize-none rounded-lg border border-border bg-background p-2 text-xs text-foreground outline-none" />
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground">Risky Terms (one per line)</label>
+                <label className="text-[10px] font-semibold text-muted-foreground">Эрсдэлтэй нэр томьёо (мөр тус бүр)</label>
                 <textarea rows={2} value={(editData.riskyTerms || []).join("\n")} onChange={(e) => setEditData({ ...editData, riskyTerms: e.target.value.split("\n").filter(Boolean) })} className="w-full resize-none rounded-lg border border-border bg-background p-2 text-xs text-foreground outline-none" />
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground">Inconsistent Wording (one per line)</label>
+                <label className="text-[10px] font-semibold text-muted-foreground">Зөрчилтэй найруулга (мөр тус бүр)</label>
                 <textarea rows={2} value={(editData.inconsistentWording || []).join("\n")} onChange={(e) => setEditData({ ...editData, inconsistentWording: e.target.value.split("\n").filter(Boolean) })} className="w-full resize-none rounded-lg border border-border bg-background p-2 text-xs text-foreground outline-none" />
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground">Compliance Warnings (one per line)</label>
+                <label className="text-[10px] font-semibold text-muted-foreground">Нийцлийн сануулга (мөр тус бүр)</label>
                 <textarea rows={2} value={(editData.complianceWarnings || []).join("\n")} onChange={(e) => setEditData({ ...editData, complianceWarnings: e.target.value.split("\n").filter(Boolean) })} className="w-full resize-none rounded-lg border border-border bg-background p-2 text-xs text-foreground outline-none" />
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground">Legal References (JSON — each object with "provision" and "text")</label>
+                <label className="text-[10px] font-semibold text-muted-foreground">Хуулийн лавлагаа (JSON — "provision" болон "text" талбартай)</label>
                 <textarea rows={4} value={JSON.stringify(editData.legalReferences || [], null, 2)} onChange={(e) => { try { setEditData({ ...editData, legalReferences: JSON.parse(e.target.value) }); } catch { /* allow editing even if invalid JSON */ } }} className="w-full resize-none rounded-lg border border-border bg-background p-2 text-xs text-foreground outline-none font-mono" />
               </div>
             </div>
             <div className="mt-5 flex gap-3">
               <button type="button" onClick={async () => { await onSaveManualEdit?.(editData); setManualEditOpen(false); }} className="flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-white transition-all hover:opacity-90">
-                <Save size={15} /> Save
+                <Save size={15} /> Хадгалах
               </button>
-              <button type="button" onClick={() => setManualEditOpen(false)} className="rounded-lg border border-border px-5 py-2.5 text-sm font-medium text-muted-foreground transition-all hover:bg-muted">Cancel</button>
+              <button type="button" onClick={() => setManualEditOpen(false)} className="rounded-lg border border-border px-5 py-2.5 text-sm font-medium text-muted-foreground transition-all hover:bg-muted">Болих</button>
             </div>
           </motion.div>
         </motion.div>

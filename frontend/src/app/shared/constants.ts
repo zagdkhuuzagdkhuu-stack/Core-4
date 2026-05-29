@@ -4,43 +4,43 @@ import type { AnalysisStep, TemplateStep } from "./types";
 export const ORBIT_FEATURES = [
   {
     num: "01",
-    title: "Template Creation",
-    desc: "Choose from AI-powered legal templates.",
+    title: "Загвар үүсгэх",
+    desc: "AI-д суурилсан хуулийн загваруудаас сонгох.",
   },
   {
     num: "02",
-    title: "Analysis",
-    desc: "AI checks risks and missing clauses.",
+    title: "Анализ",
+    desc: "AI эрсдэл ба дутуу заалтыг шалгана.",
   },
   {
     num: "03",
-    title: "Smart Editing",
-    desc: "Rewrite and improve documents.",
+    title: "Ухаалаг засвар",
+    desc: "Баримт бичгийг дахин бичиж, сайжруулах.",
   },
   {
     num: "04",
-    title: "Risk Detection",
-    desc: "Detect unclear conditions.",
+    title: "Эрсдэл илрүүлэх",
+    desc: "Тодорхойгүй нөхцөлийг илрүүлэх.",
   },
   {
     num: "05",
-    title: "Contract Generation",
-    desc: "Generate complete agreements.",
+    title: "Гэрээ үүсгэх",
+    desc: "Бүрэн гэрээ үүсгэх.",
   },
   {
     num: "06",
-    title: "Recommendations",
-    desc: "Receive AI suggestions.",
+    title: "Зөвлөмж",
+    desc: "AI зөвлөмж хүлээн авах.",
   },
   {
     num: "07",
-    title: "Export Options",
-    desc: "Download as PDF, DOCX, PPT.",
+    title: "Экспорт сонголт",
+    desc: "PDF, DOCX, PPT хэлбэрээр татах.",
   },
   {
     num: "08",
-    title: "Archive System",
-    desc: "Store and manage documents.",
+    title: "Архив систем",
+    desc: "Баримт хадгалах, удирдах.",
   },
 ];
 
@@ -136,36 +136,36 @@ export const stackedStepVariants = {
 };
 
 export const STEP_LABELS: { key: AnalysisStep; label: string }[] = [
-  { key: "upload", label: "Upload" },
-  { key: "processing", label: "Analysing" },
-  { key: "result", label: "Result" },
+  { key: "upload", label: "Оруулах" },
+  { key: "processing", label: "Анализ" },
+  { key: "result", label: "Үр дүн" },
 ];
 
 export const TEMPLATE_STEPS: { key: TemplateStep; label: string }[] = [
-  { key: "template", label: "Template" },
-  { key: "details", label: "Details" },
-  { key: "verification", label: "Verification" },
-  { key: "payment", label: "Payment" },
-  { key: "result", label: "Result" },
+  { key: "template", label: "Загвар" },
+  { key: "details", label: "Дэлгэрэнгүй" },
+  { key: "verification", label: "Шалгах" },
+  { key: "payment", label: "Төлбөр" },
+  { key: "result", label: "Үр дүн" },
 ];
 
 export const TEMPLATE_CATEGORIES = [
-  { name: "Employment", items: ["Employment Agreement", "Internship Agreement", "Temporary Contract", "Freelance Agreement"] },
-  { name: "Business", items: ["Partnership Agreement", "Purchase Agreement", "Sales Agreement"] },
-  { name: "Rental", items: ["Lease Agreement", "Sublease Agreement", "Property Use Agreement"] },
-  { name: "Financial", items: ["Loan Agreement", "Payment Agreement", "Investment Agreement"] },
-  { name: "Government", items: ["Service Request", "Compliance Letter", "Public Procurement"] },
-  { name: "Personal", items: ["Personal Loan", "Gift Agreement", "Power of Attorney"] },
-  { name: "Legal", items: ["NDA Agreement", "Settlement Agreement", "Legal Notice"] },
+  { name: "Хөдөлмөр", items: ["Employment Agreement", "Internship Agreement", "Temporary Contract", "Freelance Agreement"] },
+  { name: "Бизнес", items: ["Partnership Agreement", "Purchase Agreement", "Sales Agreement"] },
+  { name: "Түрээс", items: ["Lease Agreement", "Sublease Agreement", "Property Use Agreement"] },
+  { name: "Санхүү", items: ["Loan Agreement", "Payment Agreement", "Investment Agreement"] },
+  { name: "Төрийн", items: ["Service Request", "Compliance Letter", "Public Procurement"] },
+  { name: "Хувийн", items: ["Personal Loan", "Gift Agreement", "Power of Attorney"] },
+  { name: "Хууль", items: ["NDA Agreement", "Settlement Agreement", "Legal Notice"] },
 ];
 
 export const TEMPLATE_CARDS = [
-  { name: "Employment Agreement", desc: "A clear employment contract with role, salary, and duties." },
-  { name: "Partnership Agreement", desc: "Define ownership, decisions, contributions, and exits." },
-  { name: "Lease Agreement", desc: "Rental terms, deposits, use rules, and maintenance duties." },
-  { name: "NDA Agreement", desc: "Protect confidential information before collaboration starts." },
-  { name: "Loan Agreement", desc: "Repayment schedule, interest, penalties, and guarantees." },
-  { name: "Sales Agreement", desc: "Document sale terms, delivery, warranties, and payment." },
+  { name: "Хөдөлмөрийн гэрээ", desc: "Ажлын үүрэг, цалин, чиг үүрэг бүхий тодорхой хөдөлмөрийн гэрээ." },
+  { name: "Түншлэлийн гэрээ", desc: "Өмчлөл, шийдвэр, хувь нэмэр, гарах нөхцөлийг тодорхойлох." },
+  { name: "Түрээсийн гэрээ", desc: "Түрээсийн нөхцөл, барьцаа, ашиглах дүрэм, засвар үйлчилгээ." },
+  { name: "Нууцлалын гэрээ", desc: "Хамтран ажиллахаас өмнө нууц мэдээллийг хамгаалах." },
+  { name: "Зээлийн гэрээ", desc: "Эргэн төлөлтийн хуваарь, хүү, торгууль, баталгаа." },
+  { name: "Борлуулалтын гэрээ", desc: "Борлуулалтын нөхцөл, хүргэлт, баталгаа, төлбөрийн баримтжуулалт." },
 ];
 
 export const TEMPLATE_GROUPS = [

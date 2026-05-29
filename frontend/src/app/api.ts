@@ -114,7 +114,7 @@ async function parseJsonResponse<T>(response: Response): Promise<T> {
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    const message = typeof data.message === "string" ? data.message : "Request failed.";
+    const message = typeof data.message === "string" ? data.message : "Хүсэлт амжилтгүй боллоо.";
     if (data.code === "GEMINI_QUOTA_EXCEEDED") {
       throw new Error(message);
     }
@@ -154,7 +154,7 @@ export async function createPublicQPayInvoice(input: { amount: number; descripti
   const invoiceId = `demo-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
   return {
     invoice_id: invoiceId,
-    qr_text: `Draftly demo payment\n${input.description}\n${input.amount} MNT\nID: ${invoiceId}`,
+    qr_text: `Draftly демо төлбөр\n${input.description}\n${input.amount} MNT\nID: ${invoiceId}`,
   } satisfies QPayInvoiceResponse;
 }
 

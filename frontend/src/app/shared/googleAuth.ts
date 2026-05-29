@@ -26,7 +26,7 @@ function loadGoogleIdentityScript() {
     const existing = document.querySelector<HTMLScriptElement>('script[data-google-identity="true"]');
     if (existing) {
       existing.addEventListener("load", () => resolve(), { once: true });
-      existing.addEventListener("error", () => reject(new Error("Google Identity script failed to load.")), { once: true });
+      existing.addEventListener("error", () => reject(new Error("Google Identity скрипт ачааллаж чадсангүй.")), { once: true });
       return;
     }
 
@@ -36,7 +36,7 @@ function loadGoogleIdentityScript() {
     script.defer = true;
     script.dataset.googleIdentity = "true";
     script.onload = () => resolve();
-    script.onerror = () => reject(new Error("Google Identity script failed to load."));
+    script.onerror = () => reject(new Error("Google Identity скрипт ачааллаж чадсангүй."));
     document.head.appendChild(script);
   });
 }
@@ -51,7 +51,7 @@ export async function requestGoogleIdToken(clientId: string) {
       done = true;
       if (error) reject(error);
       else if (value) resolve(value);
-      else reject(new Error("Google login cancelled."));
+      else reject(new Error("Google нэвтрэх цуцлагдсан."));
     };
 
     try {
@@ -63,11 +63,11 @@ export async function requestGoogleIdToken(clientId: string) {
             finish(response.credential);
             return;
           }
-          finish(undefined, new Error("Google login failed."));
+          finish(undefined, new Error("Google нэвтрэлт амжилтгүй."));
         },
       });
       window.google?.accounts.id.prompt();
-      window.setTimeout(() => finish(undefined, new Error("Google login timed out. Please try again.")), 20000);
+      window.setTimeout(() => finish(undefined, new Error("Google нэвтрэх хугацаа дууссан. Дахин оролдоно уу.")), 20000);
     } catch (error) {
       finish(undefined, error instanceof Error ? error : new Error(String(error)));
     }

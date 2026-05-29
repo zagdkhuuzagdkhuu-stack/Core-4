@@ -28,19 +28,19 @@ type HomePageProps = {
 };
 
 const FEATURES = [
-  { icon: Search, title: "Contract Analysis", desc: "AI-powered review that identifies risks, missing clauses, and compliance issues in seconds." },
-  { icon: FileText, title: "Template Generation", desc: "Generate professional legal documents from smart templates tailored to your needs." },
-  { icon: Shield, title: "Risk Detection", desc: "Advanced algorithms detect risky terms, inconsistent wording, and potential liabilities." },
-  { icon: BarChart3, title: "Smart Analytics", desc: "Get detailed insights with risk scores, compliance metrics, and actionable recommendations." },
-  { icon: Download, title: "Export & Share", desc: "Download contracts as PDF, DOCX, or share securely with your team." },
-  { icon: Smartphone, title: "Mobile Ready", desc: "Access and review your documents from anywhere, on any device." },
+  { icon: Search, title: "Гэрээний анализ", desc: "AI-д суурилсан хяналт нь эрсдэл, дутуу заалт, нийцлийн асуудлуудыг секундэд илрүүлнэ." },
+  { icon: FileText, title: "Загвар үүсгэх", desc: "Таны хэрэгцээнд тохирсон ухаалаг загвараас мэргэжлийн хуулийн баримт бичиг үүсгэнэ." },
+  { icon: Shield, title: "Эрсдэл илрүүлэх", desc: "Дэвшилтэт алгоритмууд эрсдэлтэй нэр томьёо, зөрчилтэй найруулга, болзошгүй хариуцлагыг илрүүлнэ." },
+  { icon: BarChart3, title: "Ухаалаг аналитик", desc: "Эрсдэлийн оноо, нийцлийн үзүүлэлт, зөвлөмж бүхий дэлгэрэнгүй мэдээллийг авах." },
+  { icon: Download, title: "Экспорт & Хуваалцах", desc: "Гэрээг PDF, DOCX хэлбэрээр татах эсвэл багтайгаа аюулгүй хуваалцах." },
+  { icon: Smartphone, title: "Мобайл бэлэн", desc: "Дурын төхөөрөмжөөс баримтаа нээж, хянах." },
 ];
 
 const STATS = [
-  { value: "50K+", label: "Documents Analyzed" },
-  { value: "10K+", label: "Active Users" },
-  { value: "98%", label: "Accuracy Rate" },
-  { value: "150+", label: "Countries" },
+  { value: "50K+", label: "Анализ хийгдсэн баримт" },
+  { value: "10K+", label: "Идэвхтэй хэрэглэгч" },
+  { value: "98%", label: "Нарийвчлал" },
+  { value: "150+", label: "Улс" },
 ];
 
 const CUSTOMER_LOGOS = [
@@ -84,7 +84,7 @@ export function HomePage({
           >
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#1F1F1F] bg-[#141414] px-4 py-1.5">
               <span className="h-2 w-2 rounded-full bg-accent" />
-              <span className="text-xs font-medium text-gray-400">AI-Powered Legal Intelligence</span>
+              <span className="text-xs font-medium text-gray-400">AI-д суурилсан хуулийн оюун ухаан</span>
             </div>
           </motion.div>
 
@@ -94,9 +94,9 @@ export function HomePage({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
           >
-            Practice Made
+            Дадлага
             <br />
-            <span className="bg-gradient-to-r from-accent to-[#60A5FA] bg-clip-text text-transparent">Perfect</span>
+            <span className="bg-gradient-to-r from-accent to-[#60A5FA] bg-clip-text text-transparent">Төгс</span>
           </motion.h1>
 
           <motion.p
@@ -105,9 +105,9 @@ export function HomePage({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           >
-            Today's law firms and in-house legal teams trust Draftly to elevate their craft,
+            Draftly-д итгэж, өндөр чанартай хуулийн үйлчилгээг хүргэж,
             <br className="hidden sm:block" />
-            streamline contract review, and navigate complexity with confidence.
+            гэрээний хяналтыг хялбарчилж, итгэлтэйгээр ажиллаарай.
           </motion.p>
 
           <motion.div
@@ -189,12 +189,12 @@ export function HomePage({
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
-              Everything you need to
+              Хэрэгтэй бүхэн
               <br />
-              manage legal documents
+              хуулийн баримт бичгийг удирдах
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-gray-400">
-              AI-powered tools designed for legal professionals to work faster, smarter, and with greater precision.
+              Хуулийн мэргэжилтнүүдэд зориулсан AI-д суурилсан хэрэгслүүд.
             </p>
           </motion.div>
 
@@ -235,12 +235,12 @@ export function HomePage({
               <Users size={28} className="text-accent" />
             </div>
             <blockquote className="mb-8 text-2xl leading-relaxed text-gray-300 sm:text-3xl">
-              "Draftly has transformed how we review contracts. The AI-powered analysis
-              catches issues we would have missed and saves our team hours of manual review."
+              "Draftly нь гэрээний хяналтыг бүрэн өөрчилсөн. AI-анализ нь бидний анзааралгүй өнгөрөөх
+              асуудлуудыг илрүүлж, багийнхаа цагийг хэмнэж байна."
             </blockquote>
             <div>
-              <p className="font-semibold text-white">Sarah Chen</p>
-              <p className="text-sm text-gray-400">General Counsel, TechCorp International</p>
+              <p className="font-semibold text-white">Сарантуяа</p>
+              <p className="text-sm text-gray-400">Ерөнхий зөвлөх, TechCorp International</p>
             </div>
           </motion.div>
         </div>

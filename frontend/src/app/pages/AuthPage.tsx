@@ -80,13 +80,13 @@ function AuthForm({
       exit={{ opacity: 0, x: -24 }}
       transition={PANEL_TRANSITION}
     >
-      <h1 className="text-3xl font-bold text-foreground">{isLogin ? "Login" : "Sign in"}</h1>
+      <h1 className="text-3xl font-bold text-foreground">{isLogin ? "Нэвтрэх" : "Бүртгүүлэх"}</h1>
       <p className="mt-2 text-sm text-muted-foreground">{isLogin ? "Бүртгэлтэй хэрэглэгч нэвтрэх" : "Шинэ хэрэглэгчийн бүртгэл"}</p>
 
       <div className="mt-8 space-y-4">
         {!isLogin && (
           <label className="block">
-            <span className="mb-2 block text-xs font-medium text-muted-foreground">Full name</span>
+            <span className="mb-2 block text-xs font-medium text-muted-foreground">Бүтэн нэр</span>
             <span className="flex h-12 items-center gap-3 rounded-lg border border-border bg-background px-4 text-foreground transition-all focus-within:border-accent">
               <UserRound size={16} className="text-muted-foreground" />
               <input
@@ -99,7 +99,7 @@ function AuthForm({
           </label>
         )}
         <label className="block">
-          <span className="mb-2 block text-xs font-medium text-muted-foreground">Email</span>
+          <span className="mb-2 block text-xs font-medium text-muted-foreground">И-мэйл</span>
           <span className="flex h-12 items-center gap-3 rounded-lg border border-border bg-background px-4 text-foreground transition-all focus-within:border-accent">
             <Mail size={16} className="text-muted-foreground" />
             <input
@@ -111,7 +111,7 @@ function AuthForm({
           </span>
         </label>
         <label className="block">
-          <span className="mb-2 block text-xs font-medium text-muted-foreground">Password</span>
+          <span className="mb-2 block text-xs font-medium text-muted-foreground">Нууц үг</span>
           <span className="flex h-12 items-center gap-3 rounded-lg border border-border bg-background px-4 text-foreground transition-all focus-within:border-accent">
             <Lock size={16} className="text-muted-foreground" />
             <input
@@ -124,7 +124,7 @@ function AuthForm({
         </label>
         {!isLogin && (
           <label className="block">
-            <span className="mb-2 block text-xs font-medium text-muted-foreground">Confirm password</span>
+            <span className="mb-2 block text-xs font-medium text-muted-foreground">Нууц үг давтах</span>
             <span className="flex h-12 items-center gap-3 rounded-lg border border-border bg-background px-4 text-foreground transition-all focus-within:border-accent">
               <Lock size={16} className="text-muted-foreground" />
               <input
@@ -148,7 +148,7 @@ function AuthForm({
         disabled={authBusy}
         className="mt-6 h-12 w-full rounded-lg bg-white text-sm font-bold text-black transition-all hover:bg-gray-200 disabled:opacity-60"
       >
-        {authBusy ? "Processing..." : isLogin ? "Login" : "Sign in"}
+        {authBusy ? "Боловсруулж байна..." : isLogin ? "Нэвтрэх" : "Бүртгүүлэх"}
       </button>
 
       <div className="mt-5 flex gap-3">
@@ -159,7 +159,7 @@ function AuthForm({
           className="flex h-11 flex-1 items-center justify-center gap-2 rounded-lg border border-border bg-card px-3 text-xs font-bold text-foreground transition-all hover:border-accent/50 disabled:opacity-60"
         >
           <span className="font-black">G</span>
-          {authBusy ? "Connecting..." : "Continue with Google"}
+          {authBusy ? "Холбогдож байна..." : "Google-р үргэлжлүүлэх"}
         </button>
         <button
           type="button"
@@ -174,7 +174,7 @@ function AuthForm({
       <p className="mt-7 text-center text-sm text-muted-foreground">
         {isLogin ? "Шинээр бүртгүүлэх үү? " : "Бүртгэлтэй юу? "}
         <button type="button" onClick={() => onSwitch(isLogin ? "signin" : "login")} className="font-semibold text-foreground transition-colors hover:text-accent">
-          {isLogin ? "Sign in" : "Login"}
+          {isLogin ? "Бүртгүүлэх" : "Нэвтрэх"}
         </button>
       </p>
     </motion.div>
@@ -207,7 +207,7 @@ export function AuthPage({
         type="button"
         onClick={onBackHome}
         className="absolute left-4 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-lg border border-border text-muted-foreground transition-all hover:border-accent/50 hover:text-foreground"
-        aria-label="Go back"
+        aria-label="Буцах"
       >
         <ArrowLeft size={17} />
       </button>
@@ -216,7 +216,7 @@ export function AuthPage({
         <div className="w-full max-w-md">
           <div className="mb-8 text-center">
             <p className="text-3xl font-bold text-foreground">Draftly.</p>
-            <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">AI-POWERED LEGAL DOCUMENTS</p>
+            <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">ХИЙМЭЛ ОЮУНД СУУРИЛСАН ХУУЛИЙН БАРИМТ</p>
           </div>
 
           {mode === "choice" ? (
@@ -232,8 +232,8 @@ export function AuthPage({
                 Draftly нь танд баримт бичиг үүсгэх, дүн шинжилгээ хийх, хянах, баталгаажуулах бүх үйл явцыг автоматжуулж, хуулийн ажлыг хялбар болгоно.
               </p>
               <div className="space-y-3">
-                <ChoiceCard icon={UserRound} title="Login" subtitle="Бүртгэлтэй хэрэглэгч" onClick={() => setMode("login")} />
-                <ChoiceCard icon={PenLine} title="Sign in" subtitle="Шинэ хэрэглэгч бүртгүүлэх" onClick={() => setMode("signin")} />
+                <ChoiceCard icon={UserRound} title="Нэвтрэх" subtitle="Бүртгэлтэй хэрэглэгч" onClick={() => setMode("login")} />
+                <ChoiceCard icon={PenLine} title="Бүртгүүлэх" subtitle="Шинэ хэрэглэгч бүртгүүлэх" onClick={() => setMode("signin")} />
               </div>
             </motion.div>
           ) : (

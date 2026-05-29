@@ -296,7 +296,7 @@ export default function App() {
     try {
       const invoice = await createPublicQPayInvoice({
         amount: 10,
-        description: "Draftly save/export access",
+        description: "Draftly хадгалах/экспортлох эрх",
       });
       setPaywallInvoice(invoice);
     } catch (error) {
@@ -351,7 +351,7 @@ export default function App() {
     if (!authToken || !result) return;
     const doSave = async () => {
       const saved = await saveAnalyzedDocument(authToken, {
-        title: result.document.title || "Analyzed document",
+        title: result.document.title || "Анализ хийгдсэн баримт",
         content: result.document.extractedText || "",
         fileName: result.document.fileName,
         fileUrl: result.document.fileUrl,
@@ -393,8 +393,8 @@ export default function App() {
       const ar = payload as AnalysisResponse | null;
       const hasAnalysis = ar?.analysis != null;
       const title = hasAnalysis
-        ? ar?.document?.title || "Analyzed document"
-        : ((payload as Record<string, unknown> | null)?.title as string) || "document";
+        ? ar?.document?.title || "Анализ хийгдсэн баримт"
+        : ((payload as Record<string, unknown> | null)?.title as string) || "баримт";
       const content = hasAnalysis
         ? ar?.document?.extractedText || ""
         : ((payload as Record<string, unknown> | null)?.content as string) || "";
@@ -407,15 +407,15 @@ export default function App() {
     if (analysisResult?.analysis) {
       const a = analysisResult.analysis;
       html += `<p><strong>Risk Score:</strong> ${a.riskScore ?? "N/A"}/100</p>`;
-      html += `<p><strong>Summary:</strong> ${escapeHtml(a.summary || "No summary")}</p>`;
-      if (a.estimatedCost != null) html += `<p><strong>Estimated Cost:</strong> ${a.estimatedCost}</p>`;
+      html += `<p><strong>Тайлбар:</strong> ${escapeHtml(a.summary || "Тайлбар байхгүй")}</p>`;
+      if (a.estimatedCost != null) html += `<p><strong>Тооцоолсон өртөг:</strong> ${a.estimatedCost}</p>`;
 
       const sections: [string, string[], string][] = [
-        ["Risks", a.risks || [], "risk-high"],
-        ["Missing Clauses", a.missingClauses || [], "risk-mid"],
-        ["Risky Terms", a.riskyTerms || [], "risk-mid"],
-        ["Inconsistent Wording", a.inconsistentWording || [], "risk-mid"],
-        ["Compliance Warnings", a.complianceWarnings || [], "risk-high"],
+        ["Эрсдэл", a.risks || [], "risk-high"],
+        ["Дутуу заалт", a.missingClauses || [], "risk-mid"],
+        ["Эрсдэлтэй нэр томьёо", a.riskyTerms || [], "risk-mid"],
+        ["Зөрчилтэй найруулга", a.inconsistentWording || [], "risk-mid"],
+        ["Нийцлийн сануулга", a.complianceWarnings || [], "risk-high"],
       ];
 
       for (const [label, items, cls] of sections) {
@@ -427,7 +427,7 @@ export default function App() {
       }
 
       if (analysisResult.clauses?.length) {
-        html += `<h2>Clauses</h2>`;
+        html += `<h2>Заалтууд</h2>`;
         for (const c of analysisResult.clauses) {
           const level = c.riskLevel === "HIGH" ? "risk-high" : c.riskLevel === "MEDIUM" ? "risk-mid" : "risk-low";
           html += `<div class="clause"><h3>${escapeHtml(c.title)}</h3><p class="${level}">Risk: ${c.riskLevel}</p><p>${escapeHtml(c.content || c.explanation)}</p></div>`;
@@ -443,7 +443,7 @@ export default function App() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `${title.replace(/[^a-zA-Z0-9а-яА-ЯөүӨҮёЁ\-_ ]/g, "").trim() || "export"}.docx`;
+    a.download = `${title.replace(/[^a-zA-Z0-9а-яА-ЯөүӨҮёЁ\-_ ]/g, "").trim() || "экспорт"}.docx`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -605,14 +605,14 @@ export default function App() {
                     }
                   }
                   if (!id) {
-                    setGlobalNotice("Document not saved. Please save first.");
+                    setGlobalNotice("Баримт хадгалагдаагүй байна. Эхлээд хадгална уу.");
                     return null;
                   }
                   const mode = analysisResult?.mode || "single";
                   const result = await reanalyzeDocument(authToken, id, mode);
                   return result;
                 } catch (err) {
-                  setGlobalNotice("Re-analyze failed: " + (err instanceof Error ? err.message : String(err)));
+                  setGlobalNotice("Дахин анализ амжилтгүй: " + (err instanceof Error ? err.message : String(err)));
                   return null;
                 }
               }}
@@ -620,16 +620,16 @@ export default function App() {
                 if (!authToken) return;
                 try {
                   await updateAnalysisResults(authToken, documentId, data);
-                  setGlobalNotice("Analysis updated.");
+setGlobalNotice("Анализ шинэчлэгдлээ.");
                 } catch (err) {
-                  setGlobalNotice("Update failed: " + (err instanceof Error ? err.message : String(err)));
+                  setGlobalNotice("Шинэчлэлт амжилтгүй: " + (err instanceof Error ? err.message : String(err)));
                 }
               }}
               onSaveDocumentText={async (documentId, text) => {
                 if (!authToken) return;
                 try {
                   await updateDocumentContent(authToken, documentId, text);
-                  setGlobalNotice("Text saved.");
+                  setGlobalNotice("Текст хадгалагдлаа.");
                 } catch (err) {
                   setGlobalNotice("Хадгалахад алдаа гарлаа: " + (err instanceof Error ? err.message : String(err)));
                 }
@@ -744,13 +744,13 @@ export default function App() {
                 ) : paywallInvoice?.qr_image ? (
                   <img
                     src={paywallInvoice.qr_image.startsWith("data:") ? paywallInvoice.qr_image : `data:image/png;base64,${paywallInvoice.qr_image}`}
-                    alt="Payment QR"
+                    alt="Төлбөрийн QR"
                     className="h-56 w-56 object-contain"
                   />
                 ) : paywallQrDataUrl ? (
                   <img
                     src={paywallQrDataUrl}
-                    alt="Payment QR"
+                    alt="Төлбөрийн QR"
                     className="h-56 w-56 object-contain"
                   />
                 ) : (
