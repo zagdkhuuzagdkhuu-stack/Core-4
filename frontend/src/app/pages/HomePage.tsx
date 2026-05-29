@@ -94,9 +94,9 @@ export function HomePage({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
           >
-            Дадлага
+            Smarter Contracts.
             <br />
-            <span className="bg-gradient-to-r from-accent to-[#60A5FA] bg-clip-text text-transparent">Төгс</span>
+            <span className="bg-gradient-to-r from-accent to-[#60A5FA] bg-clip-text text-transparent">Faster Business</span>
           </motion.h1>
 
           <motion.p
