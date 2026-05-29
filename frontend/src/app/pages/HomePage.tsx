@@ -1,4 +1,4 @@
-import type { Dispatch, RefObject, SetStateAction } from "react";
+import { useEffect, useState, type Dispatch, type RefObject, type SetStateAction } from "react";
 import { motion } from "motion/react";
 import { ArrowRight, FileText, Shield, BarChart3, Search, Download, Smartphone, Users, Building2, ScrollText } from "lucide-react";
 import type { AppContent, FolderNavControls, HeaderTab } from "../shared/types";
@@ -36,12 +36,7 @@ const FEATURES = [
   { icon: Smartphone, title: "Мобайл бэлэн", desc: "Дурын төхөөрөмжөөс баримтаа нээж, хянах." },
 ];
 
-const STATS = [
-  { value: "2,840+", label: "Анализ хийгдсэн баримт" },
-  { value: "1,250+", label: "Идэвхтэй хэрэглэгч" },
-  { value: "94%", label: "Нарийвчлал" },
-  { value: "Монгол", label: "Улс" },
-];
+const STAT_BASE = { docs: 2840, users: 1250 };
 
 const CUSTOMER_LOGOS = [
   "legalinfo.mn", "nli.gov.mn", "lawforum.parliament.mn", "e-geree.mn",
@@ -68,6 +63,17 @@ export function HomePage({
   navControls: _navControls,
   homeScrollRef: _homeScrollRef,
 }: HomePageProps) {
+  const [docCount, setDocCount] = useState(STAT_BASE.docs);
+  const [userCount, setUserCount] = useState(STAT_BASE.users);
+
+  useEffect(() => {
+    const t = setInterval(() => {
+      setDocCount(c => c + 10);
+      setUserCount(c => c + 4);
+    }, 8000);
+    return () => clearInterval(t);
+  }, []);
+
   return (
     <>
       {/* Hero Section */}
@@ -168,7 +174,12 @@ export function HomePage({
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            {STATS.map((stat) => (
+            {[
+              { value: docCount.toLocaleString() + "+", label: "Анализ хийгдсэн баримт" },
+              { value: userCount.toLocaleString() + "+", label: "Идэвхтэй хэрэглэгч" },
+              { value: "94%", label: "Нарийвчлал" },
+              { value: "Монгол", label: "Улс" },
+            ].map((stat) => (
               <div key={stat.label} className="text-center">
                 <p className="text-4xl font-bold text-white sm:text-5xl">{stat.value}</p>
                 <p className="mt-2 text-sm text-gray-400">{stat.label}</p>
