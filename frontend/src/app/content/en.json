@@ -6,6 +6,7 @@
   "switchLabel": "MN",
   "login": "Login",
   "hero": {
+    "headline": ["Smarter Contracts.", "Faster Business"],
     "title": "Artificial intelligence-based contract and document automation system",
     "primaryCta": "Get started",
     "secondaryCta": "Try free",
