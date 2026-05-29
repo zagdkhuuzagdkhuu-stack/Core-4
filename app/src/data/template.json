@@ -3065,5 +3065,254 @@
     {"key":"clientPhone","label":"Захиалагчийн утас","type":"text","required":true},
     {"key":"clientBankAccount","label":"Захиалагчийн банкны данс","type":"text","required":true}
   ]
+},
+{
+  "category": "Хүний нөөц",
+  "name": "Хөдөлмөрийн гэрээ",
+  "description": "Ажил олгогч болон ажилтны хооронд үүсэх хөдөлмөрийн харилцаа, ажил үүрэг, цалин хөлс, ажлын цаг, эрх үүрэг, хариуцлага, гэрээ цуцлах болон бусад нөхцөлийг зохицуулах хөдөлмөрийн гэрээ",
+  "content": "ХӨДӨЛМӨРИЙН ГЭРЭЭ\n\nГэрээний дугаар: {{contractNumber}}\nБайгуулсан огноо: {{contractDate}}\nБайршил: {{city}}\n\nНэг талаас {{employerAddress}} хаягт байрлах, {{companyRegistrationNumber}} улсын бүртгэлийн дугаартай {{employerCompanyName}} /цаашид \"Ажил олгогч\" гэх/, түүнийг {{employerRepresentativePosition}} албан тушаалтай {{employerRepresentativeName}} төлөөлөн,\n\nНөгөө талаас {{employeeAddress}} хаягт оршин суух, {{employeeRegisterNumber}} регистрийн дугаартай {{employeeLastName}} овогтой {{employeeFirstName}} /цаашид \"Ажилтан\" гэх/ нар Монгол Улсын Хөдөлмөрийн тухай хууль болон холбогдох бусад хууль тогтоомжийг үндэслэн энэхүү гэрээг байгуулав.\n\n1. НИЙТЛЭГ ҮНДЭСЛЭЛ\n1.1 Энэхүү гэрээгээр Ажил олгогч болон Ажилтны хооронд үүсэх хөдөлмөрийн харилцааг зохицуулна.\n1.2 Энэхүү гэрээний хавсралтууд нь гэрээний салшгүй хэсэг болно.\n\n2. ГЭРЭЭНИЙ ХУГАЦАА\n2.1 Гэрээ эхлэх огноо: {{employmentStartDate}}\n2.2 Гэрээний хүчинтэй хугацаа: {{contractDuration}}\n2.3 Талууд гэрээг цуцлах санал гаргаагүй бол гэрээг {{autoRenewalPeriod}} хугацаагаар сунгасанд тооцно.\n\n3. ҮНДСЭН НӨХЦӨЛ\n3.1 Гүйцэтгэх ажил үүрэг\n3.1.1 Ажлын байр: {{workplace}}\n3.1.2 Албан тушаал: {{jobTitle}}\n3.1.3 Ажилтны үндсэн үүрэг:\n{{jobResponsibilities}}\n3.1.4 Хөдөлмөрийн нөхцөл: {{workingConditions}}\n3.1.5 Ажлын цаг:\n{{workingHours}}\n3.1.6 Ажил эхлэх цаг: {{workStartTime}}\n3.1.7 Үдийн завсарлага: {{lunchBreakTime}}\n\n4. ЦАЛИН ХӨЛС\n4.1 Ажилтны сарын үндсэн цалин: {{baseSalary}} {{currency}}\n4.2 Нийгмийн даатгал болон татварыг хуульд заасны дагуу суутгана.\n4.3 Цалин олгох өдөр: {{salaryPaymentDates}}\n4.4 Илүү цагийн хөлс болон нөхөн амралтыг хуульд заасны дагуу олгоно.\n\n5. АМРАЛТ\n5.1 Ажилтан нь бүх нийтийн баярын болон амралтын өдрүүдэд амарна.\n5.2 Ээлжийн амралтын хоног: {{annualLeaveDays}}\n5.3 Амралтыг байгууллагын дотоод журмын дагуу эдэлнэ.\n\n6. АЖИЛТНЫ ЭРХ, ҮҮРЭГ\n6.1 Ажилтан дараах эрхийг эдэлнэ:\n6.1.1 Аюулгүй ажлын нөхцөлөөр хангагдах.\n6.1.2 Ажил үүргээ гүйцэтгэхэд шаардлагатай техник хэрэгслээр хангагдах.\n6.1.3 Цалин хөлсөө хугацаанд нь авах.\n6.1.4 Нэмэлт эрх:\n{{employeeRights}}\n\n6.2 Ажилтан дараах үүргийг хүлээнэ:\n6.2.1 Хөдөлмөрийн дотоод журмыг мөрдөх.\n6.2.2 Ажлын байрны тодорхойлолтод заасан үүргийг биелүүлэх.\n6.2.3 Байгууллагын нууцыг хадгалах.\n6.2.4 Нэмэлт үүрэг:\n{{employeeResponsibilities}}\n\n7. АЖИЛ ОЛГОГЧИЙН ЭРХ, ҮҮРЭГ\n7.1 Ажил олгогч дараах эрхийг эдэлнэ:\n7.1.1 Ажилтнаас гэрээгээр хүлээсэн үүргээ биелүүлэхийг шаардах.\n7.1.2 Хөдөлмөрийн сахилга, дотоод журмыг мөрдүүлэх.\n7.1.3 Хууль болон гэрээнд заасан үндэслэлээр хариуцлага тооцох.\n\n7.2 Ажил олгогч дараах үүргийг хүлээнэ:\n7.2.1 Аюулгүй ажлын нөхцөлөөр хангах.\n7.2.2 Цалин хөлсийг хугацаанд нь олгох.\n7.2.3 Нийгмийн болон эрүүл мэндийн даатгалд хамруулах.\n7.2.4 Сургалт хөгжлийн боломж олгох.\n7.2.5 Нэмэлт үүрэг:\n{{employerResponsibilities}}\n\n8. ХАРИУЦЛАГА\n8.1 Гэрээ болон дотоод журам зөрчсөн тохиолдолд хуульд заасан хариуцлага хүлээнэ.\n8.2 Байгууллагад хохирол учруулсан тохиолдолд нөхөн төлнө.\n8.3 Байгууллагын нууц задруулсан тохиолдолд хөдөлмөрийн гэрээг цуцалж болно.\n\n9. ГЭРЭЭ ЦУЦЛАХ\n9.1 Гэрээг Монгол Улсын Хөдөлмөрийн тухай хуульд заасан үндэслэлээр дуусгавар болгоно.\n9.2 Ажилтан гэрээг цуцлах бол {{employeeTerminationNoticeDays}} хоногийн өмнө мэдэгдэнэ.\n9.3 Ажил олгогч хуульд заасан үндэслэлээр гэрээг цуцалж болно.\n\n10. ДАВАГДАШГҮЙ ХҮЧИН ЗҮЙЛ\n10.1 Газар хөдлөлт, үер, гал түймэр, цар тахал болон бусад форс-мажор нөхцөлд талууд хариуцлагаас чөлөөлөгдөнө.\n\n11. МАРГААН ШИЙДВЭРЛЭХ\n11.1 Маргааныг эхлээд харилцан тохиролцож шийдвэрлэнэ.\n11.2 Тохиролцоонд хүрээгүй тохиолдолд {{disputeResolutionMethod}} журмаар шийдвэрлэнэ.\n\n12. БУСАД НӨХЦӨЛ\n12.1 Энэхүү гэрээ нь талууд гарын үсэг зурсан өдрөөс хүчин төгөлдөр болно.\n12.2 Гэрээг {{agreementLanguage}} хэл дээр {{contractCopies}} хувь үйлдэнэ.\n12.3 Нэмэлт нөхцөл:\n{{additionalTerms}}\n\n13. ТАЛУУДЫН МЭДЭЭЛЭЛ\nАжил олгогч:\nХаяг: {{employerAddress}}\nУтас: {{employerPhone}}\nИ-мэйл: {{employerEmail}}\n\nАжилтан:\nХаяг: {{employeeAddress}}\nУтас: {{employeePhone}}\nИ-мэйл: {{employeeEmail}}",
+  "variables": [
+    {
+      "key": "contractNumber",
+      "label": "Гэрээний дугаар",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "contractDate",
+      "label": "Гэрээ байгуулсан огноо",
+      "type": "date",
+      "required": true
+    },
+    {
+      "key": "city",
+      "label": "Байршил",
+      "type": "text",
+      "required": true
+    },
+
+    {
+      "key": "employerCompanyName",
+      "label": "Ажил олгогч байгууллагын нэр",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "companyRegistrationNumber",
+      "label": "Улсын бүртгэлийн дугаар",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "employerRepresentativeName",
+      "label": "Ажил олгогчийг төлөөлсөн хүн",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "employerRepresentativePosition",
+      "label": "Ажил олгогчийн албан тушаал",
+      "type": "text",
+      "required": true
+    },
+
+    {
+      "key": "employeeLastName",
+      "label": "Ажилтны овог",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "employeeFirstName",
+      "label": "Ажилтны нэр",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "employeeRegisterNumber",
+      "label": "Ажилтны регистрийн дугаар",
+      "type": "text",
+      "required": true
+    },
+
+    {
+      "key": "employmentStartDate",
+      "label": "Ажил эхлэх огноо",
+      "type": "date",
+      "required": true
+    },
+    {
+      "key": "contractDuration",
+      "label": "Гэрээний хугацаа",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "autoRenewalPeriod",
+      "label": "Автоматаар сунгах хугацаа",
+      "type": "text",
+      "required": false
+    },
+
+    {
+      "key": "workplace",
+      "label": "Ажлын байр",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "jobTitle",
+      "label": "Албан тушаал",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "jobResponsibilities",
+      "label": "Ажилтны үндсэн үүрэг",
+      "type": "textarea",
+      "required": true
+    },
+    {
+      "key": "workingConditions",
+      "label": "Хөдөлмөрийн нөхцөл",
+      "type": "textarea",
+      "required": false
+    },
+    {
+      "key": "workingHours",
+      "label": "Ажлын цагийн хуваарь",
+      "type": "textarea",
+      "required": true
+    },
+    {
+      "key": "workStartTime",
+      "label": "Ажил эхлэх цаг",
+      "type": "text",
+      "required": false
+    },
+    {
+      "key": "lunchBreakTime",
+      "label": "Үдийн завсарлага",
+      "type": "text",
+      "required": false
+    },
+
+    {
+      "key": "baseSalary",
+      "label": "Үндсэн цалин",
+      "type": "number",
+      "required": true
+    },
+    {
+      "key": "currency",
+      "label": "Валют",
+      "type": "select",
+      "required": true
+    },
+    {
+      "key": "salaryPaymentDates",
+      "label": "Цалин олгох өдөр",
+      "type": "text",
+      "required": true
+    },
+
+    {
+      "key": "annualLeaveDays",
+      "label": "Ээлжийн амралтын хоног",
+      "type": "number",
+      "required": false
+    },
+
+    {
+      "key": "employeeRights",
+      "label": "Ажилтны нэмэлт эрх",
+      "type": "textarea",
+      "required": false
+    },
+    {
+      "key": "employeeResponsibilities",
+      "label": "Ажилтны нэмэлт үүрэг",
+      "type": "textarea",
+      "required": false
+    },
+
+    {
+      "key": "employerResponsibilities",
+      "label": "Ажил олгогчийн нэмэлт үүрэг",
+      "type": "textarea",
+      "required": false
+    },
+
+    {
+      "key": "employeeTerminationNoticeDays",
+      "label": "Ажилтны мэдэгдэх хоног",
+      "type": "number",
+      "required": false
+    },
+
+    {
+      "key": "disputeResolutionMethod",
+      "label": "Маргаан шийдвэрлэх журам",
+      "type": "text",
+      "required": true
+    },
+
+    {
+      "key": "agreementLanguage",
+      "label": "Гэрээний хэл",
+      "type": "text",
+      "required": false
+    },
+    {
+      "key": "contractCopies",
+      "label": "Гэрээний хувь",
+      "type": "number",
+      "required": false
+    },
+    {
+      "key": "additionalTerms",
+      "label": "Нэмэлт нөхцөл",
+      "type": "textarea",
+      "required": false
+    },
+
+    {
+      "key": "employerAddress",
+      "label": "Ажил олгогчийн хаяг",
+      "type": "textarea",
+      "required": true
+    },
+    {
+      "key": "employerPhone",
+      "label": "Ажил олгогчийн утас",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "employerEmail",
+      "label": "Ажил олгогчийн и-мэйл",
+      "type": "email",
+      "required": false
+    },
+
+    {
+      "key": "employeeAddress",
+      "label": "Ажилтны хаяг",
+      "type": "textarea",
+      "required": true
+    },
+    {
+      "key": "employeePhone",
+      "label": "Ажилтны утас",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "employeeEmail",
+      "label": "Ажилтны и-мэйл",
+      "type": "email",
+      "required": false
+    }
+  ]
 }
 ]

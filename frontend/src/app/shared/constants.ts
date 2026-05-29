@@ -180,7 +180,7 @@ export const TEMPLATE_GROUPS = [
     key: "service",
     name: "",
     desc: "",
-    keywords: ["үйлчилгээ", "ажил", "хөлсөөр", "барилга", "засвар", "уул уурхай", "үйлдвэрлэл", "боловсруулалт", "service", "employment", "freelance"],
+    keywords: ["үйлчилгээ", "ажил", "хөлсөөр", "барилга", "засвар", "уул уурхай", "үйлдвэрлэл", "боловсруулалт", "хөдөлмөр", "хүний нөөц", "service", "employment", "freelance"],
     Icon: BriefcaseBusiness,
   },
   {
