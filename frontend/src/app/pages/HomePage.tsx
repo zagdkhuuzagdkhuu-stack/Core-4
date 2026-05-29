@@ -65,8 +65,8 @@ export function HomePage({
   navControls: _navControls,
   homeScrollRef: _homeScrollRef,
 }: HomePageProps) {
-  const [docCount] = useState(() => Math.max(2840, getStoredCount("draftly_docs_analyzed", 2840)));
-  const [userCount] = useState(() => Math.max(1250, getStoredCount("draftly_active_users", 1250)));
+  const [docCount] = useState(() => Math.max(10, getStoredCount("draftly_docs_analyzed", 10)));
+  const [userCount] = useState(() => Math.max(4, getStoredCount("draftly_active_users", 4)));
 
   return (
     <>
