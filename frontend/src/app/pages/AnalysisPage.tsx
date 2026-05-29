@@ -373,7 +373,7 @@ function AnalysisResult({
             <div className="rounded-xl border border-border bg-card p-6">
               <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">Стандарт нийцэл</p>
               <p className="text-4xl font-bold text-emerald-400">{standardMatch}%</p>
-              <div className="mt-4 h-2 overflow-hidden rounded-full bg-[#2A2A2A]">
+              <div className="mt-4 h-2 overflow-hidden rounded-full bg-muted">
                 <motion.div
                   className="h-full rounded-full bg-emerald-500"
                   initial={{ width: 0 }}
@@ -387,7 +387,7 @@ function AnalysisResult({
             <div className="rounded-xl border border-border bg-card p-6">
               <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">{ui.analysis.riskScore}</p>
               <p className="text-4xl font-bold text-red-400">{riskScoreLabel}</p>
-              <div className="mt-4 h-2 overflow-hidden rounded-full bg-[#2A2A2A]">
+              <div className="mt-4 h-2 overflow-hidden rounded-full bg-muted">
                 <motion.div
                   className="h-full rounded-full bg-red-500"
                   initial={{ width: 0 }}

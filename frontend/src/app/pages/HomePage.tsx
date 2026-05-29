@@ -71,7 +71,7 @@ export function HomePage({
   return (
     <>
       {/* Hero Section */}
-      <section data-deploy-marker={DEPLOY_MARKER} className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#0A0A0A]">
+      <section data-deploy-marker={DEPLOY_MARKER} className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-background">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.15),transparent_50%),radial-gradient(ellipse_at_bottom,rgba(59,130,246,0.05),transparent_50%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.08),transparent_40%)]" />
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }} />
@@ -82,14 +82,14 @@ export function HomePage({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#1F1F1F] bg-[#141414] px-4 py-1.5">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5">
               <span className="h-2 w-2 rounded-full bg-accent" />
-              <span className="text-xs font-medium text-gray-400">AI-д суурилсан хуулийн оюун ухаан</span>
+              <span className="text-xs font-medium text-muted-foreground">AI-д суурилсан хуулийн оюун ухаан</span>
             </div>
           </motion.div>
 
           <motion.h1
-            className="mb-6 text-5xl font-bold leading-tight tracking-tight text-white sm:text-6xl md:text-7xl lg:text-8xl"
+            className="mb-6 text-5xl font-bold leading-tight tracking-tight text-foreground sm:text-6xl md:text-7xl lg:text-8xl"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
@@ -100,7 +100,7 @@ export function HomePage({
           </motion.h1>
 
           <motion.p
-            className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-gray-400"
+            className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-muted-foreground"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
@@ -126,7 +126,7 @@ export function HomePage({
             <button
               type="button"
               onClick={() => navControls.isAuthenticated ? handleTabSelect("Template") : navControls.onLoginClick()}
-              className="inline-flex items-center gap-2 rounded-lg border border-[#1F1F1F] px-8 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/5"
+              className="inline-flex items-center gap-2 rounded-lg border border-border px-8 py-3.5 text-sm font-semibold text-foreground transition-all duration-200 hover:bg-muted"
             >
               {content.hero.secondaryCta}
             </button>
@@ -140,7 +140,7 @@ export function HomePage({
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.6 }}
         >
-          <p className="mb-4 text-center text-xs font-medium uppercase tracking-[0.2em] text-gray-400">
+          <p className="mb-4 text-center text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
             {content.hero.partnerLabel}
           </p>
           <div className="overflow-hidden">
@@ -148,7 +148,7 @@ export function HomePage({
               {[...CUSTOMER_LOGOS, ...CUSTOMER_LOGOS].map((name, i) => (
                 <span
                   key={i}
-                  className="shrink-0 text-sm font-medium text-gray-400"
+                  className="shrink-0 text-sm font-medium text-muted-foreground"
                 >
                   {name}
                 </span>
@@ -159,7 +159,7 @@ export function HomePage({
       </section>
 
       {/* Stats Section */}
-      <section className="border-b border-[#1F1F1F] bg-[#0A0A0A] py-20">
+      <section className="border-b border-border bg-background py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             className="grid grid-cols-2 gap-8 md:grid-cols-4"
@@ -175,8 +175,8 @@ export function HomePage({
               { value: "Монгол", label: "Улс" },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
-                <p className="text-4xl font-bold text-white sm:text-5xl">{stat.value}</p>
-                <p className="mt-2 text-sm text-gray-400">{stat.label}</p>
+                <p className="text-4xl font-bold text-foreground sm:text-5xl">{stat.value}</p>
+                <p className="mt-2 text-sm text-muted-foreground">{stat.label}</p>
               </div>
             ))}
           </motion.div>
@@ -184,7 +184,7 @@ export function HomePage({
       </section>
 
       {/* Features Section */}
-      <section className="bg-[#0A0A0A] py-24">
+      <section className="bg-background py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             className="mb-16 text-center"
@@ -193,12 +193,12 @@ export function HomePage({
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
+            <h2 className="text-3xl font-bold text-foreground sm:text-4xl lg:text-5xl">
               Хэрэгтэй бүхэн
               <br />
               хуулийн баримт бичгийг удирдах
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-gray-400">
+            <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
               Хуулийн мэргэжилтнүүдэд зориулсан AI-д суурилсан хэрэгслүүд.
             </p>
           </motion.div>
@@ -209,7 +209,7 @@ export function HomePage({
               return (
                 <motion.div
                   key={feature.title}
-                  className="group rounded-xl border border-[#1F1F1F] bg-[#141414] p-6 transition-all duration-300 hover:border-accent/50 hover:bg-[#1A1A1A]"
+                  className="group rounded-xl border border-border bg-card p-6 transition-all duration-300 hover:border-accent/50 hover:bg-muted"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.2 }}
@@ -218,8 +218,8 @@ export function HomePage({
                   <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10 text-accent">
                     <Icon size={24} />
                   </div>
-                  <h3 className="mb-2 text-lg font-semibold text-white">{feature.title}</h3>
-                  <p className="text-sm leading-relaxed text-gray-400">{feature.desc}</p>
+                  <h3 className="mb-2 text-lg font-semibold text-foreground">{feature.title}</h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{feature.desc}</p>
                 </motion.div>
               );
             })}
@@ -228,7 +228,7 @@ export function HomePage({
       </section>
 
       {/* Testimonial */}
-      <section className="border-t border-[#1F1F1F] bg-[#0A0A0A] py-24">
+      <section className="border-t border-border bg-background py-24">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -239,23 +239,23 @@ export function HomePage({
             <div className="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-full bg-accent/10">
               <Users size={28} className="text-accent" />
             </div>
-            <blockquote className="mb-8 text-2xl leading-relaxed text-gray-300 sm:text-3xl">
+            <blockquote className="mb-8 text-2xl leading-relaxed text-foreground sm:text-3xl">
               "Draftly нь гэрээний хяналтыг бүрэн өөрчилсөн. AI-анализ нь бидний анзааралгүй өнгөрөөх
               асуудлуудыг илрүүлж, багийнхаа цагийг хэмнэж байна."
             </blockquote>
             <div>
-              <p className="font-semibold text-white">Сарантуяа</p>
-              <p className="text-sm text-gray-400">Ерөнхий зөвлөх, TechCorp International</p>
+              <p className="font-semibold text-foreground">Сарантуяа</p>
+              <p className="text-sm text-muted-foreground">Ерөнхий зөвлөх, TechCorp International</p>
             </div>
           </motion.div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="bg-[#0A0A0A] py-24">
+      <section className="bg-background py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
-            className="relative overflow-hidden rounded-2xl border border-[#1F1F1F] bg-gradient-to-br from-[#141414] to-[#1A1A1A] p-12 text-center sm:p-16"
+            className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-card to-muted p-12 text-center sm:p-16"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
@@ -266,16 +266,16 @@ export function HomePage({
               <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-accent/10">
                 <ScrollText size={28} className="text-accent" />
               </div>
-              <h2 className="mb-4 text-3xl font-bold text-white sm:text-4xl">
+              <h2 className="mb-4 text-3xl font-bold text-foreground sm:text-4xl">
                 {content.upload.title}
               </h2>
-              <p className="mx-auto mb-8 max-w-xl text-gray-400">
+              <p className="mx-auto mb-8 max-w-xl text-muted-foreground">
                 {content.upload.description}
               </p>
               <button
                 type="button"
                 onClick={() => navControls.isAuthenticated ? handleTabSelect("Analysis") : navControls.onLoginClick()}
-                className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-3.5 text-sm font-semibold text-black transition-all duration-200 hover:bg-gray-200"
+              className="inline-flex items-center gap-2 rounded-lg bg-foreground px-8 py-3.5 text-sm font-semibold text-background transition-all duration-200 hover:opacity-90"
               >
                 {content.upload.cta} <ArrowRight size={16} />
               </button>
@@ -285,12 +285,12 @@ export function HomePage({
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-[#1F1F1F] bg-[#0A0A0A] py-16">
+      <footer className="border-t border-border bg-background py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
             <div>
-              <div className="mb-4 text-xl font-bold text-white">Draftly.</div>
-              <p className="text-sm leading-relaxed text-gray-400">
+              <div className="mb-4 text-xl font-bold text-foreground">Draftly.</div>
+              <p className="text-sm leading-relaxed text-muted-foreground">
                 {content.footer.tagline}
               </p>
             </div>
@@ -299,32 +299,31 @@ export function HomePage({
               <ul className="space-y-3">
                 {content.footer.companyLinks.map(l => (
                   <li key={l}>
-                    <a href="#" className="text-sm text-gray-400 transition-colors hover:text-white">{l}</a>
-                  </li>
-                ))}
+                    <a href="#" className="text-sm text-muted-foreground transition-colors hover:text-foreground">{l}</a>
+                </li>
               </ul>
             </div>
             <div>
-              <h6 className="mb-4 text-sm font-semibold text-white">{content.footer.contactTitle}</h6>
+              <h6 className="mb-4 text-sm font-semibold text-foreground">{content.footer.contactTitle}</h6>
               <ul className="space-y-3">
-                <li className="flex items-center gap-2 text-sm text-gray-400">
+                <li className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Building2 size={14} />
                   <span>{content.footer.address}</span>
                 </li>
               </ul>
             </div>
             <div>
-              <h6 className="mb-4 text-sm font-semibold text-white">{content.footer.additionalTitle}</h6>
+              <h6 className="mb-4 text-sm font-semibold text-foreground">{content.footer.additionalTitle}</h6>
               <ul className="space-y-3">
                 {content.footer.additionalLinks.map(l => (
                   <li key={l}>
-                    <a href="#" className="text-sm text-gray-400 transition-colors hover:text-white">{l}</a>
+                    <a href="#" className="text-sm text-muted-foreground transition-colors hover:text-foreground">{l}</a>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
-          <div className="mt-12 border-t border-[#1F1F1F] pt-8 text-center text-sm text-gray-400">
+          <div className="mt-12 border-t border-border pt-8 text-center text-sm text-muted-foreground">
             {content.footer.copyright}
           </div>
         </div>

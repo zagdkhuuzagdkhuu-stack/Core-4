@@ -400,7 +400,7 @@ function TemplateField({ variable, value, onChange }: {
           }`}
         >
           <span>{label}</span>
-          <span className={`h-5 w-9 rounded-full p-0.5 transition-colors ${value === "true" ? "bg-accent" : "bg-[#2A2A2A]"}`}>
+          <span className={`h-5 w-9 rounded-full p-0.5 transition-colors ${value === "true" ? "bg-accent" : "bg-muted"}`}>
             <span className={`block h-4 w-4 rounded-full bg-white transition-transform ${value === "true" ? "translate-x-4" : ""}`} />
           </span>
         </button>
