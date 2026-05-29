@@ -586,7 +586,17 @@ export default function App() {
               step={analysisStep}
               setStep={setAnalysisStep}
               analysisResult={analysisResult}
-              setAnalysisResult={setAnalysisResult}
+              setAnalysisResult={(result) => {
+                if (result) {
+                  try {
+                    const docs = Number(localStorage.getItem("draftly_docs_analyzed") || "0") + 1;
+                    const users = Number(localStorage.getItem("draftly_active_users") || "0") + 1;
+                    localStorage.setItem("draftly_docs_analyzed", String(docs));
+                    localStorage.setItem("draftly_active_users", String(users));
+                  } catch {}
+                }
+                setAnalysisResult(result);
+              }}
               analysisError={analysisError}
               setAnalysisError={setAnalysisError}
               onSaveAnalysis={handleSaveAnalysis}

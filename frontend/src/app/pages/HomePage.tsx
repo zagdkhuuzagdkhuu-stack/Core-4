@@ -1,4 +1,4 @@
-import { useEffect, useState, type Dispatch, type RefObject, type SetStateAction } from "react";
+import { useState, type Dispatch, type RefObject, type SetStateAction } from "react";
 import { motion } from "motion/react";
 import { ArrowRight, FileText, Shield, BarChart3, Search, Download, Smartphone, Users, Building2, ScrollText } from "lucide-react";
 import type { AppContent, FolderNavControls, HeaderTab } from "../shared/types";
@@ -36,7 +36,9 @@ const FEATURES = [
   { icon: Smartphone, title: "Мобайл бэлэн", desc: "Дурын төхөөрөмжөөс баримтаа нээж, хянах." },
 ];
 
-const STAT_BASE = { docs: 2840, users: 1250 };
+function getStoredCount(key: string, fallback: number): number {
+  try { return Number(localStorage.getItem(key)) || fallback; } catch { return fallback; }
+}
 
 const CUSTOMER_LOGOS = [
   "legalinfo.mn", "nli.gov.mn", "lawforum.parliament.mn", "e-geree.mn",
@@ -63,16 +65,8 @@ export function HomePage({
   navControls: _navControls,
   homeScrollRef: _homeScrollRef,
 }: HomePageProps) {
-  const [docCount, setDocCount] = useState(STAT_BASE.docs);
-  const [userCount, setUserCount] = useState(STAT_BASE.users);
-
-  useEffect(() => {
-    const t = setInterval(() => {
-      setDocCount(c => c + 10);
-      setUserCount(c => c + 4);
-    }, 8000);
-    return () => clearInterval(t);
-  }, []);
+  const [docCount] = useState(() => Math.max(2840, getStoredCount("draftly_docs_analyzed", 2840)));
+  const [userCount] = useState(() => Math.max(1250, getStoredCount("draftly_active_users", 1250)));
 
   return (
     <>
